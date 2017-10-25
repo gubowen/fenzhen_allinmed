@@ -1,0 +1,86 @@
+@charset "utf-8";
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/3/6
+*/
+@import "../../library/_common-modules";
+@import "../../modules/_iconModule";
+@import "../../modules/_mainHeader";
+@import "../../modules/_formModule";
+@import "../../modules/_modalBox";
+@import "../../modules/_popup";
+.login-content {
+  display: none;
+}
+
+.error-text {
+  display: none;
+}
+
+.icon-loginCancel {
+  display: none;
+  &:before {
+    content: '';
+    display: block;
+    font-size: 13px;
+    width: 8px;
+    height: 8px;
+    background: url("/image/img00/login/login_cancel.png") no-repeat center;
+  }
+}
+
+.login-input-validate-code ~ .icon-loginCancel {
+  display: inline;
+  right: 30%;
+  margin-top: -30px;
+}
+.login-send-validate-code.send{
+  background: #E1E2E7;
+  color: #7A8EC1;
+}
+.login-send-validate-code.disabled{
+  background: #E1E2E7;
+  color: #ffffff;
+}
+.login-send-validate-code.btn-primary{
+  width: 86px;
+  height: 50px;
+}
+.btn-primary{
+  height: 50px;
+}
+//验证码次数超过限制的提示框
+.login-input-item .validate-code-tips{
+  opacity: 0;
+  transition: opacity 0.5s;
+  height: 50px;
+  width: 246px;
+  background-color: #ffffff;
+  box-shadow: 0 0 20px 0 rgba(153,167,208,0.35);
+  position: absolute;
+  font-size: 13px;
+  line-height: 50px;
+  text-align: center;
+  color:  #F23E34;
+  left: 154px;
+  top: 94px;
+  border-radius: 4px;
+  &::after{
+    display: block;
+    content: "";
+    width: 11px;
+    height:11px;
+    position: absolute;
+    right: 36px;
+    top: -4px;
+    transform: rotate(45deg);
+    background-color: #ffffff;
+  }
+  &.show{
+    opacity: 1;
+  }
+}
