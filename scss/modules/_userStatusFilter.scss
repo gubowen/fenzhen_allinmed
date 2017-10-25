@@ -1,0 +1,51 @@
+@charset "utf-8";
+/**
+ * @name:患者状态筛选
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/03/05
+ * @author: qiangkailiang
+ */
+.userlist-status {
+  background-color: #fff;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  &-box {
+    text-align: center;
+    font-size: 0;
+    border: 1px solid #ACB1BE;
+    border-radius: 4px;
+  }
+  &-item {
+    display: inline-block;
+    font-size: 14px;
+    color: #808080;
+    padding: 12px 0;
+    width: 33.3%;
+    box-sizing: border-box;
+    border-right: 1px solid #acb1be;
+    cursor: pointer;
+
+    &.new {
+      position: relative;
+      &:after{
+        content: '';
+        @include circle(8px, rgba(242, 62, 51, 0.90));
+        box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.15);
+        position: absolute;
+        right: 5px;
+        top: 5px;
+      }
+
+
+    }
+    &:nth-last-child(1) {
+      border-right: none;
+    }
+    &.active {
+      background-color: #7a8ec1;
+      color: #fff;
+    }
+  }
+}

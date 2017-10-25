@@ -1,0 +1,328 @@
+@charset "utf-8";
+/**
+ * @name:病例单
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/03/05
+ * @author: qiangkailiang
+ */
+
+
+//备注
+.medical-record-remark {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 340px;
+  z-index: 3;
+  transform: translateY(88%);
+  background-color: #fff;
+  overflow: hidden;
+  transition:all 0.2s ease-in-out;
+  &-header {
+    background-color: #eceff6;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    @include clearfix();
+    padding: 0 15px;
+    box-sizing: border-box;
+    font-size: 14px;
+
+    section {
+      & > h3 {
+        font-weight: normal;
+        font-size: 14px;
+        display: inline-block;
+        color: #6B748C;
+        letter-spacing: 0;
+        line-height: 40px;
+        cursor: pointer;
+        i {
+          background: url("/image/img00/employee/home_note_default.png") no-repeat;
+          width: 18px;
+          height: 18px;
+          display: inline-block;
+          top: 0;
+          margin-right: 4px;
+          cursor: pointer;
+          vertical-align: baseline;
+        }
+      }
+
+      & > .remark-time {
+        font-size: 14px;
+        color: #909090;
+        letter-spacing: 0;
+        line-height: 12px;
+      }
+
+      .remark-build {
+        float: left;
+        font-size: 14px;
+        color: #6B748C;
+        letter-spacing: 0;
+        line-height: 40px;
+        cursor: pointer;
+        i {
+          background: url("/image/img00/employee/home_note_add.png") no-repeat;
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          top: 0;
+          margin-right: 4px;
+          cursor: pointer;
+          vertical-align: baseline;
+        }
+      }
+
+      .remark-new {
+        i {
+          background: url("/image/img00/employee/home_note_return.png") no-repeat;
+        }
+      }
+      .remark-back {
+        float: left;
+        font-size: 14px;
+        color: #6B748C;
+        letter-spacing: 0;
+        line-height: 40px;
+        cursor: pointer;
+        display: none;
+        &.on {
+          display: block;
+        }
+        i {
+          background: url("/image/img00/employee/home_note_return.png") no-repeat;
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          top: 0;
+          margin-right: 4px;
+          cursor: pointer;
+          vertical-align: baseline;
+        }
+      }
+
+      .remark-toggle {
+        //float: right;
+        font-size: 14px;
+        color: #6B748C;
+        letter-spacing: 0;
+        line-height: 40px;
+        cursor: pointer;
+        i {
+          background: url("/image/img00/employee/arrow_pack_down.png") no-repeat;
+          width: 12px;
+          height: 12px;
+          display: inline-block;
+          top: 0;
+          margin-right: 4px;
+          cursor: pointer;
+          vertical-align: middle;
+        }
+      }
+    }
+    .active {
+      display: block;
+    }
+  }
+  &-content {
+    //padding: 0 15px;
+    height: 88%;
+    overflow: auto;
+    .date {
+      display: none
+    }
+    .edit {
+      height: 100%;
+      width: 100%;
+      display: none;
+      .text {
+        padding: 20px;
+        box-sizing: border-box;
+        height: 300px;
+        line-height:1.2;
+        outline: medium;
+      }
+      textarea{
+        padding: 20px;
+        box-sizing: border-box;
+        height: 280px;
+        width:100%;
+        line-height:1.2;
+        outline: medium;
+      }
+
+
+      .saveButton {
+        font-size: 13px;
+        color: #7A8EC1;
+        letter-spacing: 0;
+        line-height: 30px;
+        border: 1px solid #7A8EC1;
+        border-radius: 4px;
+        width: 70px;
+        height: 30px;
+        position: absolute;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+      }
+    }
+    .active {
+      display: block;
+    }
+    .modal-confirm{
+      top: 80%;
+      right: 14px;
+      left:auto;
+    }
+  }
+  .medical-record-remark-content{display: none;}
+  &.on {
+    transform: translateY(0);
+    .medical-record-remark-content{display: block;}
+  }
+}
+.remark-content-item {
+  padding: 20px 15px;
+  box-sizing: border-box;
+  height: 75px;
+  position: relative;
+  // border-bottom: 1px solid #e7e7e7;
+  background: #FAFBFD;
+  box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
+  transition: all 0.2s linear;
+  & > .text {
+    font-size: 14px;
+    color: #222222;
+    letter-spacing: 0;
+    line-height: 14px;
+    width: 90%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    &:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+
+  & > .time {
+    font-size: 14px;
+    color: #909090;
+    margin-top: 10px;
+    letter-spacing: 0;
+    line-height: 12px;
+  }
+  &:hover {
+    .delete {
+      background: url("/image/img00/index/home_note_delete.png") no-repeat;
+      width: 18px;
+      height: 18px;
+      display: inline-block;
+      position: absolute;
+      right: 20px;
+      top: 28px;
+      cursor: pointer;
+    }
+  }
+}
+.ml20 {
+  margin-left: 23px;
+}
+
+.ml15 {
+  margin-left: 15px;
+}
+
+.mt20 {
+  margin-top: 20px;
+}
+
+//分页
+.pagination a.active, .pagination a.prev, .pagination a.next {
+  color: #FFF;
+  background-color: #ed6591;
+}
+.pagination a {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  margin-right: 8px;
+  text-align: center;
+  color: #808080;
+  background-color: #FFF;
+  font-size: 14px;
+  overflow:hidden;
+}
+.pagination .action-wrap {
+  margin-left: 20px;
+  display: inline-block;
+  font-size: 14px;
+  line-height: 31px;
+  vertical-align: top;
+}
+.pagination .apostrophe {
+  display: inline-block;
+  width: 36px;
+  height: 36px;
+  font-size: 14px;
+  line-height: 36px;
+  margin-right: 8px;
+  overflow:hidden;
+}
+
+
+
+.pagination {
+  height:36px;
+  margin-top:45px ;
+  padding:0;
+}
+
+.pagination li{
+  display:inline-block;
+  *display:inline;
+  *zoom:1;
+  width: 36px;
+  height: 36px;
+  line-height: 36px;
+  margin-right: 8px;
+  text-align: center;
+  color: #808080;
+  background-color: #FFF;
+  font-size: 14px;
+  overflow:hidden;
+  padding:0;
+}
+.pagination .pages{
+  text-align:center;
+}
+.pagination .pgNext{
+  width:50px;
+}
+.pagination .pgCurrent{
+  height:36px;
+  width:36px;
+  background:#3D84C6;
+  color:#fff;
+}
+.pagination .pgEmpty{
+  color:#eee;
+  cursor:default;
+}
+
+.newPage-container{
+
+}
+.newPagination li{
+  color: #606062;
+}
+.newPagination .pgEmpty{
+  color: #AEAEB0;
+}
