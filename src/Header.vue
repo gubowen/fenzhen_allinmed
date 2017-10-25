@@ -1,0 +1,381 @@
+<template>
+  <div id="header" class="main-header">
+    <section class="main-header-search">
+      <input class="main-search" type="text" placeholder="请输入患者姓名" v-model="searchContent"
+             @keyup="searchPatient($event)">
+      <i class="icon-header-search" @click="clickToSearch"></i>
+    </section>
+    <article class="main-header-title" @click="refresh()">
+      <i class="icon-logo"></i>
+      <h1>唯医互联网骨科医院</h1>
+    </article>
+    <article class="main-header-base-msg">
+      <article class="main-header-tips">
+        您好，<span>{{$store.state.userName}}</span>医生
+
+
+      </article>
+      <ul class="main-header-config">
+        <li class="main-header-config-item">
+          <router-link to="/setting" tag="a">个人设置</router-link>
+        </li>
+        <hr class="main-header-line">
+        <li class="main-header-config-item">
+          <router-link to="/login" tag="a">退出</router-link>
+        </li>
+      </ul>
+    </article>
+  </div>
+</template>
+<script>
+  import axios from "axios";
+  export  default{
+    name: 'header',
+    data(){
+      return {
+        isActive: false,
+        isActiveMessage: '在线',
+        searchStatus: true,
+        searchContent: ""
+      }
+    },
+    watch: {
+      '$store.state.searchStatus': function () {
+        this.searchStatus = this.$store.state.searchStatus;
+      }
+    },
+    methods: {
+      init(){
+        this.getUserStatus();
+        this.getBaseMessage();
+        this.searchStatus = this.$store.state.searchStatus;
+      },
+      searchPatient(e) {
+        let that = this;
+        if (this.searchContent.length > 20) {
+          this.searchContent.substring(0, 20);
+        } else if (this.searchContent.length === 0) {
+          return;
+        }
+        clearTimeout(this.time);
+
+        this.time = setTimeout(() => {
+          if (e.keyCode == 13) {
+            this.$emit("searchCallback", this.searchContent);
+          }
+        }, 300);
+      },
+      clickToSearch(){
+        if (this.searchContent.length === 0) {
+          return;
+        } else {
+          this.$emit("searchCallback", this.searchContent);
+        }
+      },
+      active(){
+        this.isActive = !this.isActive;
+      },
+      changeStatus(){
+        if (this.isActiveMessage == '休息') {
+          this.isActiveMessage = '在线';
+          this.isActive = false;
+          this.toggleStatus();
+        } else {
+          this.isActiveMessage = '休息';
+          this.isActive = false;
+          this.toggleStatus();
+        }
+      },
+      getUserStatus(){
+        let _this = this;
+        let data = {
+          customerId: _this.$store.state.userId,
+          firstResult: "0",
+          maxResult: "9999",
+          isValid: "1"
+        };
+        axios({
+          method: "post",
+          url: "/call/customer/status/v1/getMapById/",
+          data: data,
+          responseType: 'json',
+          transformRequest: [function (data) {
+            data = "paramJson=" + JSON.stringify(data);
+            return data;
+          }],
+          before: function () {
+            // common.loading.show();
+          }
+        }).then(function (res) {
+          if (res.data.responseObject.responseData) {
+            var dataList = res.data.responseObject.responseData.dataList;
+
+            if (dataList && dataList.length) {
+
+              for (let i = 0; i < dataList.length; i++) {
+                switch (dataList[i].status) {
+                  case '0' :
+                    _this.isActiveMessage = '在线';
+                    break;
+                  case '1' :
+                    _this.isActiveMessage = '休息';
+                    break;
+                }
+                ;
+                //  common.loading.hide();
+              }
+            }
+          }
+        })
+      },
+      toggleStatus(){
+        let id = '';
+        if (this.isActiveMessage == '在线') {
+          id = 0;
+        } else {
+          id = 1;
+        }
+
+        let data = {
+          customerId: that.$store.state.userId,
+          status: id
+        };
+        axios({
+          method: "post",
+          url: "/call/customer/status/v1/update/",
+          data: data,
+          responseType: 'json',
+          transformRequest: [function (data) {
+            data = "paramJson=" + JSON.stringify(data);
+            return data;
+          }],
+          before: function () {
+            // common.loading.show();
+          }
+        }).then(function (res) {
+          // common.loading.hide();
+        })
+      },
+      getBaseMessage(){
+        //检测登录状态 获取基本信息
+        let _this = this;
+        axios({
+          method: "post",
+          url: "/call/tocure/web/user/getWebUser/",
+          responseType: 'json',
+//          transformRequest: [function (data) {
+//            data = "paramJson=" + JSON.stringify(data);
+//            return data;
+//          }],
+          before: function () {
+            // common.loading.show();
+          }
+        }).then(function (res) {
+          if (res.data.responseObject.responseStatus) {
+            if (res.data.responseObject.responseMessage) {
+              let dataList = res.data.responseObject.responseMessage;
+              _this.$store.state.userName = dataList.nickName;
+              _this.$store.state.mobile = dataList.mobile;
+              _this.$store.state.userId = dataList.uniteUserId;
+              _this.$store.state.mailBox = dataList.email;
+              _this.$store.state.sex = dataList.sex;
+
+              if (_this.$route.name === "setting") {
+                return ;
+              } else {
+                _this.$router.push({
+                  path: "/"
+                })
+              }
+            }
+          } else {
+            _this.$router.push({
+              path: "/login"
+            })
+          }
+        })
+      },
+      refresh(){
+
+        if (window.location.href.indexOf("setting") != -1) {
+          this.$router.push({
+            name: "home"
+          })
+        }
+      }
+    },
+    mounted(){
+      this.init();
+    }
+  }
+</script>
+<style lang="scss" rel="stylesheet/scss" scoped>
+  @import "./scss/base.scss";
+
+  /**
+   * @name: 主头部
+   * @desc:
+   * @example:
+   * @depend:
+   * @date: 2017/03/05
+   * @author: qiangkailiang
+   */
+  .main-inner {
+    width: 100%;
+    height: 100%;
+    background-color: #fff;
+    overflow: hidden;
+  }
+
+  //头部
+  .main-header {
+    width: 100%;
+    height: 70px;
+    text-align: center;
+    padding-left: 13px;
+    padding-right: 40px;;
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    line-height: 70px;
+    z-index: 5;
+    box-shadow: 0 2px 8px 0 #E5E9F4;
+  }
+
+  .main-header-search {
+    float: left;
+    position: relative;
+    width: 386px;
+    height: 70px;
+    & > .main-search {
+      background-color: #eceff6;
+      width: 372px;
+      height: 32px;
+      line-height: 32px;
+      padding-left: 14px;
+      & > input {
+        border-radius: 4px;
+      }
+    }
+
+  }
+
+  .main-header-title {
+    display: inline-block;
+    text-align: center;
+    font-size: 0;
+    & > h1 {
+      display: inline-block;
+      font-size: 20px;
+      font-weight: normal;
+      color: #6B748C;
+      cursor: pointer;
+      padding-left: 10px;
+    }
+  }
+
+  .main-header-base-msg {
+    float: right;
+    text-align: left;
+    font-size: 0;
+    & > * {
+      display: inline-block;
+
+    }
+    .main-header-tips {
+      font-size: 16px;
+      margin-right: 30px;
+      color: #323D5E;
+    }
+    .main-header-config {
+      text-align: center;
+      font-size: 0;
+      &-item {
+        font-size: 16px;
+        display: inline-block;
+        position: relative;
+        cursor: pointer;
+        &.main-header-toggle {
+          a {
+            color: #00BEAF;
+          }
+          &:after {
+            transition: all 0.2s linear;
+          }
+          &.on {
+            &:after {
+              transform: rotate(180deg);
+            }
+            .main-header-toggle-list {
+              opacity: 1;
+              visibility: visible;
+            }
+          }
+        }
+        &.icon-downArrow:after {
+          margin-left: 10px;
+
+        }
+        a {
+          color: #808080;
+          display: inline-block;
+        }
+        //&:after{
+        //  content: '';
+        //  width:1px;
+        //  height: 20px;
+        //  background-color: #e1e2e7;
+        //  position: absolute;
+        //  right: 0;
+        //  top: 50%;
+        //  margin-top:-10px;
+        //}
+      }
+    }
+    .main-header-line {
+      height: 18px;
+      width: 1px;
+      background: #E1E2E7;
+      border: none;
+      display: inline-block;
+      vertical-align: -3px;
+      margin: 0 15px;
+
+    }
+  }
+
+  .main-header-toggle-list {
+    background: #FFFFFF;
+    box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+    border-radius: 4px;
+    width: 80px;;
+    position: absolute;
+    margin-top: -10px;
+    margin-left: -10px;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s linear;
+    &-item {
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      font-size: 14px;
+      color: #222222;
+      display: block;
+      &.active {
+        display: none;
+      }
+    }
+  }
+
+  .icon-logo {
+    display: inline-block;
+    background: url("./assets/img00/header/logo_top.png") no-repeat;
+    background-size: 100% 100%;
+    width: 44px;
+    height: 44px;
+    vertical-align: -19px;
+  }
+</style>

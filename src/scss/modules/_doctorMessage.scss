@@ -1,0 +1,168 @@
+/**
+ * @Desc：
+ * @Usage:
+ * @Notify：
+ * @Depend：
+ *
+ * Created by qiangkailiang on 2017/3/9
+ */
+.doctor-message{
+  display:none;
+  &.show{
+    display:block;
+  }
+  .no-mate-doc{
+    margin-top:130px;
+    text-align: center;
+    font-size: 14px;
+    color: #AAAAAA;
+  }
+}
+.mate-and-all{
+  margin-top:30px;
+  font-size: 16px;
+  color: #AAA;
+  text-align:center;
+  li{
+    cursor: pointer;
+    display:inline-block;
+    padding:0 15px;
+    &.on{
+      color: #7A8EC1;
+    }
+  }
+}
+.doctor-message-item{
+  display: flex;
+  padding:30px 40px;
+  //&:hover{
+  //  box-shadow: 0px 0px 10px 0px rgba(179,205,199,0.35);
+  //}
+  &.active{
+    &:before{
+      background: url(/image/img00/check/1_choose_nor_small.png) no-repeat;
+    }
+  }
+}
+.page-container{
+  padding-bottom:30px;
+}
+.doctor-message-img{
+  @include circle(50px);
+  flex-shrink: 0;
+  margin-right: 16px;
+  & > img{
+    width: 100%;
+    height: 100%;
+    vertical-align: top;
+    border-radius: 50%;
+  }
+}
+.doctor-message-content{
+  width: 100%;
+  position: relative;
+}
+.doctor-message-content-head {
+  font-size: 0;
+  & > h4 {
+    font-size: 18px;
+    display: inline-block;
+    vertical-align: middle;
+    color: #222222;
+    margin-right: 18px;
+  }
+
+  & > .rate {
+    font-size: 15px;
+    color: #555555;
+    display: inline-block;
+    vertical-align: middle;
+  }
+  &>.netstat{
+    font-size: 15px;
+    color: #00BEAF;
+    display: inline-block;
+    vertical-align: middle;
+    margin:0 14px;
+    &.rest{
+      color:#cccccc;
+    }
+  }
+  .doctor-message-tags {
+    display: inline-block;
+    vertical-align: middle;
+    .tags {
+      background: #EEF6FF;
+      border-radius: 2px;
+      font-size: 12px;
+      color: #8DAED9;
+      display: inline-block;
+      padding: 4px 8px;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+  }
+}
+
+.doctor-message-hospital{
+  font-size: 14px;
+  color: #555;
+  margin-top: 10px;
+  margin-bottom: 16px;
+  .medical,.hospital{
+    margin-right:16px;
+  }
+}
+
+.doctor-message-goodAt{
+  margin:16px 0;
+  color: #909090;
+  font-size: 14px;
+  max-width: 500px;
+  line-height: 1.5;
+}
+.doctor-message-num{
+  margin:16px 0;
+  font-size: 0;
+  & > span{
+    margin-right: 40px;
+
+  }
+  & > .price{
+    font-size: 14px;
+    color: #909090;
+    em{
+      color: #F23E34;
+      font-style: normal;
+      font-weight: bolder;
+    }
+  }
+  & > .askNum{
+    color: #909090;
+    font-size: 14px;
+
+  }
+  & > .lastNum{
+    font-size: 14px;
+    color: #909090;
+    em{
+      color: #00BEAF;
+      font-style: normal;
+      font-weight: bold;
+    }
+  }
+}
+
+.doctor-message-consult{
+  border: 1px solid #A1AFD3;
+  border-radius: 4px;
+  height: 30px;
+  padding:0 17px;
+  font-size: 13px;
+  color: #7A8EC1;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -15px;
+  cursor: pointer;
+}

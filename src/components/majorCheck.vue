@@ -1,0 +1,271 @@
+<template id="majorCheck">
+  <section class="viewItem medical-record-form-item" data-role="mr-record-6">
+    <form action="">
+      <section class="major-check medical-record-main">
+        <article>
+          <header><h2>检验及诊断结果</h2></header>
+          <section class="img-check">
+            <ul class="talkImgMore">
+              <li v-show="caseAttUrl.length > 0">
+                <section>
+                  <img :src="caseAttUrl"/>
+                  <p>检查资料</p>
+                </section>
+              </li>
+              <li class='noData' v-show="caseAttUrl.length == 0">患者未上传资料</li>
+            </ul>
+          </section>
+        </article>
+        <article>
+          <header><h2>视珍</h2></header>
+          <section class="video-check">
+            <ul class="video-check-show">
+              <li v-show="videoCaseAttUrl.length > 0">
+                <section>
+                  <img :src="videoCaseAttUrl"/>
+                  <p>患病处照片</p>
+                </section>
+              </li>
+              <li class='noData' v-show="videoCaseAttUrl.length == 0">患者未上传资料</li>
+            </ul>
+            <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000"/>
+          </section>
+        </article>
+        <article class="major-check-video">
+          <header><h2>活动</h2></header>
+          <section>
+            <ul>
+              <li>
+                <input type="text" placeholder="请填写" class="J-activityState" maxlength="1000"/>
+              </li>
+            </ul>
+          </section>
+        </article>
+        <article>
+          <header><h2>肌力</h2></header>
+          <section>
+            <ul>
+              <li>
+                <input type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000"/>
+              </li>
+            </ul>
+          </section>
+        </article>
+        <footer>
+          <button type="button" class="detail-saveBtn" @click="saveData">保存</button>
+        </footer>
+      </section>
+    </form>
+  </section>
+</template>
+<script>
+  import axios from "axios";
+  import addressSelector from '@/common/addressSelector'
+  import popup from  '@/common/popup';
+
+
+  export default{
+    name: 'majorCheck',
+    data(){
+      return {
+        getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
+        userMessage: {},
+        caseAttUrl: '',
+        videoCaseAttUrl: ''
+      }
+    },
+    watch: {
+      '$route.params.num': function () {
+        this.init();
+      }
+    },
+    activated(){
+      this.userMessage = this.$route.params.num;
+      this.init();
+    },
+    methods: {
+      init() {
+        this.userMessage = JSON.parse(this.$route.params.num);
+        this.getData();
+
+      },
+      getData() {
+        let _this = this;
+        let dataValue = {
+          caseId: this.userMessage.caseId,	            //string	是	病例id
+          isValid: 1,                  //string	是	1
+          caseAttSpecPic: 1,	        //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+          caseAttSpecVideoPic: 10,	//string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+          caseAttSpecVideo: 9,	    //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+          firstResult: 0,	            //string	是
+          maxResult: 100,	            //string	是
+          attUseFlag: 3
+        };
+
+        api.ajax({         //获取基本信息
+          url: _this.getBaseInfo,
+          method: "POST",
+          data: dataValue,
+          beforeSend(config) {
+          },
+          done(res) {
+            if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
+              let data_list = res.responseObject.responseData.data_list;
+              //获取图片
+              if (data_list[0].picMap.length) {
+                $.each(data_list[0].picMap, function (key, value) { //    1-X光片2-CT3-超声4-核磁共振5-病理6-检查结果7-其他8-曾就诊病历9-专科检查10-化验及特殊检查11-体格检查',
+                  switch (value.caseAttSource) {   //0-历史健康信息 1-视诊检查检验 2-初诊建议 3 检查检验 4患处照片,
+                    case "0":
+                    case "2":
+                    case "3":
+                      _this.caseAttUrl = value.caseAttUrl;
+                      break;
+                    case "1":
+                    case "4":
+                      _this.videoCaseAttUrl = value.caseAttUrl;
+                      break;
+                  }
+                });
+              }
+            }
+          }, fail(error){
+            console.log("请求失败：" + error);
+          }
+        });
+      },
+      saveData(){
+
+      }
+    },
+    mounted(){
+      this.init();
+    }
+  }
+
+</script>
+<style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
+  @import "../scss/library/_common-modules.scss";
+  @import "../scss/record_common.scss";
+  @import "../scss/index.scss";
+
+  .medical-record-form {
+    .major-check {
+      input[type="text"] {
+        margin: 0 auto;
+        display: block;
+      }
+      header {
+        position: relative;
+        margin-bottom: 30px;
+        margin-top: 50px;
+        text-align: center;
+        &:before {
+          content: "";
+          position: absolute;
+          top: 50%;
+          width: 216px;
+          left: 50%;
+          margin-left: -108px;
+          border: 1px solid #E1E2E7;
+        }
+        h2 {
+          font-size: 12px;
+          color: #AAAAAA;
+          letter-spacing: 0;
+          line-height: 12px;
+          margin: 0 auto;
+          padding: 0 10px;
+          background: #fff;
+          text-align: center;
+          position: relative;
+          z-index: 2;
+          display: inline-block;
+        }
+      }
+      .img-check {
+        ul {
+          li {
+            margin: 0 0 30px 0;
+            width: 104px;
+            height: 107px;
+            float: left;
+            text-align: center;
+            &.noData {
+              width: 100%;
+              height: 20px;
+              float: none;
+              color: #aaa;
+              font-size: 13px;
+            }
+            img {
+              width: 80px;
+              height: 80px;
+              border-radius: 4px;
+              cursor: pointer;
+            }
+            p {
+              margin-top: 12px;
+              font-size: 13px;
+              color: #555555;
+              letter-spacing: 0;
+              line-height: 13px;
+
+            }
+          }
+        }
+        ul:after {
+          content: "";
+          display: block;
+          clear: both;
+          visibility: hidden;
+        }
+      }
+      .video-check {
+        ul {
+          li {
+            margin: 0 0 30px 0;
+            height: 107px;
+            float: left;
+            text-align: center;
+            margin-right: 30px;
+            &.noData {
+              width: 100%;
+              height: 20px;
+              float: none;
+              margin-right: 0;
+              font-size: 13px;
+              line-height: 20px;
+              color: #aaa;
+            }
+
+            img {
+              width: auto;
+              height: 80px;
+              border-radius: 4px;
+            }
+            p {
+              margin-top: 12px;
+              font-size: 13px;
+              color: #555555;
+              letter-spacing: 0;
+              line-height: 13px;
+            }
+          }
+          &:first-child {
+            margin-left: 12px;
+          }
+        }
+        ul:after {
+          content: "";
+          display: block;
+          clear: both;
+          visibility: hidden;
+        }
+      }
+      .detail-saveBtn {
+        margin-right: 35px;
+      }
+
+    }
+  }
+</style>

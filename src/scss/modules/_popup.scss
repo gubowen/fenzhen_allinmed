@@ -1,0 +1,48 @@
+@charset "utf-8";
+/**
+* @Desc：
+* @Usage:
+* @Notify：
+* @Depend：
+*
+* Created by qiangkailiang on 2017/3/6
+*/
+
+.popup{
+  &.right{
+    left:91%;
+  }
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform:scale(0) translate(-50%,-50%);
+  background: #000000;
+  opacity:0;
+  padding:20px 28px;
+  border-radius: 8px;
+  transform-origin: 0% 0%;
+  //transform-origin:25% 25%;
+  transition:all 0.2s linear;
+  z-index: 6;
+  .popup-text{
+    font-size: 16px;
+    color: #FFFFFF;
+  }
+  &.show{
+    opacity: 0.7;
+    transform:scale(1) translate(-50%,-50%)
+  }
+  .middle-tip-box-text {
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 16px;
+    color: #FFFFFF;
+    & > img {
+      width: 50px;
+      height: 50px;
+      vertical-align: top;
+      margin-bottom: 14px;
+    }
+  }
+}

@@ -1,0 +1,93 @@
+@charset "utf-8";
+@import "./modules/_popup.scss";
+
+html, body {
+  font-family: "microsoft yahei";
+}
+
+//中部双飞翼布局
+.center-inner-userlist {
+  background-color: #fff;
+  color: #fff;
+  width: 385px;
+  float: left;
+  margin-left: -100%;
+  height: 100%;
+  border-right: 1px solid #ededed;
+  box-sizing: border-box;
+}
+
+.center-inner-message {
+  float: left;
+  width: 100%;
+  height: 100%;
+  & > .layout-helper {
+    margin: 0 385px;
+    position: relative;
+    padding-top: 55px;
+    height: 100%;
+  }
+}
+
+.medical-record {
+  background-color: #fff;
+  width: 385px;
+  height: 100%;
+  float: left;
+  position: relative;
+  margin-left: -385px;
+}
+
+
+
+.center-inner-wrapper{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 56px;
+  left: 2px;
+  background-color: #fff;
+  z-index: 3;
+  text-align: center;
+  display: none;
+
+  &:before{
+    content: '';
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+  & > img{
+    width: 170px;
+    height: 170px;
+    vertical-align: middle;
+  }
+}
+.no-content{
+  .layout-helper{
+    margin-right: 0;
+  }
+  .medical-record{
+    display: none;
+  }
+  .center-inner-wrapper{
+    display: block;
+  }
+}
+.main-footer{
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #fff;
+  height: 40px;
+  line-height: 40px;
+  z-index: 3;
+  text-align: center;
+  border-top:1px solid #ededed;
+  span{
+    font-size: 13px;
+    color: #aaaaaa;
+
+  }
+}

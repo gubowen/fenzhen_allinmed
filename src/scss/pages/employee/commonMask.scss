@@ -1,0 +1,394 @@
+.mask-close {
+  background: url("/static/img/img00/employee/popup_close_activate.png") no-repeat;
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  top: 0;
+  right: -36px;
+  cursor: pointer;
+}
+
+.mask-background {
+  background: rgba(0, 0, 0, .6);
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 5;
+  display: none;
+}
+
+.mask-background.show {
+  display: block;
+}
+
+.confirmBox-tips {
+  height: 300px;
+  width: 550px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -150px;
+  margin-left: -275px;
+  background: #fff;
+  border-radius: 4px;
+  z-index: 1000;
+  display: none;
+}
+
+.confirmBox-tips.show {
+  display: block;
+}
+
+.confirmBox-tips h2 {
+  height: 40px;
+  width: 100%;
+  background: #D9DFEC;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+
+}
+
+.confirmBox-tips p {
+  font-size: 18px;
+  line-height: 18px;
+  color: #222222;
+  margin-top: 90px;
+  text-align: center;
+}
+
+.confirmBox-btns {
+  position: absolute;
+  height: 80px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.confirmBox-cancelBtn {
+  font-size: 13px;
+  line-height: 30px;
+  width: 70px;
+  height: 30px;
+  border: 1px solid #7A8EC1;
+  border-radius: 4px;
+  color: #7A8EC1;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.confirmBox-ensureBtn {
+  font-size: 13px;
+  line-height: 30px;
+  width: 70px;
+  height: 30px;
+  border: 1px solid #7A8EC1;
+  background: #7A8EC1;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+//infoBox 样式
+.infoBox-tips {
+  height: 600px;
+  width: 800px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -300px;
+  margin-left: -400px;
+  background: #fff;
+  border-radius: 4px;
+  z-index: 6;
+  display: none;
+  &.show {
+    display: block;
+  }
+  .infoBox-inner {
+    height: 100%;
+  }
+  .video-Box {
+    text-align: center;
+    background: #000;
+    video{
+        height:100%;
+        width:100%;
+    }
+  }
+  h2 {
+    height: 60px;
+    width: 100%;
+    background: #D9DFEC;
+    text-align: center;
+    font-size: 18px;
+    line-height: 60px;
+    color: #222222;
+    letter-spacing: 0;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+  }
+}
+
+.infoBox-content-info {
+  padding: 30px;
+
+  ul {
+    margin-left: 175px;
+    width: 420px;
+    li {
+      margin: 20px 0;
+
+      input[type="text"], input[type="password" ] {
+        width: 315px;
+        height: 40px;
+        border: 1px solid #DBDDE4;
+        border-radius: 4px;
+        padding: 13px 16px;
+        box-sizing: border-box;
+      }
+
+      input:focus {
+        border: 1px solid #7A8EC1;
+      }
+      select {
+        width: 315px;
+        height: 40px;
+        border: 1px solid #DBDDE4;
+        border-radius: 4px;
+        padding: 13px 16px;
+        box-sizing: border-box;
+
+      }
+    }
+
+  }
+  .infoBox-text-title {
+    width: 80px;
+    text-align: right;
+    display: inline-block;
+    margin-right: 20px;
+  }
+}
+
+.checkbox-group {
+  display: inline-block;
+  font-size: 18px;
+  line-height: 18px;
+}
+
+.checkbox-group label {
+  margin-right: 60px;
+}
+
+.checkbox-group .on .checkbox {
+  background: url("/static/img/img00/employee/1_choose_nor_small.png") no-repeat;;
+}
+
+.checkbox {
+  border: 1px solid #DBDDE4;
+  border-radius: 2px;
+  width: 14px;
+  height: 14px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+}
+
+.infoBox-btns {
+  position: absolute;
+  height: 100px;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center;
+}
+
+.infoBox-saveBtn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  font-size: 13px;
+  line-height: 30px;
+  width: 70px;
+  height: 30px;
+  background: #CCCCCC;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+}
+
+.warn-info {
+  color: #F23E34;
+  margin-left: 100px;
+  margin-top: 10px;
+}
+
+.warn-info-img {
+  height: 14px;
+  width: 14px;
+  font-size: 0;
+  background: url("/static/img/img00/employee/error_message.png") no-repeat;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.check-history {
+  overflow: auto;
+  height: 540px;
+
+  .check-history-majorTitle {
+    height: 54px;
+    font-size: 14px;
+    letter-spacing: 0;
+    line-height: 54px;
+    padding: 0 30px;
+    color: #CCCCCC;
+
+    .check-title-left {
+    }
+    .check-title-right {
+      float: right;
+    }
+  }
+
+  & > ul {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    box-sizing: border-box;
+
+    & > li {
+      margin: 0;
+      width: 100%;
+
+    }
+  }
+}
+
+.check-history-info {
+  height: 54px;
+  font-size: 16px;
+  color: #222222;
+  letter-spacing: 0;
+  line-height: 16px;
+  padding: 0 30px;
+  cursor: pointer;
+}
+
+.check-history-show {
+  background: #F9F9F9;
+  padding: 20px 65px;
+  width: 100%;
+  box-sizing: border-box;
+  display: none;
+
+  &.on {
+    display: block;
+  }
+
+  h3 {
+    font-size: 14px;
+    color: #CCCCCC;
+    letter-spacing: 0;
+    line-height: 14px;
+    margin-bottom: 22px;
+  }
+
+  .check-history-talk ul li {
+    margin-bottom: 30px;
+  }
+  .check-history-talk header {
+    font-size: 13px;
+    color: #00BEAF;
+    letter-spacing: 0;
+    line-height: 13px;
+    margin-bottom: 10px;
+
+    &.doctor-letter {
+      color: #7A8EC1;
+    }
+    &.check-suggestion-message-title {
+      background: #a6c7ee;
+      font-size: 12px;
+      color: #fff;
+      height: 25px;
+      line-height: 25px;
+      padding-left: 15px;
+      box-sizing: border-box;
+      border-top-left-radius: 20px;
+      margin-bottom: 0;
+    }
+  }
+
+  .check-history-talk {
+    p {
+      font-size: 16px;
+      color: #222222;
+      letter-spacing: 0;
+      line-height: 18px;
+      &.preview-suggestion-result {
+        font-size: 13px;
+        color: #909090;
+        margin-top: 10px;
+        line-height: 13px;
+      }
+    }
+    .img-show {
+      width: 200px;
+      height: auto;
+    }
+  }
+
+}
+
+.check-history .icon-downArrow {
+  margin-right: 13px;
+}
+
+.check-history .check-history-title {
+  font-size: 16px;
+  color: #222222;
+  letter-spacing: 0;
+  line-height: 54px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 550px;
+  display: inline-block;
+}
+
+.check-history .check-history-text {
+  font-size: 14px;
+  color: #909090;
+  letter-spacing: 0;
+  line-height: 54px;
+  float: right;
+}
+
+.check-history .check-history-header .check-history-title {
+  margin-right: 33px;
+  font-size: 14px;
+  color: #CCCCCC;
+  letter-spacing: 0;
+  line-height: 54px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  width: 550px;
+  display: inline-block;
+}
+
+.check-history .check-history-header .check-history-text {
+  font-size: 14px;
+  color: #CCCCCC;
+  letter-spacing: 0;
+  line-height: 54px;
+  float: right;
+}
+
+.check-history .icon-downArrow:after {
+  position: relative;
+  right: 0;
+}
