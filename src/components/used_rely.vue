@@ -36,10 +36,16 @@
         if (!status) {
           this.getReplyList();
         }
+      },
+      "$store.state.caseId"(caseId){
+          if (caseId){
+            this.getReplyList();
+          }
       }
     },
     mounted(){
-      this.getReplyList();
+
+
     },
     methods: {
       getReplyList(){

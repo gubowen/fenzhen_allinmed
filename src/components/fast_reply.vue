@@ -4,17 +4,25 @@
       <h3>快捷提问</h3>
     </header>
     <nav class="jump-box-tabs tabsInner" id="ev-show-tabs">
-      <button class="jump-box-prev jump-box-tabs-controller"><i class="icon-leftArrow" :click="transformBtn()"></i></button>
-      <article class="jump-tabs-wrapper">
-        <figure class="jump-box-tabs-item tabsItem" :class="{'active': index == nowIndex}" v-for="(items,index) in FastReplyList" @click="tabShow(items,index)">{{items.questionDesc}}</figure>
+      <button class="jump-box-prev jump-box-tabs-controller">
+        <i class="icon-leftArrow" @click="transformBtn('prev')"></i>
+      </button>
+      <article class="jump-tabs-wrapper" ref="tabItems">
+        <figure class="jump-box-tabs-item tabsItem" :class="{'active': index == nowIndex}"
+                v-for="(items,index) in FastReplyList" @click="tabShow(items,index)">{{items.questionDesc}}
+        </figure>
       </article>
-      <button class="jump-box-next jump-box-tabs-controller"><i class="icon-rightArrow" :click="transformBtn()"></i></button>
+      <button class="jump-box-next jump-box-tabs-controller">
+        <i class="icon-rightArrow" @click="transformBtn('next')"></i>
+      </button>
     </nav>
     <section class="jump-box-viewers viewInner" id="ev-show-inners">
-      <section class="jump-box-viewers-item viewItem" :class="{'active': index == nowIndex}" v-for="(items,index) in FastReplyList">
-          <ul class="jump-box-list">
-            <li class="jump-box-list-item" v-for="item in items.children" ><span @click.stop="clickToSendReply(item)">{{item.questionDesc}}</span></li>
-          </ul>
+      <section class="jump-box-viewers-item viewItem" :class="{'active': index == nowIndex}"
+               v-for="(items,index) in FastReplyList">
+        <ul class="jump-box-list">
+          <li class="jump-box-list-item" v-for="item in items.children"><span
+            @click.stop="clickToSendReply(item)">{{item.questionDesc}}</span></li>
+        </ul>
       </section>
     </section>
     <button class="jump-box-config-button icon-fast-reply-config" @click="showConfig()"><span>编辑快捷提问</span></button>
@@ -24,42 +32,59 @@
 <script>
   import axios from "axios";
   import store from "@/store/store";
-  const XHRList={
+  const XHRList = {
     getTerm: "/call/customer/quick/question/v1/getMapList/",
   }
   export  default{
     name: "fast-reply",
     data(){
       return {
-        FastReplyList:{},
-        showInnerList:{},
-        nowIndex:0
+        FastReplyList: {},
+        showInnerList: {},
+        nowIndex: 0,
+        transformIndex: {
+          i: 0,
+          num: 0
+        }
       }
     },
     components: {},
-    watch:{
-        "$store.state.fastReplyConfig"(status){
-         if (!status){
-           this.getFastReplyList();
-         }
+    watch: {
+      "$store.state.fastReplyConfig"(status){
+        if (!status) {
+          this.getFastReplyList();
         }
+      }
     },
     methods: {
       init(){
-          this.getFastReplyList();
+        this.getFastReplyList();
       },
       showConfig(){
         this.$store.state.fastReplyConfig = true;
       },
       //tabs左右轮播按钮...
-      transformBtn: function () {
-//           let marginLeft =   document.getElementsByClassName("jump-tabs-wrapper")[0].style.marginLeft;
-//           console.log(marginLeft);
+      transformBtn (dir) {
+        const total = this.total;
+        const size = this.size;
+        if (dir === "prev") {
+          if (Math.abs(this.transformIndex.i) > 0) {
+            this.transformIndex.i++;
+            this.transformIndex.num += total / size;
+            $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")
+          }
+        } else if (dir === "next") {
+          if (Math.abs(this.transformIndex.i) < size * 0.7) {
+            this.transformIndex.i--;
+            this.transformIndex.num -= total / size;
+            $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")
+          }
+        }
       },
       //获取列表...
       getFastReplyList(){
         let _this = this;
-        let dataValue ={
+        let dataValue = {
           sessionCustomerId: _this.$store.state.userId,
           isValid: "1",
           firstResult: "0",
@@ -80,32 +105,45 @@
             common.loading.show();
           }
         }).then(function (res) {
-            if(res.data.responseObject.responseData){
-               let datalist = res.data.responseObject.responseData.dataList;
-                _this.FastReplyList = datalist;
-            }
+          if (res.data.responseObject.responseData) {
+            let datalist = res.data.responseObject.responseData.dataList;
+            _this.FastReplyList = datalist;
+          }
+          setTimeout(() => {
+            _this.getTotalSize();
+          }, 20)
+
         })
       },
-      tabShow(ele,index){
-        this.nowIndex = index ;
+      getTotalSize(){
+        let total = 0, size = this.FastReplyList.length;
+        document.querySelectorAll(".jump-tabs-wrapper .tabsItem").forEach((element, index) => {
+          total += element.offsetWidth
+        });
+        $(".jump-tabs-wrapper").width(total + 30 * size + 55);
+        this.total = total;
+        this.size = size;
+      },
+      tabShow(ele, index){
+        this.nowIndex = index;
       },
       //点击将一条回复加入输入框...
       clickToSendReply: function (item) {
-        store.commit("setFastReply",item.questionDesc)
-        this.$emit("update:controllerInputStatus",parseInt(item.isUpload));
+        store.commit("setFastReply", item.questionDesc)
+        this.$emit("update:controllerInputStatus", parseInt(item.isUpload));
       }
     },
     mounted(){
       this.init()
     },
-    props:{
-      controllerInputStatus:{
-          type:Number
+    props: {
+      controllerInputStatus: {
+        type: Number
       }
     }
   }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss">
   @import "../scss/base.scss";
   //快捷提问
   .jump-box {
@@ -203,11 +241,11 @@
     margin-top: 2px;
     min-height: 340px;
     overflow: hidden;
-    &-item{
+    &-item {
       display: none;
     }
-    &-item.active{
-      display:block;
+    &-item.active {
+      display: block;
     }
   }
 

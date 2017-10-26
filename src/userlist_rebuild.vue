@@ -20,9 +20,10 @@
             <li class="userlist-status-item tabsItem"
                 data-role="ut-tabs-1"
                 @click="statusChange(1)"
-                v-bind:class="{ 'active': userListStatus.first,'new':$store.state.newWating}"
+                v-bind:class="{ 'active': userListStatus.first,'new':newWaitingFlag}"
             >
               待分诊
+
 
             </li>
             <li class="userlist-status-item tabsItem"
@@ -31,68 +32,87 @@
                 v-bind:class="{ 'active': userListStatus.second,'new':$store.state.newOnline}"
             >沟通中
 
+
+
+
             </li>
           </ul>
+          <i class="userlist-status-right" @click="sortShow()"></i>
+          <div class="userlist-status-sortList" v-show="sortFlag">
+            <ul>
+              <li @click="sort(1)" :class="{'active':sortActive==1}">剩余时间从:少-多</li>
+              <li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>
+              <li @click="sort(3)" :class="{'active':sortActive==3}">病例时间从:少-多</li>
+              <li @click="sort(4)" :class="{'active':sortActive==4}">病例时间从:多-少</li>
+            </ul>
+          </div>
+
         </nav>
         <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}" id="ev-user-inner">
           <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
-            <article v-show="userListWating.length > 0" @click="transformData(items,index)"
-                     :class="[{ active : userWatingActive == index }, 'userlist-mainList-item']"
-                     v-for="(items,index) in userListWating"
-            >
-              <figure class="userlist-item-img">
-                <img v-bind:src="items.logoUrl" alt="">
-                <p style="display: none;"></p>
-              </figure>
-              <figcaption class="userlist-item-base-msg">
-                <h3>
+
+              <article v-show="userListWating.length > 0" @click="transformData(items,index)"
+                       :class="[{ active : userWatingActive == index }, 'userlist-mainList-item']"
+                       v-for="(items,index) in userListWating"
+                       :key="index"
+              >
+                <figure class="userlist-item-img">
+                  <img v-bind:src="items.logoUrl" alt="">
+                  <p v-show="items.messageAlert">{{items.messageAlert}}</p>
+                </figure>
+                <figcaption class="userlist-item-base-msg">
+                  <h3>
                   <span
                     class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                  <span class="category short" v-show="items.diagnosisContent == ''">{{items.state | checkState
-                    }}</span>
-                  <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
-                </h3>
-                <article>
+                    <span class="category short"
+                          v-show="items.diagnosisContent == ''">{{items.state | checkState}}</span>
+                    <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                  </h3>
+                  <article>
                   <span
                     class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
-                </article>
-                <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
-              </figcaption>
+                  </article>
+                  <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
+                </figcaption>
 
-              <span class="time"> {{items.createTime | timeFormat}}</span>
-            </article>
-            <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
+                <span class="time"> {{items.createTime | timeFormat}}</span>
+              </article>
+              <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
+
           </section>
           <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
-            <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
-                     :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
-                     v-for="(items,index) in userListOnline"
-            >
-              <figure class="userlist-item-img">
-                <img v-bind:src="items.logoUrl" alt="">
-                <p style="display: none;"></p>
-              </figure>
-              <figcaption class="userlist-item-base-msg">
-                <h3>
+
+              <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
+                       :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
+                       v-for="(items,index) in userListOnline"
+                       :key="index"
+              >
+                <figure class="userlist-item-img">
+                  <img v-bind:src="items.logoUrl" alt="">
+                  <p style="display: none;"></p>
+                </figure>
+                <figcaption class="userlist-item-base-msg">
+                  <h3>
                   <span
                     class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                  <span class="category short" v-show="items.diagnosisContent == ''">{{items.state | checkState
-                    }}</span>
-                  <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
-                </h3>
-                <article>
+                    <span class="category short" v-show="items.diagnosisContent == ''">{{items.state | checkState
+                      }}</span>
+                    <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                  </h3>
+                  <article>
                   <span
                     class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
-                </article>
-                <figure class="quit-triage">
-                  <span class="text">转移患者</span>
-                  <i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"
-                     @click.stop="selectQuitItem(items)"></i>
-                </figure>
-              </figcaption>
-              <span class="time"> {{items.createTime | timeFormat}}</span>
-            </article>
-            <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
+                  </article>
+                  <figure class="quit-triage">
+                    <span class="text">转移患者</span>
+                    <i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"
+                       @click="selectQuitItem(items)"></i>
+                  </figure>
+                </figcaption>
+                <span class="time"> {{items.createTime | timeFormat}}</span>
+              </article>
+              <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
+
           </section>
         </section>
         <footer class="user-list-footer">
@@ -101,7 +121,8 @@
           </button>
         </footer>
       </aside>
-      <record :recodrdData="message" v-if="noData"></record>
+      <record :recodrdData="message" v-if="noData" :watingTriage.sync="watingTriage"
+              :userListStatus.sync="userListStatus"></record>
     </div>
     <footer-list></footer-list>
     <check-history v-if="$store.state.checkHistoryFlag"></check-history>
@@ -195,7 +216,11 @@
         },
         fastRelyStatusParent: false,  //快捷提问
         watingTriage: false,
-        filterFinish: false
+        filterFinish: false,
+        newWaitingFlag: false,
+        newPatientFlag: false,
+        sortFlag: false,
+        sortActive: ''
       }
     },
     components: {
@@ -216,7 +241,7 @@
         });
       },
       '$store.state.userId'(){
-
+        this.init();
       },
       '$store.state.patientList'(list){
         this.userListOnline = list;
@@ -231,10 +256,22 @@
         } else {
           return;
         }
+        if (flag) {
+          this.getUserList('wating');
+          store.commit("watingListRefreshFlag", false);
+        } else {
+          return;
+        }
+      },
+      '$store.state.newWating'(flag){
+        this.newWaitingFlag = flag;
+      },
+      '$store.state.newOnline'(flag){
+        this.newPatientFlag = flag;
       }
     },
     mounted(){
-      this.init();
+
     },
     methods: {
       init(){
@@ -248,10 +285,37 @@
           this.watingTriage = true;
           this.userWatingActive = index;
           store.commit("setInputReadOnly", true);
+
+          let waitingList = this.$store.state.watingList;
+          items.messageAlert = '';
+          waitingList[index] = items;
+          this.$store.commit("setWatingList", waitingList);
+
+          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+          console.log(waitingAlertList)
+          if (waitingAlertList) {
+            delete waitingAlertList["0_" + items.caseId];
+            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+          }
+          console.log(localStorage.getItem("waitingAlertList"));
+          if (localStorage.getItem("waitingAlertList") == "{}") {
+            console.log("11");
+            this.newWaitingFlag = false;
+          }
+
         } else {
           this.watingTriage = false;
           this.userOnlineActive = index;
           store.commit("setInputReadOnly", false);
+
+          let patientList = this.$store.state.patientList;
+          items.messageAlert = '';
+          patientList[index] = items;
+          this.$store.commit("setPatientList", patientList);
+
+          if (localStorage.getItem("patientAlertList") == '') {
+            this.newWaitingFlag = false;
+          }
         }
         this.message = items;
 
@@ -313,7 +377,11 @@
             store.commit("stopLoading");
             if (res.responseObject.responseData && res.responseObject.responseStatus) {
               let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
-              //  console.log(dataList);
+              dataList.forEach(function (item, index) {
+                //let waitingAlertList =  JSON.parse(localStorage.getItem("waitingAlertList"));
+
+               // item.messageAlert = '';
+              });
               if (type === "online") {
                 _this.$store.commit("setPatientList", dataList);
                 _this.userListOnline = dataList ? dataList : [];
@@ -357,21 +425,27 @@
       },
       //选择退回患者
       selectQuitItem(item){
-        if (!item.triageSelect) {
-          //选中-增加一项待处理
-          item.triageSelect = true;
-          store.commit("setQuitPatientList", {
-            type: "add",
-            data: item
-          })
-        } else {
-          //取消-删除一项待处理
-          item.triageSelect = false;
-          store.commit("setQuitPatientList", {
-            type: "minus",
-            data: item
-          })
-        }
+//        if (!item.triageSelect) {
+//          //选中-增加一项待处理
+//          item.triageSelect = true;
+//          store.commit("setQuitPatientList", {
+//            type: "add",
+//            data: item
+//          })
+//        } else {
+//          //取消-删除一项待处理
+//          item.triageSelect = false;
+//          store.commit("setQuitPatientList", {
+//            type: "minus",
+//            data: item
+//          })
+//        }
+        this.userListOnline.forEach((element, index) => {
+          element.triageSelect = false;
+        })
+        item.triageSelect = true;
+
+        store.commit("setQuitPatientItem", item)
       },
       //接诊
       getTriagePatient(item, index){
@@ -392,10 +466,37 @@
           this.userListStatus.status = 2;
           this.userListStatus.first = false;
           this.userListStatus.second = true;
+          store.commit("setInputReadOnly", false);
           store.commit("stopLoading");
         }).catch((res) => {
           console.log("网络异常...")
         });
+      },
+      sortShow(){
+        this.sortFlag = !this.sortFlag;
+      },
+      sort(index){
+        let _this = this ;
+        _this.sortActive = index;
+        _this.sortFlag = false;
+        switch (index) {
+          case 1:
+            _this.getUserList('wating', {'sortType':4});
+            break;
+          case 2:
+            _this.getUserList('wating', {'sortType':5});
+            break;
+          case 3:
+            _this.getUserList('wating', {'sortType':-5});
+            _this.getUserList('online', {'sortType':-5});
+            break;
+          case 4:
+            _this.getUserList('wating', {'sortType':-6});
+            _this.getUserList('online', {'sortType':-6});
+            break;
+          default:
+            _this.getUserList('wating', {'sortType':4});
+        }
       }
     }
   }
@@ -412,11 +513,55 @@
     background-color: #fff;
     box-sizing: border-box;
     padding: 10px 14px;
+    position: relative;
     &-box {
       text-align: center;
       font-size: 0;
       border: 1px solid #ACB1BE;
       border-radius: 4px;
+      width: 90%;
+      display: inline-block;
+
+    }
+    &-right {
+      width: 15px;
+      height: 35px;
+      background: #eceff6 url("./assets/img00/common/vedio_play.png") no-repeat center center;
+      background-size: 60% 60%;
+      display: inline-block;
+      vertical-align: middle;
+      padding: 14px;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    &-sortList {
+      position: absolute;
+      top: 12px;
+      right: -150px;
+      width: 150px;
+      z-index: 6;
+      ul {
+        width: 100%;
+        border-radius: 4px;
+        overflow: hidden;
+        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+        li {
+          width: 100%;
+          text-align: center;
+          padding: 5px 0 5px 0;
+          height: 20px;
+          line-height: 25px;
+          color: #808080;
+          font-size: 14px;
+          background: #fff;
+          &:hover {
+            background: #f6f9fa;
+          }
+          &.active {
+            background: #eceff6;
+          }
+        }
+      }
     }
     &-item {
       display: inline-block;
@@ -432,8 +577,11 @@
         position: relative;
         &:after {
           content: '';
-          // @include circle(8px, rgba(242, 62, 51, 0.90));
-          box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.15);
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: rgba(242, 62, 51, .9);
+          box-shadow: 0 1px 1px 0 rgba(45, 17, 14, .15);
           position: absolute;
           right: 5px;
           top: 5px;
@@ -599,7 +747,6 @@
         position: absolute;
         top: 0;
         right: -10px;
-        display: none;
       }
       & > img {
         width: 50px;
@@ -1472,5 +1619,19 @@
         background-size: contain;
       }
     }
+  }
+
+  .fadeDown-enter-active,
+  .fadeDown-leave-active {
+    transition: all ease-in-out .5s
+  }
+
+  .fadeDown-enter,
+  .fadeDown-leave-to
+    /* .fade-leave-active in <2.1.8 */
+
+  {
+    opacity: 0;
+    transform: translateY(-50%);
   }
 </style>

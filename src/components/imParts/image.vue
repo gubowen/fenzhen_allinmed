@@ -34,7 +34,6 @@
     },
     methods:{
       showBigImgFunction(){
-          console.log(this.$store.state.SBIList);
           this.$store.commit("setSBIFlag",true);
           this.$store.commit("setSBIType",'IMImage');
       }

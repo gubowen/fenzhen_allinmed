@@ -1,9 +1,10 @@
 <template id="record">
-  <aside class="medical-record" v-if="showFlag">
-    <header class="medical-record-title-text">
+  <aside class="medical-record" v-if="showFlag" >
+    <button class="btn-primary user-controller-get-triage" v-if="watingTriage" @click="getPatient">接诊</button>
+    <header class="medical-record-title-text" v-show="!$store.state.inputReadOnly">
       <h2>病历编辑</h2>
     </header>
-    <section class="medical-record-content">
+    <section class="medical-record-content" v-show="!$store.state.inputReadOnly">
       <header class="medical-record-title">
         <figure class="medical-record-img" @click="showCheckHistory()">
           <!--<img src="http://img.jfdown.com/jfdown/201409/rw4fi0eoppn.jpg" alt="">-->
@@ -53,11 +54,18 @@
 </template>
 <script type="text/javascript">
   import remarkRecord from "./components/triageRecord";
-
+  import triagePatient from "@/base/triagePatient";
+  import store from "@/store/store";
   export default{
     name: 'record',
     props: {
       recordData: {
+        type: Object
+      },
+      watingTriage: {
+        type: Boolean
+      },
+      userListStatus: {
         type: Object
       }
     },
@@ -72,22 +80,55 @@
     },
     methods: {
       init(){
-        this.userMessage = this.$route.params.num;
+//        alert(5)
+//        this.userMessage = this.$route.params.num;
+        this.userMessage=JSON.stringify(this.$store.state.currentItem);
         this.name = JSON.parse(this.userMessage).patientName;
         this.age = JSON.parse(this.userMessage).patientAge;
         this.sex = JSON.parse(this.userMessage).patientSex;
         this.logoUrl = JSON.parse(this.userMessage).logoUrl;
         this.showFlag = true;
       },
-      activated(){
-        this.init();
-      },
+//      activated(){
+//        this.init();
+//
+//      },
       showCheckHistory(){
         this.$store.state.checkHistoryFlag = !this.$store.state.checkHistoryFlag;
+      },
+//患者接诊
+      getPatient(){
+        let currentItem = this.$store.state.currentItem;
+        let watingList = this.$store.state.watingList;
+        let patientList = this.$store.state.patientList;
+        triagePatient({
+          consultationId: this.$store.state.consultationId,
+          customerId: this.$store.state.userId
+        }).then((res) => {
+
+          this.$emit("update:watingTriage", false);
+
+          watingList.removeByValue(currentItem);
+          patientList.unshift(currentItem);
+
+          store.commit("setPatientList", patientList);
+          store.commit("setWatingList", watingList);
+          store.commit("setInputReadOnly", false);
+          this.$emit("update:userListStatus", {
+            first: false,
+            second: true,
+            status: 2
+          })
+        }).catch((res) => {
+          console.log("网络异常...")
+        });
       }
     },
     watch: {
       '$route.params.num': function () {
+
+      },
+      '$store.state.currentItem'(){
         this.init();
       }
     },
@@ -100,6 +141,7 @@
   }
 </script>
 <style lang="scss" scoped="" rel="stylesheet/scss">
+  @import "./scss/base.scss";
   .slide-fade-enter-active {
     transition: all .3s ease;
   }
@@ -120,7 +162,15 @@
     float: right;
     position: relative;
     margin-left: -385px;
-
+      .user-controller-get-triage{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform:translate(-50%,-50%);
+        @include circle(100px,#7a8ec1);
+        font-size:16px;
+        box-shadow: -2px -2px 2px #000,5px 5px 5px #7a8ec1;
+      }
     .medical-record-title-text {
       height: 56px;
       width: 100%;

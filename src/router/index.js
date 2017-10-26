@@ -5,12 +5,12 @@ import login from '@/Login'
 import userlist from '@/userlist_rebuild'
 
 
-import baseInfo from '@/components/baseInfo'
-import mainSpeak from '@/components/mainSpeak'
-import nowSick from '@/components/nowSick'
-import oldSick from '@/components/oldSick'
-import checkBody from '@/components/checkBody'
-import majorCheck from '@/components/majorCheck'
+import baseInfo from '@/components/sickParts/baseInfo'
+import mainSpeak from '@/components/sickParts/mainSpeak'
+import nowSick from '@/components/sickParts/nowSick'
+import oldSick from '@/components/sickParts/oldSick'
+import checkBody from '@/components/sickParts/checkBody'
+import majorCheck from '@/components/sickParts/majorCheck'
 import setting from '@/components/setting'
 Vue.use(Router);
 Vue.use(VueResource);

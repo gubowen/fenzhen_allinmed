@@ -16,7 +16,7 @@ export default new Vuex.Store({
     userName: "",  // 定义你的数据源
     mobile: '',
     patientList: '',  //患者列表
-    watingList: "",//待分诊列表
+    watingList: "",   //待分诊列表
     watingListRefresh:false,
     caseId: '',       //病例Id
     patientId: '',    //患者Id
@@ -48,7 +48,8 @@ export default new Vuex.Store({
     examineFlag:false,//检查检验显示隐藏
     checkSuggestionFlag:false,//初诊建议显示隐藏
     usedReplyContent: "",
-    quitPatientList: [],
+    // quitPatientList: [],
+    quitPatientItem:{},
     SBIFlag: false, //查看大图标志位
     SBIObject: {}, //查看大图对象
     SBIType:'', //查看大图类型
@@ -117,14 +118,18 @@ export default new Vuex.Store({
       state.consultationId = data;
     },
     //添加删除退回患者
-    setQuitPatientList(state, payLoad){
-      if (payLoad.type === "add") {
-        state.quitPatientList.push(payLoad.data);
-      } else if (payLoad.type === "minus") {
-        state.quitPatientList.removeByValue(payLoad.data);
-      } else if (payLoad.type === "clear") {
-        state.quitPatientList = [];
-      }
+    // setQuitPatientList(state, payLoad){
+    //   if (payLoad.type === "add") {
+    //     state.quitPatientList.push(payLoad.data);
+    //   } else if (payLoad.type === "minus") {
+    //     state.quitPatientList.removeByValue(payLoad.data);
+    //   } else if (payLoad.type === "clear") {
+    //     state.quitPatientList = [];
+    //   }
+    // },
+    //设置退回患者（单选
+    setQuitPatientItem(state,item){
+      state.quitPatientItem=item;
     },
     setCurrentItem(state, data){
       state.currentItem = data;

@@ -223,7 +223,7 @@
           store.commit("setPreviewType",-1);
         },
         sendSuggest(){
-          let that = this
+          let that = this;
           let recommendCustomerList = [],recoveryAdviceList = [];
           //推荐医生
           if(this.previewSendData.doctorList.length>0){
@@ -298,9 +298,9 @@
                     url: XHRList.saveRecommendDoc,
                     method: 'POST',
                     data: {
-                      caseId:this.$store.state.currentItem.caseId,
-                      patientId:this.$store.state.currentItem.patientId,
-                      customerId:this.$store.state.currentItem.customerId,
+                      caseId:that.$store.state.caseId,
+                      patientId:that.$store.state.patientId,
+                      customerId:that.$store.state.userId,
                       recommendCustomerList:JSON.stringify(recommendCustomerList),
                       diagnosisId:diagnosisId,
                       type:1
@@ -316,9 +316,9 @@
                     url: XHRList.savePreviewSuggest,
                     method: 'POST',
                     data: {
-                      caseId:this.$store.state.currentItem.caseId,
-                      patientId:this.$store.state.currentItem.patientId,
-                      customerId:this.$store.state.currentItem.customerId,
+                      caseId:that.$store.state.caseId,
+                      patientId:that.$store.state.patientId,
+                      customerId:that.$store.state.userId,
                       recoveryAdviceList:JSON.stringify(recoveryAdviceList),
                       diagnosisId:diagnosisId,
                       type:1
@@ -332,6 +332,7 @@
                 let nowTime = new Date(),
                 createTime = (nowTime.getFullYear()+'.'+(nowTime.getMonth()+1<10?"0"+(nowTime.getMonth()+1):nowTime.getMonth()+1)+'.'+(nowTime.getDate()<10?"0"+nowTime.getDate():nowTime.getDate())).replace(/-/g,".");
                 that.closePreview();
+                that.$store.commit("setCheckSuggestionFlag", !that.$store.state.checkSuggestionFlag);
                 store.commit("previewSuggestionSender",{
                     flag:true,
                     data:{
@@ -342,7 +343,7 @@
                       "createTime":createTime,
                       "diagnosisId":diagnosisId
                     }
-                })
+                });
               }
             }
           })

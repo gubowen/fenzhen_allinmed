@@ -15,7 +15,8 @@
           </button>
           <button class="user-controller-check" @click="examine()"><i class="icon-checkout"></i><span>检查检验</span>
           </button>
-          <button class="user-controller-check" @click="reTriageShow=true"><i class="icon-checkout"></i><span>患者转移分诊</span></button>
+          <button class="user-controller-check" @click="reTriageShow=true"><i
+            class="icon-checkout"></i><span>患者转移分诊</span></button>
           <!--快捷提问-->
           <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus"></fast-Rely>
           <!--常用回复-->
@@ -32,7 +33,7 @@
           <span class="user-send-message">按下Enter发送</span>
           <button class="btn-primary user-controller-send-btn" @click="sendMessage">发送</button>
         </footer>
-        <button class="btn-primary user-controller-get-triage" v-if="watingTriage" @click="getPatient">接诊</button>
+
 
       </section>
     </section>
@@ -41,18 +42,18 @@
     <!--编辑快捷提问-->
     <fast-Reply-Config v-if="$store.state.fastReplyConfig"></fast-Reply-Config>
     <!--检查检验-->
-    <examine-check  v-if="$store.state.examineFlag" ></examine-check>
+    <examine-check v-if="$store.state.examineFlag"></examine-check>
     <!--初诊建议-->
     <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
 
     <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
-    <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}" v-if="$store.state.previewShow">
+    <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
+             v-if="$store.state.previewShow">
       <PreviewSuggestion></PreviewSuggestion>
     </section>
   </section>
 </template>
 <script>
-  import axios from "axios";
   import SmallConfirm from "@/common/smallConfirm";
   import fastRely from './components/fast_reply';
   import usedRely from './components/used_rely';
@@ -62,8 +63,6 @@
   import ExamineCheck from './components/ExamineCheck';
   import PreviewSuggestion from './components/previewSuggestion'
   import BaseIm from './baseIm';
-
-
   import triagePatient from "@/base/triagePatient";
   import releasePatient from "@/base/releasePatient";
   import ShowBigImg from './common/ShowBigImg';
@@ -91,7 +90,7 @@
         fastReplyConfig: false,
         reTriageShow: false,
         reTriageContentTips: "确定要重新分诊您选中的患者吗？",
-        inputReadOnly:""
+        inputReadOnly: ""
       }
     },
     components: {
@@ -103,7 +102,8 @@
       ShowBigImg,
       BaseIm,
       SmallConfirm,
-      PreviewSuggestion
+      PreviewSuggestion,
+      UsedReplyConfig
     },
     props: {
       m: {
@@ -167,11 +167,11 @@
       },
       //出诊建议按钮
       suggestion () {
-          this.$store.commit("setCheckSuggestionFlag",!this.$store.state.checkSuggestionFlag);
+        this.$store.commit("setCheckSuggestionFlag", !this.$store.state.checkSuggestionFlag);
       },
       //检查检验
       examine () {
-        this.$store.commit('setExamineFlag',!this.$store.state.examineFlag);
+        this.$store.commit('setExamineFlag', !this.$store.state.examineFlag);
       },
       //快捷提问按钮
       fastRely(){
@@ -191,29 +191,37 @@
         let consultationId = [];
         let watingList = this.$store.state.watingList;
         let patientList = this.$store.state.patientList;
-        if (this.$store.state.quitPatientList.length===0){
+//        if (this.$store.state.quitPatientList.length === 0) {
+//          this.reTriageShow = false;
+//          return false;
+//        }
+//        this.$store.state.quitPatientList.forEach((element, index) => {
+//          consultationId.push(element.consultationId);
+//        });
+        if (!this.$store.state.quitPatientItem){
           this.reTriageShow = false;
           return false;
         }
-        this.$store.state.quitPatientList.forEach((element, index) => {
-          consultationId.push(element.consultationId);
-        });
         releasePatient({
+//          customerId: this.$store.state.userId,
+//          consultationId: consultationId.join(",")
           customerId: this.$store.state.userId,
-          consultationId: consultationId.join(",")
+          consultationId: this.$store.state.quitPatientItem.consultationId
         }).then((res) => {
 
-          this.$store.state.quitPatientList.forEach((element, index) => {
-            patientList.removeByValue(element);
-            watingList.unshift(element);
-          });
-
+//          this.$store.state.quitPatientList.forEach((element, index) => {
+//            patientList.removeByValue(element);
+//            watingList.unshift(element);
+//          });
+          patientList.removeByValue(this.$store.state.quitPatientItem);
+          this.$store.state.quitPatientItem.triageSelect=false;
+          watingList.unshift(this.$store.state.quitPatientItem);
           store.commit("setPatientList", patientList);
           store.commit("setWatingList", watingList);
 
           this.reTriageShow = false;
 
-          this.$emit("update:n",false);
+          this.$emit("update:n", false);
         })
       },
 
@@ -234,7 +242,7 @@
 
           store.commit("setPatientList", patientList);
           store.commit("setWatingList", watingList);
-          store.commit("setInputReadOnly",false);
+          store.commit("setInputReadOnly", false);
           this.$emit("update:userListStatus", {
             first: false,
             second: true,
