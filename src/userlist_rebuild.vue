@@ -69,16 +69,12 @@
                             </figure>
                             <figcaption class="userlist-item-base-msg">
                                 <h3>
-                  <span
-                          class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                    <span class="category short"
-                                          v-show="items.diagnosisContent == ''">{{items.state | checkState}}</span>
-                                    <span class="category short"
-                                          v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                                    <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
+                                    <span class="category short" v-show="items.diagnosisContent == ''">{{items.caseType | checkState}}</span>
+                                    <span class="category short"v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
-                  <span
-                          class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
+                  <span class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
                                 </article>
                                 <button class="get-triage btn-primary-small"
                                         @click.stop="getTriagePatient(items,index)">接诊
@@ -107,7 +103,7 @@
                   <span
                           class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
                                     <span class="category short"
-                                          v-show="items.diagnosisContent == ''">{{items.state | checkState
+                                          v-show="items.diagnosisContent == ''">{{items.caseType | checkState
                                         }}</span>
                                     <span class="category short"
                                           v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
