@@ -1,6 +1,16 @@
 <template>
   <article>
     <figure class="messageList-item-content">
+      <!--文字-->
+      <figcaption class="messageList-item-text" >
+        非常抱歉，由于缺少重要的检查资料，暂时无法做出诊断。建议您尽快进行以下检查，并上传检查资料，唯医骨科将继续为您咨询。
+      </figcaption>
+      <!--医生头像-->
+      <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
+        <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+      </figure>
+    </figure>
+    <figure class="messageList-item-content">
       <!--检查检验-->
       <figcaption class="check-suggestion-message">
         <header class="check-suggestion-message-title">检查/检验建议</header>
@@ -17,6 +27,7 @@
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
+
   </article>
 </template>
 <script type="text/ecmascript-6">
