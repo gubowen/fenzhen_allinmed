@@ -398,27 +398,29 @@
         } else {
           //接诊列表
           let patientList = this.$store.state.patientList;
-          patientList.forEach(function (item, index) {
-            if (("0_" + item.caseId) == element.from) {
+            if(patientList) {
+                patientList.forEach(function (item, index) {
+                    if (("0_" + item.caseId) == element.from) {
 
-              if (item.messageAlert == '') {
-                item.messageAlert = "1";
-              } else {
-                item.messageAlert = parseInt(item.messageAlert) + 1;
-              }
+                        if (item.messageAlert == '') {
+                            item.messageAlert = "1";
+                        } else {
+                            item.messageAlert = parseInt(item.messageAlert) + 1;
+                        }
 
-              let caseIdInfo = "0_" + item.caseId;
-              let patientAlertList = {};
-              patientAlertList[caseIdInfo] = item.messageAlert;
+                        let caseIdInfo = "0_" + item.caseId;
+                        let patientAlertList = {};
+                        patientAlertList[caseIdInfo] = item.messageAlert;
 
-              localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
-              _this.$store.commit("setNewOnline", true);
+                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+                        _this.$store.commit("setNewOnline", true);
+                    }
+                });
+                this.$store.commit("setPatientList", patientList);
             }
-          });
-          this.$store.commit("setPatientList", patientList);
-
           //等待列表
           let watingList = this.$store.state.watingList;
+            if(watingList){
           watingList.forEach(function (item, index) {
             if (("0_" + item.caseId) == element.from) {
               if (item.messageAlert == '') {
@@ -435,6 +437,7 @@
             }
           });
           this.$store.commit("setWatingList", watingList);
+        }
         }
       },
       //输出历史消息...

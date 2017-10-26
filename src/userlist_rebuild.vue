@@ -291,17 +291,14 @@
           waitingList[index] = items;
           this.$store.commit("setWatingList", waitingList);
 
-          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-          console.log(waitingAlertList)
-          if (waitingAlertList) {
-            delete waitingAlertList["0_" + items.caseId];
-            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-          }
-          console.log(localStorage.getItem("waitingAlertList"));
-          if (localStorage.getItem("waitingAlertList") == "{}") {
-            console.log("11");
-            this.newWaitingFlag = false;
-          }
+            let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+            if (waitingAlertList) {
+                delete waitingAlertList["0_" + items.caseId];
+                localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+            }
+            if (localStorage.getItem("waitingAlertList") == "{}") {
+                this.newWaitingFlag = false;
+            }
 
         } else {
           this.watingTriage = false;
@@ -313,9 +310,14 @@
           patientList[index] = items;
           this.$store.commit("setPatientList", patientList);
 
-          if (localStorage.getItem("patientAlertList") == '') {
-            this.newWaitingFlag = false;
-          }
+            let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
+            if (patientAlertList) {
+                delete patientAlertList["0_" + items.caseId];
+                localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+            }
+            if (localStorage.getItem("patientAlertList") == "{}") {
+                this.newPatientFlag = false;
+            }
         }
         this.message = items;
 
