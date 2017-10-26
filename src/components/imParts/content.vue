@@ -6,7 +6,7 @@
         <img :src="$store.state.currentItem.logoUrl" alt="">
       </figure>
       <!--文字-->
-      <figcaption class="messageList-item-text" v-if="message.type == 'text'&&message.text!=='患者已上传检查资料'">
+      <figcaption class="messageList-item-text" v-if="message.type == 'text'&&(message.text!=='患者已上传检查资料'||message.text!=='患者已上传视诊资料')">
         {{message.text}}
 
       </figcaption>
@@ -14,6 +14,12 @@
         {{message.text + "，点击至"}}
         <a href="#" class="link" @click="goToCheck">“专科检查”</a>
         查看
+
+      </figcaption>
+      <figcaption class="messageList-item-text" v-if="message.type == 'text'&&message.text==='患者已上传视诊资料'">
+        {{message.text + "，点击至"}}
+        <a href="#" class="link" @click="goToCheck">“专科检查”</a>
+        查看。若视频上传中，请稍后再次点击查看。
 
       </figcaption>
       <!--医生头像-->

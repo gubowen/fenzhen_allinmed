@@ -53,7 +53,7 @@
                 <span class="hospital">{{item.company}}</span>
                 <span class="medical">{{item.medicalTitle}}</span>
               </article>
-              <article class="doctor-message-goodAt">擅长:{{item.illnessNameList}}</article>
+              <article class="doctor-message-goodAt">擅长：<span v-html="item.illnessNameList"></span></article>
               <article class="doctor-message-num">
                 <span class="price"><em>¥{{item.generalPrice}}</em>/{{item.generalTimes}}次起</span>
                 <span class="lastNum">仅剩<em>{{item.adviceNum}}</em>个名额</span>
@@ -72,7 +72,7 @@
         </header>
         <section class="preview-project">
           <section class="preview-project-list">
-            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName}}</article>
+            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName || item.checkName}}</article>
             <article class="preview-project-item test" v-for="item in previewSendData.testList">{{item.inspectionName}}</article>
           </section>
         </section>
@@ -282,12 +282,7 @@
           ajax({
             url: XHRList.saveData,
             method: 'POST',
-            data: {
-              isValid: 1,
-              firstResult: 0,
-              maxResult: 999,
-              treeLevel: "2"
-            },
+            data: that.previewSendData.diagnoseResult,
             done(data){
               if (data.responseObject.responseStatus) {
                 console.log("初步诊断保存成功");

@@ -79,6 +79,8 @@
       init(){
         this.imgList = [];
         this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
+        console.log( this.imgList);
+        console.log( this.$store.state.SBIType);
       },
       close(){
         this.$store.commit("setSBIFlag", false);

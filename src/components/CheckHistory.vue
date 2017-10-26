@@ -12,7 +12,7 @@
           <ul>
             <li v-for="(items,index) in diagnoseHistoryList" @click="chatHistoryRecord(items,index)">
               <section class="check-history-info">
-                <span class="check-history-title"><i class="icon-downArrow"></i>{{items.mainContent.caseMain}}}</span>
+                <span class="check-history-title"><i class="icon-downArrow"></i>{{items.mainContent.caseMain}}</span>
                 <span class="check-history-text">{{items.createTime|timeFormatCheckHistory}}</span>
               </section>
               <article class="check-history-show" :class="{'on': index == currentIndex}" v-show="chatHistoryRecordList.length >0">
