@@ -1,7 +1,7 @@
 <template>
   <!--底部区域-->
   <footer id="footer" class="main-footer">
-    <span>Copyright©2017 tocure.cn All Rights Reserved.版权所有©北京欧应信息技术有限公司</span>
+    <span>Copyright©2017 allinmed.cn All Rights Reserved.版权所有©北京欧应信息技术有限公司</span>
     <span>京公网安备 11010502032763号</span>
     <span>京ICP备14007118号-5</span>
   </footer>
