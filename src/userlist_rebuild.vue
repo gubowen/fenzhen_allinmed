@@ -41,9 +41,9 @@
           <div class="userlist-status-sortList" v-show="sortFlag">
             <ul>
               <li @click="sort(1)" :class="{'active':sortActive==1}">剩余时间从:少-多</li>
-              <li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>
-              <li @click="sort(3)" :class="{'active':sortActive==3}">病例时间从:少-多</li>
-              <li @click="sort(4)" :class="{'active':sortActive==4}">病例时间从:多-少</li>
+              <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
+              <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
+              <li @click="sort(4)" :class="{'active':sortActive==4}">等待时间从:多-少</li>
             </ul>
           </div>
 

@@ -1,8 +1,8 @@
 {
-  "name": "tocure_triage_pc_vue",
-  "version": "1.0.0",
-  "description": "A Vue.js project",
-  "author": "",
+  "name": "triage_pc_vue",
+  "version": "1.1.0",
+  "description": "Allinmed triage PC",
+  "author": "Allinmd Front-End Term",
   "private": true,
   "scripts": {
     "dev": "node build/dev-server.js",
