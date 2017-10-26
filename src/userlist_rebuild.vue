@@ -29,12 +29,14 @@
 
 
 
+
                         </li>
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
+
 
 
 
@@ -70,14 +72,17 @@
                             <figcaption class="userlist-item-base-msg">
                                 <h3>
                                     <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                    <span class="category short" v-show="items.diagnosisContent == ''">{{items.caseType | checkState}}</span>
-                                    <span class="category short"v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                                    <span class="category short"
+                                          v-show="items.diagnosisContent == ''">{{items.caseType | checkState}}</span>
+                                    <span class="category short"
+                                          v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
-                  <span class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
+                                    <span class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
                                 </article>
                                 <button class="get-triage btn-primary-small"
                                         @click.stop="getTriagePatient(items,index)">接诊
+
                                 </button>
                             </figcaption>
 
@@ -180,13 +185,9 @@
         let result = "";
         switch (parseInt(type)) {
             case 0:
-                result = "咨询";
-                break;
             case 1:
-                result = "复诊";
-                break;
             case 2:
-                result = "预约手术";
+                result = "咨询";
                 break;
             case 3:
                 result = "待检查";
@@ -503,14 +504,14 @@
                 }, () => {
                     this.getUserList('wating');
                     store.commit("stopLoading");
-                    store.commit("showPopup",{
+                    store.commit("showPopup", {
                         hasImg: false,
                         text: "该患者已被其他分诊医生接诊！"
                     });
                 }, (c) => {
                     this.getUserList('wating');
                     store.commit("stopLoading");
-                    store.commit("showPopup",{
+                    store.commit("showPopup", {
                         hasImg: false,
                         text: `您最多可以接诊${c}个患者！`
                     });
