@@ -84,10 +84,6 @@
         this.showCity();
         this.showDistrict();
       },
-      showData(){
-        this.dataShow = !this.dataShow;
-        this.iconFlag = !this.iconFlag;
-      },
       showProvince(){
         let _this = this;
         let dataValue = {
@@ -203,7 +199,7 @@
         });
       },
       showData(){
-        this.provinceFlag = true;
+        this.provinceFlag = !this.provinceFlag;
         this.cityFlag = false;
         this.districtFlag = false;
       },
