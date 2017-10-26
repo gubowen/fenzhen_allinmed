@@ -26,6 +26,7 @@
         </footer>
       </section>
     </form>
+    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
   </section>
 </template>
 <script>
@@ -55,9 +56,14 @@
         allergyHistory: '',
         allergyHistoryID: '',
         plague: '',
-        plagueID: ''
+        plagueID: '',
+        popupShow:false,
+        popupObj: {}
       }
     },
+      components:{
+          popup
+      },
     watch: {
       '$store.state.currentItem'(){
         this.init();
@@ -137,7 +143,7 @@
       },
       saveData: function () {
           let _this = this;
-        if (this.sickHistory || this.operationHistory || this.medicineHistory || this.outSickHistory || this.allergyHistory || this.plague) {
+     //   if (this.sickHistory || this.operationHistory || this.medicineHistory || this.outSickHistory || this.allergyHistory || this.plague) {
           let dataList = [];
           //疾病史
           if (this.sickHistory) {
@@ -208,20 +214,29 @@
             beforeSend(config) {
             },
             done(res){
-              console.log(res.responseObject.responseStatus);
               if (res.responseObject.responseStatus) {
-                common.popupRight({text: "保存成功"});
+                  _this.popupShow = true;
+                  _this.popupObj = {
+                      text: '保存成功'
+                  };
               } else {
-                common.popupRight({text: "保存失败"});
+                  _this.popupShow = true;
+                  _this.popupObj = {
+                      text: '保存失败'
+                  };
               }
             }, fail(error){
               console.log("请求失败" + error);
             }
           });
 
-        } else {
-          common.popupRight({text: "只少输入一项病史"});
-        }
+//        } else {
+//            _this.popupShow = true;
+//            _this.popupObj = {
+//                text: '只少输入一项病史'
+//            };
+//          //common.popupRight({text: "只少输入一项病史"});
+//        }
 
       }
     },

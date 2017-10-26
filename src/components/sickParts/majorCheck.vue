@@ -17,7 +17,7 @@
           </section>
         </article>
         <article>
-          <header><h2>视珍</h2></header>
+          <header><h2>视诊</h2></header>
           <section class="video-check">
             <ul class="video-check-show">
               <li v-show="videoCaseAttUrl.length > 0" v-for="item in videoCaseAttUrl">
