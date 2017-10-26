@@ -18,9 +18,9 @@
           <button class="user-controller-check" @click="reTriageShow=true"><i
             class="icon-checkout"></i><span>患者转移分诊</span></button>
           <!--快捷提问-->
-          <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus"></fast-Rely>
+          <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
           <!--常用回复-->
-          <used-Rely v-show="usedRelyStatus"></used-Rely>
+          <used-Rely v-show="usedRelyStatus" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
           <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
                         @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
         </nav>
