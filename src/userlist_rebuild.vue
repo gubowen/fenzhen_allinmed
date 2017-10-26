@@ -9,6 +9,8 @@
         :fastRelyStatus.sync="fastRelyStatusParent"
         :watingTriage.sync="watingTriage"
         :userListStatus.sync="userListStatus"
+        :userOnlineActive.sync="userOnlineActive"
+        :userWatingActive.sync="userWatingActive"
       >
       </communication>
       <aside class="center-inner-userlist">
@@ -101,13 +103,13 @@
                   </h3>
                   <article>
                   <span
-                    class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
+                    class="text">{{items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{(items.returnReason.length>0?items.returnReason:parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料")}}</span>
                   </article>
-                  <figure class="quit-triage">
-                    <span class="text">转移患者</span>
-                    <i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"
-                       @click="selectQuitItem(items)"></i>
-                  </figure>
+                  <!--<figure class="quit-triage">-->
+                    <!--<span class="text">转移患者</span>-->
+                    <!--<i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"-->
+                       <!--@click="selectQuitItem(items)"></i>-->
+                  <!--</figure>-->
                 </figcaption>
                 <span class="time"> {{items.createTime | timeFormat}}</span>
               </article>
@@ -195,8 +197,8 @@
         userListData: "",
         userListOnline: [],
         userListWating: [],
-        userWatingActive: '-1',
-        userOnlineActive: '-1',
+        userWatingActive: -1,
+        userOnlineActive: -1,
         questionShow: '',
         userName: "默认",
         message: {},
@@ -379,13 +381,13 @@
 //              conType: 0
 //            })
 //        }
-        store.commit("startLoading");
+//        store.commit("startLoading");
         api.ajax({
           url: type === "online" ? XHRList.onlineUserList : XHRList.watingUserList,
           method: "POST",
           data: dataValue,
           done(res) {
-            store.commit("stopLoading");
+//            store.commit("stopLoading");
             if (res.responseObject.responseData && res.responseObject.responseStatus) {
               let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
 

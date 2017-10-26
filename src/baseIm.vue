@@ -5,7 +5,7 @@
         </header>
         <section class="messageList">
             <!--v-for="items in messageInfo"-->
-            <article class="messageList-box" ref="messageBox">
+            <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
@@ -395,7 +395,7 @@
             receiveMessage (targetUser, element) {
                 //获取当前患者消息
                 const _this = this;
-                if (element.from==="1_doctor00001"||(element.from.includes("0_")&&targetUser===element.from)) {
+                if ((element.from.includes("0_")&&targetUser===element.from)||(element.to.includes("0_")&&targetUser===element.to)) {
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
@@ -403,7 +403,7 @@
                 } else {
                     //接诊列表
                     let patientList = this.$store.state.patientList;
-                    patientList.forEach(function (item, index) {
+                    patientList.forEach((item, index) =>{
                         if (("0_" + item.caseId) == element.from) {
 
                             if (item.messageAlert == '') {
@@ -565,6 +565,9 @@
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
+        &.watingBoxStyle{
+            height: 90%;
+        }
         .messageList-item {
             position: relative;
             zoom: 1;
