@@ -45,8 +45,13 @@
           remarkList:[]
         }
     },
+    watch:{
+       '$store.state.caseId'(){
+           this.getRemarkList();
+       }
+    },
     mounted(){
-      this.getRemarkList();
+
     },
     methods:{
       getRemarkList(){
