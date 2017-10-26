@@ -184,6 +184,7 @@
         this.examineGetData("/call/comm/data/inspection/v1/getMapList/", "testSuggest", 2);
       },
       examineGetData: function (url, target, type) {
+        store.commit("startLoading");
         let _this = this;
         let dataValue = {
           isValid: 1,
@@ -221,6 +222,7 @@
             } else {
               _this.testSuggest = res.responseObject.responseData.dataList;
             }
+            store.commit("stopLoading");
           },
           fail(error){
           }
@@ -477,7 +479,7 @@
     }
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/base";
   @import "../../scss/modules/_checkSuggestion";
   @import "../../scss/modules/_configSuggestion";

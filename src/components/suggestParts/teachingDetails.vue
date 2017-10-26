@@ -17,6 +17,7 @@
 </template>
 <script type="text/ecmascript-6">
   import ajax from "../../common/js/ajax";
+  import store from "../../store/store";
    const XHRList = {
      getTeachingDetail:"/call/comm/data/knowledge/content/v1/getMapById/"
    }
@@ -31,6 +32,7 @@
         },
         methods:{
           getTeachingDetail(){
+            store.commit("startLoading");
             let that = this;
             ajax({
               url: XHRList.getTeachingDetail,
@@ -45,6 +47,7 @@
                 if (data.responseObject.responseData.dataList) {
                   that.teachingDetail = data.responseObject.responseData.dataList[0];
                 }
+                store.commit("stopLoading");
               }
             })
           },
@@ -67,6 +70,7 @@
   @import "../../scss/base";
   .disease-teach-detail {
     .check-suggestion-box {
+      height:auto;
       position: absolute;
       top: 50%;
       left: 50%;

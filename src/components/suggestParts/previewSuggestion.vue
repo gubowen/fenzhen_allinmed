@@ -72,7 +72,7 @@
         </header>
         <section class="preview-project">
           <section class="preview-project-list">
-            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName}}</article>
+            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName || item.checkName}}</article>
             <article class="preview-project-item test" v-for="item in previewSendData.testList">{{item.inspectionName}}</article>
           </section>
         </section>
