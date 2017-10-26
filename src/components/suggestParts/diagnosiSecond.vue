@@ -44,7 +44,7 @@
               <section class="doctor-message doctor-message-mate" v-show="docCutNum==0">
                 <template v-if="matchDoc.matchDocList.length>0">
                   <section class='doctor-message-item icon-select-big' :class="{'active':docList.isChecked}" v-for="(docList,index) in matchDoc.matchDocList" @click.stop="changeCheckedState(docList,index,'match')">
-                    <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'../assets/img00/common/default_logo.png'"></figure>
+                    <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
                     <figcaption class="doctor-message-content">
                       <header class="doctor-message-content-head">'
                         <h4>{{docList.fullName}}</h4>
@@ -74,7 +74,7 @@
               <section class="doctor-message doctor-message-all" v-show="docCutNum==1">
                 <section class="doctor-message-page-box">
                   <section class='doctor-message-item icon-select-big' :class="{'active':docList.isChecked}" v-for="(docList,index) in allDoc.allDocList" @click="changeCheckedState(docList,index,'all')">
-                    <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'../assets/img00/common/default_logo.png'"></figure>
+                    <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
                     <figcaption class="doctor-message-content">
                       <header class="doctor-message-content-head">'
                         <h4>{{docList.fullName}}</h4>
@@ -1417,7 +1417,7 @@
       width:14px;
       height:4px;
       position:absolute;
-      right:25px;
+      right:10px;
       top:30px;
       z-index: 2;
       background:url("../../assets/img00/check/dot_more.png") no-repeat;
