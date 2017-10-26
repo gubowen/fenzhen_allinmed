@@ -8,7 +8,7 @@
             <ul class="talkImgMore">
               <li v-show="caseAttUrl.length > 0" v-for="item in caseAttUrl">
                 <section>
-                  <img :src="item"/>
+                  <img :src="item" @click="showBigImgFunction(1)"/>
                   <p>检查资料</p>
                 </section>
               </li>
@@ -22,7 +22,7 @@
             <ul class="video-check-show">
               <li v-show="videoCaseAttUrl.length > 0" v-for="item in videoCaseAttUrl">
                 <section>
-                  <img :src="item"/>
+                  <img :src="item" @click="showBigImgFunction(2)"/>
                   <p>患病处照片</p>
                 </section>
               </li>
@@ -59,95 +59,118 @@
   </section>
 </template>
 <script>
-  import api from '@/common/js/util';
-  import axios from "axios";
-  import addressSelector from '@/common/addressSelector'
-  import popup from  '@/common/popup';
+    import api from '@/common/js/util';
+    import axios from "axios";
+    import addressSelector from '@/common/addressSelector'
+    import popup from  '@/common/popup';
 
 
-  export default{
-    name: 'majorCheck',
-    data(){
-      return {
-        getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
-        userMessage: {},
-        caseAttUrl: [],
-        videoCaseAttUrl: []
-      }
-    },
-    watch: {
-      '$store.state.currentItem'(){
-        this.init();
-      }
-    },
+    export default{
+        name: 'majorCheck',
+        data(){
+            return {
+                getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
+                userMessage: {},
+                caseAttUrl: [],
+                videoCaseAttUrl: []
+            }
+        },
+        watch: {
+            '$store.state.currentItem'(){
+                this.init();
+            }
+        },
 //    activated(){
 //      this.userMessage = this.$store.state.currentItem;
 //      this.init();
 //    },
-    methods: {
-      init() {
-        this.userMessage = this.$store.state.currentItem;
-        console.log( this.userMessage);
-        this.getData();
+        methods: {
+            init() {
+                this.userMessage = this.$store.state.currentItem;
+                console.log(this.userMessage);
+                this.getData();
 
-      },
-      getData() {
-        let _this = this;
-        let dataValue = {
-          caseId: this.userMessage.caseId,	            //string	是	病例id
-          isValid: 1,                  //string	是	1
-          caseAttSpecPic: 1,	        //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
-          caseAttSpecVideoPic: 10,	//string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
-          caseAttSpecVideo: 9,	    //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
-          firstResult: 0,	            //string	是
-          maxResult: 100,	            //string	是
-          attUseFlag: 3
-        };
+            },
+            getData() {
+                let _this = this;
+                let dataValue = {
+                    caseId: this.userMessage.caseId,	            //string	是	病例id
+                    isValid: 1,                  //string	是	1
+                    caseAttSpecPic: 1,	        //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+                    caseAttSpecVideoPic: 10,	//string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+                    caseAttSpecVideo: 9,	    //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
+                    firstResult: 0,	            //string	是
+                    maxResult: 100,	            //string	是
+                    attUseFlag: 3
+                };
 
-        console.log(dataValue);
-        api.ajax({         //获取基本信息
-          url: _this.getDataUrl,
-          method: "POST",
-          data: dataValue,
-          beforeSend(config) {
-          },
-          done(res) {
-              console.log(res);
-            if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
-              let data_list = res.responseObject.responseData.data_list;
-              //获取图片
-              if (data_list[0].picMap.length) {
-                $.each(data_list[0].picMap, function (key, value) { //    1-X光片2-CT3-超声4-核磁共振5-病理6-检查结果7-其他8-曾就诊病历9-专科检查10-化验及特殊检查11-体格检查',
-                  switch (value.caseAttSource) {   //0-历史健康信息 1-视诊检查检验 2-初诊建议 3 检查检验 4患处照片,
-                    case "0":
-                    case "2":
-                    case "3":
-                      _this.caseAttUrl.push(value.caseAttUrl);
-                      break;
-                    case "1":
-                    case "4":
-                      _this.videoCaseAttUrl.push(value.caseAttUrl);
-                      break;
-                  }
+                console.log(dataValue);
+                api.ajax({         //获取基本信息
+                    url: _this.getDataUrl,
+                    method: "POST",
+                    data: dataValue,
+                    beforeSend(config) {
+                    },
+                    done(res) {
+                        console.log(res);
+                        if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
+                            let data_list = res.responseObject.responseData.data_list;
+                            //获取图片
+                            let checkImageList = [];
+                            let diagnoseList = [];
+                            if (data_list[0].picMap.length) {
+                                $.each(data_list[0].picMap, function (key, value) { //    1-X光片2-CT3-超声4-核磁共振5-病理6-检查结果7-其他8-曾就诊病历9-专科检查10-化验及特殊检查11-体格检查',
+                                    switch (value.caseAttSource) {   //0-历史健康信息 1-视诊检查检验 2-初诊建议 3 检查检验 4患处照片,
+                                        case "0":
+                                        case "2":
+                                        case "3":
+                                            _this.caseAttUrl.push(value.caseAttUrl);
+                                            checkImageList.push({"url": value.caseAttUrl});
+                                            break;
+                                        case "1":
+                                        case "4":
+                                            _this.videoCaseAttUrl.push(value.caseAttUrl);
+                                            diagnoseList.push({"url": value.caseAttUrl});
+                                            break;
+                                    }
+                                });
+                                if(checkImageList.length > 0 && diagnoseList.length > 0){
+                                    let allList ={};
+                                    allList['checkImage'] = checkImageList;
+                                    allList['diagnoseListImage'] = diagnoseList;
+                                    _this.$store.commit('setSBIObject',allList);
+                                } else if (checkImageList.length > 0) {
+                                    console.log("2");
+                                    _this.$store.commit('setSBIObject', {'checkImage': checkImageList});
+                                } else if (diagnoseList.length > 0) {
+                                    console.log("2");
+                                    _this.$store.commit('setSBIObject', {'diagnoseListImage': diagnoseList});
+                                }
+
+                            }
+                        }
+                    }, fail(error){
+                        console.log("请求失败：" + error);
+                    }
                 });
-                let checkImageList = [];
-                checkImageList.push( {"url": _this.caseAttUrl});
-                this.$store.commit('setSBIObject',{'Image':checkImageList});
-              }
-            }
-          }, fail(error){
-            console.log("请求失败：" + error);
-          }
-        });
-      },
-      saveData(){
+            },
+            saveData(){
 
-      }
-    },
-    mounted(){
-      this.init();
+            },
+            showBigImgFunction(type){
+                if (type == '1') {
+                    this.$store.commit("setSBIFlag", true);
+                    this.$store.commit("setSBIType", 'checkImage');
+                } else if (2) {
+                    this.$store.commit("setSBIFlag", true);
+                    this.$store.commit("setSBIType", 'diagnoseListImage');
+                }
+            }
+        },
+        mounted(){
+            this.init();
+        }
     }
-  }
 
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
