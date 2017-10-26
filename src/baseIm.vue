@@ -769,4 +769,15 @@
     margin-top: 40px;
     text-align: center;
   }
+  .fadeDown-enter-active {
+    transition: all ease-in-out .5s
+  }
+
+  .fadeDown-enter
+    /* .fade-leave-active in <2.1.8 */
+
+  {
+    opacity: 0;
+    transform: translateY(-50%);
+  }
 </style>
