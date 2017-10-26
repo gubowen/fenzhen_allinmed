@@ -43,13 +43,13 @@
           }
       },
         "usedRelyStatus"(status){
-            if (!status) {
+            if (status) {
                 this.getReplyList();
             }
         }
     },
     mounted(){
-
+        this.getReplyList();
 
     },
     props:{
