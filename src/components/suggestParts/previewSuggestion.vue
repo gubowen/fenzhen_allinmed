@@ -282,12 +282,7 @@
           ajax({
             url: XHRList.saveData,
             method: 'POST',
-            data: {
-              isValid: 1,
-              firstResult: 0,
-              maxResult: 999,
-              treeLevel: "2"
-            },
+            data: that.previewSendData.diagnoseResult,
             done(data){
               if (data.responseObject.responseStatus) {
                 console.log("初步诊断保存成功");

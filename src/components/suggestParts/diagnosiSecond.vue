@@ -32,8 +32,8 @@
               </ul>
               <button class="viewMore" :class="{'rotate':viewMore}" @click="viewMore = !viewMore"></button>
               <div class="doc-search-box">
-                <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.length>0}">
-                <button class="doc-search-btn" :class="{on:docSearchValue.length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
+                <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
+                <button class="doc-search-btn" :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
               </div>
             </section>
             <!--全选按钮-->
@@ -91,7 +91,7 @@
                         <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                         <span class="medical">{{docList.medicalTitle}}</span>
                       </article>
-                      <article class="doctor-message-goodAt">擅长：<span v-html="docList.illnessNameList">{{docList.illnessNameList}}</span></article>
+                      <article class="doctor-message-goodAt">擅长：<span v-html="docList.illnessNameList"></span></article>
                       <article class="doctor-message-num">
                         <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
                         <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
@@ -425,7 +425,7 @@
             illnessId: that.checkData.illnessId,
             areasExpertise: that.checkData.majorName.indexOf("&") == -1?that.checkData.majorName:that.checkData.majorName.replace(/&/g,","),
             patientId: that.$store.state.patientId,
-            searchParam: that.docSearchValue,
+            searchParam: that.docSearchValue.trim(),
             searchAreasExpertise: searchAreasExpertise,
             degreeType: that.checkData.degreeType
           };
@@ -437,12 +437,26 @@
             done(data){
               if (data.responseObject.responseData&&data.responseObject.responseData.dataList) {
                 let dataList=that.setCheckedState(data.responseObject.responseData.dataList);
+                if(obj.type == "search"){
+                    //高亮搜索关键字
+                    let lightWord = that.docSearchValue.trim().replace(/\s+/g, ' ').split(" ");
+                    lightWord.forEach(function (value) {
+                        let _lightWord = new RegExp("("+value+")","g");
+                        dataList.forEach(function (element) {
+                            element.illnessNameList = element.illnessNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
+//                            element.operationNameList = element.operationNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
+                        })
+                    });
+                }
                 that.allDoc.allDocList = dataList;
                 that.allDoc.totalCount = data.responseObject.responseData.totalCount;
-                store.commit("stopLoading");
+              }else{
+                  that.allDoc.allDocList = [];
+                  that.noDocData = true;
               }
+              store.commit("stopLoading");
             }
-          })
+          });
         },
         //推荐医生---复选、全选、筛选、分页
         setCheckedState(arr){
