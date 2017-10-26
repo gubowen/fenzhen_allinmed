@@ -151,8 +151,8 @@
   </section>
 </template>
 <script>
-  import api from '../common/js/util';
-  import store from "../store/store";
+  import api from '../../common/js/util';
+  import store from "../../store/store";
   export default{
     name: 'examine-check',
     data(){
@@ -367,7 +367,7 @@
               url: _this.updateCount,
               method: "POST",
               data: {
-                consultationId: _this.$store.state.consultationid,
+                consultationId: _this.$store.state.consultationId,
                 frequency: "-1",
                 frequencyType: "4"
               },
@@ -478,9 +478,9 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "../scss/base";
-  @import "../scss/modules/_checkSuggestion";
-  @import "../scss/modules/_configSuggestion";
+  @import "../../scss/base";
+  @import "../../scss/modules/_checkSuggestion";
+  @import "../../scss/modules/_configSuggestion";
   .jump-box-add-term {
     padding: 7px 15px;
     background-color: #fff;
@@ -494,7 +494,7 @@
       content: '';
       display: inline-block;
       vertical-align: middle;
-      background: url("../assets/img00/check/suggestion_view.png") no-repeat;
+      background: url("../../assets/img00/check/suggestion_view.png") no-repeat;
       background-size: 100% 100%;
       width: 14px;
       height: 14px;
@@ -504,7 +504,7 @@
       content: '';
       display: inline-block;
       vertical-align: middle;
-      background: url("../assets/img00/check/preview_off.png") no-repeat;
+      background: url("../../assets/img00/check/preview_off.png") no-repeat;
       background-size: 100% 100%;
       width: 14px;
       height: 14px;

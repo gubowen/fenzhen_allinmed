@@ -227,9 +227,9 @@
   </section>
 </template>
 <script type="text/ecmascript-6">
-    import ajax from "../common/js/ajax";
+    import ajax from "../../common/js/ajax";
     import teachingDetail from "./teachingDetails";
-    import store from "../store/store";
+    import store from "../../store/store";
 
     const XHRList = {
       getTagData: "/call/comm/data/tag/v1/getMapList/",//专业列表
@@ -846,7 +846,7 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "../scss/base.scss";
+  @import "../../scss/base";
   .config-suggestion {
     .config-suggestion-box {
       position: absolute;
@@ -886,7 +886,7 @@
             content: '';
             display: inline-block;
             vertical-align: middle;
-            background: url("../assets/img00/check/suggestion_view.png") no-repeat;
+            background: url("../../assets/img00/check/suggestion_view.png") no-repeat;
             background-size: 100% 100%;
             width: 14px;
             height: 14px;
@@ -896,7 +896,7 @@
             content: '';
             display: inline-block;
             vertical-align: middle;
-            background: url("../assets/img00/check/preview_off.png") no-repeat;
+            background: url("../../assets/img00/check/preview_off.png") no-repeat;
             background-size: 100% 100%;
             width: 14px;
             height: 14px;
@@ -1150,12 +1150,12 @@
         vertical-align: middle;
         width: 14px;
         height: 14px;
-        background: url("../assets/img00/check/choose_sel_small.png");
+        background: url("../../assets/img00/check/choose_sel_small.png");
         background-size: 100% 100%;
       }
       &.active {
         &:before {
-          background: url("../assets/img00/check/choose_nor_small.png");
+          background: url("../../assets/img00/check/choose_nor_small.png");
         }
       }
     }
@@ -1257,7 +1257,7 @@
     }
     &.active {
       &.icon-select-small:before {
-        background: url("../assets/img00/check/choose_nor_small.png") no-repeat;
+        background: url("../../assets/img00/check/choose_nor_small.png") no-repeat;
       }
     }
   }
@@ -1357,7 +1357,7 @@
         }
         &.active  {
           & > .icon-select-big:before {
-            background: url(../assets/img00/check/choose_nor_small.png) no-repeat;
+            background: url(../../assets/img00/check/choose_nor_small.png) no-repeat;
           }
 
           .select-element{
@@ -1420,7 +1420,7 @@
       right:25px;
       top:30px;
       z-index: 2;
-      background:url("../assets/img00/check/dot_more.png") no-repeat;
+      background:url("../../assets/img00/check/dot_more.png") no-repeat;
       background-size:100% 100%;
       &.rotate{
         transform:rotate(90deg);
@@ -1437,12 +1437,12 @@
         border: 1px solid #E3E3E3;
         border-radius:4px;
         text-indent: 10px;
-        background:url("../assets/img00/check/search_gray.png") 97% center no-repeat #fff;
+        background:url("../../assets/img00/check/search_gray.png") 97% center no-repeat #fff;
         font-size: 13px;
         color: #555555;
         &.on{
           border: 1px solid #B2BDD8;
-          background:url("../assets/img00/check/search_blue.png") 97% center no-repeat #fff;
+          background:url("../../assets/img00/check/search_blue.png") 97% center no-repeat #fff;
         }
       }
       .doc-search-btn{
@@ -1484,7 +1484,7 @@
     //}
     &.active{
       &:before{
-        background: url(../assets/img00/check/choose_nor_small.png) no-repeat;
+        background: url(../../assets/img00/check/choose_nor_small.png) no-repeat;
       }
     }
   }

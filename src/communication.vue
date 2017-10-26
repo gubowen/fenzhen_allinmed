@@ -59,9 +59,9 @@
   import usedRely from './components/used_rely';
   import fastReplyConfig from  './components/fast_reply_config';
   import UsedReplyConfig from './components/usedReplyConfig';
-  import CheckSuggestion from './components/CheckSuggestion';
-  import ExamineCheck from './components/ExamineCheck';
-  import PreviewSuggestion from './components/previewSuggestion'
+  import CheckSuggestion from './components/suggestParts/CheckSuggestion';
+  import ExamineCheck from './components/suggestParts/ExamineCheck';
+  import PreviewSuggestion from './components/suggestParts/previewSuggestion'
   import BaseIm from './baseIm';
   import triagePatient from "@/base/triagePatient";
   import releasePatient from "@/base/releasePatient";
