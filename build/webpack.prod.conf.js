@@ -46,12 +46,12 @@ var webpackConfig = merge(baseWebpackConfig, {
         safe: true
       }
     }),
-    // generate dist index.html with correct asset hash for caching.
-    // you can customize output by editing /index.html
+    // generate dist index_local.html with correct asset hash for caching.
+    // you can customize output by editing /index_local.html
     // see https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: config.build.index,
-      template: 'index_rebuild.html',
+      template: 'index_local.html',
       inject: true,
       minify: {
         removeComments: true,

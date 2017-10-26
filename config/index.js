@@ -4,7 +4,7 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../dist/index_rebuild.html'),
+    index: path.resolve(__dirname, '../index.html'),
     assetsRoot: path.resolve(__dirname, '../dist'),
     assetsSubDirectory: 'static',
     assetsPublicPath: '/dist/',
@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {                                           // 需要 proxyTable 代理的接口（可跨域）
       '/call': {
-        target: 'http://www.allinmed.cn/call',
+        target: 'http://triage.allinmed.cn/call',
         changeOrigin: true,
         pathRewrite:{
           '^/call': '/'

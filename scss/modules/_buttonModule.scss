@@ -1,0 +1,81 @@
+@charset "utf-8";
+/**
+ * @name: 按钮集合
+ * @desc:
+ * @example:
+ * @depend:
+ * @date: 2017/2/15
+ * @author: qiangkailiang
+ */
+.btn-primary {
+  width: 95px;
+  height: 35px;
+  background-color: #7a8ec1;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  vertical-align: middle;
+
+  &-small{
+    width: 70px;
+    height: 30px;
+    background-color: #7a8ec1;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    vertical-align: middle;
+    line-height: 30px;
+    &-pvw{
+      width: 76px;
+      height: 30px;
+      background-color: #7a8ec1;
+      border-radius: 4px;
+      color: #fff;
+      cursor: pointer;
+      vertical-align: middle;
+      line-height: 30px;
+      margin-top:-5px;
+    }
+  }
+
+}
+
+.btn-border{
+  width: 95px;
+  height: 35px;
+  font-size: 13px;
+  color: #7A8EC1;
+  letter-spacing: 0;
+  line-height: 35px;
+  background: #FFFFFF;
+  border: 1px solid #8F9DC2;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &-small{
+    width: 70px;
+    height: 30px;
+    font-size: 13px;
+    color: #7A8EC1;
+    letter-spacing: 0;
+    line-height: 30px;
+    background: #FFFFFF;
+    border: 1px solid #8F9DC2;
+    border-radius: 4px;
+    cursor: pointer;
+    &-pvw{
+      width: 76px;
+      height: 30px;
+      font-size: 13px;
+      color: #555555;
+      letter-spacing: 0;
+      line-height: 30px;
+      background: #FFFFFF;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-top:-5px;
+    }
+  }
+
+}
+

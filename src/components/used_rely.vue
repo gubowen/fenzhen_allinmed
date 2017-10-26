@@ -6,7 +6,7 @@
     <section class="jump-box-viewers viewInner">
       <section class="jump-box-viewers-item viewItem" data-role="fr-tabs-1">
         <ul class="jump-box-list" id="ev-used-reply-box">
-          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent">
+          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$emit('update:usedRelyStatus',false)">
             <span>{{item.replyContent}}</span>
           </li>
         </ul>
@@ -36,10 +36,21 @@
         if (!status) {
           this.getReplyList();
         }
+      },
+      "$store.state.caseId"(caseId){
+          if (caseId){
+            this.getReplyList();
+          }
       }
     },
     mounted(){
-      this.getReplyList();
+
+
+    },
+    props:{
+        usedRelyStatus:{
+            type:Boolean
+        }
     },
     methods: {
       getReplyList(){
