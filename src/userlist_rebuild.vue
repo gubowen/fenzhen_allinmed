@@ -67,7 +67,7 @@
                   <span
                     class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
                     <span class="category short"
-                          v-show="items.diagnosisContent == ''">{{items.state | checkState}}</span>
+                          v-show="items.diagnosisContent == ''">{{items.caseType | checkState}}</span>
                     <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
                   </h3>
                   <article>
@@ -97,7 +97,7 @@
                   <h3>
                   <span
                     class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                    <span class="category short" v-show="items.diagnosisContent == ''">{{items.state | checkState
+                    <span class="category short" v-show="items.diagnosisContent == ''">{{items.caseType | checkState
                       }}</span>
                     <span class="category short" v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
                   </h3>
@@ -484,6 +484,15 @@
       },
       //接诊
       getTriagePatient(item, index){
+          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+          if (waitingAlertList) {
+              delete waitingAlertList["0_" + items.caseId];
+              localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+          }
+          if (localStorage.getItem("waitingAlertList") == "{}") {
+              this.newWaitingFlag = false;
+          }
+
         store.commit("startLoading");
         triagePatient({
           consultationId: item.consultationId,
