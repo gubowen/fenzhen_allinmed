@@ -54,9 +54,10 @@
         let that = this;
         if (this.searchContent.length > 20) {
           this.searchContent.substring(0, 20);
-        } else if (this.searchContent.length === 0) {
-          return;
         }
+//        else if (this.searchContent.length === 0) {
+//          return;
+//        }
         clearTimeout(this.time);
 
         this.time = setTimeout(() => {
@@ -66,11 +67,12 @@
         }, 300);
       },
       clickToSearch(){
-        if (this.searchContent.length === 0) {
-          return;
-        } else {
-          this.$emit("searchCallback", this.searchContent);
-        }
+        this.$emit("searchCallback", this.searchContent);
+//        if (this.searchContent.length === 0) {
+//          return;
+//        } else {
+//
+//        }
       },
       active(){
         this.isActive = !this.isActive;

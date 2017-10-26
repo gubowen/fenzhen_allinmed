@@ -28,12 +28,12 @@
             <!--搜索医生-->
             <section class="doc-filter-search-box" v-show="docCutNum==1">
               <ul class="doc-filter-box" :class="{'quHighly':!viewMore}">
-                <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList" @click="filterAndSearchDocDate(item,index,'filter')">{{getTagName(item)}}</li>
+                <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList" @click="getAllDocCustomer({tag:item,type:'filter',num:0,cutNum:index})">{{getTagName(item)}}</li>
               </ul>
               <button class="viewMore" :class="{'rotate':viewMore}" @click="viewMore = !viewMore"></button>
               <div class="doc-search-box">
-                <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" ref="docSearch">
-                <button class="doc-search-btn" @click="filterAndSearchDocDate()">搜索</button>
+                <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.length>0}">
+                <button class="doc-search-btn" :class="{on:docSearchValue.length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
               </div>
             </section>
             <!--全选按钮-->
@@ -91,7 +91,7 @@
                         <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                         <span class="medical">{{docList.medicalTitle}}</span>
                       </article>
-                      <article class="doctor-message-goodAt" ref="goodAt">擅长：{{docList.illnessNameList}}</article>
+                      <article class="doctor-message-goodAt">擅长：<span v-html="docList.illnessNameList">{{docList.illnessNameList}}</span></article>
                       <article class="doctor-message-num">
                         <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
                         <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
@@ -103,11 +103,11 @@
                 <div class="page-container" v-if="allDoc.totalCount>allDoc.pageNum&&allDoc.allDocList.length>0">
                   <div class="pagination pager">
                     <ul class="pages">
-                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer(1,0)">首页</li>
-                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer(allDoc.pageIndex-1,allDoc.pageIndex-2)">上一页</li>
-                      <li class="page-number" :class="{'pgCurrent':allDoc.pageIndex == item}" v-for="(item,index) in pages" @click="getAllDocCustomer(item,index)">{{item}}</li>
-                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}" @click="getAllDocCustomer(allDoc.pageIndex+1,allDoc.pageIndex+2)">下一页</li>
-                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}" @click="getAllDocCustomer(Math.ceil(allDoc.totalCount/allDoc.pageNum),Math.ceil(allDoc.totalCount/allDoc.pageNum)-1)">末页</li>
+                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer({num:0})">首页</li>
+                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer({num:allDoc.pageIndex-2})">上一页</li>
+                      <li class="page-number" :class="{'pgCurrent':allDoc.pageIndex == item}" v-for="(item,index) in pages" @click="getAllDocCustomer({num:index})">{{item}}</li>
+                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}" @click="getAllDocCustomer({num:allDoc.pageIndex+2})">下一页</li>
+                      <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}" @click="getAllDocCustomer({num:allDoc.Math.ceil(allDoc.totalCount/allDoc.pageNum)-1})">末页</li>
                     </ul>
                   </div>
                 </div>
@@ -247,6 +247,7 @@
     export default{
       data(){
           return {
+            docSearchValue:"",
             configShow:true,
             FirstIndex: -1,
             SecondIndex: -1,
@@ -301,7 +302,7 @@
       mounted(){
         this.getTargetList();
         this.getMatchDocCustomer();
-        this.getAllDocCustomer();
+        this.getAllDocCustomer({num:0});
         this.getFourList({
           url:XHRList.getTeachingKnowledge,
           listName:"teachingKnowledgeList"
@@ -397,30 +398,42 @@
             }
           })
         },
-        getAllDocCustomer(num,index){
-          let that = this;
+        getAllDocCustomer(obj){
           store.commit("startLoading");
-          if(num){
-            this.allDoc.pageResult = index*this.allDoc.pageNum;
-            this.allDoc.pageIndex = num;
+          let that = this;
+          let searchAreasExpertise = "";
+          that.allDoc.pageResult = obj.num*that.allDoc.pageNum;
+          that.allDoc.pageIndex = obj.num+1;
+          if(obj.type == "filter"){
+            this.tagCutNum = obj.cutNum;
+            this.searchTagName = obj.tag.tagName;
+            this.docSearchValue = "";
           }
+          if(this.searchTagName == "全部"){
+            searchAreasExpertise = "";
+          }else if(this.searchTagName.indexOf("&") != -1){
+            searchAreasExpertise = this.searchTagName.replace(/&/g,",");
+          }else{
+            searchAreasExpertise = this.searchTagName;
+          }
+          let data = {
+            isMatch: "0",
+            isValid: "1",
+            logoUseFlag: "3",
+            firstResult: that.allDoc.pageResult,
+            maxResult: that.allDoc.pageNum,
+            illnessId: that.checkData.illnessId,
+            areasExpertise: that.checkData.majorName.indexOf("&") == -1?that.checkData.majorName:that.checkData.majorName.replace(/&/g,","),
+            patientId: that.$store.state.patientId,
+            searchParam: that.docSearchValue,
+            searchAreasExpertise: searchAreasExpertise,
+            degreeType: that.checkData.degreeType
+          };
           //全部医生首页
           ajax({
             url: XHRList.filterSearchDocMessage,
             method: 'POST',
-            data: {
-              isMatch: "0",
-              isValid: "1",
-              firstResult: that.allDoc.pageResult,
-              maxResult: that.allDoc.pageNum,
-              illnessId: that.checkData.illnessId,
-              areasExpertise: that.checkData.majorName.indexOf("&") == -1?that.checkData.majorName:that.checkData.majorName.replace(/&/g,","),
-              patientId: that.$store.state.patientId,
-              logoUseFlag: 3,
-              searchParam: "",
-              searchAreasExpertise: "",
-              degreeType: that.checkData.degreeType
-            },
+            data: data,
             done(data){
               if (data.responseObject.responseData&&data.responseObject.responseData.dataList) {
                 let dataList=that.setCheckedState(data.responseObject.responseData.dataList);
@@ -547,56 +560,6 @@
             }
           }
         },
-        filterAndSearchDocDate(opt,index,type){
-          let that =this;
-          let searchAreasExpertise;
-          if(type == "filter"){
-            this.tagCutNum = index;
-            this.searchTagName = opt.tagName;
-          }
-          if(this.searchTagName == "全部"){
-            searchAreasExpertise = "";
-          }else if(this.searchTagName.indexOf("&") != -1){
-            searchAreasExpertise = this.searchTagName.replace(/&/g,",");
-          }else{
-            searchAreasExpertise = this.searchTagName;
-          }
-          store.commit("startLoading");
-          ajax({
-            url: XHRList.filterSearchDocMessage,
-            method: 'POST',
-            data: {
-              isValid: 1,
-              firstResult: 0,
-              maxResult: 20,
-              illnessId: that.checkData.illnessId,
-              areasExpertise :  that.checkData.majorName.indexOf("&") == -1?that.checkData.majorName:that.checkData.majorName.replace(/&/g,","),
-              patientId: that.checkData.patientId,
-              searchParam:that.$refs.docSearch.value,
-              searchAreasExpertise:searchAreasExpertise,
-              isMatch: 0,
-              logoUseFlag:3
-            },
-            done(data){
-              if (data.responseObject.responseData&&data.responseObject.responseData.dataList) {
-                let dataList=that.setCheckedState(data.responseObject.responseData.dataList);
-                that.allDoc.allDocList = dataList;
-                //高亮搜索关键字
-                let lightWord = that.$refs.docSearch.value.split(" ");
-                lightWord.forEach(function (value) {
-                  let _lightWord = new RegExp("("+value+")","g");
-                  that.$refs.goodAt.forEach(function (element) {
-                    element.nodeValue = element.innerText.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
-                  })
-                })
-              }else{
-                that.allDoc.allDocList = [];
-                that.noDocData = true;
-              }
-              store.commit("stopLoading");
-            }
-          })
-        },
         //四大建议
         showNext(type, index){
           if (type == 'FirstIndex') {
@@ -638,14 +601,10 @@
           }
         },
         selectData(item,type){
+          let that = this;
           item.isChecked = !item.isChecked;
-          if (item.children&&item.children.length>0) {
-            item.children.forEach(function (key) {
-              key.isSelected = !key.isSelected
-            });
-          };
           if(type==1){
-              this.addFourSuggest(item,"teachingList","knowledgeId");
+            this.addFourSuggest(item,"teachingList","knowledgeId");
           }else if(type==2){
             this.addFourSuggest(item,"disposeList","treatmentId");
           }else if(type==3){
@@ -653,6 +612,21 @@
           }else if(type==4){
             this.addFourSuggest(item,"testList","inspectionId");
           }
+          if (item.children&&item.children.length>0) {
+            item.children.forEach(function (key) {
+              key.isSelected = !key.isSelected;
+              key.isChecked = false;
+              if(type==1){
+                that.addFourSuggest(key,"teachingList","knowledgeId");
+              }else if(type==2){
+                that.addFourSuggest(key,"disposeList","treatmentId");
+              }else if(type==3){
+                that.addFourSuggest(key,"examineList","nodeId");
+              }else if(type==4){
+                that.addFourSuggest(key,"testList","inspectionId");
+              }
+            });
+          };
         },
         addFourSuggest(obj,suggestName,typeId){
           let that =this,flag = true;
@@ -674,7 +648,7 @@
           };
           if(flag&&obj.isChecked){
             this.previewDiagnoseSuggest[suggestName].push(obj);
-            console.log("该匹配医生已添加");
+            console.log("该选项已添加");
           }
         },
         //患教知识详情
@@ -714,7 +688,6 @@
         },
         sendSuggest(){
           let that = this;
-          console.log(!this.isLight);
           if(!this.isLight){
             let recommendCustomerList = [],recoveryAdviceList = [];
             //推荐医生
@@ -830,7 +803,8 @@
                       "createTime":createTime,
                       "diagnosisId":diagnosisId
                     }
-                  })
+                  });
+                  console.log("发送IM成功");
                 }
               }
             })
@@ -843,7 +817,6 @@
           for(let i=1;i<=Math.ceil(that.allDoc.totalCount/that.allDoc.pageNum);i++){
             pageArr.push(i);
           }
-          console.log(pageArr)
           return pageArr;
         }
       },
@@ -1418,13 +1391,12 @@
     }
     .doc-filter-box{
       @include clearfix();
+      height:auto;
+      margin-bottom:12px;
       &.quHighly{
         height:50px;
         overflow: hidden;
       }
-      transition: all 0.4s;
-      height:auto;
-      margin-bottom:12px;
       li{
         float:left;
         cursor:pointer;
@@ -1444,7 +1416,6 @@
       display:block;
       width:14px;
       height:4px;
-      transition: all 0.4s;
       position:absolute;
       right:25px;
       top:30px;
@@ -1483,8 +1454,8 @@
         font-size:12px;
         background:#EDEDED;
         border-radius:4px;
-        cursor:pointer;
         &.on{
+          cursor:pointer;
           background: #E2E7F2;
           color: #7A8EC1;
         }

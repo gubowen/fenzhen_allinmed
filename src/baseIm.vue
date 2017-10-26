@@ -7,21 +7,23 @@
       <!--v-for="items in messageInfo"-->
       <article class="messageList-box" ref="messageBox">
         <!--患者text-->
-        <article class="messageList-item" :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
-                 v-for="items in communicationList" v-if="messageFilter(items)">
-          <p class="time-stamp">{{items.time | transformMessageTime}}</p>
-          <!--文本消息-->
-          <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
-          <ImageElement v-if="items.type === 'file'" :message="items"></ImageElement>
-          <CheckSuggestion v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
-                           :message="items"></CheckSuggestion>
-          <MedicalReport v-if="items.type==='custom'&&(items.content&&items.content.type==='medicalReport')"
-                         :message="items"></MedicalReport>
-          <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
-                       :message="items"></VideoTriage>
-          <PreviewSuggestion v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
-                             :message="items"></PreviewSuggestion>
-        </article>
+        <transition-group name="fadeDown" tag="article">
+          <article class="messageList-item" :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
+                   v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+            <p class="time-stamp">{{items.time | transformMessageTime}}</p>
+            <!--文本消息-->
+            <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
+            <ImageElement v-if="items.type === 'file'" :message="items"></ImageElement>
+            <CheckSuggestion v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
+                             :message="items"></CheckSuggestion>
+            <MedicalReport v-if="medicalReport(items)"
+                           :message="items" ref="medicalReport"></MedicalReport>
+            <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
+                         :message="items"></VideoTriage>
+            <PreviewSuggestion v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
+                               :message="items"></PreviewSuggestion>
+          </article>
+        </transition-group>
       </article>
     </section>
   </section>
@@ -37,7 +39,6 @@
    */
 
   import nim from "nim";
-  import axios from "axios";
   import Vue from "vue";
 
   import ContentElement from "@/components/imParts/content";
@@ -174,16 +175,32 @@
           onofflinemsgs: this.onOfflineMsgs,
           onmsg (msg) {
             //自定义消息
+            console.log(msg)
             if (msg.type.toLowerCase() === 'custom') {
               //判断是否为新用户
               if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
                 store.commit("watingListRefreshFlag", true)
-                store.commit("setNewWating",true);
+                store.commit("setNewWating", true);
               }
             }
             that.receiveMessage(that.targetData.account, msg);
           },
         });
+      },
+      medicalReport(items){
+        let flag = true;
+        if (items.type === 'custom' && (items.content && items.content.type === 'medicalReport')) {
+          setTimeout(() => {
+            if (this.$refs.medicalReport.length === 0) {
+              flag = true
+            } else {
+              flag = false;
+            }
+          }, 20)
+        } else {
+          flag = false
+        }
+        return flag;
       },
       messageFilter(items){
         let flag = false;
@@ -191,7 +208,7 @@
           if (items.type === 'text') {
             flag = true;
           } else {
-            if (items.content && (items.content.type === 'reTriageTip' || items.content.type === "new-health" || items.content.type === "notification")) {
+            if (items.content && (items.content.type === 'reTriageTip' || items.content.type === "new-health" || items.content.type === "notification" || items.content.type === "payFinishTips")) {
               flag = false;
             } else {
               flag = true;
@@ -372,14 +389,53 @@
       //接受消息...
       receiveMessage (targetUser, element) {
         //获取当前患者消息
-        if (targetUser == this.targetData.account) {
+        const _this=this;
+        if (targetUser == element.from) {
           if (element.type==="custom") {
             element.content = JSON.parse(element.content);
           }
           this.communicationList.push(element);
+        } else {
+          //接诊列表
+          let patientList = this.$store.state.patientList;
+          patientList.forEach(function (item, index) {
+            if (("0_" + item.caseId) == element.from) {
+
+              if (item.messageAlert == '') {
+                item.messageAlert = "1";
+              } else {
+                item.messageAlert = parseInt(item.messageAlert) + 1;
+              }
+
+              let caseIdInfo = "0_" + item.caseId;
+              let patientAlertList = {};
+              patientAlertList[caseIdInfo] = item.messageAlert;
+
+              localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+              _this.$store.commit("setNewOnline", true);
+            }
+          });
+          this.$store.commit("setPatientList", patientList);
+
+          //等待列表
+          let watingList = this.$store.state.watingList;
+          watingList.forEach(function (item, index) {
+            if (("0_" + item.caseId) == element.from) {
+              if (item.messageAlert == '') {
+                item.messageAlert = "1";
+              } else {
+                item.messageAlert = parseInt(item.messageAlert) + 1;
+              }
+              let caseIdInfo = "0_" + item.caseId;
+              let waitingAlertList = {};
+              waitingAlertList[caseIdInfo] = item.messageAlert;
+
+              localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+              _this.$store.commit("setNewWating", true);
+            }
+          });
+          this.$store.commit("setWatingList", watingList);
         }
-
-
       },
       //输出历史消息...
       renderHistoryMessage: function (container, error, obj, from) {
@@ -441,8 +497,6 @@
         }
         return result;
       },
-
-
       mine: function (data) {
         if (data.content) {
           data.content = JSON.parse(data.content);
@@ -487,10 +541,7 @@
             this.FourIndex = index;
           }
         }
-      },
-      //初诊建议
-
-
+      }
     }
   }
 </script>
