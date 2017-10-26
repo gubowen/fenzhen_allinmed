@@ -246,7 +246,7 @@
           // positionName: $(".firstListTitle", "#direction-selector").val()
           positionName: ""
         };
-
+        console.log( _this.nextPageDate);
       }
     },
     mounted(){

@@ -388,6 +388,12 @@
             store.commit("stopLoading");
             if (res.responseObject.responseData && res.responseObject.responseStatus) {
               let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
+
+                let waitingAlertList ={};
+                let patientAlertList={};
+                waitingAlertList =  JSON.parse(localStorage.getItem("waitingAlertList"));
+                patientAlertList =  JSON.parse(localStorage.getItem("patientAlertList"));
+
               dataList.forEach(function (item, index) {
                   item.messageAlert='';
                   if (waitingAlertList && waitingAlertList !=='{}') {
