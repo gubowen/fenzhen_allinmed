@@ -36,8 +36,8 @@
     </section>
 </template>
 <script>
-  import api from '../common/js/util';
-  import downSelect from  '../common/downSelector.vue';
+  import api from '../../common/js/util';
+  import downSelect from  '../../common/downSelector.vue';
   import diagnosiSecond from './diagnosiSecond.vue';
   export default{
     name: 'check-suggestion',
@@ -246,7 +246,7 @@
           // positionName: $(".firstListTitle", "#direction-selector").val()
           positionName: ""
         };
-
+        console.log( _this.nextPageDate);
       }
     },
     mounted(){
@@ -255,7 +255,7 @@
   }
 </script>
 <style lang="scss" scoped  rel="stylesheet/scss">
-  @import "../scss/base";
+  @import "../../scss/base";
 
   .check-suggestion {
 

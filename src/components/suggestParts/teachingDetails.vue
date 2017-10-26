@@ -16,7 +16,8 @@
     </section>
 </template>
 <script type="text/ecmascript-6">
-  import ajax from "../common/js/ajax";
+  import ajax from "../../common/js/ajax";
+  import store from "../../store/store";
    const XHRList = {
      getTeachingDetail:"/call/comm/data/knowledge/content/v1/getMapById/"
    }
@@ -31,6 +32,7 @@
         },
         methods:{
           getTeachingDetail(){
+            store.commit("startLoading");
             let that = this;
             ajax({
               url: XHRList.getTeachingDetail,
@@ -45,6 +47,7 @@
                 if (data.responseObject.responseData.dataList) {
                   that.teachingDetail = data.responseObject.responseData.dataList[0];
                 }
+                store.commit("stopLoading");
               }
             })
           },
@@ -64,9 +67,10 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "../scss/base.scss";
+  @import "../../scss/base";
   .disease-teach-detail {
     .check-suggestion-box {
+      height:auto;
       position: absolute;
       top: 50%;
       left: 50%;
@@ -92,7 +96,7 @@
         cursor: pointer;
         .icon-leftArrow{
           display: inline-block;
-          background: url(../assets/img00/check/qustion_arrow_left.png) no-repeat;
+          background: url(../../assets/img00/check/qustion_arrow_left.png) no-repeat;
           background-size: 100% 100%;
           width: 16px;
           height: 16px;

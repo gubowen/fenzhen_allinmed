@@ -31,7 +31,7 @@
             <li class="userlist-status-item tabsItem"
                 data-role="ut-tabs-2"
                 @click="statusChange(2)"
-                v-bind:class="{ 'active': userListStatus.second,'new':$store.state.newOnline}"
+                v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
             >沟通中
 
 
@@ -91,7 +91,7 @@
               >
                 <figure class="userlist-item-img">
                   <img v-bind:src="items.logoUrl" alt="">
-                  <p style="display: none;"></p>
+                  <p v-show="items.messageAlert">{{items.messageAlert}}</p>
                 </figure>
                 <figcaption class="userlist-item-base-msg">
                   <h3>
@@ -245,12 +245,19 @@
       '$store.state.userId'(){
         this.init();
       },
-      '$store.state.patientList'(list){
-        this.userListOnline = list;
-      },
-      '$store.state.watingList'(list){
-        this.userListWating = list;
-      },
+        '$store.state.patientList': {
+            handler: (list, oldValue) => {
+                this.userListOnline = list;
+
+            },
+            deep: true
+        },
+        '$store.state.watingList': {
+            handler: (list, oldValue) => {
+                this.userListWating = list;
+            },
+            deep: true
+        },
       '$store.state.watingListRefresh'(flag){
         if (flag) {
           this.getUserList('wating');
@@ -293,15 +300,14 @@
           waitingList[index] = items;
           this.$store.commit("setWatingList", waitingList);
 
+
+
           let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-          console.log(waitingAlertList)
           if (waitingAlertList) {
             delete waitingAlertList["0_" + items.caseId];
             localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
           }
-          console.log(localStorage.getItem("waitingAlertList"));
           if (localStorage.getItem("waitingAlertList") == "{}") {
-            console.log("11");
             this.newWaitingFlag = false;
           }
 
@@ -315,9 +321,14 @@
           patientList[index] = items;
           this.$store.commit("setPatientList", patientList);
 
-          if (localStorage.getItem("patientAlertList") == '') {
-            this.newWaitingFlag = false;
-          }
+            let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
+            if (patientAlertList) {
+                delete patientAlertList["0_" + items.caseId];
+                localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+            }
+            if (localStorage.getItem("patientAlertList") == "{}") {
+                this.newPatientFlag = false;
+            }
         }
         this.message = items;
 
@@ -379,10 +390,32 @@
 //            store.commit("stopLoading");
             if (res.responseObject.responseData && res.responseObject.responseStatus) {
               let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
-              dataList.forEach(function (item, index) {
-                //let waitingAlertList =  JSON.parse(localStorage.getItem("waitingAlertList"));
 
-               // item.messageAlert = '';
+                let waitingAlertList ={};
+                let patientAlertList={};
+                waitingAlertList =  JSON.parse(localStorage.getItem("waitingAlertList"));
+                patientAlertList =  JSON.parse(localStorage.getItem("patientAlertList"));
+
+              dataList.forEach(function (item, index) {
+                  item.messageAlert='';
+                  if (waitingAlertList && waitingAlertList !=='{}') {
+                      for (let key in waitingAlertList) {
+                          if (key == ("0_" + item.caseId)) {
+                              item.messageAlert = waitingAlertList[key];
+                              _this.newWaitingFlag = true;
+                          }
+                      }
+                  }
+
+                  if(patientAlertList && patientAlertList !=='{}'){
+                      for (let key in patientAlertList) {
+                          if (key == ("0_" + item.caseId)) {
+                              item.messageAlert = patientAlertList[key];
+                              _this.newPatientFlag = true;
+                              console.log(_this.newPatientFlag );
+                          }
+                      }
+                  }
               });
               if (type === "online") {
                 _this.$store.commit("setPatientList", dataList);

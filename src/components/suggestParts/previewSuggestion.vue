@@ -72,7 +72,7 @@
         </header>
         <section class="preview-project">
           <section class="preview-project-list">
-            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName}}</article>
+            <article class="preview-project-item examine" v-for="item in previewSendData.examineList">{{item.nodeName || item.checkName}}</article>
             <article class="preview-project-item test" v-for="item in previewSendData.testList">{{item.inspectionName}}</article>
           </section>
         </section>
@@ -126,7 +126,7 @@
         savePreviewSuggest:"/call/patient/recovery/advice/v1/create/",//保存初诊建议
         saveRecommendDoc:"/call/patient/recommend/v1/create/",//保存初诊医生
       }
-    import ajax from "../common/js/ajax";
+    import ajax from "../../common/js/ajax";
     import store from "@/store/store";
     export default{
       data(){
@@ -355,8 +355,8 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "../scss/base";
-  @import "../scss/modules/buttonModule";
+  @import "../../scss/base";
+  @import "../../scss/modules/_buttonModule";
   .preview-suggestion-box {
     height: 90.7%;
     position: absolute;
@@ -677,7 +677,7 @@
     //}
     &.active{
       &:before{
-        background: url(../assets/img00/check/choose_nor_small.png) no-repeat;
+        background: url(../../assets/img00/check/choose_nor_small.png) no-repeat;
       }
     }
   }
