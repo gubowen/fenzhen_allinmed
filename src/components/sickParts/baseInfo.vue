@@ -491,6 +491,7 @@
     width: 100%;
     padding: 25px 28px;
     box-sizing: border-box;
+    margin-bottom:20px;
   }
   .base-info {
     .base-title {
