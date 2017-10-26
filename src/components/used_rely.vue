@@ -41,7 +41,12 @@
           if (caseId){
             this.getReplyList();
           }
-      }
+      },
+        "usedRelyStatus"(status){
+            if (!status) {
+                this.getReplyList();
+            }
+        }
     },
     mounted(){
 

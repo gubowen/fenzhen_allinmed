@@ -51,7 +51,7 @@
                           v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName">
                 <p class="question">VAS评分：</p>
                 <span class="answer"
-                      style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName}}</span>
+                      style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName+medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionDesc}}</span>
               </figcaption>
               <figcaption class="special-message-item-list"
                           v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
@@ -77,7 +77,7 @@
               </figure>
             </figcaption>
           </article>
-          <article class="special-message-item inline-message" v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.remark">
+          <article class="special-message-item inline-message" v>
             <header class="special-message-item-title"><span>备注</span></header>
             <article class="special-message-item-list"><span
               class="answer">{{medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.remark.length > 0?medicalReportMsg.patientCasemap.remark:'未填写')}}</span></article>
