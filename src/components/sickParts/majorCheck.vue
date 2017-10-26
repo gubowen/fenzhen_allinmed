@@ -124,29 +124,39 @@
                                         case "0":
                                         case "2":
                                         case "3":
-                                            _this.caseAttUrl.push(value.caseAttUrl);
+                                            let arr=[];
+                                            arr[0] =  value.caseAttUrl;
+                                            _this.caseAttUrl =arr;
                                             checkImageList.push({"url": value.caseAttUrl});
                                             break;
                                         case "1":
                                         case "4":
-                                            _this.videoCaseAttUrl.push(value.caseAttUrl);
+                                            let arrs=[];
+                                            arrs[0] = value.caseAttUrl;
+                                            _this.videoCaseAttUrl= arrs;
                                             diagnoseList.push({"url": value.caseAttUrl});
                                             break;
                                     }
                                 });
+
                                 if(checkImageList.length > 0 && diagnoseList.length > 0){
                                     let allList ={};
                                     allList['checkImage'] = checkImageList;
                                     allList['diagnoseListImage'] = diagnoseList;
                                     _this.$store.commit('setSBIObject',allList);
                                 } else if (checkImageList.length > 0) {
-                                    console.log("2");
-                                    _this.$store.commit('setSBIObject', {'checkImage': checkImageList});
+                                    let allObject ={};
+                                    allObject = _this.$store.state.SBIObject;
+                                    allObject['checkImage'] = checkImageList;
+                                    _this.$store.commit('setSBIObject',allObject);
                                 } else if (diagnoseList.length > 0) {
-                                    console.log("2");
-                                    _this.$store.commit('setSBIObject', {'diagnoseListImage': diagnoseList});
+                                    let allObject={};
+                                    allObject = _this.$store.state.SBIObject;
+                                    allObject['diagnoseListImage'] = diagnoseList;
+                                    _this.$store.commit('setSBIObject', allObject);
                                 }
-
+                                console.log( _this.caseAttUrl);
+                                console.log( _this.videoCaseAttUrl)
                             }
                         }
                     }, fail(error){
