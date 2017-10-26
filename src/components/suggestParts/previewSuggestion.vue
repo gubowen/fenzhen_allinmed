@@ -53,7 +53,7 @@
                 <span class="hospital">{{item.company}}</span>
                 <span class="medical">{{item.medicalTitle}}</span>
               </article>
-              <article class="doctor-message-goodAt">擅长:{{item.illnessNameList}}</article>
+              <article class="doctor-message-goodAt">擅长：<span v-html="item.illnessNameList"></span></article>
               <article class="doctor-message-num">
                 <span class="price"><em>¥{{item.generalPrice}}</em>/{{item.generalTimes}}次起</span>
                 <span class="lastNum">仅剩<em>{{item.adviceNum}}</em>个名额</span>
