@@ -6,8 +6,8 @@
           <div class="swiper-wrapper">
             <div class="swiper-slide swiper-no-swiping">
               <div class="swiper-zoom-container">
-                <video>
-                  <source :src="videoList"></source>
+                <video :src="videoList">
+                  <!--<source ></source>-->
                 </video>
               </div>
             </div>

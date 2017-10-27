@@ -941,6 +941,7 @@
                         if (res.responseObject.responseData.dataList && res.responseObject.responseStatus == true) {
                             let dataList = res.responseObject.responseData.dataList[0];
                             _this.id = dataList.id;
+                            _this.$store.commit("setNewSickId",dataList.id);
                             _this.produceReason = dataList.produceReason;         //产生诱因
                             _this.produceSymptomsId = dataList.produceSymptomsId;      //症状
                             _this.produceLevelId = dataList.produceLevelId;         //程度
@@ -1022,7 +1023,6 @@
                     patientId: this.$store.state.patientId	                                    // string	是	患者id
 
                 };
-                console.log(dataValue);
                 api.ajax({
                     url: _this.sickSaveUrl,
                     method: "POST",
@@ -1030,6 +1030,7 @@
                     beforeSend(config) {
                     },
                     done(res) {
+                        _this.$store.state.setNewSickId = res.responseObject.responsePk;
                         console.log("保存成功！");
                         _this.popupShow = true;
                         _this.popupObj = {

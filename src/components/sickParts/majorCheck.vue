@@ -34,7 +34,7 @@
               </li>
               <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
             </ul>
-            <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000"/>
+            <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000" v-model="visualInspection"/>
           </section>
         </article>
         <article class="major-check-video">
@@ -42,7 +42,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-activityState" maxlength="1000"/>
+                <input type="text" placeholder="请填写" class="J-activityState" maxlength="1000" v-model="activityState"/>
               </li>
             </ul>
           </section>
@@ -52,7 +52,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000"/>
+                <input type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000" v-model="muscleStrength"/>
               </li>
             </ul>
           </section>
@@ -62,6 +62,7 @@
         </footer>
       </section>
     </form>
+    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
   </section>
 </template>
 <script>
@@ -76,16 +77,26 @@
         data(){
             return {
                 getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
+                sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
+                sickSaveUrl: '/call/patient/case/hpi/v1/save/',
                 userMessage: {},
                 caseAttUrl: [],
                 videoCaseAttUrl: [],
-                videoList:[]
+                videoList:[],
+                visualInspection:'',
+                activityState:'',
+                muscleStrength:'',
+                popupShow:false,
+                popupObj: {}
             }
         },
         watch: {
             '$store.state.currentItem'(){
                 this.init();
             }
+        },
+        components:{
+            popup
         },
 //    activated(){
 //      this.userMessage = this.$store.state.currentItem;
@@ -94,7 +105,6 @@
         methods: {
             init() {
                 this.userMessage = this.$store.state.currentItem;
-                console.log(this.userMessage);
                 this.getData();
 
             },
@@ -110,8 +120,6 @@
                     maxResult: 100,	            //string	是
                     attUseFlag: 3
                 };
-
-                console.log(dataValue);
                 api.ajax({         //获取基本信息
                     url: _this.getDataUrl,
                     method: "POST",
@@ -119,7 +127,6 @@
                     beforeSend(config) {
                     },
                     done(res) {
-                        console.log(res);
                         if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
                             let data_list = res.responseObject.responseData.data_list;
                             //获取图片
@@ -180,8 +187,65 @@
                         console.log("请求失败：" + error);
                     }
                 });
+
+                let nowSickDataValue = {
+                    caseId: _this.$store.state.caseId
+                };
+                //现病史详情
+                api.ajax({
+                        url: _this.sickDetailUrl,
+                        method: "POST",
+                        data: nowSickDataValue,
+                        beforeSend(config) {
+                        },
+                        done(res) {
+                            if(res.responseObject.responseMessage != 'NO DATA'){
+                                console.log(res);
+                                _this.visualInspection = res.responseObject.responseData.dataList[0].visualInspection;
+                                _this.activityState = res.responseObject.responseData.dataList[0].activityState;
+                                _this.muscleStrength = res.responseObject.responseData.dataList[0].muscleStrength;
+                                _this.$store.commit("setNewSickId",res.responseObject.responseData.dataList[0].id);
+                            }
+                        },
+                        fail(error){
+                          console.log("请求失败：" + error);
+                        }
+                })
+
+
+
             },
             saveData(){
+                let _this = this;
+                let id = '';
+                console.log(_this.$store.state.newSickId);
+                    id = _this.$store.state.newSickId ? _this.$store.state.newSickId :'';
+               let dataValue = {
+                    id:id,
+                    visualInspection:_this.visualInspection,
+                    activityState:_this.activityState,
+                    muscleStrength:_this.muscleStrength,
+                    patientId:_this.$store.state.patientId,
+                    caseId:_this.$store.state.caseId
+                };
+                console.log(dataValue);
+                api.ajax({                    //保存现病史信息
+                        url: _this.sickSaveUrl,
+                        method: "POST",
+                        data: dataValue,
+                        beforeSend(config) {
+                        },
+                        done(res) {
+                            _this.popupShow = true;
+                            _this.popupObj = {
+                                text: '保存成功'
+                            };
+                        },fail(error){
+                        console.log("请求失败：" + error);
+                    }
+                });
+
+
 
             },
             showBigImgFunction(type){

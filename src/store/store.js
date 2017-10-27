@@ -86,7 +86,8 @@ export default new Vuex.Store({
         sendVideoTriageFlag: {
             flag: false,
             data: {}
-        }
+        },
+        newSickId:''                //现病史Id
     },
     mutations: {
         enableSearchFn(state){
@@ -219,6 +220,9 @@ export default new Vuex.Store({
         },
         setSBIIndex(state,data){
             state.SBIIndex=data;
+        },
+        setNewSickId(state,data){
+            state.newSickId = data;
         }
     }
 });
