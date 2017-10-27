@@ -30,12 +30,14 @@
 
 
 
+
                         </li>
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
+
 
 
 
@@ -78,10 +80,12 @@
                                           v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
-                                    <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料")}}</span>
+                                    <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
+                                    )}}</span>
                                 </article>
                                 <button class="get-triage btn-primary-small"
                                         @click.stop="getTriagePatient(items,index)">接诊
+
 
                                 </button>
                             </figcaption>
@@ -108,14 +112,14 @@
                   <span
                           class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
                                     <span class="category short"
-                                          v-show="items.diagnosisContent == ''">{{items.caseType | checkState
-                                        }}</span>
+                                          v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
                                     <span class="category short"
-                                          v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                                          v-show="fixByCurrent(items,index)">{{userOnlineActive == index?$store.state.currentItem.diagnosisContent:items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
                   <span
-                          class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料")}}</span>
+                          class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
+                  )}}</span>
                                 </article>
                                 <!--<figure class="quit-triage">-->
                                 <!--<span class="text">转移患者</span>-->
@@ -302,6 +306,24 @@
                 this.getUserList('wating');
                 this.getUserList('online');
             },
+            fixByCurrent(item, index){
+                let flag = false;
+                if (index === this.userOnlineActive) {
+                    if (this.$store.state.currentItem.diagnosisContent) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
+                } else {
+                    if (item.diagnosisContent) {
+                        flag = true;
+                    } else {
+                        flag = false;
+                    }
+                }
+
+                return flag;
+            },
             //给子组件传值..
             transformData (items, index) {
                 if (this.userListStatus.first) {
@@ -348,7 +370,7 @@
                 this.$store.commit('setPatientId', items.patientId);
                 this.$store.commit('setPatientName', items.patientName);
                 this.$store.commit('setCaseId', items.caseId);
-                localStorage.setItem("caseId",items.caseId);
+                localStorage.setItem("caseId", items.caseId);
                 this.$store.commit("setConsultationId", items.consultationId);
 
                 this.$store.commit("setCurrentItem", items);
