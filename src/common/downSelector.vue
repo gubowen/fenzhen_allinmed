@@ -9,10 +9,11 @@
 <template>
   <section class="search-sortType-item">
     <ul class="search-selector">
-      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" readonly @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
-      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'"></i>
+      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
+      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
       <section class="search-selector-second-box">
         <div class="custom-selector-second firstList" v-show="dataShow">
+          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">暂不确定</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
             <span v-show="item.tagName!=''" >{{item.tagName}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
@@ -50,6 +51,11 @@
         type: Object
       }
     },
+    watch:{
+        resultData(){
+            console.log("111");
+        }
+    },
     methods: {
       init(){
       },
@@ -59,6 +65,8 @@
       },
       selectData(item, index){
         let _this = this;
+        item = item?item:'';
+        index = index?index:'';
         _this.currentIndex = index;
         _this.secondActive = true;
         if (item.tagName) {
@@ -84,6 +92,11 @@
             this.dataShow = !this.dataShow;
             this.iconFlag = !this.iconFlag;
           }
+        }else{
+            _this.resultData = '暂不确定';
+            this.dataShow = !this.dataShow;
+            this.iconFlag = !this.iconFlag;
+            _this.$emit('update:dataBack', {'illnessId':'','illnessName':''});
         }
       },
       childrenData(item,index){

@@ -1,127 +1,60 @@
 <template>
-  <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
+  <section class="show-video show-big-img-masker" v-if="$store.state.videoFlag">
     <div class="background-hidden">
-      <div class="rotate-button"></div>
-      <div class="bigger-button"></div>
-      <div class="smaller-button"></div>
-      <div class="download-button" v-show="!($store.state.SBIType == 'medicalReport')"></div>
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-              <div class="swiper-zoom-container"><img :src="item.url"/></div>
+            <div class="swiper-slide swiper-no-swiping">
+              <div class="swiper-zoom-container">
+                <video>
+                  <source :src="videoList"></source>
+                </video>
+              </div>
             </div>
           </div>
-          <div class="swiper-pagination swiper-pagination-white"></div>
-        </div>
-        <div class="swiper-left-gray" v-show="imgList.length>1"></div>
-        <div class="swiper-right-gray" v-show="imgList.length>1"></div>
-      </div>
-      <div class="close" @click="close()"></div>
-      <div class="gallery-thumbs" v-show="imgList.length>1">
-        <div class="swiper-container thumbSwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-              <div class="swiper-zoom-container"><img :src="item.url"/></div>
-            </div>
-          </div>
-          <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
-          <div class="swiper-button-next" slot="button-next" v-show="imgList.length>6"></div>
           <div class="swiper-pagination swiper-pagination-white"></div>
         </div>
       </div>
+      <div class="close" @click="close()"></div>
     </div>
   </section>
 </template>
 <script>
-  //  import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import Vue from 'vue'
-  import VueAwesomeSwiper from 'vue-awesome-swiper'
-  import Swiper from 'swiper';
-  import 'swiper/dist/css/swiper.css';
-  import showBigImg  from '../common/js/showBigImg';
 
-  Vue.use(VueAwesomeSwiper);
   export default{
-    name: 'show-big-img',
+    name: 'show-video',
     data(){
       return {
-        imgList: [
-//          {
-//            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
-//          }
-//          ,
-//          {
-//            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
-//          },
-//          {
-//            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
-//          },
-//          {
-//            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
-//          }
-        ]
+        videoList: ''
       }
     },
     components: {
-      VueAwesomeSwiper
+
     },
     props: {
-      showBigImgFlag: {
+      showVideoFlag: {
         type: Boolean
       }
     },
     watch: {
-      '$store.state.SBIList'(content){
+      '$store.state.videoFlag'(content){
         this.init();
       }
     },
     methods: {
       init(){
-        this.imgList = [];
-        this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
-        console.log( this.imgList);
-        console.log( this.$store.state.SBIType);
+        this.videoList = '';
+        this.videoList = this.$store.state.videoObject;
+        console.log(this.$store.state.videoObject)
       },
       close(){
-        this.$store.commit("setSBIFlag", false);
+         this.$store.commit("setVideoFlag",false);
       }
     },
     mounted(){
       this.init();
     },
     updated(){
-      let topSwiper = new Swiper('.topSwiper', {
-        direction: 'horizontal',
-        zoom: true,
-        prevButton: '.swiper-left-gray',
-        nextButton: '.swiper-right-gray',//前进按钮的css选择器或HTML元素。
-        onInit: function (swiper) {
-          console.log(swiper.activeIndex + "当前索引");
-          console.log("sipwer初始化完成!,回调函数，初始化后执行。");
-          $.openPhotoGallery($(".swiper-slide-active").eq(0));
-        },
-        onTap: function (swiper, event) {
-          console.log(swiper.activeIndex); //swiper当前的活动块的索引
-        },
-        onSlideChangeStart(swiper){
-          console.log(swiper.activeIndex + "当前索引");
-
-        }
-      });
-
-      let thumbSwiper = new Swiper('.thumbSwiper', {
-        direction: 'horizontal',
-        prevButton: '.swiper-button-prev',
-        nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
-        loopedSlides: 5,
-        spaceBetween: 10,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        slideToClickedSlide: true
-      });
-      topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
-      thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
     }
   }
 </script>
