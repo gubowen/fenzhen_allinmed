@@ -9,11 +9,11 @@
 <template>
   <section class="search-sortType-item">
     <ul class="search-selector">
-      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
+      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" @keyup="searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
       <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
       <section class="search-selector-second-box">
         <div class="custom-selector-second firstList" v-show="dataShow">
-          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">暂不确定</li>
+          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">{{noData}}</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
             <span v-show="item.tagName!=''" >{{item.tagName}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
@@ -33,6 +33,7 @@
   </section>
 </template>
 <script>
+  import api from './js/util';
   export default{
     name: 'search-sorType-item',
     data(){
@@ -40,6 +41,7 @@
         dataShow: false,
         iconFlag: false,
         resultData: '',
+        noData:"暂不确定",
         currentIndex: -1,
         oldIndex:-1,
         secondActive:true,
@@ -102,6 +104,36 @@
         this.dataShow = !this.dataShow;
         this.iconFlag = !this.iconFlag;
         this.$emit('update:dataBack',item);
+      },
+      searchIllness(ev){
+        let that = this;
+        if (ev.keCode == 37 || ev.keyCode == 38 || ev.keyCode == 39 || ev.keyCode == 40) {
+            return false;
+        }
+        let flag = false;
+        api.ajax({
+              url: "/call/comm/data/illness/v1/getMapList/",
+              method: "POST",
+              data: {
+                  isValid: 1,
+                  firstResult: 0,
+                  maxResult: 999,
+                  illnessName: "",
+                  searchParam: that.resultData,
+                  isSolr: 1
+              },
+              done(res) {
+                  if(res.responseObject.responseData.dataList){
+                      that.noData = "暂不确定";
+                      that.secondActive = true;
+                      that.dataListInfo.dataList = res.responseObject.responseData.dataList;
+                  }else{
+                      that.noData = "暂无数据";
+                      that.secondActive = false;
+                      that.dataListInfo.dataList = [];
+                  }
+              }
+          })
       }
     }, mounted(){
       this.init()

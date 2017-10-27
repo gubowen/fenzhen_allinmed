@@ -349,49 +349,91 @@
             userItemToTop (account, time) {
 
             },
-            //新消息提示机制...
-            newMessageTips: function (account) {
-                if ($(".main-header-toggle-list-item.active").attr("data-id") == 0) {
-                    var element = $(".userlist-mainList-item[data-account='" + account.substring(2) + "']");
-                    // if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-                    //     var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-                    //         newTipsNumber = ntnCache[account];
-                    // } else {
-                    //     var ntnCache = {}, newTipsNumber = 0;
-                    // }
+//            //新消息提示机制...
+//            newMessageTips: function (account) {
+//                if ($(".main-header-toggle-list-item.active").attr("data-id") == 0) {
+//                    var element = $(".userlist-mainList-item[data-account='" + account.substring(2) + "']");
+//                    // if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
+//                    //     var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
+//                    //         newTipsNumber = ntnCache[account];
+//                    // } else {
+//                    //     var ntnCache = {}, newTipsNumber = 0;
+//                    // }
+//
+//                    var newTipsNumber = 0;
+//                    var ntnCache = {};
+//                    if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
+//                        var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
+//                            newTipsNumber = ntnCache[account];
+//                    }
+//
+//                    var ntnCacheObject = {};
+//                    if (this.ntnCacheList[account] != undefined) {
+//                        newTipsNumber = this.ntnCacheList[account];
+//                    } else {
+//                        ntnCacheObject[account] = 0;
+//                        newTipsNumber = ntnCacheObject[account];
+//                        this.ntnCacheList[account] = newTipsNumber;
+//
+//                    }
+//                    newTipsNumber++;
+//                    ntnCache[account] = newTipsNumber;
+//                    this.ntnCacheList[account] = newTipsNumber;
+//                    localStorage.setItem("ntnCache", JSON.stringify(ntnCache));
+//
+//                    if (!element.hasClass("active") && $(".userlist-mainList-item[data-account='" + account.substring(2) + "']").length > 0) {
+//                        var _role = element.parents(".userlist-mainList").attr("data-role");
+//
+//                        element.find(".userlist-item-img p").show().addClass("on").text((newTipsNumber >= 100 ? "..." : newTipsNumber));
+//                        if (_role != 'ut-tabs-2') {
+//                            $(".userlist-status-item[data-role='" + _role + "']").addClass("new");
+//                            $('#music')[0].play();
+//                        }
+//
+//                    }
+//                }
+//            },
+            // 新消息提示
+            newMessageTips(target,element){
+                const _this=this;
+                let patientList = this.$store.state.patientList;
+                patientList.forEach((item, index) =>{
+                    if (("0_" + item.caseId) == element.from) {
 
-                    var newTipsNumber = 0;
-                    var ntnCache = {};
-                    if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-                        var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-                            newTipsNumber = ntnCache[account];
-                    }
-
-                    var ntnCacheObject = {};
-                    if (this.ntnCacheList[account] != undefined) {
-                        newTipsNumber = this.ntnCacheList[account];
-                    } else {
-                        ntnCacheObject[account] = 0;
-                        newTipsNumber = ntnCacheObject[account];
-                        this.ntnCacheList[account] = newTipsNumber;
-
-                    }
-                    newTipsNumber++;
-                    ntnCache[account] = newTipsNumber;
-                    this.ntnCacheList[account] = newTipsNumber;
-                    localStorage.setItem("ntnCache", JSON.stringify(ntnCache));
-
-                    if (!element.hasClass("active") && $(".userlist-mainList-item[data-account='" + account.substring(2) + "']").length > 0) {
-                        var _role = element.parents(".userlist-mainList").attr("data-role");
-
-                        element.find(".userlist-item-img p").show().addClass("on").text((newTipsNumber >= 100 ? "..." : newTipsNumber));
-                        if (_role != 'ut-tabs-2') {
-                            $(".userlist-status-item[data-role='" + _role + "']").addClass("new");
-                            $('#music')[0].play();
+                        if (item.messageAlert == '') {
+                            item.messageAlert = "1";
+                        } else {
+                            item.messageAlert = parseInt(item.messageAlert) + 1;
                         }
 
+                        let caseIdInfo = "0_" + item.caseId;
+                        let patientAlertList = {};
+                        patientAlertList[caseIdInfo] = item.messageAlert;
+
+                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+                        _this.$store.commit("setNewOnline", true);
                     }
-                }
+                });
+                this.$store.commit("setPatientList", patientList);
+
+                //等待列表
+                let watingList = this.$store.state.watingList;
+                watingList.forEach(function (item, index) {
+                    if (("0_" + item.caseId) == element.from) {
+                        if (item.messageAlert == '') {
+                            item.messageAlert = "1";
+                        } else {
+                            item.messageAlert = parseInt(item.messageAlert) + 1;
+                        }
+                        let caseIdInfo = "0_" + item.caseId;
+                        let waitingAlertList = {};
+                        waitingAlertList[caseIdInfo] = item.messageAlert;
+
+                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+                        _this.$store.commit("setNewWating", true);
+                    }
+                });
+                this.$store.commit("setWatingList", watingList);
             },
             //接受消息...
             receiveMessage (targetUser, element) {
@@ -401,47 +443,11 @@
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
+
                     this.communicationList.push(element);
                 } else {
                     //接诊列表
-                    let patientList = this.$store.state.patientList;
-                    patientList.forEach((item, index) =>{
-                        if (("0_" + item.caseId) == element.from) {
-
-                            if (item.messageAlert == '') {
-                                item.messageAlert = "1";
-                            } else {
-                                item.messageAlert = parseInt(item.messageAlert) + 1;
-                            }
-
-                            let caseIdInfo = "0_" + item.caseId;
-                            let patientAlertList = {};
-                            patientAlertList[caseIdInfo] = item.messageAlert;
-
-                            localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
-                            _this.$store.commit("setNewOnline", true);
-                        }
-                    });
-                    this.$store.commit("setPatientList", patientList);
-
-                    //等待列表
-                    let watingList = this.$store.state.watingList;
-                    watingList.forEach(function (item, index) {
-                        if (("0_" + item.caseId) == element.from) {
-                            if (item.messageAlert == '') {
-                                item.messageAlert = "1";
-                            } else {
-                                item.messageAlert = parseInt(item.messageAlert) + 1;
-                            }
-                            let caseIdInfo = "0_" + item.caseId;
-                            let waitingAlertList = {};
-                            waitingAlertList[caseIdInfo] = item.messageAlert;
-
-                            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                            _this.$store.commit("setNewWating", true);
-                        }
-                    });
-                    this.$store.commit("setWatingList", watingList);
+                    this.newMessageTips(targetUser,element);
                 }
 
                 setTimeout(() => {
