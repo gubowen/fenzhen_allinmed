@@ -54,11 +54,9 @@
                             <figcaption class="special-message-item-list"
                                         v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName">
                                 <p class="question">VAS评分：</p>
-                                <span class="answer"
-                                      style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName}}</span>
+                                <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName.substring(0,2)}}</span>
                             </figcaption>
-                            <figcaption class="special-message-item-list"
-                                        v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
+                            <figcaption class="special-message-item-list" v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
                                 <p class="question">其他症状：</p>
                                 <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseAlong}}</span>
                             </figcaption>

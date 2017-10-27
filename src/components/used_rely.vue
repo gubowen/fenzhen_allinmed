@@ -233,6 +233,9 @@
 
   .used_reply {
     left: 12%;
+    .jump-box-viewers-item{
+      display: block;
+    }
   }
 
   .jump-box-header {
