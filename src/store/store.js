@@ -39,6 +39,7 @@ export default new Vuex.Store({
         wxBrowseAccessLockOn: '',
         LOCAL_STORAGE_KEY: '',
         searchStatus: '',
+        enableSearch: true,
         fastReplyConfig: false,
         checkHistoryFlag: false,
         loadingShow: false, //是否请求中
@@ -87,6 +88,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        enableSearchFn(state){
+            state.enableSearch = false;
+        },
         setInputReadOnly(state, content){
             state.inputReadOnly = content;
         },

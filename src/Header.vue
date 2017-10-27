@@ -2,9 +2,9 @@
   <section>
     <div id="header" class="main-header">
       <section class="main-header-search">
-        <input class="main-search" type="text" placeholder="请输入患者姓名" v-model="searchContent"
+        <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="this.enableSearch" v-model="searchContent"
                @keyup="searchPatient($event)">
-        <i class="icon-header-search" @click="clickToSearch"></i>
+        <i class="icon-header-search" v-show="this.enableSearch" @click="clickToSearch"></i>
       </section>
       <article class="main-header-title" @click="refresh()">
         <i class="icon-logo"></i>
@@ -34,24 +34,29 @@
   export  default{
     name: 'header',
     data(){
-      return {
-        isActive: false,
-        confirmShow:false,
-        isActiveMessage: '在线',
-        searchStatus: true,
-        searchContent: ""
-      }
+        return {
+            isActive: false,
+            confirmShow: false,
+            isActiveMessage: '在线',
+            searchStatus: true,
+            enableSearch: true,
+            searchContent: ""
+        }
     },
     watch: {
-      '$store.state.searchStatus': function () {
-        this.searchStatus = this.$store.state.searchStatus;
-      }
+        '$store.state.searchStatus': function () {
+            this.searchStatus = this.$store.state.searchStatus;
+        },
+        '$store.state.enableSearch': function () {
+            this.enableSearch = this.$store.state.enableSearch;
+        }
     },
     methods: {
       init(){
         this.getUserStatus();
         this.getBaseMessage();
         this.searchStatus = this.$store.state.searchStatus;
+
       },
       searchPatient(e) {
         let that = this;
@@ -203,9 +208,15 @@
       refresh(){
 
         if (window.location.href.indexOf("setting") != -1) {
-          this.$router.push({
-            name: "home"
-          })
+//          this.$router.push({
+//            name: "home"
+//          })
+            if (window.location.origin.includes("triage.allinmed.cn")) {
+                window.location.href='/index.html';
+            }
+            if (!window.location.hostname.includes("triage.allinmed.cn")) {
+                window.location.href='/index_local.html';
+            }
         }
       },
       cancelLogin(){
