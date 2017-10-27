@@ -65,24 +65,18 @@
                                 <h3>
                                     <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
                                     <span class="category short"
-                                          v-show="items.diagnosisContent == ''">{{items.caseType | checkState}}</span>
+                                          v-show="items.consultationState==5">重新分诊</span>
                                     <span class="category short"
-                                          v-show="items.diagnosisContent != ''">{{items.diagnosisContent}}</span>
+                                          v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
+                                    <span class="category short"
+                                          v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
                                     <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
                                     )}}</span>
                                 </article>
                                 <button class="get-triage btn-primary-small"
-                                        @click.stop="getTriagePatient(items,index)">接诊
-
-
-
-
-
-
-
-                                </button>
+                                        @click.stop="getTriagePatient(items,index)">接诊</button>
                             </figcaption>
 
                             <span class="time"> {{items.createTime | timeFormat}}</span>
@@ -550,8 +544,10 @@
                     });
                 }).then((res) => {
                     //患者未被抢单
-                    this.userListWating.removeByValue(item);
-                    this.userListOnline.unshift(item);
+//                    this.userListWating.removeByValue(item);
+//                    this.userListOnline.unshift(item);
+                    this.getUserList('wating');
+                    this.getUserList('online');
                     this.transformData(item, index);
                     this.watingTriage = false;
 
@@ -573,10 +569,12 @@
                 _this.sortFlag = false;
                 switch (index) {
                     case 1:
-                        _this.getUserList('wating', {'sortType': 4});
+                        _this.getUserList('wating', {'sortType': 5});
+                        _this.getUserList('online', {'sortType': 5});
                         break;
                     case 2:
-                        _this.getUserList('wating', {'sortType': 5});
+                        _this.getUserList('wating', {'sortType': 4});
+                        _this.getUserList('online', {'sortType': 4});
                         break;
                     case 3:
                         _this.getUserList('wating', {'sortType': -5});
@@ -587,7 +585,8 @@
                         _this.getUserList('online', {'sortType': -6});
                         break;
                     default:
-                        _this.getUserList('wating', {'sortType': 4});
+                        _this.getUserList('wating', {'sortType': 5});
+                        _this.getUserList('online', {'sortType': 5});
                 }
             }
         }
@@ -935,7 +934,8 @@
             line-height: 13px;
             margin-top: 10px;
             display: inline-block;
-            white-space: nowrap;
+            @include ellipsis();
+            max-width: 250px;
         }
     }
 
