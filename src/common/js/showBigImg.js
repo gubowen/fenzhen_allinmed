@@ -1,4 +1,5 @@
 import jQuery from 'jquery'
+import JSON from '@/common/js/jquery.json-2.4'
 (function ($) {
 $.fn.extend({
   photoGallery: function (options) {
@@ -112,8 +113,6 @@ $.fn.extend({
           maxHeight: "none"
         }).removeClass("rotate0 rotate90 rotate180 rotate270")
       }
-
-
       setImagePosition();
     }
 
@@ -393,68 +392,70 @@ $.fn.extend({
     });
 
     //保存图片
-    // function downPic(caseNum) {
-    //   var src = $image.attr("src");
-    //   var caseCategoryId,caseAttSource;
-    //   if(caseNum == 0){
-    //     caseCategoryId = 1;
-    //     caseAttSource = 5;
-    //   }else{
-    //     caseCategoryId = 12;
-    //     caseAttSource = 6;
-    //   }
-    //   $(".centerTip").remove();
-    //   $.ajax({
-    //     url: "/call/customer/patient/case/attachment/create/",
-    //     type: 'POST',
-    //     data: {
-    //       paramJson: $.toJSON({
-    //         caseId: localStorage.getItem("caseId"),
-    //         extName: "jpg",
-    //         fileContent: src,
-    //         caseCategoryId: caseCategoryId,
-    //         caseAttSource: caseAttSource
-    //       })
-    //     },
-    //     dataType: "json",
-    //     beforeSend: function () {
-    //       //common.loading.show();
-    //     },
-    //     success: function (data) {
-    //       if (data.responseObject.responseData && data.responseObject.responseData.url.length > 0) {
-    //         //common.loading.hide();
-    //
-    //
-    //         var htmlResult = '<div class="tip-save-result">' +
-    //           '<div ><img src="/image/img00/employee/picture_success.png"/></div>' +
-    //           '<div class="text">保存成功</div>' +
-    //           '</div>';
-    //         $("body").append(htmlResult);
-    //         $(".tip-save-result").addClass("on");
-    //         setTimeout(
-    //           function () {
-    //             $(".tip-save-result").remove();
-    //           }, 2000
-    //         );
-    //         require("medicalRecord").getMajorCheck();
-    //       }
-    //     },
-    //     fail: function () {
-    //       var htmlResult = '<div class="tip-save-result">' +
-    //         '<div ><img src="/image/img00/employee/picture_fail.png"/></div>' +
-    //         '<div class="text">保存失败</div>' +
-    //         '</div>';
-    //       $("body").append(htmlResult);
-    //       $(".tip-save-result").addClass("on");
-    //       setTimeout(
-    //         function () {
-    //           $(".tip-save-result").remove();
-    //         }, 2000
-    //       )
-    //     }
-    //   })
-    //
-    // }
+    function downPic(caseNum) {
+      var src = $image.attr("src");
+      var caseCategoryId,caseAttSource;
+      if(caseNum == 0){
+        caseCategoryId = 1;
+        caseAttSource = 5;
+      }else{
+        caseCategoryId = 12;
+        caseAttSource = 6;
+      }
+      $(".centerTip").remove();
+      $.ajax({
+        url: "/call/customer/patient/case/attachment/create/",
+        type: 'POST',
+        data: {
+          paramJson: $.toJSON({
+            caseId: localStorage.getItem("caseId"),
+            extName: "jpg",
+            fileContent: src,
+            caseCategoryId: caseCategoryId,
+            caseAttSource: caseAttSource
+          })
+        },
+        dataType: "json",
+        beforeSend: function () {
+          //common.loading.show();
+        },
+        success: function (data) {
+          if (data.responseObject.responseData && data.responseObject.responseData.url.length > 0) {
+                console.log("成功！");
+            //common.loading.hide();
+
+
+            var htmlResult = '<div class="tip-save-result">' +
+              '<div ><img src="/image/img00/employee/picture_success.png"/></div>' +
+              '<div class="text">保存成功</div>' +
+              '</div>';
+            $("body").append(htmlResult);
+            $(".tip-save-result").addClass("on");
+            setTimeout(
+              function () {
+                $(".tip-save-result").remove();
+              }, 2000
+            );
+          //   require("medicalRecord").getMajorCheck();
+           }
+        },
+        fail: function () {
+            console.log("失败！");
+          var htmlResult = '<div class="tip-save-result">' +
+            '<div ><img src="/image/img00/employee/picture_fail.png"/></div>' +
+            '<div class="text">保存失败</div>' +
+            '</div>';
+          $("body").append(htmlResult);
+          $(".tip-save-result").addClass("on");
+          setTimeout(
+            function () {
+              $(".tip-save-result").remove();
+            }, 2000
+          )
+        }
+      })
+
+    }
 
     function centerTip(obj) {
       if ($('.centerTip').length > 0) {

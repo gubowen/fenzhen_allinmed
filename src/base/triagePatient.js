@@ -8,56 +8,78 @@
  */
 import ajax from "@/common/js/ajax";
 const XHRList = {
-  triage: "/call/customer/case/consultation/v1/update/",
-  status: "/call/customer/case/consultation/v1/getMapInfo/"
+    triage: "/call/customer/case/consultation/v1/update/",
+    status: "/call/customer/case/consultation/v1/getMapInfo/"
 };
 
-function getTriageStatus(id,endFn,readyFn) {
-  let param = {
-    consultationId: id,
-    consultationStateList: "-1,2,4,5"
-  };
-  ajax({
-    url: XHRList.status,
-    method: "POST",
-    data: param,
-    done(res){
-      if (res.responseObject.responseCode === "fail") {
-        //患者已被抢单
-        endFn&&endFn();
-      } else {
-        //患者未被抢单
-        readyFn&&readyFn();
-      }
-    }
-
-  });
-}
-export default function triagePatient(data,endFn) {
-  let param = {
-    consultationIds: data.consultationId,
-    consultationState: "0",
-    customerId: data.customerId,
-    consultationType: "0"
-  };
-  return new Promise((resolve, reject) => {
-    getTriageStatus(param.consultationIds,()=>{
-      endFn&&endFn();
-    },()=>{
-      ajax({
-        url: XHRList.triage,
+function getTriageStatus(data, endFn, limitFn, readyFn) {
+    let param = {
+        consultationId: data.consultationIds,
+        consultationStateList: "2,4,5",
+        customerId:data.customerId
+    };
+    ajax({
+        url: XHRList.status,
         method: "POST",
         data: param,
         done(res){
-          if (res.responseObject.responseStatus) {
-            resolve(res);
-          } else {
-            console.log("网络异常，请稍后再试......")
-            reject(res);
-          }
+            if (res.responseObject.responseData) {
+                let dataList = res.responseObject.responseData;
+                if (dataList.status == 0) {
+                    //达到接单上限...
+                    limitFn && limitFn(dataList.limitCount);
+                } else if (dataList.status == 1) {
+                    //未达到上限,,,
+                    if (dataList.state == 1) {
+                        //患者未被抢单...
+                        readyFn && readyFn(dataList);
+                    } else if (dataList.state == 0) {
+                        //患者已被抢单...
+                        endFn && endFn();
+                    }
+                }
+                //   //患者已被抢单
+                //   endFn&&endFn();
+                // } else {
+                //   //患者未被抢单
+                //   readyFn&&readyFn();
+            }
         }
-      })
-    })
 
-  })
+    });
+}
+export default function triagePatient(data, endFn,limitFn) {
+    let param = {
+        consultationIds: data.consultationId,
+        consultationState: "0",
+        customerId: data.customerId,
+        consultationType: "0"
+    };
+    return new Promise((resolve, reject) => {
+        getTriageStatus({
+            consultationIds: data.consultationId,
+            customerId: data.customerId,
+        }, () => {
+            endFn && endFn();
+        }, (c) => {
+            console.log(c)
+            limitFn && limitFn(c);
+        }, (d) => {
+            ajax({
+                url: XHRList.triage,
+                method: "POST",
+                data: param,
+                done(res){
+                    console.log(d)
+                    if (res.responseObject.responseStatus) {
+                        resolve(res);
+                    } else {
+                        console.log("网络异常，请稍后再试......")
+                        reject(res);
+                    }
+                }
+            })
+        })
+
+    })
 }
