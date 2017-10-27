@@ -12,7 +12,7 @@
       <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" @keyup="searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
       <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
       <section class="search-selector-second-box">
-        <div class="custom-selector-second firstList" v-show="dataShow">
+        <div class="custom-selector-second firstList" v-show="conIndex===currentIndex&&dataShow">
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">{{noData}}</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
             <span v-show="item.tagName!=''" >{{item.tagName}}</span>
@@ -51,12 +51,19 @@
     props: {
       dataListInfo: {
         type: Object
-      }
+      },
+        conIndex:{
+          type:Number||String
+        },
+        currentIndex:{
+          type:Number||String
+        }
     },
     methods: {
       init(){
       },
       showData(){
+          this.$emit("update:currentIndex",this.conIndex);
         this.dataShow = !this.dataShow;
         this.iconFlag = !this.iconFlag;
       },
