@@ -256,7 +256,6 @@
     width: 100%;
     padding: 25px 28px;
     box-sizing: border-box;
-    padding-bottom: 50px;
   }
 
   .medical-record-form {

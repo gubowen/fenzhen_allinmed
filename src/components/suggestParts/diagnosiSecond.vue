@@ -30,7 +30,7 @@
               <ul class="doc-filter-box" :class="{'quHighly':!viewMore}">
                 <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList" @click="getAllDocCustomer({tag:item,type:'filter',num:0,cutNum:index})">{{getTagName(item)}}</li>
               </ul>
-              <button class="viewMore" :class="{'rotate':viewMore}" @click="viewMore = !viewMore"></button>
+              <a href="javascript:;" class="viewMoreBox" @click="viewMore = !viewMore"><button class="viewMore" :class="{'rotate':viewMore}"></button></a>
               <div class="doc-search-box">
                 <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
                 <button class="doc-search-btn" :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
@@ -79,7 +79,7 @@
                       <header class="doctor-message-content-head">'
                         <h4>{{docList.fullName}}</h4>
                         <p class="rate">匹配度{{docList.suitability}}%</p>
-                        <span class="netstat" :class="{'rest':docList.adviceStatus == 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
+                        <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
                         <figure class="doctor-message-tags">' +
                           <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                           <span class="tags" v-if="docList.isNearest==1">距离最近</span>
@@ -1425,19 +1425,26 @@
         }
       }
     }
-    .viewMore{
+    .viewMoreBox{
       cursor:pointer;
       display:block;
-      width:14px;
-      height:4px;
+      width:18px;
+      height:18px;
       position:absolute;
       right:10px;
-      top:30px;
+      top:23px;
       z-index: 2;
-      background:url("../../assets/img00/check/dot_more.png") no-repeat;
-      background-size:100% 100%;
-      &.rotate{
-        transform:rotate(90deg);
+      .viewMore{
+        cursor:pointer;
+        display:inline-block;
+        vertical-align: middle;
+        width:18px;
+        height:4px;
+        background:url("../../assets/img00/check/dot_more.png") no-repeat;
+        background-size:100% 100%;
+        &.rotate{
+          transform:rotate(90deg);
+        }
       }
     }
     .doc-search-box{

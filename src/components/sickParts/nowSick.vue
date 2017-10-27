@@ -488,7 +488,7 @@
 
   .medical-record-main {
     width: 100%;
-    padding: 25px 28px;
+    padding: 25px 28px 60px 28px;
     box-sizing: border-box;
   }
 
