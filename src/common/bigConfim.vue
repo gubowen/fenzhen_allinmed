@@ -1,5 +1,5 @@
 <template>
-    <section class="main-masker big-confirm">
+    <section class="main-masker big-confirm exitConfirm">
         <section class="big-confirm-inner">
             <header class="big-confirm-title"><h4>{{comfirmData.title}}</h4><i class="icon-close window-close" @click="cancel"></i></header>
             <article class="big-confirm-content"><p>{{comfirmData.content}}</p></article>
@@ -55,9 +55,11 @@
         transition:all 0.2s linear;
     }
     .big-confirm {
-        text-align: center;
-        opacity: 1;
-        transition: all 0.2s linear;
+        &.exitConfirm{
+            text-align: center;
+            opacity: 1;
+            transition: all 0.2s linear;
+        }
         &:before {
             content: '';
             display: inline-block;
