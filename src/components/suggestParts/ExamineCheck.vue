@@ -394,6 +394,11 @@
               },
               done(res) {
                 console.log("更改待检查成功");
+                let  inquiryResult = _this.$store.state.currentItem;
+                inquiryResult.diagnosisContent = "待检查";
+                store.commit('setCurrentItem',inquiryResult);
+
+
                 store.commit("checkSuggestionSender",{
                   flag:true,
                   data:_this.recoveryAdviceList

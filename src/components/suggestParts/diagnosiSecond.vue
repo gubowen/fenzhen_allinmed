@@ -929,9 +929,17 @@
                                             console.log("四大建议保存成功");
                                         }
                                     })
-                                }
-                                ;
+                                };
                                 //发送IM
+                                let  inquiryResult = that.$store.state.currentItem,
+                                    caseMajorName = that.checkData.majorName,
+                                    caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
+                                    caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
+                                inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                                store.commit('setCurrentItem',inquiryResult);
+
+
+
                                 let nowTime = new Date(),
                                     createTime = (nowTime.getFullYear() + '.' + (nowTime.getMonth() + 1 < 10 ? "0" + (nowTime.getMonth() + 1) : nowTime.getMonth() + 1) + '.' + (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate())).replace(/-/g, ".");
                                 that.closePreview();

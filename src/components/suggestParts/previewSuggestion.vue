@@ -324,6 +324,15 @@
                   })
                 };
                 //发送IM
+                let  inquiryResult = that.$store.state.currentItem,
+                      caseMajorName = that.previewSendData.diagnoseResult.majorName,
+                      caseIllnessName = (that.previewSendData.diagnoseResult.illnessName=="暂不确定"?"":that.previewSendData.diagnoseResult.illnessName),
+                      caseOperationName = (that.previewSendData.diagnoseResult.operationName=="暂不确定"?"":that.previewSendData.diagnoseResult.operationName);
+                inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                store.commit('setCurrentItem',inquiryResult);
+
+
+
                 let nowTime = new Date(),
                 createTime = (nowTime.getFullYear()+'.'+(nowTime.getMonth()+1<10?"0"+(nowTime.getMonth()+1):nowTime.getMonth()+1)+'.'+(nowTime.getDate()<10?"0"+nowTime.getDate():nowTime.getDate())).replace(/-/g,".");
                 that.closePreview();
