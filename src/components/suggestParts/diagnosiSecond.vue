@@ -11,7 +11,7 @@
         <button class="jump-box-add-term" :class="{'icon-suggestion-preview-gray':isLight,'forbid':isLight,'icon-suggestion-preview':!isLight}" @click="previewSuggest"><span>预览</span></button>
         <button class="jump-box-add-send" :class="{'forbid':isLight}" @click="sendSuggest"><span>发送</span></button>
       </header>
-      <section class="config-suggestion-inner">
+      <section class="config-suggestion-inner scrollTop">
         <nav class="config-suggestion-tabsBox">
           <ul class="config-suggestion-tabs">
             <li class="config-suggestion-tabs-item" :class="{'active':cutNum==index}" v-for="(item,index) in tabList" @click="cutNum = index;FirstIndex = -1 ;secondIndex = -1 ;ThirdIndex =-1 ;FourIndex = -1">{{item}}</li>
@@ -454,6 +454,7 @@
                   that.allDoc.allDocList = [];
                   that.noDocData = true;
               }
+              document.querySelector(".scrollTop").scrollTop = 0;
               store.commit("stopLoading");
             }
           });
