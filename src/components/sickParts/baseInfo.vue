@@ -26,7 +26,7 @@
               </li>
               <li>
                 <span class="base-title ">籍贯</span>
-                <address-selector  :dataListInfo.sync ="addressResult"  :dataBack.sync="addressResult"></address-selector>
+                <address-selector  :dataListInfo.sync ="addressResult"  :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
               </li>
               <li>
                 <span class="base-title">家庭住址</span><input class="base-input J-homeAddress"
@@ -48,7 +48,7 @@
               <ul>
                 <li>
                   <span class="base-title">出生地</span>
-                  <address-selector  :dataListInfo.sync ="birthResult" :dataBack.sync="birthResult"></address-selector>
+                  <address-selector  :dataListInfo.sync ="birthResult" :dataBack.sync="birthResult" v-if="childrenShow"></address-selector>
                 </li>
                 <li>
                   <span class="base-title">生育状况</span><select class="select-120 J-fertility-boy"
@@ -236,6 +236,7 @@
           districtId: '',
           districtName: ''
         },
+        childrenShow:false,
         popupShow:false,
         popupObj: {}
       }
@@ -261,6 +262,7 @@
     },
     methods: {
       init() {
+        this.childrenShow = false;
         this.userMessage = this.$store.state.currentItem;
         this.addData();
       },
@@ -363,6 +365,14 @@
               _this.addressResult.districtId=data.nativeDistrictId;
               _this.addressResult.districtName=data.nativeDistrict;
 
+              //出生地
+                _this.birthResult.provinceId=data.birthplaceProvinceId;
+                _this.birthResult.provinceName=data.birthplaceProvince;
+                _this.birthResult.cityId=data.birthplaceCityId;
+                _this.birthResult.cityName=data.birthplaceCity;
+                _this.birthResult.districtId=data.birthplaceDistrictId;
+                _this.birthResult.districtName=data.birthplaceDistrict;
+
               //  $("#base-info-address").find(".firstListTitle").text(nativeAddress).attr("data-province", data.nativeProvinceId).attr("data-city", data.nativeCityId).attr("data-district", data.nativeDistrictId);                                   //籍贯
               //社保所在地
               data.socialProvince ? _this.socialAddress = data.socialProvince + " " + data.socialCity + " " + data.socialDistrict : _this.socialAddress = "未填写";
@@ -412,7 +422,7 @@
 //            $("#base-info-address").find(".firstListTitle").text(nativeAddress).attr("data-province", data.nativeProvinceId).attr("data-city", data.nativeCityId).attr("data-district", data.nativeDistrictId);                                   //籍贯
 //            //出生地
 //            $("#base-info-born-address").find(".firstListTitle").text(birthplaceInfo).attr("data-province", data.birthplaceProvinceId).attr("data-city", data.birthplaceCityId).attr("data-district", data.birthplaceDistrictId);                           //出生地
-
+              _this.childrenShow = true;
             }
           },
           fail(error){
