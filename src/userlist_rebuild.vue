@@ -381,7 +381,7 @@
 
                 this.$store.commit("setCurrentItem", items);
 
-                this.$store.commit('setSBIObject', '');
+                this.$store.commit('setSBIObject', {});
 
                 let data = JSON.stringify(items);
                 this.data = data;
