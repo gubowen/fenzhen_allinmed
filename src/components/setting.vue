@@ -10,7 +10,8 @@
               <h4>姓名</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="text" class="setting-form-input-item" placeholder="姓名" data-validate-info="isNoEmpty" name="name" v-model="userName" maxlength="10" @blur="nameCheck(errors)" @focus="userNameErrorMessage=''"  v-validate="'required|nameSpace'">
+                <input type="text" name="name" v-show="false">
+              <input type="text" class="setting-form-input-item" placeholder="姓名" autocomplete="off" data-validate-info="isNoEmpty" name="name" v-model="userName" maxlength="10" @blur="nameCheck(errors)" @focus="userNameErrorMessage=''"  v-validate="'required|nameSpace'">
             </figcaption>
             <p class="error-text icon-errorTips" v-show="userNameErrorMessage.length>0"><span>{{userNameErrorMessage}}</span></p>
           </section>
@@ -19,7 +20,8 @@
               <h4>手机号码</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="text" class="setting-form-input-item" placeholder="手机" data-validate-info="isMobile" name="mobile" v-model="mobile" @blur="nameCheck(errors)" @focus="mobileErrorMessage=''" v-validate="'required|mobile'">
+                <input type="text" name="mobile" v-show="false">
+              <input type="text" class="setting-form-input-item" placeholder="手机" autocomplete="off" data-validate-info="isMobile" name="mobile" v-model="mobile" @blur="nameCheck(errors)" @focus="mobileErrorMessage=''" v-validate="'required|mobile'">
             </figcaption>
             <p class="error-text icon-errorTips mobileTips" v-show="mobileErrorMessage.length>0" ><span>{{mobileErrorMessage}}</span></p>
             <!--<p class="error-text icon-errorTips mobileTips" v-show=" errors.has('mobile')" ><span>{{ errors.first('mobile') }}</span></p>-->
@@ -29,7 +31,8 @@
               <h4>邮箱</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="text" class="setting-form-input-item" placeholder="邮箱" data-validate-info="isMailbox" name="mailBox" v-model="mailBox" @blur="nameCheck(errors)" @focus="mailBoxErrorMessage=''" v-validate="'required|mailBox'">
+                <input type="text" name="mailBox" v-show="false">
+              <input type="text" class="setting-form-input-item" placeholder="邮箱" autocomplete="off" data-validate-info="isMailbox" name="mailBox" v-model="mailBox" @blur="nameCheck(errors)" @focus="mailBoxErrorMessage=''" v-validate="'required|mailBox'">
             </figcaption>
             <p class="error-text icon-errorTips" v-show="mailBoxErrorMessage.length>0"><span>{{mailBoxErrorMessage}}</span></p>
             <!--<p class="error-text icon-errorTips" v-show=" errors.has('mailBox')" ><span>{{errors.first('mailBox') }}</span></p>-->
@@ -39,7 +42,8 @@
               <h4>原密码</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="password" class="setting-form-input-item old-password" placeholder="当前使用的密码" data-validate-info="ajax" name="passWord" @blur="passCheck($event,errors)" v-model="oldPassword" @focus="oldPasswordErrorMessage=''" v-validate="'passw'">
+                <input type="password" name="passWord" v-show="false">
+              <input type="password" class="setting-form-input-item old-password" placeholder="当前使用的密码" autocomplete="off" data-validate-info="ajax" name="passWord" @blur="passCheck($event,errors)" v-model="oldPassword" @focus="oldPasswordErrorMessage=''" v-validate="'passw'">
             </figcaption>
             <p class="error-text icon-errorTips oldPassTip" v-show="oldPasswordErrorMessage.length>0"><span>{{oldPasswordErrorMessage}}</span></p>
             <!--<p class="error-text icon-errorTips oldPassTip" v-show="errors.has('oldPass')"><span>{{errors.first('oldPass')}}</span></p>-->
@@ -50,7 +54,8 @@
               <h4>新密码</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="password" class="setting-form-input-item new-password" placeholder="新的密码" data-validate-info="newPass" name="newPassword" @blur="passCheck($event,errors)" v-model="newPassword" @focus="newPasswordErrorMessage=''" v-validate="'passw'">
+                <input type="password" name="newPassword" v-show="false">
+              <input type="password" class="setting-form-input-item new-password" placeholder="新的密码" autocomplete="off" data-validate-info="newPass" name="newPassword" @blur="passCheck($event,errors)" v-model="newPassword" @focus="newPasswordErrorMessage=''" v-validate="'passw'">
             </figcaption>
             <p class="error-text icon-errorTips newPassTip" v-show="newPasswordErrorMessage.length>0">{{newPasswordErrorMessage}}</p>
             <p class="warn-text" v-show="!newPasswordErrorMessage.length>0"><span>6-20位字符</span></p>
@@ -60,7 +65,8 @@
               <h4>确认密码</h4>
             </figure>
             <figcaption class="setting-form-item-input">
-              <input type="password" class="setting-form-input-item double-password" placeholder="重新输入新密码" data-validate-info="double" name="newPassword2" @blur="passCheck($event,errors)" v-model="newPassword2" @focus="newPassword2ErrorMessage=''" v-validate="'passw'">
+                <input type="password" name="newPassword2" v-show="false">
+              <input type="password" class="setting-form-input-item double-password" placeholder="重新输入新密码" autocomplete="off" data-validate-info="double" name="newPassword2" @blur="passCheck($event,errors)" v-model="newPassword2" @focus="newPassword2ErrorMessage=''" v-validate="'passw'">
             </figcaption>
             <p class="error-text icon-errorTips doublePassTip" v-show="newPassword2ErrorMessage.length>0"><span>{{newPassword2ErrorMessage}}</span></p>
           </section>
@@ -77,6 +83,7 @@
   import axios from  "axios";
   import {common, modules} from "common";
   import headerList from "../Header";
+  import store from "@/store/store";
 
   export default{
     name: 'setting',
@@ -104,6 +111,7 @@
       init(){
         this.storageGet()
         this.$store.state.searchStatus =false;
+        store.commit('enableSearchFn');
       },
       storageGet(){
         this.userName = this.$store.state.userName;

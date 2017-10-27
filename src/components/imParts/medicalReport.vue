@@ -62,21 +62,22 @@
                             </figcaption>
                         </article>
                     </article>
-                    <article class="special-message-item"
-                             v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
-                        <header class="special-message-item-title"><span>现病史</span></header>
+                    <article class="special-message-item">
+                        <header class="special-message-item-title">
+                            <span>现病史</span>
+                        </header>
                         <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap.treatmentName.length > 0">
+                                 v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
                             <span class="answer"><p
                                     class="question">曾就诊情况：</p>{{medicalReportMsg.patientCasemap.treatmentName}}&nbsp;&nbsp;&nbsp;{{medicalReportMsg.patientCasemap.illnessName}}</span>
                         </article>
                         <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap.takeMedicine.length > 0">
+                                 v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.takeMedicine.length > 0">
                             <span class="answer"><p
                                     class="question">服用药物：</p>{{medicalReportMsg.patientCasemap.takeMedicine}}</span>
                         </article>
                         <figcaption class="special-message-item-list img-box"
-                                    v-if="medicalReportMsg.patientCasemap.attachmentList.length > 0">
+                                    v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
                             <figure class="special-message-item-img "
                                     v-for="imgs in medicalReportMsg.patientCasemap.attachmentList">
                                 <img :src="imgs.caseAttUrl" @click="showBigImgFunction()">
