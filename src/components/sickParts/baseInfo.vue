@@ -20,7 +20,8 @@
                 <option value="">请选择</option>
                 <option value="1">未婚</option>
                 <option value="2">已婚</option>
-                <option value="3">丧偶</option>
+                <option value="3">离异</option>
+                <option value="4">丧偶</option>
               </select>
               </li>
               <li>

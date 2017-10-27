@@ -146,59 +146,59 @@
      //   if (this.sickHistory || this.operationHistory || this.medicineHistory || this.outSickHistory || this.allergyHistory || this.plague) {
           let dataList = [];
           //疾病史
-          if (this.sickHistory) {
-            let content = {
+        //  if (this.sickHistory) {
+            let contentHistory = {
               id: this.sickHistoryID,
               caseHistoryType: 0,
               caseHistoryDesc: this.sickHistory
             };
-            dataList.push(content);
-          }
+            dataList.push(contentHistory);
+      //    }
           //手术史
-          if (this.operationHistory) {
-            let content = {
+      //    if (this.operationHistory) {
+            let contentOperation = {
               id: this.operationHistoryID,
               caseHistoryType: 1,
               caseHistoryDesc: this.operationHistory
             };
-            dataList.push(content);
-          }
+            dataList.push(contentOperation);
+     //     }
           //药物史
-          if (this.medicineHistory) {
-            let content = {
+      //    if (this.medicineHistory) {
+            let contentMedicine = {
               id: this.medicineHistoryID,
               caseHistoryType: 2,
               caseHistoryDesc: this.medicineHistory
             };
-            dataList.push(content);
-          }
+            dataList.push(contentMedicine);
+       //   }
           //外伤史
-          if (this.outSickHistory) {
-            let content = {
+       //   if (this.outSickHistory) {
+            let contentOut = {
               id: this.outSickHistoryID,
               caseHistoryType: 3,
               caseHistoryDesc: this.outSickHistory
             };
-            dataList.push(content);
-          }
+            dataList.push(contentOut);
+        //  }
           //过敏史
-          if (this.allergyHistory) {
-            let content = {
+        //  if (this.allergyHistory) {
+            let contentGM = {
               id: this.allergyHistoryID,
               caseHistoryType: 4,
               caseHistoryDesc: this.allergyHistory
             };
-            dataList.push(content);
-          }
+            dataList.push(contentGM);
+       //   }
           //疫区接触史
-          if (this.sickHistory) {
-            let content = {
+       //   if (this.sickHistory) {
+            let contentArea = {
               id: this.plagueID,
               caseHistoryType: 5,
               caseHistoryDesc: this.plague
             };
-            dataList.push(content);
-          }
+            dataList.push(contentArea);
+      //    }
           dataList = JSON.stringify(dataList).toString();
           let dataValue = {
             patientId: this.userMessage.patientId,           //	string	是	患者id

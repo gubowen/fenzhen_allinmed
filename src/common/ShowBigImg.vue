@@ -40,6 +40,7 @@
   import Swiper from 'swiper';
   import 'swiper/dist/css/swiper.css';
   import showBigImg  from '../common/js/showBigImg';
+
   Vue.use(VueAwesomeSwiper);
   export default{
     name: 'show-big-img',
@@ -459,5 +460,33 @@
     top: 0;
     right: -36px;
     cursor: pointer
+  }
+
+  .tip-save-result{
+    width:120px;
+    height:120px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #000;
+    border-radius: 8px;
+    opacity: 0.9;
+    text-align:center;
+    font-size: 16px;
+    color: #FFFFFF;
+    letter-spacing: 0;
+    line-height: 16px;
+    z-index: 7;
+    -webkit-transition:opacity 0.5s;
+    img{
+      margin-top:20px;
+    }
+    .text{
+      margin-top:14px;
+    }
+    &.on{
+      -webkit-animation: fadeOut 2s  linear 0s forwards 1;
+    }
   }
 </style>

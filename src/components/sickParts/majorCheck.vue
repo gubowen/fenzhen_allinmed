@@ -124,6 +124,7 @@
                                         case "0":
                                         case "2":
                                         case "3":
+                                        case "5":
                                             let arr=[];
                                             arr[0] =  value.caseAttUrl;
                                             _this.caseAttUrl =arr;
@@ -131,6 +132,7 @@
                                             break;
                                         case "1":
                                         case "4":
+                                        case "6":
                                             let arrs=[];
                                             arrs[0] = value.caseAttUrl;
                                             _this.videoCaseAttUrl= arrs;

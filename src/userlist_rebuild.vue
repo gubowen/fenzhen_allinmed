@@ -348,6 +348,7 @@
                 this.$store.commit('setPatientId', items.patientId);
                 this.$store.commit('setPatientName', items.patientName);
                 this.$store.commit('setCaseId', items.caseId);
+                localStorage.setItem("caseId",items.caseId);
                 this.$store.commit("setConsultationId", items.consultationId);
 
                 this.$store.commit("setCurrentItem", items);
