@@ -10,7 +10,7 @@
   <section class="search-sortType-item">
     <ul class="search-selector">
       <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" readonly @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
-      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'"></i>
+      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
       <section class="search-selector-second-box">
         <div class="custom-selector-second firstList" v-show="dataShow">
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">暂不确定</li>

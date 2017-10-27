@@ -6,7 +6,7 @@
           <article>
             <ul>
               <li><span class="base-title">所在地区</span><span class="base-text">{{address}}</span></li>
-              <li><span class="base-title">联系方式</span><span class="base-text">{{telephone}}</span></li>
+              <li style="display: none;"><span class="base-title">联系方式</span><span class="base-text">{{telephone}}</span></li>
               <li><span class="base-title">社保类型</span><span class="base-text" :data-value="socialId.value">{{socialId.text}}</span>
               </li>
               <li><span class="base-title base-title-long">社保所在地</span><span class="base-text">{{socialAddress}}</span>
@@ -20,7 +20,8 @@
                 <option value="">请选择</option>
                 <option value="1">未婚</option>
                 <option value="2">已婚</option>
-                <option value="3">丧偶</option>
+                <option value="3">离异</option>
+                <option value="4">丧偶</option>
               </select>
               </li>
               <li>
@@ -489,7 +490,7 @@
   @import "../../scss/record_common";
   .medical-record-main {
     width: 100%;
-    padding: 25px 28px;
+    padding: 25px 28px 60px 28px;
     box-sizing: border-box;
   }
   .base-info {

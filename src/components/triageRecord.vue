@@ -45,8 +45,13 @@
           remarkList:[]
         }
     },
+    watch:{
+       '$store.state.caseId'(){
+           this.getRemarkList();
+       }
+    },
     mounted(){
-      this.getRemarkList();
+
     },
     methods:{
       getRemarkList(){
@@ -64,6 +69,8 @@
             if (data.responseObject.responseData) {
               if(data.responseObject.responseData.dataList&&data.responseObject.responseData.dataList.length>0){
                 that.remarkList = data.responseObject.responseData.dataList;
+              }else{
+                  that.remarkList=[]
               }
             }
           }
