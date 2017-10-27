@@ -43,13 +43,13 @@
           }
       },
         "usedRelyStatus"(status){
-            if (!status) {
+            if (status) {
                 this.getReplyList();
             }
         }
     },
     mounted(){
-
+        this.getReplyList();
 
     },
     props:{
@@ -233,6 +233,9 @@
 
   .used_reply {
     left: 12%;
+    .jump-box-viewers-item{
+      display: block;
+    }
   }
 
   .jump-box-header {

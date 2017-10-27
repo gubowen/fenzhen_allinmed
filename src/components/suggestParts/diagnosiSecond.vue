@@ -11,7 +11,7 @@
         <button class="jump-box-add-term" :class="{'icon-suggestion-preview-gray':isLight,'forbid':isLight,'icon-suggestion-preview':!isLight}" @click="previewSuggest"><span>预览</span></button>
         <button class="jump-box-add-send" :class="{'forbid':isLight}" @click="sendSuggest"><span>发送</span></button>
       </header>
-      <section class="config-suggestion-inner">
+      <section class="config-suggestion-inner scrollTop">
         <nav class="config-suggestion-tabsBox">
           <ul class="config-suggestion-tabs">
             <li class="config-suggestion-tabs-item" :class="{'active':cutNum==index}" v-for="(item,index) in tabList" @click="cutNum = index;FirstIndex = -1 ;secondIndex = -1 ;ThirdIndex =-1 ;FourIndex = -1">{{item}}</li>
@@ -30,7 +30,7 @@
               <ul class="doc-filter-box" :class="{'quHighly':!viewMore}">
                 <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList" @click="getAllDocCustomer({tag:item,type:'filter',num:0,cutNum:index})">{{getTagName(item)}}</li>
               </ul>
-              <button class="viewMore" :class="{'rotate':viewMore}" @click="viewMore = !viewMore"></button>
+              <a href="javascript:;" class="viewMoreBox" @click="viewMore = !viewMore"><button class="viewMore" :class="{'rotate':viewMore}"></button></a>
               <div class="doc-search-box">
                 <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
                 <button class="doc-search-btn" :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
@@ -79,7 +79,7 @@
                       <header class="doctor-message-content-head">'
                         <h4>{{docList.fullName}}</h4>
                         <p class="rate">匹配度{{docList.suitability}}%</p>
-                        <span class="netstat" :class="{'rest':docList.adviceStatus == 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
+                        <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
                         <figure class="doctor-message-tags">' +
                           <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                           <span class="tags" v-if="docList.isNearest==1">距离最近</span>
@@ -454,6 +454,7 @@
                   that.allDoc.allDocList = [];
                   that.noDocData = true;
               }
+              document.querySelector(".scrollTop").scrollTop = 0;
               store.commit("stopLoading");
             }
           });
@@ -1425,19 +1426,26 @@
         }
       }
     }
-    .viewMore{
+    .viewMoreBox{
       cursor:pointer;
       display:block;
-      width:14px;
-      height:4px;
+      width:18px;
+      height:18px;
       position:absolute;
       right:10px;
-      top:30px;
+      top:23px;
       z-index: 2;
-      background:url("../../assets/img00/check/dot_more.png") no-repeat;
-      background-size:100% 100%;
-      &.rotate{
-        transform:rotate(90deg);
+      .viewMore{
+        cursor:pointer;
+        display:inline-block;
+        vertical-align: middle;
+        width:18px;
+        height:4px;
+        background:url("../../assets/img00/check/dot_more.png") no-repeat;
+        background-size:100% 100%;
+        &.rotate{
+          transform:rotate(90deg);
+        }
       }
     }
     .doc-search-box{

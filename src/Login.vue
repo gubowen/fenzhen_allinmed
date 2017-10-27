@@ -11,11 +11,6 @@
       <section class="login-content" id="ev-loginBox" style="display: inline-block;" v-show="loginFlag">
         <header class="login-title">
           用户登录
-
-
-
-
-
         </header>
         <section class="login-input-item">
           <h3><span>用户名</span></h3>
@@ -58,11 +53,6 @@
           <button class="login-send-validate-code btn-primary" @click="sendValidateCode()"
                   :class="{ send:loginSendValidateCodeFlag}" :disabled="loginSendValidateCodeFlag">
             {{loginSendValidateCode}}
-
-
-
-
-
           </button>
           <p class="error-text icon-errorTips" id="ev-validate-code-error" v-show="validateCodeError.length>0"><span>{{validateCodeError}}</span>
           </p>
