@@ -7,6 +7,7 @@
             <!--v-for="items in messageInfo"-->
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
+                <p class="time-stamp" v-if="$store.state.currentItem.returnReason">{{`由于${$store.state.currentItem.returnReason}，该患者被退回`}}</p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
