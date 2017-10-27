@@ -26,7 +26,10 @@
     mounted(){
         let ImageList = [];
         if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
-          ImageList.push( {"url":this.$store.state.SBIObject.IMImage});
+            console.log( this.$store.state.SBIObject.IMImage);
+            this.$store.state.SBIObject.IMImage.forEach(function(item,index){
+                ImageList.push( {"url":item.url});
+            })
         }
         ImageList.push( {"url":this.message.file.url});
         this.$store.commit('setSBIObject',{'IMImage':ImageList});

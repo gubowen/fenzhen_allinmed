@@ -23,7 +23,7 @@
                     <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus"
                                :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     <!--常用回复-->
-                    <used-Rely v-show="usedRelyStatus" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    <used-Rely v-if="usedRelyStatus" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
                                   @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
                 </nav>
@@ -57,19 +57,19 @@
     </section>
 </template>
 <script>
-  import SmallConfirm from "@/common/smallConfirm";
-  import fastRely from './components/fast_reply';
-  import usedRely from './components/used_rely';
-  import fastReplyConfig from  './components/fast_reply_config';
-  import UsedReplyConfig from './components/usedReplyConfig';
-  import CheckSuggestion from './components/suggestParts/CheckSuggestion';
-  import ExamineCheck from './components/suggestParts/ExamineCheck';
-  import PreviewSuggestion from './components/suggestParts/previewSuggestion'
-  import BaseIm from './baseIm';
-  import triagePatient from "@/base/triagePatient";
-  import releasePatient from "@/base/releasePatient";
-  import ShowBigImg from './common/ShowBigImg';
-  import store from "@/store/store";
+    import SmallConfirm from "@/common/smallConfirm";
+    import fastRely from './components/fast_reply';
+    import usedRely from './components/used_rely';
+    import fastReplyConfig from  './components/fast_reply_config';
+    import UsedReplyConfig from './components/usedReplyConfig';
+    import CheckSuggestion from './components/suggestParts/CheckSuggestion';
+    import ExamineCheck from './components/suggestParts/ExamineCheck';
+    import PreviewSuggestion from './components/suggestParts/previewSuggestion'
+    import BaseIm from './baseIm';
+    import triagePatient from "@/base/triagePatient";
+    import releasePatient from "@/base/releasePatient";
+    import ShowBigImg from './common/ShowBigImg';
+    import store from "@/store/store";
 
     export default {
         name: 'communication',
@@ -231,22 +231,22 @@
                     this.reTriageShow = false;
 
 
-                    let num="";
+                    let num = "";
 
-                    if (patientList.length>0){
-                        if (this.userOnlineActive<=patientList.length-1){
-                            num=this.userOnlineActive;
-                        }else{
-                            num=patientList.length-1;
+                    if (patientList.length > 0) {
+                        if (this.userOnlineActive <= patientList.length - 1) {
+                            num = this.userOnlineActive;
+                        } else {
+                            num = patientList.length - 1;
                         }
                         this.$emit("update:userOnlineActive", num);
-                    }else{
+                    } else {
                         this.$emit("update:userOnlineActive", -1);
                         this.$emit("update:n", false);
                         return;
                     }
                     this.$emit("update:userWatingActive", -1);
-                    let items=patientList[parseInt(num)];
+                    let items = patientList[parseInt(num)];
 
                     this.$store.commit('setPatientId', items.patientId);
                     this.$store.commit('setPatientName', items.patientName);

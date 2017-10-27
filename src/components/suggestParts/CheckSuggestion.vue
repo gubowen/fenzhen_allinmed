@@ -193,13 +193,14 @@
       },
       operationData(){
         let _this = this;
-        let dataValue = {
+          console.log(_this.partListResult);
+          let dataValue = {
           isValid: 1,	                  //string	是		1
           firstResult: 0,	              //string	是	分页参数
           treeLevel: 1,
           maxResult: 999,	              //string	是	分页参数
-          majorId: _this.partListResult.id,            //string	否	专业ID
-          operationName: ''  //string	是	手术名称
+          specialtyId: _this.partListResult.id, //string	否	专业ID
+          operationName: _this.partListResult.tagName  //string	是	手术名称
         };
         api.ajax({
           url: _this.operationUrl,
