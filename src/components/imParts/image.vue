@@ -36,11 +36,11 @@
     },
     methods:{
       showBigImgFunction(message){
-          console.log(message);
-
+          let _this = this;
 
           this.$store.state.SBIObject.IMImage.forEach(function(item,index){
-              if(message == item){
+              if(message == item.url){
+                  _this.$store.commit("setSBIIndex",index);
               }
           });
           this.$store.commit("setSBIFlag",true);

@@ -60,6 +60,7 @@ export default new Vuex.Store({
         quitPatientItem: {},
         SBIFlag: false, //查看大图标志位
         SBIObject: {}, //查看大图对象
+        SBIIndex:'',   //查看大图索引
         SBIType: '', //查看大图类型
         videoFlag:false, //查看视频标致位
         videoObject:'',  //查看视频列表
@@ -215,6 +216,9 @@ export default new Vuex.Store({
         },
         setVideoObject(state,data){
             state.videoObject=data;
+        },
+        setSBIIndex(state,data){
+            state.SBIIndex=data;
         }
     }
 });
