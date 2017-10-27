@@ -114,11 +114,12 @@
       progressResult:{
         handler(curVal,oldVal){
           if(curVal == '暂不需手术'){
-                this.nextFlag = false ;
+              this.nextFlag = false ;
+              this.operationList.disabledFlag = true;
           }else{
             this.nextFlag =true;
+              this.operationList.disabledFlag = false;
           }
-          this.operationList.disabledFlag = false;
         }
       },
       operationListResult:{
@@ -199,8 +200,8 @@
           firstResult: 0,	              //string	是	分页参数
           treeLevel: 1,
           maxResult: 999,	              //string	是	分页参数
-          specialtyId: _this.partListResult.id, //string	否	专业ID
-          operationName: _this.partListResult.tagName  //string	是	手术名称
+          //majorId: _this.partListResult.id, //string	否	专业ID
+          //operationName: _this.partListResult.tagName  //string	是	手术名称
         };
         api.ajax({
           url: _this.operationUrl,
