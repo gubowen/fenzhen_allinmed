@@ -235,7 +235,8 @@
                 popupContent: {
                     text: "",
                     hasImg: false
-                }
+                },
+
             }
         },
         components: {
@@ -255,6 +256,7 @@
                     }
                 });
             },
+
             '$store.state.userId'(){
                 this.init();
             },
@@ -293,6 +295,13 @@
             }
         },
         mounted(){
+            if (this.$store.state.userId){
+                this.init();
+                store.commit("setUsedReplyShow",false);
+                store.commit("setFastReplyShow",false);
+            }
+        },
+        activated(){
 
         },
         methods: {

@@ -96,7 +96,8 @@
                 medicalReportImgList: [],
                 ShowBigImgList: [],
                 diagnosisId: "",
-                diagnosisShow: false
+                diagnosisShow: false,
+
             }
         },
         components: {
