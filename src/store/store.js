@@ -60,6 +60,8 @@ export default new Vuex.Store({
         SBIFlag: false, //查看大图标志位
         SBIObject: {}, //查看大图对象
         SBIType: '', //查看大图类型
+        videoFlag:false, //查看视频标致位
+        videoObject:'',  //查看视频列表
         previewShow: false,
         previewId: "",
         previewData: {
@@ -203,6 +205,12 @@ export default new Vuex.Store({
         //常用回复显示隐藏
         setUsedReplyShow(state,flag){
             state.usedReplyShow=flag;
+        },
+        setVideoFlag(state,data){
+            state.videoFlag = data;
+        },
+        setVideoObject(state,data){
+            state.videoObject=data;
         }
     }
 });

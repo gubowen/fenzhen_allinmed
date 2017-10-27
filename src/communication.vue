@@ -58,6 +58,7 @@
         <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
 
         <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
+        <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
         <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
                  v-if="$store.state.previewShow">
             <PreviewSuggestion></PreviewSuggestion>
@@ -77,6 +78,7 @@
     import triagePatient from "@/base/triagePatient";
     import releasePatient from "@/base/releasePatient";
     import ShowBigImg from './common/ShowBigImg';
+    import ShowVideo from './common/ShowVideo';
     import store from "@/store/store";
 
     export default {
@@ -111,6 +113,7 @@
             CheckSuggestion,
             ExamineCheck,
             ShowBigImg,
+            ShowVideo,
             BaseIm,
             SmallConfirm,
             PreviewSuggestion,

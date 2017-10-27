@@ -26,7 +26,13 @@
                   <p>患病处照片</p>
                 </section>
               </li>
-              <li class='noData' v-show="videoCaseAttUrl.length == 0">患者未上传资料</li>
+              <li v-show="videoList.length > 0" v-for="item in videoList">
+                <section>
+                  <img :src="item.caseAttUrl" @click="showVideoFunction(item)"/>
+                  <p>动作视频</p>
+                </section>
+              </li>
+              <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
             </ul>
             <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000"/>
           </section>
@@ -72,7 +78,8 @@
                 getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
                 userMessage: {},
                 caseAttUrl: [],
-                videoCaseAttUrl: []
+                videoCaseAttUrl: [],
+                videoList:[]
             }
         },
         watch: {
@@ -160,6 +167,13 @@
                                 console.log( _this.caseAttUrl);
                                 console.log( _this.videoCaseAttUrl)
                             }
+                            //获取视频
+                            if (data_list[1].videoMap.length) {
+                                $.each(data_list[1].videoMap, function (key, value) {
+                                    _this.videoList.push(value);
+                                });
+
+                            }
                         }
                     }, fail(error){
                         console.log("请求失败：" + error);
@@ -177,6 +191,10 @@
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'diagnoseListImage');
                 }
+            },
+            showVideoFunction(item){
+                this.$store.commit('setVideoObject',item.videoList[0].caseAttUrl);
+                this.$store.commit('setVideoFlag',true);
             }
         },
         mounted(){
