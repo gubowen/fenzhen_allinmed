@@ -219,6 +219,7 @@
                   _this.popupObj = {
                       text: '保存成功'
                   };
+                  _this.getData();
               } else {
                   _this.popupShow = true;
                   _this.popupObj = {

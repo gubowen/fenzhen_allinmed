@@ -150,6 +150,7 @@
 
                                 if(checkImageList.length > 0 && diagnoseList.length > 0){
                                     let allList ={};
+                                    allList = _this.$store.state.SBIObject;
                                     allList['checkImage'] = checkImageList;
                                     allList['diagnoseListImage'] = diagnoseList;
                                     _this.$store.commit('setSBIObject',allList);
