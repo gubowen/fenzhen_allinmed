@@ -9,7 +9,7 @@
 <template>
   <section class="search-sortType-item">
     <ul class="search-selector">
-      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" readonly @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
+      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
       <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
       <section class="search-selector-second-box">
         <div class="custom-selector-second firstList" v-show="dataShow">
@@ -50,6 +50,11 @@
       dataListInfo: {
         type: Object
       }
+    },
+    watch:{
+        resultData(){
+            console.log("111");
+        }
     },
     methods: {
       init(){

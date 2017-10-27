@@ -4,7 +4,7 @@
       <div class="rotate-button"></div>
       <div class="bigger-button"></div>
       <div class="smaller-button"></div>
-      <div class="download-button"></div>
+      <div class="download-button" v-show="!($store.state.SBIType == 'medicalReport')"></div>
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
           <div class="swiper-wrapper">

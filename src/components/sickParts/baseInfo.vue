@@ -202,6 +202,7 @@
         marriageAgeSelectValue: '',
         nation: [],
         nationDataSelectValue: '',
+        nationDataSelectName:'',
         marriageSelectValue: '',
         nativeAddress: '',
         homeAddress: '',
