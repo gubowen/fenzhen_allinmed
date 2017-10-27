@@ -1,39 +1,42 @@
 <template>
-  <div id="header" class="main-header">
-    <section class="main-header-search">
-      <input class="main-search" type="text" placeholder="请输入患者姓名" v-model="searchContent"
-             @keyup="searchPatient($event)">
-      <i class="icon-header-search" @click="clickToSearch"></i>
-    </section>
-    <article class="main-header-title" @click="refresh()">
-      <i class="icon-logo"></i>
-      <h1>唯医互联网骨科医院</h1>
-    </article>
-    <article class="main-header-base-msg">
-      <article class="main-header-tips">
-        您好，<span>{{$store.state.userName}}</span>医生
-
-
+  <section>
+    <div id="header" class="main-header">
+      <section class="main-header-search">
+        <input class="main-search" type="text" placeholder="请输入患者姓名" v-model="searchContent"
+               @keyup="searchPatient($event)">
+        <i class="icon-header-search" @click="clickToSearch"></i>
+      </section>
+      <article class="main-header-title" @click="refresh()">
+        <i class="icon-logo"></i>
+        <h1>唯医互联网骨科医院</h1>
       </article>
-      <ul class="main-header-config">
-        <li class="main-header-config-item">
-          <router-link to="/setting" tag="a">个人设置</router-link>
-        </li>
-        <hr class="main-header-line">
-        <li class="main-header-config-item">
-          <router-link to="/login" tag="a">退出</router-link>
-        </li>
-      </ul>
-    </article>
-  </div>
+      <article class="main-header-base-msg">
+        <article class="main-header-tips">
+          您好，<span>{{$store.state.userName}}</span>医生
+
+
+        </article>
+        <ul class="main-header-config">
+          <li class="main-header-config-item">
+            <router-link to="/setting" tag="a">个人设置</router-link>
+          </li>
+          <hr class="main-header-line">
+          <li class="main-header-config-item" @click="confirmShow = !confirmShow">退出</li>
+        </ul>
+      </article>
+    </div>
+    <confirm :comfirmData="{content:'你确定要退出平台吗？'}" v-if="confirmShow" @ensureCallback="exitLogin" @cancelCallback="cancelLogin"></confirm>
+  </section>
 </template>
 <script>
   import axios from "axios";
+  import confirm from "./common/bigConfim";
   export  default{
     name: 'header',
     data(){
       return {
         isActive: false,
+        confirmShow:false,
         isActiveMessage: '在线',
         searchStatus: true,
         searchContent: ""
@@ -204,7 +207,21 @@
             name: "home"
           })
         }
+      },
+      cancelLogin(){
+          console.log(111)
+          this.confirmShow = false;
+      },
+      exitLogin(){
+          console.log(111)
+          this.$router.push({
+              name: "login"
+          })
+          this.confirmShow = false;
       }
+    },
+    components:{
+      confirm
     },
     mounted(){
       this.init();

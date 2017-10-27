@@ -104,6 +104,18 @@
         triagePatient({
           consultationId: this.$store.state.consultationId,
           customerId: this.$store.state.userId
+        }, () => {
+            store.commit("stopLoading");
+            store.commit("showPopup",{
+                hasImg: false,
+                text: "该患者已被其他分诊医生接诊！"
+            });
+        }, (c) => {
+            store.commit("stopLoading");
+            store.commit("showPopup",{
+                hasImg: false,
+                text: `您最多可以接诊${c}个患者！`
+            });
         }).then((res) => {
 
           this.$emit("update:watingTriage", false);

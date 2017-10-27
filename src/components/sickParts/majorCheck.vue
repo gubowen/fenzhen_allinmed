@@ -26,13 +26,7 @@
                   <p>患病处照片</p>
                 </section>
               </li>
-              <li v-show="videoList.length > 0" v-for="item in videoList">
-                <section>
-                  <img :src="item.caseAttUrl" @click="showVideoFunction(item)"/>
-                  <p>动作视频</p>
-                </section>
-              </li>
-              <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
+              <li class='noData' v-show="videoCaseAttUrl.length == 0">患者未上传资料</li>
             </ul>
             <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000"/>
           </section>
@@ -78,8 +72,7 @@
                 getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
                 userMessage: {},
                 caseAttUrl: [],
-                videoCaseAttUrl: [],
-                videoList:[]
+                videoCaseAttUrl: []
             }
         },
         watch: {
@@ -94,7 +87,7 @@
         methods: {
             init() {
                 this.userMessage = this.$store.state.currentItem;
-//                console.log(this.userMessage);
+                console.log(this.userMessage);
                 this.getData();
 
             },
@@ -111,7 +104,7 @@
                     attUseFlag: 3
                 };
 
-              //  console.log(dataValue);
+                console.log(dataValue);
                 api.ajax({         //获取基本信息
                     url: _this.getDataUrl,
                     method: "POST",
@@ -119,7 +112,7 @@
                     beforeSend(config) {
                     },
                     done(res) {
-                   //     console.log(res);
+                        console.log(res);
                         if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
                             let data_list = res.responseObject.responseData.data_list;
                             //获取图片
@@ -154,7 +147,6 @@
                                     allList['diagnoseListImage'] = diagnoseList;
                                     _this.$store.commit('setSBIObject',allList);
                                 } else if (checkImageList.length > 0) {
-
                                     let allObject ={};
                                     allObject = _this.$store.state.SBIObject;
                                     allObject['checkImage'] = checkImageList;
@@ -167,14 +159,6 @@
                                 }
                                 console.log( _this.caseAttUrl);
                                 console.log( _this.videoCaseAttUrl)
-                            }
-
-                            //获取视频
-                            if (data_list[1].videoMap.length) {
-                                $.each(data_list[1].videoMap, function (key, value) {
-                                    _this.videoList.push(value);
-                                });
-
                             }
                         }
                     }, fail(error){
@@ -193,10 +177,6 @@
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'diagnoseListImage');
                 }
-            },
-            showVideoFunction(item){
-                this.$store.commit('setVideoObject',item.videoList[0].caseAttUrl);
-                this.$store.commit('setVideoFlag',true);
             }
         },
         mounted(){

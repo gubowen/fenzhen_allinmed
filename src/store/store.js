@@ -48,18 +48,18 @@ export default new Vuex.Store({
             text: ""
         },
         fastReplyContent: "", //
+        fastReplyShow:false,
         consultationId: '',//交流Id
         usedReplyConfig: false,
         examineFlag: false,//检查检验显示隐藏
         checkSuggestionFlag: false,//初诊建议显示隐藏
         usedReplyContent: "",
+        usedReplyShow:false,
         // quitPatientList: [],
         quitPatientItem: {},
         SBIFlag: false, //查看大图标志位
         SBIObject: {}, //查看大图对象
         SBIType: '', //查看大图类型
-        videoFlag:false, //查看视频标致位
-        videoObject:'',  //查看视频列表
         previewShow: false,
         previewId: "",
         previewData: {
@@ -196,11 +196,13 @@ export default new Vuex.Store({
         setCheckSuggestionFlag(state, data){
             state.checkSuggestionFlag = data;
         },
-        setVideoFlag(state,data){
-            state.videoFlag = data;
+        //快捷提问显示隐藏
+        setFastReplyShow(state,flag){
+            state.fastReplyShow=flag;
         },
-        setVideoObject(state,data){
-            state.videoObject=data;
+        //常用回复显示隐藏
+        setUsedReplyShow(state,flag){
+            state.usedReplyShow=flag;
         }
     }
 });
