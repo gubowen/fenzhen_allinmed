@@ -6,7 +6,7 @@
     </figure>
     <!--图片-->
     <figcaption class="messageList-item-text">
-      <img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction()"/>
+      <img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)"/>
     </figcaption>
   </figure>
 </template>
@@ -26,7 +26,6 @@
     mounted(){
         let ImageList = [];
         if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
-            console.log( this.$store.state.SBIObject.IMImage);
             this.$store.state.SBIObject.IMImage.forEach(function(item,index){
                 ImageList.push( {"url":item.url});
             })
@@ -36,7 +35,14 @@
         //console.log(this.message);
     },
     methods:{
-      showBigImgFunction(){
+      showBigImgFunction(message){
+          console.log(message);
+
+
+          this.$store.state.SBIObject.IMImage.forEach(function(item,index){
+              if(message == item){
+              }
+          });
           this.$store.commit("setSBIFlag",true);
           this.$store.commit("setSBIType",'IMImage');
       }

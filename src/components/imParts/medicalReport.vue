@@ -164,7 +164,13 @@
                 _this.medicalReportMsg.patientCasemap.attachmentList.forEach(function (item, index) {
                     _this.showBigImageList.push({"url": item.caseAttUrl});
                 });
-                _this.$store.commit("setSBIObject", {'medicalReport': _this.showBigImageList});
+
+                let allList ={};
+                allList = _this.$store.state.SBIObject;
+                allList['medicalReport'] = _this.showBigImageList;
+
+
+                _this.$store.commit("setSBIObject",allList);
                 _this.$store.commit("setSBIType", 'medicalReport');
                 _this.$store.commit("setSBIFlag", true);
             }
