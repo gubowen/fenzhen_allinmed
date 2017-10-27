@@ -48,11 +48,13 @@ export default new Vuex.Store({
             text: ""
         },
         fastReplyContent: "", //
+        fastReplyShow:false,
         consultationId: '',//交流Id
         usedReplyConfig: false,
         examineFlag: false,//检查检验显示隐藏
         checkSuggestionFlag: false,//初诊建议显示隐藏
         usedReplyContent: "",
+        usedReplyShow:false,
         // quitPatientList: [],
         quitPatientItem: {},
         SBIFlag: false, //查看大图标志位
@@ -193,6 +195,14 @@ export default new Vuex.Store({
         //初诊建议显示隐藏
         setCheckSuggestionFlag(state, data){
             state.checkSuggestionFlag = data;
+        },
+        //快捷提问显示隐藏
+        setFastReplyShow(state,flag){
+            state.fastReplyShow=flag;
+        },
+        //常用回复显示隐藏
+        setUsedReplyShow(state,flag){
+            state.usedReplyShow=flag;
         }
     }
 });

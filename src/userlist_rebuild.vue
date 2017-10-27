@@ -27,22 +27,12 @@
                         >
                             待分诊
 
-
-
-
-
                         </li>
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
-
-
-
-
-
-
 
                         </li>
                     </ul>
@@ -87,6 +77,11 @@
                                         @click.stop="getTriagePatient(items,index)">接诊
 
 
+
+
+
+
+
                                 </button>
                             </figcaption>
 
@@ -114,12 +109,12 @@
                                     <span class="category short"
                                           v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
                                     <span class="category short"
-                                          v-show="fixByCurrent(items,index)">{{userOnlineActive == index?$store.state.currentItem.diagnosisContent:items.diagnosisContent}}</span>
+                                          v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
-                  <span
-                          class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
-                  )}}</span>
+                                    <span class="text">
+                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
+                                    )}}</span>
                                 </article>
                                 <!--<figure class="quit-triage">-->
                                 <!--<span class="text">转移患者</span>-->
@@ -326,6 +321,8 @@
             },
             //给子组件传值..
             transformData (items, index) {
+                store.commit("setUsedReplyShow",false);
+                store.commit("setFastReplyShow",false);
                 if (this.userListStatus.first) {
                     this.watingTriage = true;
                     this.userWatingActive = index;
@@ -410,7 +407,9 @@
                 let dataValue = Object.assign({
                     customerId: _this.$store.state.userId,
                     conState: type === "online" ? "0" : "2,4,5",
-                    conType: 0
+                    conType: 0,
+                    sortType:-6
+
                 }, param);
 //        if (type==="online"){
 //            dataValue=Object.assign(dataValue,{
@@ -486,8 +485,10 @@
                 this.filterMethod = Object.assign(this.filterMethod, {
                     selectName: content,
                 });
+                store.commit("startLoading");
                 this.getUserList("wating", this.filterMethod);
-//        this.getUserList("online", this.filterMethod);
+                this.getUserList("online", this.filterMethod);
+                store.commit("stopLoading");
 //        this.filterFinish = true;
             },
             refreshList() {

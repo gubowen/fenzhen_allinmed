@@ -7,23 +7,31 @@
             <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply" v-if="!watingTriage">
-                    <button class="user-controller-fastReply" @click="fastRely()"><i class="icon-fastReply"></i><span>快捷提问</span>
+                    <button class="user-controller-fastReply" @click="fastRely()">
+                        <i class="icon-fastReply"></i>
+                        <span>快捷提问</span>
                     </button>
-                    <button class="user-controller-result" @click="usedRely()"><i
-                            class="icon-userReply"></i><span>常用回复</span>
+                    <button class="user-controller-result" @click="usedRely()">
+                        <i class="icon-userReply"></i>
+                        <span>常用回复</span>
                     </button>
-                    <button class="user-controller-report" @click="suggestion()"><i class="icon-suggestion"></i><span>初诊建议</span>
+                    <button class="user-controller-report" @click="suggestion()">
+                        <i class="icon-suggestion"></i>
+                        <span>初诊建议</span>
                     </button>
-                    <button class="user-controller-check" @click="examine()"><i
-                            class="icon-checkout"></i><span>检查检验</span>
+                    <button class="user-controller-check" @click="examine()">
+                        <i class="icon-checkout"></i>
+                        <span>检查检验</span>
                     </button>
-                    <button class="user-controller-check" @click="reTriageShow=true"><i
-                            class="icon-checkout"></i><span>结束沟通</span></button>
+                    <button class="user-controller-check" @click="reTriageShow=true">
+                        <i class="icon-checkout"></i>
+                        <span>结束沟通</span>
+                    </button>
                     <!--快捷提问-->
-                    <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus"
+                    <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
                                :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     <!--常用回复-->
-                    <used-Rely v-if="usedRelyStatus" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    <used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
                                   @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
                 </nav>
@@ -184,15 +192,23 @@
             },
             //快捷提问按钮
             fastRely(){
-                let _this = this;
-                _this.fastRelyStatus = !_this.fastRelyStatus;
-                _this.usedRelyStatus = false;
+                let flag=true;
+                if (this.$store.state.fastReplyShow){
+                    flag=false;
+                }else{
+                    flag=true;
+                }
+                store.commit("setFastReplyShow",flag);
             },
             //常用回复
             usedRely(){
-                let _this = this;
-                _this.usedRelyStatus = !_this.usedRelyStatus;
-                _this.fastRelyStatus = false;
+                let flag=true;
+                if (this.$store.state.usedReplyShow){
+                    flag=false;
+                }else{
+                    flag=true;
+                }
+                store.commit("setUsedReplyShow",flag);
             },
 
             //患者转移至其他分诊医生：
