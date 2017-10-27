@@ -129,7 +129,7 @@
                     data: {
                         caseId: this.$store.state.currentItem.caseId,
                         isOrder: 0,
-                        attUseFlag: 3
+                        attUseFlag: 6
                     },
                     done(res){
                         if (res.responseObject.responseData) {

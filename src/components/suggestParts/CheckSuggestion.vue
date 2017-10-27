@@ -22,10 +22,10 @@
             <h2>初步诊断：</h2>
           </section>
           <nav class="search-sortType">
-            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :conIndex="1" :currentIndex.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :conIndex="2" :currentIndex.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :conIndex="3" :currentIndex.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="operationList" :dataBack.sync="operationListResult" :conIndex="4" :currentIndex.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="operationList" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
           </nav>
           <section class="search-suggestion-footer">
             <button type="button" class="search-next" :class="{'disable':nextFlag}" @click="!nextFlag&&toNextPage()">下一步</button>
@@ -50,7 +50,7 @@
           disabledFlag:false
         },
         partListResult:{},
-          currentSelectorIndex:-1,
+        currentSelectorIndex:1,
         nextPageShow:false,
         nextPageDate:{},
         homePageShow:true,

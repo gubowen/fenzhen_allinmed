@@ -118,7 +118,7 @@
                     caseAttSpecVideo: 9,	    //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
                     firstResult: 0,	            //string	是
                     maxResult: 100,	            //string	是
-                    attUseFlag: 3
+                    attUseFlag: 6
                 };
                 api.ajax({         //获取基本信息
                     url: _this.getDataUrl,
