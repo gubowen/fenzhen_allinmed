@@ -1030,6 +1030,7 @@
                     beforeSend(config) {
                     },
                     done(res) {
+                        _this.addData();
                         _this.$store.state.setNewSickId = res.responseObject.responsePk;
                         console.log("保存成功！");
                         _this.popupShow = true;

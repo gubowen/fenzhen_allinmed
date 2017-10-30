@@ -327,7 +327,6 @@
           done(res) {
             if (res.responseObject.responseData.dataList && res.responseObject.responseStatus == true) {
               let data = res.responseObject.responseData.dataList[0];
-              // console.log(data);
               _this.id = data.id;
               //所在地区
               _this.address = data.province + " " + data.city + " " + data.district;
@@ -463,7 +462,7 @@
           childrenStatus: this.childrenStatusSelectValue, //子女状况
           fertility: this.fertilityBoySelectValue + ',' + this.fertilityGirlSelectValue,  //生育状况
           marriageAge: this.marriageAgeSelectValue,       //结婚年龄
-          isSmoke: this.isDrinkSelectValue,               //吸烟史
+          isSmoke: this.isSmokeSelectValue,               //吸烟史
           isDrink: this.isDrinkSelectValue,               //饮酒史
           isNarcotics: this.isNarcoticsSelectValue,        //毒品史
           parentStatus: this.parentStratusSelectValue,    //父母状况
@@ -479,6 +478,8 @@
           beforeSend(config) {
           },
           done(res){
+              _this.baseInfoGet();
+
             _this.popupShow = true;
             _this.popupObj = {
               text: '保存成功'

@@ -155,7 +155,6 @@
           patientId: this.userMessage.patientId,
           caseId: this.userMessage.caseId
         };
-        console.log(dataValue);
         api.ajax({         //获取基本信息
           url: _this.getDataUrl,
           method: "POST",
@@ -213,6 +212,7 @@
           },
           done(res) {
             if (res != "" && res.responseObject.responseStatus != false) {
+                _this.getData();
               console.log("保存成功！");
               _this.popupShow = true;
               _this.popupObj = {

@@ -236,6 +236,7 @@
                         beforeSend(config) {
                         },
                         done(res) {
+                            _this.getData();
                             _this.popupShow = true;
                             _this.popupObj = {
                                 text: '保存成功'
