@@ -410,7 +410,7 @@
               //毒品史
               data.isNarcotics != '' && data.isNarcotics > 0 ? _this.isNarcoticsSelectValue = data.isNarcotics : _this.isNarcoticsSelectValue = 0;
               //父母状况
-              data.parentStatus != '' && data.parentStatus > 0 ? _this.parentStratusSelectValue = data.isNarcotics : _this.parentStratusSelectValue = 0;
+              data.parentStatus != '' && data.parentStatus > 0 ? _this.parentStratusSelectValue = data.parentStatus : _this.parentStratusSelectValue = 0;
               //兄妹状况
               data.siblingsStatus != '' && data.siblingsStatus > 0 ? _this.siblingsStatusSelectValue = data.siblingsStatus : _this.siblingsStatusSelectValue = 0;
               //传染病

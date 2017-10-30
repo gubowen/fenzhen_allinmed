@@ -11,21 +11,27 @@
     <section class="main-masker config-suggestion check-suggestion disease-teach-detail on show">
       <section class="check-suggestion-box" v-show="homePageShow">
         <i class="icon-close window-close" @click="closeWindow()"></i>
-        <header class="check-suggestion-title">
+        <header class="check-suggestion-title" @click = 'closeSelect()'>
           <article>
             <h2>初诊建议</h2>
           </article>
           <!--<button class="jump-box-add-term icon-suggestion-preview"><span>预览</span></button>-->
         </header>
-        <section class="check-suggestion-inner">
+        <section class="check-suggestion-inner" @click = 'closeSelect()'>
           <section class="check-suggestion-title">
             <h2>初步诊断：</h2>
           </section>
           <nav class="search-sortType">
-            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="operationList" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :iconFlag="showIconFlag"    :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :iconFlag="showIconFlag" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :iconFlag="showIconFlag" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select  v-if='operationShowFlag' :dataListInfo.sync="operationList" :iconFlag="showIconFlag" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <section class="search-sortType-item" v-if="!operationShowFlag">
+              <ul class="search-selector" >
+                <input class="custom-selector-title firstListTitle" placeholder="手术建议" readonly>
+                <i class="icon-downArrow"></i>
+              </ul>
+            </section>
           </nav>
           <section class="search-suggestion-footer">
             <button type="button" class="search-next" :class="{'disable':nextFlag}" @click="!nextFlag&&toNextPage()">下一步</button>
@@ -50,7 +56,7 @@
           disabledFlag:false
         },
         partListResult:{},
-        currentSelectorIndex: 1,
+        currentSelectorIndex: -1,
         nextPageShow:false,
         nextPageDate:{},
         homePageShow:true,
@@ -94,7 +100,9 @@
 
         parentId:'',
         operationName:'',
-        nextFlag:true
+        nextFlag:true,
+        operationShowFlag:true,
+        showIconFlag:false
       }
     },
     props: {
@@ -108,9 +116,9 @@
       },
       sicknessResult:{
         handler(curVal,oldVal){
-            if(this.sicknessResult.illnessName&&this.sicknessResult.illnessName.length>0){
+            if(this.sicknessResult.illnessName && this.sicknessResult.illnessName.length>0){
               this.progressList.disabledFlag = false;
-              if(this.progressResult){
+              if(this.progressResult && this.progressResult.progressName){
                   this.nextFlag = false;
               }
             }else{
@@ -121,12 +129,17 @@
       },
       progressResult:{
         handler(curVal,oldVal){
-          if(curVal == '暂不需手术'){
+            console.log(curVal);
+          if(curVal.progressName == '暂不需手术'){
+              console.log("111");
               this.nextFlag = false ;
               this.operationList.disabledFlag = true;
+              this.operationShowFlag = false;
           }else{
-            this.nextFlag =true;
+              console.log("222");
+              this.nextFlag =true;
               this.operationList.disabledFlag = false;
+              this.operationShowFlag = true;
           }
         }
       },
@@ -146,8 +159,8 @@
         this.sicknessSelect();
       },
       closeSelect(ev){
-          console.log(ev);
           this.currentSelectorIndex = -1;
+          this.showIconFlag = false;
       },
       closeWindow(){
         this.nextPageShow = false;
@@ -236,11 +249,13 @@
         _this.homePageShow = false;
 
         let degreeType='';
-        if (_this.progressResult == "暂不需手术") {
+        if (_this.progressResult.progressName == "暂不需手术") {
+            _this.operationListResult.operationId ='';
+            _this.operationListResult.operationId ='';
           degreeType = 0;
-        } else if (_this.progressResult== "需手术") {
+        } else if (_this.progressResult.progressName== "需手术") {
           degreeType = 1;
-        } else if (_this.progressResult == "急需手术") {
+        } else if (_this.progressResult.progressName == "急需手术") {
           degreeType = 2;
         }
 
