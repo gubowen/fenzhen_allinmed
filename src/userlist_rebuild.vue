@@ -451,6 +451,13 @@
                                         if (key == ("0_" + item.caseId)) {
                                             item.messageAlert = waitingAlertList[key];
                                             _this.newWaitingFlag = true;
+                                            _this.$store.commit('setMusicPlay',true);
+                                            console.log("music2");
+                                            setTimeout(function(){
+                                                console.log("music");
+                                                _this.$store.commit('setMusicPlay',false);
+
+                                            },2000);
                                         }
                                     }
                                 }
@@ -460,7 +467,13 @@
                                         if (key == ("0_" + item.caseId)) {
                                             item.messageAlert = patientAlertList[key];
                                             _this.newPatientFlag = true;
-                                            console.log(_this.newPatientFlag);
+                                            _this.$store.commit('setMusicPlay',true);
+                                            console.log("music2");
+                                            setTimeout(function(){
+                                                console.log("music");
+                                                _this.$store.commit('setMusicPlay',false);
+
+                                            },2000);
                                         }
                                     }
                                 }

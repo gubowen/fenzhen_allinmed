@@ -52,6 +52,7 @@
     import VideoTriage from "@/components/imParts/videoTriage";
     import CheckSuggestion from "@/components/imParts/checkSuggestion";
     import store from "@/store/store";
+    import api from '@/common/js/util';
 
 
     Vue.filter('transformMessageTime', function (time) {
@@ -82,6 +83,10 @@
         }
         return result;
     });
+
+    const XHRList = {
+        watingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+    };
     export default{
         data(){
             return {
@@ -107,7 +112,7 @@
             ImageElement,
             PreviewSuggestion,
             VideoTriage,
-            CheckSuggestion,
+            CheckSuggestion
         },
         props: {},
         watch: {
@@ -186,6 +191,38 @@
                             if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
                                 store.commit("watingListRefreshFlag", true);
                                 store.commit("setNewWating", true);
+                                store.commit("setMusicPlay", true);
+                                let dataValue = Object.assign({
+                                    customerId: that.$store.state.userId,
+                                    conState: "2,4,5",
+                                    conType: 0,
+                                    sortType:-6
+                                });
+                                api.ajax({
+                                    url: XHRList.watingUserList,
+                                    method: "POST",
+                                    data: dataValue,
+                                    done(res) {
+                                        if (res.responseObject.responseData && res.responseObject.responseStatus) {
+                                            let dataList =res.responseObject.responseData.dataList;
+                                            let  waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+                                            if(!waitingAlertList){
+                                                waitingAlertList = {};
+                                            }
+                                            console.log(waitingAlertList);
+                                            dataList.forEach(function (item, index) {
+                                                if (msg.from == ("0_" + item.caseId)) {
+                                                    waitingAlertList[msg.from] = 1;
+                                                }
+                                            });
+                                            localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
+
+                                        }
+                                    },
+                                    fail(err) {
+                                        console.log("请求失败：" + err);
+                                    }
+                                });
                             }
                         }
                         that.receiveMessage(that.targetData.account, msg);
