@@ -6,8 +6,8 @@
           <article class="J-consult">
             <ul>
               <li class="operation-name" v-show="caseMain != ''"><span class="sick-title">主要症状</span><span class="sick-text">{{caseMain}}</span></li>
-              <li class="operation-expectation-time" v-show="painNature != ''"><span class="sick-title">疼痛性质：</span><span class="sick-text">{{painNature}}</span></li>
-              <li class="operation-expectation-time" v-show="VASLevelL != ''"><span class="sick-title">VAS评分：</span><span class="sick-text">{{painNature}}</span></li>
+              <li class="operation-expectation-time" v-show="painNature != ''"><span class="sick-title">疼痛性质</span><span class="sick-text">{{painNature}}</span></li>
+              <li class="operation-expectation-time" v-show="VASLevelL != ''"><span class="sick-title">VAS评分</span><span class="sick-text">{{VASLevelL}}</span></li>
               <li class="operation-expectation-time" v-show="caseAlong != ''"><span class="sick-title">其他症状</span><span class="sick-text">{{caseAlong}}</span></li>
 
             </ul>
@@ -61,8 +61,9 @@
         let _this = this;
         this.userMessage = this.$store.state.currentItem;
         let dataValue = {
-          caseId: this.userMessage.caseId,
-          patientId: this.userMessage.patientId
+            caseId: this.userMessage.caseId,
+            isOrder: 0,
+            attUseFlag: 6
         };
 
         api.ajax({
@@ -72,19 +73,19 @@
           beforeSend(config) {
           },
           done(res) {
-
+              console.log(res);
             let dataList = res.responseObject.responseData.dataList[0];
-            console.log(dataList);
+
             if (dataList.patientCasemap.caseMain.caseMain != '') {
               _this.caseMain = dataList.patientCasemap.caseMain.caseMain;
             }
             if (dataList.resultMainList.length > 0) {
-              dataList.resultMainList[0].symptomOptions.forEach(function (index, value) {
+              dataList.resultMainList[0].symptomOptions.forEach(function (value,index) {
                 if (value.refQuestionList && value.refQuestionList.length > 0) {
                   if (value.refQuestionList[0]) {
                     if (value.refQuestionList[0].symptomOptions && value.refQuestionList[0].symptomOptions.length > 0) {
                       if (value.refQuestionList[0].symptomOptions[0].optionName && value.refQuestionList[0].symptomOptions[0].optionName.length > 0) {
-                        _this.painNature = dataList.refQuestionList[0].symptomOptions[0].optionName;
+                        _this.painNature = value.refQuestionList[0].symptomOptions[0].optionName;
                       }
                     }
                   }

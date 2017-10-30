@@ -129,14 +129,11 @@
       },
       progressResult:{
         handler(curVal,oldVal){
-            console.log(curVal);
           if(curVal.progressName == '暂不需手术'){
-              console.log("111");
               this.nextFlag = false ;
               this.operationList.disabledFlag = true;
               this.operationShowFlag = false;
           }else{
-              console.log("222");
               this.nextFlag =true;
               this.operationList.disabledFlag = false;
               this.operationShowFlag = true;
