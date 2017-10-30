@@ -529,6 +529,7 @@
       line-height: 14px;
       display: inline-block;
       width: 248px;
+      vertical-align: top;
     }
     li {
       margin-top: 15px;
