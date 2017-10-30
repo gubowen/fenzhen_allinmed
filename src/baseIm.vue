@@ -397,7 +397,7 @@
             newMessageTips(target,element){
                 const _this=this;
                 let patientList = this.$store.state.patientList;
-                patientList.forEach((item, index) =>{
+                patientList.forEach(function (item, index){
                     if (("0_" + item.caseId) == element.from) {
 
                         if (item.messageAlert == '') {
@@ -412,6 +412,13 @@
 
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                         _this.$store.commit("setNewOnline", true);
+                        _this.$store.commit('setMusicPlay',true);
+                        console.log("music1");
+                        setTimeout(function(){
+                            console.log("music");
+                            _this.$store.commit('setMusicPlay',false);
+
+                        },2000);
                     }
                 });
                 this.$store.commit("setPatientList", patientList);
@@ -431,6 +438,13 @@
 
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                         _this.$store.commit("setNewWating", true);
+                        _this.$store.commit('setMusicPlay',true);
+                        console.log("music1");
+                        setTimeout(function(){
+                            console.log("music");
+                            _this.$store.commit('setMusicPlay',false);
+
+                        },2000);
                     }
                 });
                 this.$store.commit("setWatingList", watingList);

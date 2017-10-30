@@ -45,7 +45,7 @@
                             <li @click="sort(4)" :class="{'active':sortActive==4}">等待时间从:多-少</li>
                         </ul>
                     </div>
-
+                    <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3" style="display: none"></audio> <!--新消息提示音-->
                 </nav>
                 <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"
                          id="ev-user-inner">
@@ -282,10 +282,20 @@
                 }
             },
             '$store.state.newWating'(flag){
+                let _this = this ;
                 this.newWaitingFlag = flag;
             },
             '$store.state.newOnline'(flag){
+                let _this = this ;
+                _this.$store.commit('setMusicPlay',true);
+                console.log("music2");
+                setTimeout(function(){
+                    console.log("music");
+                    _this.$store.commit('setMusicPlay',false);
+
+                },2000);
                 this.newPatientFlag = flag;
+
             }
         },
         mounted(){

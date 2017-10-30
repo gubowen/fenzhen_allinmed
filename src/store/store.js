@@ -87,7 +87,8 @@ export default new Vuex.Store({
             flag: false,
             data: {}
         },
-        newSickId:''                //现病史Id
+        newSickId:'',                //现病史Id
+        musicPlay:false
     },
     mutations: {
         enableSearchFn(state){
@@ -223,6 +224,9 @@ export default new Vuex.Store({
         },
         setNewSickId(state,data){
             state.newSickId = data;
+        },
+        setMusicPlay(state,data){
+            state.musicPlay = data;
         }
     }
 });
