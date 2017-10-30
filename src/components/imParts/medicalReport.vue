@@ -191,6 +191,7 @@
                 _this.showBigImageList = [];
 
                 _this.medicalReportMsg.patientCasemap.attachmentList.forEach(function (item, index) {
+                    console.log(item.caseAttUrl.substring(0,item.caseAttUrl.indexOf("_c")));
                     _this.showBigImageList.push({"url": item.caseAttUrl});
                 });
 
