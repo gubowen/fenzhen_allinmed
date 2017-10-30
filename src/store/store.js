@@ -16,6 +16,7 @@ export default new Vuex.Store({
         userName: "",  // 定义你的数据源
         mobile: '',
         patientList: '',  //患者列表
+        patientActiveIndex:-1,
         watingList: "",   //待分诊列表
         watingListRefresh: false,
         caseId: '',       //病例Id
@@ -66,6 +67,7 @@ export default new Vuex.Store({
         videoObject:'',  //查看视频列表
         previewShow: false,
         previewId: "",
+
         previewData: {
             diagnoseResult: {},
             doctorList: [],
@@ -91,6 +93,9 @@ export default new Vuex.Store({
         musicPlay:false
     },
     mutations: {
+        setPatientActiveIndex(state,index){
+           state.patientActiveIndex = index;
+        },
         enableSearchFn(state){
             state.enableSearch = false;
         },

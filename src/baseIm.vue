@@ -372,6 +372,9 @@
             },
             //发送单条数据...
             sendSingleMessage: function (error, msg) {
+                this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
+                this.$store.state.patientList.unshift(this.$store.state.currentItem);
+                store.commit("setPatientActiveIndex",this.$store.state.patientActiveIndex+1);
                 let that = this;
                 console.log(msg);
                 console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
