@@ -21,8 +21,8 @@
             <div class="gallery-thumbs" v-show="imgList.length>1">
                 <div class="swiper-container thumbSwiper">
                     <div class="swiper-wrapper">
-                        <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-                            <div class="swiper-zoom-container"><img :src="item.url"/></div>
+                        <div class="swiper-slide" v-for="item in imgList">
+                            <img :src="item.url"/>
                         </div>
                     </div>
                     <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
@@ -116,15 +116,26 @@
             });
 
             let thumbSwiper = new Swiper('.thumbSwiper', {
-                direction: 'horizontal',
                 initialSlide: index,
+                spaceBetween: 10,
+                direction: 'horizontal',
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                touchRatio: 1,
+                slideToClickedSlide: true,
+                observer: true,
                 prevButton: '.swiper-button-prev',
                 nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
                 loopedSlides: 5,
-                spaceBetween: 10,
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                slideToClickedSlide: true
+                paginationType: '',
+                imgElementCallBack: function () {
+                    console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+                },
+                onTap:function (swiper,event) {
+                    swiper.slideTo(swiper.activeIndex)
+                }
+
+
             });
             topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
             thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
@@ -302,21 +313,24 @@
                 width: 100%;
                 .swiper-wrapper {
                     .swiper-slide {
-                        width: auto;
+                        width: 64px;
+                        height: 64px;
+                        border: 2px solid #fff;
+                        box-sizing: border-box;
+                        text-align: center;
+                        background: #fff;
                         &.swiper-slide-active {
+                            border: 2px solid #00d6c6;
+                            background: white;
                             img {
-                                border: 2px solid #fff;
-                                background: white;
-
                             }
                         }
 
                         img {
                             display: inline-block;
-                            height: 100%;
-                            width: auto;
-                            border: 2px solid rgba(63, 63, 63, 0.9);
-                            box-sizing: border-box;
+                            max-width:100%;
+                            max-height:100%;
+                            margin:0 auto;
                             cursor: pointer;
                         }
                     }
