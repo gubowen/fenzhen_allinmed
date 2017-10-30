@@ -50,7 +50,7 @@
           disabledFlag:false
         },
         partListResult:{},
-        currentSelectorIndex:1,
+        currentSelectorIndex: 1,
         nextPageShow:false,
         nextPageDate:{},
         homePageShow:true,
@@ -108,7 +108,15 @@
       },
       sicknessResult:{
         handler(curVal,oldVal){
-          this.progressList.disabledFlag = false;
+            if(this.sicknessResult.illnessName&&this.sicknessResult.illnessName.length>0){
+              this.progressList.disabledFlag = false;
+              if(this.progressResult){
+                  this.nextFlag = false;
+              }
+            }else{
+              this.nextFlag = true ;
+              this.progressList.disabledFlag = true;
+            }
         }
       },
       progressResult:{
@@ -136,6 +144,10 @@
       init(){
         this.partSelect();
         this.sicknessSelect();
+      },
+      closeSelect(ev){
+          console.log(ev);
+          this.currentSelectorIndex = -1;
       },
       closeWindow(){
         this.nextPageShow = false;
