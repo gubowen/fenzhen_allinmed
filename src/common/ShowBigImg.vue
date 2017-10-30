@@ -9,7 +9,7 @@
                 <div class="swiper-container topSwiper">
                     <div class="swiper-wrapper">
                         <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-                            <div class="swiper-zoom-container"><img :src="item.url"/></div>
+                            <img :src="item.url"/>
                         </div>
                     </div>
                     <div class="swiper-pagination swiper-pagination-white"></div>
@@ -103,14 +103,19 @@
                 onInit: function (swiper) {
                     console.log(swiper.activeIndex + "当前索引");
                     console.log("sipwer初始化完成!,回调函数，初始化后执行。");
-                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                  //  setTimeout(function(){
+                        $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                  //  },500);
                 },
                 onTap: function (swiper, event) {
                     console.log(swiper.activeIndex); //swiper当前的活动块的索引
                 },
                 onSlideChangeStart(swiper){
                     console.log(swiper.activeIndex + "当前索引");
-                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                   // setTimeout(function(){
+                        $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                   // },500);
+
 
                 }
             });
@@ -239,7 +244,13 @@
                         height: 100%;
                         img {
                             display: block;
+                            position: absolute;
                             height: 100%;
+                            -webkit-user-select:none;
+                            -moz-user-select:none;
+                            -ms-user-select:none;
+                            user-select:none;
+
                         }
                     }
                 }
@@ -397,19 +408,20 @@
                 }
 
             }
-            .percentTip {
-                position: absolute;
-                width: 80px;
-                height: 25px;
-                background: #000;
-                border-radius: 5px;
-                color: #fff;
-                font-size: 14px;
-                text-align: center;
-                line-height: 25px;
-                top: 50%;
-                left: 50%;
-            }
+
+        }
+        .percentTip {
+            position: absolute;
+            width: 80px;
+            height: 25px;
+            background: #000;
+            border-radius: 5px;
+            color: #fff;
+            font-size: 14px;
+            text-align: center;
+            line-height: 25px;
+            top: 50%;
+            left: 50%;
         }
 
     }
