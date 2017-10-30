@@ -49,7 +49,7 @@
     data(){
       return {
         dataShow: false,
-        iconFlag: false,
+//        iconFlag: false,
         resultData: '',
         noData:"暂不确定",
         currentIndex: -1,
@@ -68,7 +68,12 @@
       currentIndexNow:{
           type:Number||String,
             default:-1
-       }
+       },
+        iconFlag:{
+          type:Boolean,
+            default:false
+        }
+
     },
     methods: {
       init(){
@@ -96,7 +101,7 @@
           this.iconFlag = !this.iconFlag;
         } else if (item.progressName) {
           this.resultData = item.progressName;
-          _this.$emit('update:dataBack', item.progressName);
+          _this.$emit('update:dataBack', item);
           this.dataShow = !this.dataShow;
           this.iconFlag = !this.iconFlag;
         } else if (item.operationName) {
