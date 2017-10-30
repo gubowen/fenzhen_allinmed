@@ -76,7 +76,7 @@
                     <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
                     <figure class="modal-confirm-button">
                       <button class="btn-ensure modal-confirm-ensure"
-                              @click.stop="deleteCallback('term',item,index,cItem,cIndex)">确定
+                              @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定
 
                       </button>
                       <button class="btn-primary modal-confirm-cancel"
@@ -342,7 +342,7 @@
             },
             done(res){
               if (res.responseObject.responseStatus) {
-                that.termList[index].children.removeByValue(item);
+                that.termList[index].children.removeByValue(cItem);
                 that.deleteTermShowFlag[index] = false;
                 delete that.deleteTermShowFlag[index];
               }
