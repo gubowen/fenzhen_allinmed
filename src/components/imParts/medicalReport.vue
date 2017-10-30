@@ -46,15 +46,15 @@
                                       style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseMain}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list"
-                                        v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0].questionName">
+                                        v-if="getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).typeShow">
                                 <p class="question">疼痛性质：</p>
                                 <span class="answer"
-                                      style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0].symptomOptions[0].optionName}}</span>
+                                      style="display:inline-block;max-width:80%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).type}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list"
-                                        v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName">
+                                        v-if="getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VASShow">
                                 <p class="question">VAS评分：</p>
-                                <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName.substring(0,2)}}</span>
+                                <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VAS}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list" v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
                                 <p class="question">其他症状：</p>
@@ -142,6 +142,34 @@
                     }
                 })
             },
+                getPainMessage(item){
+                    let painItem;
+                    if (item){
+                        item.forEach((element,index)=>{
+                            if (element.optionName==="疼痛"){
+                                painItem=element;
+                                return false;
+                            }
+                        })
+                    }
+
+                    console.log(!Object.is(painItem,{}))
+                    if (painItem){
+                        return {
+                            VASShow:true,
+                            VAS:painItem.refQuestionList[1].symptomOptions[0].optionName.substring(0,2),
+                            typeShow:true,
+                            type:painItem.refQuestionList[0].symptomOptions[0].optionName
+                        }
+                    }else{
+                        return {
+                            VASShow:false,
+                            typeShow:false,
+                        };
+                    }
+//                    medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName
+
+                },
             getMRTitle(type){
                 let result = "";
                 switch (parseInt(type)) {

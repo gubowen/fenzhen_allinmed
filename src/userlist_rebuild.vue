@@ -591,12 +591,12 @@
                         _this.getUserList('online', {'sortType': -5});
                         break;
                     case 4:
-                        _this.getUserList('wating', {'sortType': -6});
-                        _this.getUserList('online', {'sortType': -6});
+                        _this.getUserList('wating', {'sortType': -5});
+                        _this.getUserList('online', {'sortType': -5});
                         break;
                     default:
-                        _this.getUserList('wating', {'sortType': 5});
-                        _this.getUserList('online', {'sortType': 5});
+                        _this.getUserList('wating', {'sortType': 6});
+                        _this.getUserList('online', {'sortType': 6});
                 }
             }
         }
