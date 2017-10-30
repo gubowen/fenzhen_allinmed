@@ -76,7 +76,7 @@
                         $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")
                     }
                 } else if (dir === "next") {
-                    if (Math.abs(this.transformIndex.i) < size * 0.7) {
+                    if (Math.abs(this.transformIndex.i) < size ) {
                         this.transformIndex.i--;
                         this.transformIndex.num -= total / size;
                         $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")

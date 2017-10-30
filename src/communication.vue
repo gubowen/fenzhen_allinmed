@@ -200,6 +200,7 @@
                     flag=false;
                 }else{
                     flag=true;
+                    store.commit("setUsedReplyShow",false);
                 }
                 store.commit("setFastReplyShow",flag);
             },
@@ -210,6 +211,7 @@
                     flag=false;
                 }else{
                     flag=true;
+                    store.commit("setFastReplyShow",false);
                 }
                 store.commit("setUsedReplyShow",flag);
             },

@@ -27,12 +27,14 @@
                         >
                             待分诊
 
+
                         </li>
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
+
 
                         </li>
                     </ul>
@@ -45,7 +47,8 @@
                             <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间:多-少</li>
                         </ul>
                     </div>
-                    <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3" style="display: none"></audio> <!--新消息提示音-->
+                    <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3"
+                           style="display: none"></audio> <!--新消息提示音-->
                 </nav>
                 <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"
                          id="ev-user-inner">
@@ -76,7 +79,8 @@
                                     )}}</span>
                                 </article>
                                 <button class="get-triage btn-primary-small"
-                                        @click.stop="getTriagePatient(items,index)">接诊</button>
+                                        @click.stop="getTriagePatient(items,index)">接诊
+                                </button>
                             </figcaption>
 
                             <span class="time"> {{items.createTime | timeFormat}}</span>
@@ -84,7 +88,8 @@
                         <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
 
                     </section>
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
+                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2"
+                             v-show="userListStatus.status == 2">
                         <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
                                  v-for="(items,index) in userListOnline"
@@ -249,7 +254,7 @@
                 });
             },
             '$store.state.patientActiveIndex'(){
-                this.userOnlineActive=0;
+                this.userOnlineActive = 0;
             },
             '$store.state.userId'(){
                 this.init();
@@ -257,7 +262,6 @@
             '$store.state.patientList': {
                 handler: (list, oldValue) => {
                     this.userListOnline = list;
-
                 },
                 deep: true
             },
@@ -282,27 +286,27 @@
                 }
             },
             '$store.state.newWating'(flag){
-                let _this = this ;
+                let _this = this;
                 this.newWaitingFlag = flag;
             },
             '$store.state.newOnline'(flag){
-                let _this = this ;
-                _this.$store.commit('setMusicPlay',true);
+                let _this = this;
+                _this.$store.commit('setMusicPlay', true);
                 console.log("music2");
-                setTimeout(function(){
+                setTimeout(function () {
                     console.log("music");
-                    _this.$store.commit('setMusicPlay',false);
+                    _this.$store.commit('setMusicPlay', false);
 
-                },2000);
+                }, 2000);
                 this.newPatientFlag = flag;
 
             }
         },
         mounted(){
-            if (this.$store.state.userId){
+            if (this.$store.state.userId) {
                 this.init();
-                store.commit("setUsedReplyShow",false);
-                store.commit("setFastReplyShow",false);
+                store.commit("setUsedReplyShow", false);
+                store.commit("setFastReplyShow", false);
             }
         },
         activated(){
@@ -334,8 +338,8 @@
             },
             //给子组件传值..
             transformData (items, index) {
-                store.commit("setUsedReplyShow",false);
-                store.commit("setFastReplyShow",false);
+                store.commit("setUsedReplyShow", false);
+                store.commit("setFastReplyShow", false);
                 if (this.userListStatus.first) {
                     this.watingTriage = true;
                     this.userWatingActive = index;
@@ -421,7 +425,7 @@
                     customerId: _this.$store.state.userId,
                     conState: type === "online" ? "0" : "2,4,5",
                     conType: 0,
-                    sortType:-6
+                    sortType: -6
 
                 }, param);
 //        if (type==="online"){
@@ -451,13 +455,13 @@
                                         if (key == ("0_" + item.caseId)) {
                                             item.messageAlert = waitingAlertList[key];
                                             _this.newWaitingFlag = true;
-                                            _this.$store.commit('setMusicPlay',true);
+                                            _this.$store.commit('setMusicPlay', true);
                                             console.log("music2");
-                                            setTimeout(function(){
+                                            setTimeout(function () {
                                                 console.log("music");
-                                                _this.$store.commit('setMusicPlay',false);
+                                                _this.$store.commit('setMusicPlay', false);
 
-                                            },2000);
+                                            }, 2000);
                                         }
                                     }
                                 }
@@ -467,13 +471,13 @@
                                         if (key == ("0_" + item.caseId)) {
                                             item.messageAlert = patientAlertList[key];
                                             _this.newPatientFlag = true;
-                                            _this.$store.commit('setMusicPlay',true);
+                                            _this.$store.commit('setMusicPlay', true);
                                             console.log("music2");
-                                            setTimeout(function(){
+                                            setTimeout(function () {
                                                 console.log("music");
-                                                _this.$store.commit('setMusicPlay',false);
+                                                _this.$store.commit('setMusicPlay', false);
 
-                                            },2000);
+                                            }, 2000);
                                         }
                                     }
                                 }
@@ -571,9 +575,9 @@
 //                    this.userListOnline.unshift(item);
                     this.getUserList('wating');
                     this.getUserList('online');
-                    if (!this.noData){
-                        this.transformData(item, index);
-                    }
+
+                    this.transformData(item, index);
+
 //
                     this.watingTriage = false;
 

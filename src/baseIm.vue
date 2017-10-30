@@ -370,10 +370,39 @@
                     limit: 100
                 });
             },
+            transformMessageTime: function (time) {
+                var format = function (num) {
+                    return num > 9 ? num : "0" + num;
+                };
+                var normalTime = function (time) {
+                    var d = new Date(time);
+                    var obj = {
+                        y: d.getFullYear(),
+                        m: d.getMonth() + 1,
+                        dd: d.getDate(),
+                        h: d.getHours(),
+                        mm: format(d.getMinutes())
+                    };
+                    return obj;
+                };
+                var result = "";
+                var now = new Date().getTime(),
+                    day1 = normalTime(time).y + "-" + normalTime(time).m + "-" + normalTime(time).dd,
+                    day2 = normalTime(now).y + "-" + normalTime(now).m + "-" + normalTime(now).dd;
+                if (day1 === day2) {
+                    result = normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y === normalTime(now).y) {
+                    result = normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y !== normalTime(now).y) {
+                    result = normalTime(time).y + "年" + normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                }
+                return result;
+            },
             //发送单条数据...
             sendSingleMessage: function (error, msg) {
                 this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 this.$store.state.patientList.unshift(this.$store.state.currentItem);
+                this.$store.state.currentItem.createTime=this.transformMessageTime(msg.time);
                 store.commit("setPatientActiveIndex",this.$store.state.patientActiveIndex+1);
                 let that = this;
                 console.log(msg);
@@ -388,10 +417,6 @@
                 }
             },
             //接收用户信息...
-            //列表置顶...
-            userItemToTop (account, time) {
-
-            },
 //            //新消息提示机制...
 //            newMessageTips: function (account) {
 //                if ($(".main-header-toggle-list-item.active").attr("data-id") == 0) {
