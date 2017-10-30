@@ -39,10 +39,10 @@
                     <i class="userlist-status-right" @click="sortShow()"></i>
                     <div class="userlist-status-sortList" v-show="sortFlag">
                         <ul>
-                            <li @click="sort(1)" :class="{'active':sortActive==1}">剩余时间从:少-多</li>
+                            <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间:少-多</li>
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
-                            <li @click="sort(4)" :class="{'active':sortActive==4}">等待时间从:多-少</li>
+                            <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间:多-少</li>
                         </ul>
                     </div>
                     <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3" style="display: none"></audio> <!--新消息提示音-->
@@ -571,7 +571,10 @@
 //                    this.userListOnline.unshift(item);
                     this.getUserList('wating');
                     this.getUserList('online');
-                    this.transformData(item, index);
+                    if (!this.noData){
+                        this.transformData(item, index);
+                    }
+//
                     this.watingTriage = false;
 
                     this.userListStatus.status = 2;
@@ -651,9 +654,10 @@
         &-sortList {
             position: absolute;
             top: 12px;
-            right: -150px;
-            width: 150px;
+            right: -210px;
+            width: 205px;
             z-index: 6;
+            text-indent: 5px;
             ul {
                 width: 100%;
                 border-radius: 4px;
@@ -661,7 +665,7 @@
                 box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
                 li {
                     width: 100%;
-                    text-align: center;
+                    text-align: left;
                     padding: 5px 0 5px 0;
                     height: 20px;
                     line-height: 25px;

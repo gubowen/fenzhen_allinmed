@@ -80,14 +80,15 @@
                   <span class="base-title">配偶状况</span><select class="J-spouseStatus" v-model="spouseStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select><span class="base-title ml20">子女状况</span><select class="J-childrenStatusSelect" v-model="childrenStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
-                  <option value="4">已故</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select>
                 </li>
                 <li>
@@ -137,9 +138,9 @@
                 </select><span class="base-title ml20">兄妹状况</span><select class="J-siblingsStatus" v-model="siblingsStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
-                  <option value="4">已故</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select>
                 </li>
                 <li>
@@ -396,9 +397,9 @@
               data.childrenStatus != '' && data.childrenStatus > 0 ? _this.childrenStatusSelectValue = data.childrenStatus : _this.childrenStatusSelectValue = 0;
               //结婚年龄
 
-
+                _this.marriageAge=[];
               _this.marriageAge.push({value: "", text: "请选择"});
-              for (let i = 15; i < 60; i++) {
+              for (let i = 15; i <= 60; i++) {
                 _this.marriageAge.push({value: i, text: i});
               }
               data.marriageAge != '' && data.marriageAge > 0 ? _this.marriageAgeSelectValue = data.marriageAge : _this.marriageAgeSelectValue = "";

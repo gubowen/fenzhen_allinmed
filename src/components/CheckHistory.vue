@@ -22,7 +22,7 @@
                     <li v-for="ele in chatHistoryRecordList">
                       <article>
                         <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
-                                v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
+                                v-show="ele.msgType.toLowerCase()==='custom' &&JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
                         <p v-show="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
@@ -33,21 +33,25 @@
                               <p class="preview-suggestion-img">
                                 <img src="/static/img/img00/index/dialog_report.png" alt="">
                               </p>
-                              <section class="preview-suggestion-content-text" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
-                                <header class="preview-suggestion-title">{{element.createTime}}</header>
-                                <p class="preview-suggestion-result" >{{element.illnessName}}</p>
-                              </section>
+                              <template v-if="ele.msgType.toLowerCase()==='custom'">
+                                <section class="preview-suggestion-content-text" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                                  <header class="preview-suggestion-title">{{element.createTime}}</header>
+                                  <p class="preview-suggestion-result" >{{element.illnessName}}</p>
+                                </section>
+                              </template>
                             </section>
                           </figcaption>
                         </figure>
                         <figure v-show="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">检查/检验建议</header>
-                            <section class="check-suggestion-content">
-                              <article class="check-suggestion-item" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
-                                <span>{{element.adviceName}}</span>
-                              </article>
-                            </section>
+                            <template v-if="ele.msgType.toLowerCase()==='custom'">
+                              <section class="check-suggestion-content">
+                                <article class="check-suggestion-item" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                                  <span>{{element.adviceName}}</span>
+                                </article>
+                              </section>
+                            </template>
                           </figcaption>
                         </figure>
                         <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='videoTriage'">
