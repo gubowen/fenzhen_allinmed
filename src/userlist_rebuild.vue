@@ -84,9 +84,7 @@
                         <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
 
                     </section>
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2"
-                             v-show="userListStatus.status == 2">
-
+                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
                         <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
                                  v-for="(items,index) in userListOnline"
@@ -116,7 +114,7 @@
                                 <!--@click="selectQuitItem(items)"></i>-->
                                 <!--</figure>-->
                             </figcaption>
-                            <span class="time"> {{items.createTime | timeFormat}}</span>
+                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
                         <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
 
@@ -250,7 +248,9 @@
                     }
                 });
             },
-
+            '$store.state.patientActiveIndex'(){
+                this.userOnlineActive=0;
+            },
             '$store.state.userId'(){
                 this.init();
             },
