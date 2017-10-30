@@ -2,7 +2,7 @@
   <aside class="medical-record-remark" :class="{on:showRecord}">
     <header class="medical-record-remark-header">
       <section class="remark-add">
-        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="showAdd=!showAdd"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
+        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
         <h3 class="remark-name" v-show="!showRecord" @click.stop="showRecord=true"><i></i><span>展开添加分诊记录</span></h3>
         <p class="remark-toggle" v-show="showRecord" @click.stop="showRecord=false"><i></i><span>收起分诊记录</span></p>
       </section>
@@ -45,13 +45,13 @@
           remarkList:[]
         }
     },
+    mounted(){
+        this.getRemarkList();
+    },
     watch:{
-       '$store.state.caseId'(){
+       '$store.state.currentItem'(){
            this.getRemarkList();
        }
-    },
-    mounted(){
-
     },
     methods:{
       getRemarkList(){
