@@ -644,7 +644,7 @@
                 } else {
                     this.allDoc.allDocList[index].isChecked = !(this.allDoc.allDocList[index].isChecked);
                 }
-                if ((this.matchDoc.matchDocList.length > 0 && this.matchDoc.matchDocList[index].isChecked && type == "match") || (this.allDoc.allDocList[index].isChecked && type == "all")) {
+                if ((type == "match"&&this.matchDoc.matchDocList.length > 0 && this.matchDoc.matchDocList[index].isChecked) || (type == "all"&&this.allDoc.allDocList.length > 0&&this.allDoc.allDocList[index].isChecked)) {
                     this.previewDiagnoseSuggest.doctorList.forEach(function (key, value) {
                         if (list.customerId == key.customerId) {
                             flag = false;
@@ -661,7 +661,7 @@
                     })
                 }
                 ;
-                if ((this.matchDoc.matchDocList.length > 0 && flag && (this.matchDoc.matchDocList[index].isChecked) || this.allDoc.allDocList[index].isChecked)) {
+                if ((type == "match"&&this.matchDoc.matchDocList.length > 0 && flag && this.matchDoc.matchDocList[index].isChecked) || (type == "all"&&flag &&this.allDoc.allDocList[index].isChecked)) {
                     this.previewDiagnoseSuggest.doctorList.push(list);
                     console.log("该匹配医生已添加");
                 }
