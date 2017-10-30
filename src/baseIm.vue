@@ -274,12 +274,15 @@
             //发送初诊建议...
             sendPreviewSuggestion (data) {
                 const that = this;
+                let dataList=[{}];
                 return new Promise((resolve, reject) => {
+                    dataList[0]=data;
+                    console.log(dataList)
                     this.nim.sendCustomMsg({
                         scene: 'p2p',
                         to: that.targetData.account,
                         content: JSON.stringify({
-                            "data": data,
+                            "data": dataList,
                             "type": "previewSuggestion"
                         }),
                         done (error, obj) {
