@@ -230,6 +230,7 @@
 //          this.reTriageShow = false;
 //          return false;
 //        }
+                store.commit("startLoading");
                 releasePatient({
 //          customerId: this.$store.state.userId,
 //          consultationId: consultationId.join(",")
@@ -275,6 +276,7 @@
                     this.$store.commit("setCurrentItem", items);
 
                     this.$store.commit('setSBIObject', '');
+                    store.commit("stopLoading");
                 })
             },
 
