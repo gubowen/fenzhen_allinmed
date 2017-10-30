@@ -413,9 +413,7 @@
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                         _this.$store.commit("setNewOnline", true);
                         _this.$store.commit('setMusicPlay',true);
-                        console.log("music1");
                         setTimeout(function(){
-                            console.log("music");
                             _this.$store.commit('setMusicPlay',false);
 
                         },2000);
@@ -439,9 +437,7 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                         _this.$store.commit("setNewWating", true);
                         _this.$store.commit('setMusicPlay',true);
-                        console.log("music1");
                         setTimeout(function(){
-                            console.log("music");
                             _this.$store.commit('setMusicPlay',false);
 
                         },2000);
