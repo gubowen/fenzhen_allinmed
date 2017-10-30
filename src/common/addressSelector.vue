@@ -273,11 +273,15 @@
                 width: 100%;
                 height: 100%;
                 .custom-selector-title {
-                    width: 100%;
+                    width: 90%;
                     font-size: 14px;
                     height: 100%;
                     line-height: 18px;
                     text-align: left;
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    float: left;
                 }
                 .icon-downArrow:after {
                     position: absolute;
