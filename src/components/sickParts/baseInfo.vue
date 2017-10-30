@@ -26,7 +26,7 @@
               </li>
               <li>
                 <span class="base-title ">籍贯</span>
-                <address-selector  :dataListInfo.sync ="addressResult"  :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
+                <address-selector  :dataListInfo.sync ="addressResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex" :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
               </li>
               <li>
                 <span class="base-title">家庭住址</span><input class="base-input J-homeAddress"
@@ -48,7 +48,7 @@
               <ul>
                 <li>
                   <span class="base-title">出生地</span>
-                  <address-selector  :dataListInfo.sync ="birthResult" :dataBack.sync="birthResult" v-if="childrenShow"></address-selector>
+                  <address-selector  :dataListInfo.sync ="birthResult"  :dataBack.sync="birthResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex" v-if="childrenShow"></address-selector>
                 </li>
                 <li>
                   <span class="base-title">生育状况</span><select class="select-120 J-fertility-boy"
@@ -239,7 +239,8 @@
         },
         childrenShow:false,
         popupShow:false,
-        popupObj: {}
+        popupObj: {},
+        currentSelectorIndex:1
       }
     },
     props: {

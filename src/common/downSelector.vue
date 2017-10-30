@@ -55,10 +55,10 @@
         conIndex:{
           type:Number||String
         },
-        currentIndexNow:{
+      currentIndexNow:{
           type:Number||String,
             default:-1
-        }
+       }
     },
     methods: {
       init(){
