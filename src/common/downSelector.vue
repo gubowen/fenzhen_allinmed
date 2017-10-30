@@ -9,13 +9,13 @@
 <template>
   <section class="search-sortType-item">
     <ul class="search-selector">
-      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" @keyup="searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
-      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
+      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click.stop="showData()" @keyup="searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
+      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click.stop="showData()"></i>
       <section class="search-selector-second-box" v-show="conIndex===currentIndexNow">
         <div class="custom-selector-second firstList" v-show="dataShow">
-          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">{{noData}}</li>
-          <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
-            <span v-show="item.tagName!=''" >{{item|messageFilter}}</span>
+          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click.stop="selectData()">{{noData}}</li>
+          <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click.stop="selectData(item,index)" :class="{'active':index == currentIndex}">
+            <span v-show="item.tagName!=''" >{{item.tagName}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
             <span v-show="item.progressName!=''" >{{item.progressName}}</span>
             <span v-show="item.operationName!=''" >{{item.operationName}}</span>
@@ -23,7 +23,7 @@
         </div>
         <div class="custom-selector-second custom-selector-second-list secondList">
           <ul v-for="(item,index) in dataListInfo.dataList">
-            <li class="custom-selector-item result-item" :class="{'active':index == oldIndex && IndexChildren==currentIndexChildren}" v-for="(itemChildren,IndexChildren) in item.children" v-if="index == currentIndex && secondActive" @click="childrenData(itemChildren,IndexChildren)">
+            <li class="custom-selector-item result-item" :class="{'active':index == oldIndex && IndexChildren==currentIndexChildren}" v-for="(itemChildren,IndexChildren) in item.children" v-if="index == currentIndex && secondActive" @click.stop="childrenData(itemChildren,IndexChildren)">
               <span>{{itemChildren.operationName}}</span>
             </li>
           </ul>
@@ -111,7 +111,7 @@
             _this.resultData = '暂不确定';
             this.dataShow = !this.dataShow;
             this.iconFlag = !this.iconFlag;
-            _this.$emit('update:dataBack', {'illnessId':'','illnessName':''});
+            _this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
         }
       },
       childrenData(item,index){
@@ -153,9 +153,18 @@
               }
           })
       }
-    }, mounted(){
+    },
+    watch:{
+      resultData(){
+          if(!this.resultData){
+              this.$emit('update:dataBack', {'illnessId':'','illnessName':''});
+          }
+      }
+    },
+    mounted(){
       this.init()
-    }
+    },
+
   }
 </script>
 <style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
