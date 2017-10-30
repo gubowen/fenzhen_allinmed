@@ -118,6 +118,21 @@
             });
         }).then((res) => {
 
+//
+//          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+//          if (waitingAlertList) {
+//              for (let key in waitingAlertList) {
+//                  if (key == ("0_" + item.caseId)) {
+//                      delete waitingAlertList["0_" + items.caseId];
+//                  }
+//              }
+//              localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+//          }
+//          if (localStorage.getItem("waitingAlertList") == "{}") {
+//              this.newWaitingFlag = false;
+//          }
+
+
           this.$emit("update:watingTriage", false);
 
           watingList.removeByValue(currentItem);

@@ -551,6 +551,7 @@
             },
             //接诊
             getTriagePatient(item, index){
+//                let _this = this ;
                 store.commit("startLoading");
                 triagePatient({
                     consultationId: item.consultationId,
@@ -573,6 +574,21 @@
                     //患者未被抢单
 //                    this.userListWating.removeByValue(item);
 //                    this.userListOnline.unshift(item);
+
+
+//                    let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+//                    if (waitingAlertList) {
+//                        for (let key in waitingAlertList) {
+//                            if (key == ("0_" + item.caseId)) {
+//                                delete waitingAlertList["0_" + items.caseId];
+//                            }
+//                        }
+//                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+//                    }
+//                    if (localStorage.getItem("waitingAlertList") == "{}") {
+//                        this.newWaitingFlag = false;
+//                    }
+
                     this.getUserList('wating');
                     this.getUserList('online');
 
