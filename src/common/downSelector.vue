@@ -15,7 +15,7 @@
         <div class="custom-selector-second firstList" v-show="dataShow">
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">{{noData}}</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
-            <span v-show="item.tagName!=''" >{{item.tagName}}</span>
+            <span v-show="item.tagName!=''" >{{item|messageFilter}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
             <span v-show="item.progressName!=''" >{{item.progressName}}</span>
             <span v-show="item.operationName!=''" >{{item.operationName}}</span>
@@ -34,6 +34,16 @@
 </template>
 <script>
   import api from './js/util';
+  import Vue from "vue";
+
+  Vue.filter('messageFilter', function (data) {
+    if(data.platformId == 2){
+        return "手外-"+ data.tagName;
+    }else{
+        return  data.tagName;
+    }
+  });
+
   export default{
     name: 'search-sorType-item',
     data(){
