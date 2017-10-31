@@ -561,7 +561,9 @@
                     //患者未被抢单
 
                     this.getUserList('wating');
-                    this.getUserList('online');
+                    this.getUserList('online',{},()=>{
+                        let triageItem=this.getBeTriagePatient(item);
+                    });
 
                     this.transformData(item, index);
 
@@ -577,6 +579,16 @@
                 }).catch((res) => {
                     console.log("网络异常...")
                 });
+            },
+            getBeTriagePatient(item){
+                let caseId=item.caseId;
+                let result;
+                this.userListOnline.forEach((element,index)=>{
+                    if (element.caseId===caseId){
+                        result=element;
+                    }
+                });
+                return result;
             },
             sortShow(){
                 this.sortFlag = !this.sortFlag;
