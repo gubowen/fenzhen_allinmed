@@ -340,6 +340,7 @@
             transformData (items, index) {
                 store.commit("setUsedReplyShow", false);
                 store.commit("setFastReplyShow", false);
+                this.noData=true;
                 if (this.userListStatus.first) {
                     this.watingTriage = true;
                     this.userWatingActive = index;

@@ -1,9 +1,9 @@
 <template>
   <!--底部区域-->
   <footer id="footer" class="main-footer">
-    <span>Copyright©2017 allinmed.cn All Rights Reserved.版权所有©北京欧应信息技术有限公司</span>
-    <span>京公网安备 11010502032763号</span>
-    <span>京ICP备14007118号-5</span>
+    <span>Copyright©2017 allinmed.cn All Rights Reserved.版权所有©银川唯医互联网骨科医院有限公司</span>
+    <span>宁公网安备 64010402000685号 宁ICP备17001413号-1</span>
+    <span>互联网药品信息服务 证书编号： (宁)-非经营性-2017-0005</span>
   </footer>
 </template>
 

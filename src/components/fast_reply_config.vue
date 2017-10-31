@@ -343,7 +343,7 @@
             done(res){
               if (res.responseObject.responseStatus) {
                 that.termList[index].children.removeByValue(cItem);
-                that.deleteTermShowFlag[index][cIndex] = false;
+                that.deleteMemberShowFlag[index][cIndex] = false;
                 delete that.deleteTermShowFlag[index];
               }
             }

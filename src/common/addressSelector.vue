@@ -247,7 +247,9 @@
                 this.districtFlag = false;
                 this.$emit('update:dataBack', this.dataBack);
             }
-        }, mounted(){
+        },
+        mounted(){
+            console.log(this.provinceList)
             this.init()
         }
     }
