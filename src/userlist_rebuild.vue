@@ -418,7 +418,7 @@
             },
             //患者列表
             //type:online为沟通中，wating待分诊
-            getUserList(type, param){
+            getUserList(type, param,fn){
                 let _this = this;
                 _this.userListData = '';
                 _this.userListLoading = [];
@@ -492,6 +492,7 @@
                                 _this.$store.commit("setWatingList", dataList);
                                 _this.userListWating = dataList ? dataList : [];
                             }
+                            fn&&fn();
                         }
                     },
                     fail(err) {
@@ -563,18 +564,19 @@
                     this.getUserList('wating');
                     this.getUserList('online',{},()=>{
                         let triageItem=this.getBeTriagePatient(item);
+                        this.transformData(triageItem, index);
+
+                        this.watingTriage = false;
+                        this.userListStatus.status = 2;
+                        this.userListStatus.first = false;
+                        this.userListStatus.second = true;
+
+
+                        store.commit("setInputReadOnly", false);
+                        store.commit("stopLoading");
                     });
 
-                    this.transformData(item, index);
 
-                    this.watingTriage = false;
-                    this.userListStatus.status = 2;
-                    this.userListStatus.first = false;
-                    this.userListStatus.second = true;
-
-
-                    store.commit("setInputReadOnly", false);
-                    store.commit("stopLoading");
 
                 }).catch((res) => {
                     console.log("网络异常...")

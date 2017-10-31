@@ -653,11 +653,10 @@
         background-color: #f6f9fa;
         margin-left: 1px;
         @include query(1500px){
-            height: 53%;
+            height: 45%;
         }
         &.watingBoxStyle {
             height: 85%;
-
         }
         .messageList-item {
             position: relative;

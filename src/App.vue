@@ -42,6 +42,7 @@
 
     html, body {
         height: 100%;
+        overflow: hidden;
     }
 
     /*vue组件自定义动画开始*/
