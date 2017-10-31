@@ -23,7 +23,7 @@
     background-color: #fff;
     height: 40px;
     line-height: 40px;
-    z-index: 1;
+    z-index: 6;
     text-align: center;
     border-top: 1px solid #ededed;
 
