@@ -153,11 +153,11 @@
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.pageIndex+2})">下一页
+                                                @click="getAllDocCustomer({num:allDoc.pageIndex})">下一页
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.Math.ceil(allDoc.totalCount/allDoc.pageNum)-1})">
+                                                @click="getAllDocCustomer({num:Math.ceil(allDoc.totalCount/allDoc.pageNum)-1})">
                                                 末页
                                             </li>
                                         </ul>
