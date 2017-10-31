@@ -19,21 +19,20 @@
                             <span>{{item.regionName}}</span>
                         </li>
                     </div>
-                    <div class="custom-selector-second custom-selector-second-list secondList" v-for="(item,key) in cityList" v-show="cityFlag && dataBack.provinceId == key ">
+                    <div class="custom-selector-second custom-selector-second-list secondList" v-show="cityFlag ">
                         <li class="custom-selector-item result-item" @click="selectCity()">
                             <span>未知</span>
                         </li>
-                        <li class="custom-selector-item thirdListTitle" v-for=" children in  item" @click="selectCity(children)">
-                            <span>{{children.regionName}}</span>
+                        <li class="custom-selector-item thirdListTitle" v-for=" cItem in  cityList" @click="selectCity(cItem)">
+                            <span>{{cItem.regionName}}</span>
                         </li>
                     </div>
-
-                    <div class="custom-selector-second custom-selector-second-list thirdList" v-for="(item,key) in districtList" v-show="districtFlag && dataBack.cityId == key">
+                    <div class="custom-selector-second custom-selector-second-list thirdList" v-show="districtFlag ">
                         <li class="custom-selector-item result-item" @click="selectDistrict()">
                             <span>未知</span>
                         </li>
-                        <li class="custom-selector-item thirdListTitle" v-for=" children in  item" @click="selectDistrict(children)">
-                            <span>{{children.regionName}}</span>
+                        <li class="custom-selector-item thirdListTitle" v-for=" ccItem in  districtList" @click="selectDistrict(ccItem)">
+                            <span>{{ccItem.regionName}}</span>
                         </li>
                     </div>
                 </section>
@@ -86,9 +85,9 @@
                 } else {
                     this.showAddress = this.dataListInfo.provinceName + '-' + this.dataListInfo.cityName + '-' + this.dataListInfo.districtName;
                 }
-                this.showProvince();
-                this.showCity();
-                this.showDistrict();
+
+//                this.showCity();
+//                this.showDistrict();
             },
             showProvince(){
                 let _this = this;
@@ -116,13 +115,14 @@
                     }
                 });
             },
-            showCity(){
+            showCity(item){
                 let _this = this;
                 let dataValue = {
                     isValid: 1,
                     firstResult: 0,
                     maxResult: 9999,
-                    treeLevel: 3
+                    treeLevel: 3,
+                    parentId:item.regionId
                 };
 
                 api.ajax({         //获取市信息
@@ -134,7 +134,8 @@
                     done(res){
                         if (res.responseObject.responseData.dataList && res.responseObject.responseStatus != false) {
                             let data = res.responseObject.responseData.dataList;
-                            $.each(data, function (k, v) {
+                            _this.cityList=data;
+      /*                      $.each(data, function (k, v) {
                                 let cityListInfo = [];
                                 let cityObj = {
                                     parentId: "",
@@ -152,7 +153,7 @@
                                 } else {
                                     _this.cityList[v.parentId] = cityListInfo;
                                 }
-                            });
+                            });*/
                         }
                     },
                     fail(error){
@@ -160,13 +161,14 @@
                     }
                 });
             },
-            showDistrict(){
+            showDistrict(item){
                 let _this = this;
                 let dataValue = {
                     isValid: 1,
                     firstResult: 0,
                     maxResult: 9999,
-                    treeLevel: 4
+                    treeLevel: 4,
+                    parentId:item.regionId
                 };
                 api.ajax({         //获取区信息
                     url: _this.addressSearch,
@@ -177,7 +179,8 @@
                     done(res){
                         if (res.responseObject.responseData.dataList && res.responseObject.responseStatus != false) {
                             let data = res.responseObject.responseData.dataList;
-                            $.each(data, function (k, v) {
+                            _this.districtList=data;
+/*                            $.each(data, function (k, v) {
                                 let districtListInfo = [];
                                 let cityObj = {
                                     parentId: "",
@@ -196,7 +199,7 @@
                                 } else {
                                     _this.districtList[v.parentId] = districtListInfo;
                                 }
-                            });
+                            });*/
                         }
                     },
                     fail(error){
@@ -206,6 +209,9 @@
             },
             showData(){
                 this.$emit("update:currentIndexNow",this.conIndex);
+                if (this.provinceList.length===0){
+                    this.showProvince();
+                }
                 this.provinceFlag = !this.provinceFlag;
                 this.cityFlag = false;
                 this.districtFlag = false;
@@ -216,6 +222,7 @@
                     this.dataBack.provinceId = item.regionId;
                     this.dataBack.provinceName = item.regionName;
                 }
+                this.showCity(item);
                 this.cityFlag = true;
                 this.districtFlag = false;
             },
@@ -225,7 +232,10 @@
                     this.dataBack.cityName = item.regionName;
                     this.showAddress = this.dataBack.provinceName + '-' + item.regionName;
                     this.districtFlag = true;
+                    this.showDistrict(item);
                 } else {
+                    this.dataBack.cityId = 0;
+                    this.dataBack.cityName = "未知";
                     this.showAddress = this.dataBack.provinceName + '-' + '未知';
                     this.provinceFlag = false;
                     this.cityFlag = false;
@@ -241,6 +251,8 @@
                     this.dataBack.districtName = item.regionName;
                 } else {
                     this.showAddress = this.showAddress + '-' + '未知';
+                    this.dataBack.districtId = 0;
+                    this.dataBack.districtName = "未知";
                 }
                 this.provinceFlag = false;
                 this.cityFlag = false;
