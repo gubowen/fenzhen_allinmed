@@ -517,6 +517,7 @@
       margin-right: 8px;
       text-align: right;
       display: inline-block;
+      vertical-align: middle;
       white-space: nowrap;
 
     }
@@ -531,7 +532,7 @@
       line-height: 14px;
       display: inline-block;
       width: 248px;
-      vertical-align: top;
+      vertical-align: middle;
     }
     li {
       margin-top: 15px;

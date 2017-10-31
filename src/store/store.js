@@ -196,6 +196,9 @@ export default new Vuex.Store({
         watingListRefreshFlag(state, data){
             state.watingListRefresh = data;
         },
+        onlineListRefresh(state, data){
+            state.onlineListRefresh = data;
+        },
         setNewWating(state, flag){
             state.newWating = flag;
         },

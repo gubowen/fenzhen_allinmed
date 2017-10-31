@@ -278,9 +278,11 @@
                 } else {
                     return;
                 }
+            },
+            '$store.state.onlineListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('wating');
-                    store.commit("watingListRefreshFlag", false);
+                    this.getUserList('online');
+                    store.commit("onlineListRefresh", false);
                 } else {
                     return;
                 }
@@ -528,31 +530,15 @@
             },
             //选择退回患者
             selectQuitItem(item){
-//        if (!item.triageSelect) {
-//          //选中-增加一项待处理
-//          item.triageSelect = true;
-//          store.commit("setQuitPatientList", {
-//            type: "add",
-//            data: item
-//          })
-//        } else {
-//          //取消-删除一项待处理
-//          item.triageSelect = false;
-//          store.commit("setQuitPatientList", {
-//            type: "minus",
-//            data: item
-//          })
-//        }
                 this.userListOnline.forEach((element, index) => {
                     element.triageSelect = false;
-                })
+                });
                 item.triageSelect = true;
 
                 store.commit("setQuitPatientItem", item)
             },
             //接诊
             getTriagePatient(item, index){
-//                let _this = this ;
                 store.commit("startLoading");
                 triagePatient({
                     consultationId: item.consultationId,
@@ -573,36 +559,21 @@
                     });
                 }).then((res) => {
                     //患者未被抢单
-//                    this.userListWating.removeByValue(item);
-//                    this.userListOnline.unshift(item);
-
-
-//                    let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-//                    if (waitingAlertList) {
-//                        for (let key in waitingAlertList) {
-//                            if (key == ("0_" + item.caseId)) {
-//                                delete waitingAlertList["0_" + items.caseId];
-//                            }
-//                        }
-//                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-//                    }
-//                    if (localStorage.getItem("waitingAlertList") == "{}") {
-//                        this.newWaitingFlag = false;
-//                    }
 
                     this.getUserList('wating');
                     this.getUserList('online');
 
                     this.transformData(item, index);
 
-//
                     this.watingTriage = false;
-
                     this.userListStatus.status = 2;
                     this.userListStatus.first = false;
                     this.userListStatus.second = true;
+
+
                     store.commit("setInputReadOnly", false);
                     store.commit("stopLoading");
+
                 }).catch((res) => {
                     console.log("网络异常...")
                 });
@@ -836,7 +807,7 @@
 
     .userlist-mainList {
         overflow: auto;
-        height: 88%;
+        height: 83%;
     }
 
     .userlist-mainList-item {

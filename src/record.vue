@@ -215,6 +215,7 @@
     }
 
     .medical-record-content {
+      height: 90%;
       .medical-record-title {
         font-size: 0;
         padding: 18px 30px 0;
@@ -284,6 +285,7 @@
       }
       .medical-record-detail {
         margin-top: 30px;
+        height: 100%;
         .tabsInner.medical-record-tabs {
           text-align: center;
           border-bottom: 1px solid #E1E2E7;
@@ -311,7 +313,7 @@
 
   .medical-record-form {
     overflow: auto;
-    height: 630px;
+    height: 70%;
     &.on {
       height: 320px;
     }

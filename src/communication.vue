@@ -221,29 +221,12 @@
                 let consultationId = [];
                 let watingList = this.$store.state.watingList;
                 let patientList = this.$store.state.patientList;
-//        if (this.$store.state.quitPatientList.length === 0) {
-//          this.reTriageShow = false;
-//          return false;
-//        }
-//        this.$store.state.quitPatientList.forEach((element, index) => {
-//          consultationId.push(element.consultationId);
-//        });
-//        if (!this.$store.state.quitPatientItem){
-//          this.reTriageShow = false;
-//          return false;
-//        }
                 store.commit("startLoading");
                 releasePatient({
-//          customerId: this.$store.state.userId,
-//          consultationId: consultationId.join(",")
                     customerId: this.$store.state.userId,
                     consultationId: this.$store.state.currentItem.consultationId
                 }).then((res) => {
 
-//          this.$store.state.quitPatientList.forEach((element, index) => {
-//            patientList.removeByValue(element);
-//            watingList.unshift(element);
-//          });
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
                     watingList.unshift(this.$store.state.currentItem);
@@ -270,12 +253,12 @@
                     this.$emit("update:userWatingActive", -1);
                     let items = patientList[parseInt(num)];
 
-                    this.$store.commit('setPatientId', items.patientId);
-                    this.$store.commit('setPatientName', items.patientName);
-                    this.$store.commit('setCaseId', items.caseId);
-                    this.$store.commit("setConsultationId", items.consultationId);
+                    this.$store.commit('setPatientId', items?items.patientId:"");
+                    this.$store.commit('setPatientName', items?items.patientName:"");
+                    this.$store.commit('setCaseId', items?items.caseId:"");
+                    this.$store.commit("setConsultationId", items?items.consultationId:"");
 
-                    this.$store.commit("setCurrentItem", items);
+                    this.$store.commit("setCurrentItem", items?items:{});
 
                     this.$store.commit('setSBIObject', '');
                     store.commit("stopLoading");

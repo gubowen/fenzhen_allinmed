@@ -7,7 +7,8 @@
             <!--v-for="items in messageInfo"-->
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
-                <p class="time-stamp" v-if="$store.state.currentItem.returnReason">{{`由于${$store.state.currentItem.returnReason}，该患者被退回`}}</p>
+                <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被退回`}}</p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
@@ -196,7 +197,7 @@
                                     customerId: that.$store.state.userId,
                                     conState: "2,4,5",
                                     conType: 0,
-                                    sortType:-6
+                                    sortType: -6
                                 });
                                 api.ajax({
                                     url: XHRList.watingUserList,
@@ -204,9 +205,9 @@
                                     data: dataValue,
                                     done(res) {
                                         if (res.responseObject.responseData && res.responseObject.responseStatus) {
-                                            let dataList =res.responseObject.responseData.dataList;
-                                            let  waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-                                            if(!waitingAlertList){
+                                            let dataList = res.responseObject.responseData.dataList;
+                                            let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+                                            if (!waitingAlertList) {
                                                 waitingAlertList = {};
                                             }
                                             console.log(waitingAlertList);
@@ -215,7 +216,7 @@
                                                     waitingAlertList[msg.from] = 1;
                                                 }
                                             });
-                                            localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
+                                            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
 
                                         }
                                     },
@@ -311,9 +312,9 @@
             //发送初诊建议...
             sendPreviewSuggestion (data) {
                 const that = this;
-                let dataList=[{}];
+                let dataList = [{}];
                 return new Promise((resolve, reject) => {
-                    dataList[0]=data;
+                    dataList[0] = data;
                     console.log(dataList)
                     this.nim.sendCustomMsg({
                         scene: 'p2p',
@@ -402,8 +403,8 @@
             sendSingleMessage: function (error, msg) {
                 this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 this.$store.state.patientList.unshift(this.$store.state.currentItem);
-                this.$store.state.currentItem.createTime=this.transformMessageTime(msg.time);
-                store.commit("setPatientActiveIndex",this.$store.state.patientActiveIndex+1);
+                this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
+                store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
                 console.log(msg);
                 console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
@@ -462,10 +463,10 @@
 //                }
 //            },
             // 新消息提示
-            newMessageTips(target,element){
-                const _this=this;
+            newMessageTips(target, element){
+                const _this = this;
                 let patientList = this.$store.state.patientList;
-                patientList.forEach(function (item, index){
+                patientList.forEach(function (item, index) {
                     if (("0_" + item.caseId) == element.from) {
 
                         if (item.messageAlert == '') {
@@ -480,11 +481,11 @@
 
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                         _this.$store.commit("setNewOnline", true);
-                        _this.$store.commit('setMusicPlay',true);
-                        setTimeout(function(){
-                            _this.$store.commit('setMusicPlay',false);
+                        _this.$store.commit('setMusicPlay', true);
+                        setTimeout(function () {
+                            _this.$store.commit('setMusicPlay', false);
 
-                        },2000);
+                        }, 2000);
                     }
                 });
                 this.$store.commit("setPatientList", patientList);
@@ -504,11 +505,11 @@
 
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                         _this.$store.commit("setNewWating", true);
-                        _this.$store.commit('setMusicPlay',true);
-                        setTimeout(function(){
-                            _this.$store.commit('setMusicPlay',false);
+                        _this.$store.commit('setMusicPlay', true);
+                        setTimeout(function () {
+                            _this.$store.commit('setMusicPlay', false);
 
-                        },2000);
+                        }, 2000);
                     }
                 });
                 this.$store.commit("setWatingList", watingList);
@@ -517,7 +518,7 @@
             receiveMessage (targetUser, element) {
                 //获取当前患者消息
                 const _this = this;
-                if ((element.from.includes("0_")&&targetUser===element.from)||(element.to.includes("0_")&&targetUser===element.to)) {
+                if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
@@ -525,7 +526,7 @@
                     this.communicationList.push(element);
                 } else {
                     //接诊列表
-                    this.newMessageTips(targetUser,element);
+                    this.newMessageTips(targetUser, element);
                 }
 
                 setTimeout(() => {
@@ -647,12 +648,16 @@
     /*@import "./scss/modules/_masker.scss";*/
     .messageList-box {
         padding: 40px 50px;
-        height: 60%;
+        height: 62%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
-        &.watingBoxStyle{
-            height: 90%;
+        @include query(1500px){
+            height: 53%;
+        }
+        &.watingBoxStyle {
+            height: 85%;
+
         }
         .messageList-item {
             position: relative;
@@ -717,6 +722,9 @@
                     line-height: 1.5;
                     border-radius: 5px;
                     word-break: break-all;
+                    @include query(1500px) {
+                        margin: 0 12px;
+                    }
                 }
             }
         }
@@ -754,6 +762,9 @@
         margin: 0 24px;
         overflow: hidden;
         text-align: left;
+        @include query(1500px) {
+            margin:0 12px;
+        }
         .check-suggestion-message-title {
             background: #A6C7EE;
             font-size: 12px;
