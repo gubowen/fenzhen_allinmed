@@ -80,11 +80,22 @@
             init(){
                 this.imgList = [];
                 this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
-                console.log(this.imgList);
-                console.log(this.$store.state.SBIType);
+                let that = this;
+                this.imgList.forEach(function (element,value) {
+                    that.imgList[value].url = that.clipImg(element.url);
+                })
             },
             close(){
                 this.$store.commit("setSBIFlag", false);
+            },
+            clipImg(imgUrl){
+                if(imgUrl.indexOf("_c") != -1){
+                    let beforeUrl = imgUrl.substring(0,imgUrl.indexOf("_c")+2);
+                    let afterUrl = imgUrl.substring(imgUrl.lastIndexOf("."));
+                    return beforeUrl+afterUrl;
+                }else{
+                    return imgUrl;
+                }
             }
         },
         mounted(){
