@@ -41,10 +41,10 @@
                     <i class="userlist-status-right" @click="sortShow()"></i>
                     <div class="userlist-status-sortList" v-show="sortFlag">
                         <ul>
-                            <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间:少-多</li>
+                            <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
-                            <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间:多-少</li>
+                            <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间从多到少</li>
                         </ul>
                     </div>
                     <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3"
@@ -674,8 +674,8 @@
         &-sortList {
             position: absolute;
             top: 12px;
-            right: -210px;
-            width: 205px;
+            right: -220px;
+            width: 220px;
             z-index: 6;
             text-indent: 5px;
             ul {
