@@ -10,10 +10,10 @@
         <section class="check-history">
           <article class="check-history-majorTitle"><span class="check-title-left">诊断结论</span><span class="check-title-right">患者提交病例时间</span></article>
           <ul>
-            <li v-for="(items,index) in diagnoseHistoryList" @click="chatHistoryRecord(items,index)">
+            <li v-for="(items,index) in diagnoseHistoryList">
               <section class="check-history-info">
-                <span class="check-history-title"><i class="icon-downArrow"></i>{{items.mainContent.caseMain}}</span>
-                <span class="check-history-text">{{items.createTime|timeFormatCheckHistory}}</span>
+                <span class="check-history-title" @click.self="chatHistoryRecord(0,items,index)"><i class="icon-downArrow" @click.self="chatHistoryRecord(0,items,index)"></i>{{items.mainContent.caseMain}}</span>
+                <span class="check-history-text" >{{items.createTime|timeFormatCheckHistory}}</span>
               </section>
               <article class="check-history-show" :class="{'on': index == currentIndex}" v-show="chatHistoryRecordList.length >0">
                 <h3>咨询对话历史</h3>
@@ -75,6 +75,17 @@
                       </article>
                     </li>
                   </ul>
+                  <div class="page-container" v-if="totalCount>pageNum&&diagnoseHistoryList.length>0">
+                    <div class="pagination pager">
+                      <ul class="pages">
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(0,items)">首页</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(pageIndex-2,items)">上一页</li>
+                        <li class="page-number" :class="{'pgCurrent':pageIndex == item}" v-for="(item,key) in pages" @click.stop="chatHistoryRecord(key,items)">{{item}}</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageIndex,items)">下一页</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(Math.ceil(totalCount/pageNum)-1,items)">末页</li>
+                      </ul>
+                    </div>
+                  </div>
                 </section>
               </article>
             </li>
@@ -114,6 +125,10 @@
         diagnoseHistoryList: [],
         chatHistoryRecordList: [],
         currentIndex: -1,
+        totalCount:0,
+        pageNum:5,
+        pageIndex:1,
+        pageResult:0,
         loadingShow: false,
         popupShow: false,
         popupObj: {}
@@ -146,28 +161,30 @@
           }
         })
       },
-      chatHistoryRecord(items, index){
+      chatHistoryRecord(num,items, index){
         let _this = this;
-        if(_this.currentIndex == index){
-            _this.currentIndex = -1;
-        }else{
-          _this.currentIndex = index;
+        _this.pageResult = num * _this.pageNum;
+        _this.pageIndex = num + 1;
+        console.log(_this.pageIndex);
+        if(index||index == 0){
+            if(_this.currentIndex == index){
+                _this.currentIndex = -1;
+            }else{
+                _this.currentIndex = index;
+            }
         }
         _this.chatHistoryRecordList = [];
-        let maxResult = 5;
         let dataValue = {
           fromAccount: "1_doctor00001",   // localStorage.getItem("patientId"),
           receiveAccount: "0_" + items.caseId,
-          firstResult: 0,
-          maxResult: maxResult,
+          firstResult: _this.pageResult,
+          maxResult: _this.pageNum,
           sortType: 1
         };
         api.ajax({
           url: _this.chatHistoryRecordUrl,
           method: "POST",
           data: dataValue,
-          beforeSend(config) {
-          },
           done(res) {
             if (res.responseObject.responseMessage == "NO DATA") {
               _this.chatHistoryRecordList = [];
@@ -178,20 +195,67 @@
             } else {
               _this.popupShow = false;
               _this.chatHistoryRecordList = res.responseObject.responseData.dataList;
+              _this.totalCount = res.responseObject.responseData.totalCount;
             }
-          },
-          fail(error){
           }
         })
       }
     },
+    computed: {
+          pages(){
+              let pageArr = [], that = this;
+              for (let i = 1; i <= Math.ceil(that.totalCount / that.pageNum); i++) {
+                  pageArr.push(i);
+              }
+              return pageArr;
+          }
+      },
     mounted(){
       this.init();
     }
   }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../scss/pages/employee/commonMask";
   @import "../scss/modules/_middleMessageBox";
+  //分页
+  .page-container {
+    padding-bottom: 30px;
+    .pagination {
+      height: 36px;
+      margin-top: 45px;
+      padding: 0;
+      .pages {
+        text-align: center;
+      }
+      .pgEmpty {
+        color: #eee;
+        cursor: default;
+      }
+      .pgNext {
+        width: 50px;
+      }
+      li {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        margin-right: 8px;
+        text-align: center;
+        color: grey;
+        background-color: #fff;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 0;
+        cursor: pointer;
+      }
+      .pgCurrent {
+        height: 36px;
+        width: 36px;
+        background: #3d84c6;
+        color: #fff;
+      }
+    }
+  }
 
 </style>
