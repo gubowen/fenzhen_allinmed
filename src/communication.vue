@@ -229,8 +229,7 @@
 
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
-                    watingList.unshift(this.$store.state.currentItem);
-                    store.commit("setPatientList", patientList);
+                    store.commit("watingListRefreshFlag",true);
                     store.commit("setWatingList", watingList);
 
                     this.reTriageShow = false;
