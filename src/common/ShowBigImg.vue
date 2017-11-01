@@ -104,7 +104,6 @@
         updated(){
 
             let index = this.$store.state.SBIIndex?this.$store.state.SBIIndex : 0 ;
-            console.log(index);
             let topSwiper = new Swiper('.topSwiper', {
                 direction: 'horizontal',
                 zoom: true,

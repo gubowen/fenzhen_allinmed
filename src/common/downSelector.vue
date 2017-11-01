@@ -15,7 +15,7 @@
         <div class="custom-selector-second firstList" v-show="dataShow">
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click.stop="selectData()">{{noData}}</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click.stop="selectData(item,index)" :class="{'active':index == currentIndex}">
-            <span v-show="item.tagName!=''" >{{item.tagName}}</span>
+            <span v-show="item.tagName!=''" >{{item.tagName|messageFilter}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
             <span v-show="item.progressName!=''" >{{item.progressName}}</span>
             <span v-show="item.operationName!=''" >{{item.operationName}}</span>

@@ -79,8 +79,8 @@
                         <figcaption class="special-message-item-list img-box"
                                     v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
                             <figure class="special-message-item-img "
-                                    v-for="imgs in medicalReportMsg.patientCasemap.attachmentList">
-                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction()">
+                                    v-for="(imgs,index) in medicalReportMsg.patientCasemap.attachmentList">
+                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction(index)">
                             </figure>
                         </figcaption>
                     </article>
@@ -186,12 +186,11 @@
                 return result;
             },
             //查看大图
-            showBigImgFunction(){
+            showBigImgFunction(index){
                 let _this = this;
                 _this.showBigImageList = [];
 
                 _this.medicalReportMsg.patientCasemap.attachmentList.forEach(function (item, index) {
-                    console.log(item.caseAttUrl.substring(0,item.caseAttUrl.indexOf("_c")));
                     _this.showBigImageList.push({"url": item.caseAttUrl});
                 });
 
@@ -202,6 +201,9 @@
 
                 _this.$store.commit("setSBIObject",allList);
                 _this.$store.commit("setSBIType", 'medicalReport');
+
+                _this.$store.commit("setSBIIndex",index);
+
                 _this.$store.commit("setSBIFlag", true);
             }
 
