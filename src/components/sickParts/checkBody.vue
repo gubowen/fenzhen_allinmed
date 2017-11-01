@@ -1,5 +1,5 @@
-<template id="checkBody">
-  <section class="viewItem medical-record-form-item">
+<template>
+  <section class="checkBody viewItem medical-record-form-item">
     <form action="">
       <section class="body-check medical-record-main">
         <article>
@@ -264,19 +264,10 @@
       this.init()
     }
   }
-  ;
 </script>
-<style type="text/css" lang="scss" rel="stylesheet/scss">
+<style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  @import "../../scss/index";
-
-  .medical-record-main {
-    width: 100%;
-    padding: 25px 28px 60px 28px;
-    box-sizing: border-box;
-  }
-
   .medical-record-form {
     .body-check {
       .input-95 {

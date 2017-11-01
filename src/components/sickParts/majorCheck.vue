@@ -1,5 +1,5 @@
-<template id="majorCheck">
-  <section class="viewItem medical-record-form-item" data-role="mr-record-6">
+<template>
+  <section class="majorCheck viewItem medical-record-form-item" data-role="mr-record-6">
     <form action="">
       <section class="major-check medical-record-main">
         <article>
@@ -72,7 +72,6 @@
     import axios from "axios";
     import addressSelector from '@/common/addressSelector'
     import popup from  '@/common/popup';
-
 
     export default{
         name: 'majorCheck',
@@ -269,131 +268,129 @@
             this.init();
         }
     }
-
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  @import "../../scss/index";
 
-  .medical-record-form {
-    .major-check {
-      input[type="text"] {
+  .major-check {
+    input[type="text"] {
+      margin: 0 auto;
+      display: block;
+    }
+    header {
+      position: relative;
+      margin-bottom: 30px;
+      margin-top: 50px;
+      text-align: center;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 216px;
+        left: 50%;
+        margin-left: -108px;
+        border: 1px solid #E1E2E7;
+      }
+      h2 {
+        font-size: 12px;
+        color: #AAAAAA;
+        letter-spacing: 0;
+        line-height: 12px;
         margin: 0 auto;
-        display: block;
-      }
-      header {
-        position: relative;
-        margin-bottom: 30px;
-        margin-top: 50px;
+        padding: 0 10px;
+        background: #fff;
         text-align: center;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          width: 216px;
-          left: 50%;
-          margin-left: -108px;
-          border: 1px solid #E1E2E7;
-        }
-        h2 {
-          font-size: 12px;
-          color: #AAAAAA;
-          letter-spacing: 0;
-          line-height: 12px;
-          margin: 0 auto;
-          padding: 0 10px;
-          background: #fff;
+        position: relative;
+        z-index: 2;
+        display: inline-block;
+        width:90px;
+      }
+    }
+    .img-check {
+      ul {
+        li {
+          margin: 0 0 30px 0;
+          width: 104px;
+          height: 107px;
+          float: left;
           text-align: center;
-          position: relative;
-          z-index: 2;
-          display: inline-block;
-        }
-      }
-      .img-check {
-        ul {
-          li {
-            margin: 0 0 30px 0;
-            width: 104px;
-            height: 107px;
-            float: left;
-            text-align: center;
-            &.noData {
-              width: 100%;
-              height: 20px;
-              float: none;
-              color: #aaa;
-              font-size: 13px;
-            }
-            img {
-              width: 80px;
-              height: 80px;
-              border-radius: 4px;
-              cursor: pointer;
-            }
-            p {
-              margin-top: 12px;
-              font-size: 13px;
-              color: #555555;
-              letter-spacing: 0;
-              line-height: 13px;
+          &.noData {
+            width: 100%;
+            height: 20px;
+            float: none;
+            color: #aaa;
+            font-size: 13px;
+          }
+          img {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          p {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #555555;
+            letter-spacing: 0;
+            line-height: 13px;
 
-            }
           }
         }
-        ul:after {
-          content: "";
-          display: block;
-          clear: both;
-          visibility: hidden;
-        }
       }
-      .video-check {
-        ul {
-          li {
-            margin: 0 0 30px 0;
-            height: 107px;
-            float: left;
-            text-align: center;
-            margin-right: 30px;
-            &.noData {
-              width: 100%;
-              height: 20px;
-              float: none;
-              margin-right: 0;
-              font-size: 13px;
-              line-height: 20px;
-              color: #aaa;
-            }
+      ul:after {
+        content: "";
+        display: block;
+        clear: both;
+        visibility: hidden;
+      }
+    }
+    .video-check {
+      ul {
+        li {
+          margin: 0 0 30px 0;
+          height: 107px;
+          float: left;
+          text-align: center;
+          margin-right: 30px;
+          &.noData {
+            width: 100%;
+            height: 20px;
+            float: none;
+            margin-right: 0;
+            font-size: 13px;
+            line-height: 20px;
+            color: #aaa;
+          }
 
-            img {
-              width: auto;
-              height: 80px;
-              border-radius: 4px;
-            }
-            p {
-              margin-top: 12px;
-              font-size: 13px;
-              color: #555555;
-              letter-spacing: 0;
-              line-height: 13px;
-            }
+          img {
+            width: auto;
+            height: 80px;
+            border-radius: 4px;
           }
-          &:first-child {
-            margin-left: 12px;
+          p {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #555555;
+            letter-spacing: 0;
+            line-height: 13px;
           }
         }
-        ul:after {
-          content: "";
-          display: block;
-          clear: both;
-          visibility: hidden;
+        &:first-child {
+          margin-left: 12px;
         }
       }
+      ul:after {
+        content: "";
+        display: block;
+        clear: both;
+        visibility: hidden;
+      }
+    }
+    footer{
       .detail-saveBtn {
         margin-right: 35px;
       }
-
     }
   }
 </style>

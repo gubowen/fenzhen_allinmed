@@ -9,34 +9,34 @@
 <template>
     <nav class="userlist-sortType address-selector">
         <section class="userlist-sortType-item">
-            <ul class="custom-selector">
+            <section class="custom-selector">
                 <h3 class="custom-selector-title firstListTitle" @click="showData()">{{showAddress}}</h3>
                 <i class="icon-downArrow" @click="showData()"></i>
                 <section class="custom-selector-second-box" v-show="conIndex===currentIndexNow">
-                    <div class="custom-selector-second firstList J-province" v-show="provinceFlag">
+                    <ul class="custom-selector-second firstList J-province" v-show="provinceFlag">
                         <li class="custom-selector-item secondListTitle" @click="selectProvince()"><span>请选择</span></li>
                         <li class="custom-selector-item secondListTitle" v-for="item in provinceList" @click="selectProvince(item)">
                             <span>{{item.regionName}}</span>
                         </li>
-                    </div>
-                    <div class="custom-selector-second custom-selector-second-list secondList" v-show="cityFlag ">
+                    </ul>
+                    <ul class="custom-selector-second custom-selector-second-list secondList" v-show="cityFlag ">
                         <li class="custom-selector-item result-item" @click="selectCity()">
                             <span>未知</span>
                         </li>
                         <li class="custom-selector-item thirdListTitle" v-for=" cItem in  cityList" @click="selectCity(cItem)">
                             <span>{{cItem.regionName}}</span>
                         </li>
-                    </div>
-                    <div class="custom-selector-second custom-selector-second-list thirdList" v-show="districtFlag ">
+                    </ul>
+                    <ul class="custom-selector-second custom-selector-second-list thirdList" v-show="districtFlag ">
                         <li class="custom-selector-item result-item" @click="selectDistrict()">
                             <span>未知</span>
                         </li>
                         <li class="custom-selector-item thirdListTitle" v-for=" ccItem in  districtList" @click="selectDistrict(ccItem)">
                             <span>{{ccItem.regionName}}</span>
                         </li>
-                    </div>
+                    </ul>
                 </section>
-            </ul>
+            </section>
         </section>
     </nav>
 </template>
@@ -285,128 +285,88 @@
         background: #f9f9f9;
         border: 1px solid #e1e2e7;
         border-radius: 4px;
-        padding: 5px 10px;
+        padding: 5px;
         font-size: 14px;
         line-height: 14px;
         height: 18px;
-        width: 230px;
+        width: 240px;
         display: inline-block;
         position: relative;
+        vertical-align: middle;
         .userlist-sortType-item {
             border: 0;
             padding: 0;
             width: 100%;
             height: 100%;
+            display: inline-block;
+            color: #222;
             .custom-selector {
                 width: 100%;
                 height: 100%;
+                display: inline-block;
+                cursor: pointer;
                 .custom-selector-title {
+                    display: inline-block;
+                    min-width: 30px;
                     width: 90%;
+                    float: left;
                     font-size: 14px;
+                    font-weight: normal;
                     height: 100%;
                     line-height: 18px;
+                    color: #808080;
                     text-align: left;
+
                     white-space: nowrap;
                     overflow: hidden;
                     text-overflow: ellipsis;
-                    float: left;
+
                 }
-                .icon-downArrow:after {
-                    position: absolute;
-                    top: 10px;
-                    right: 10px;
+                .icon-downArrow {
+                    cursor: pointer;
+                    &:after {
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        margin-right:0;
+                    }
                 }
                 .custom-selector-second-box {
                     margin-left: 0;
+                    box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+                    border-radius: 4px;
+                    background-color: #fff;
+                    position: absolute;
+                    z-index: 5;
+                    text-align: left;
+                    font-size: 0;
+                    width: auto;
+                    margin-top: 24px;
+                    .custom-selector-second {
+                        display: inline-block;
+                        width: 80px;
+                        font-size: 12px;
+                        vertical-align: top;
+                        text-align: left;
+                        box-sizing: border-box;
+                        padding: 0 15px;
+                        max-height: 310px;
+                        overflow: auto;
+                        &.custom-selector-second-list {
+                            right: -100%;
+                        }
+                        & > .custom-selector-item {
+                            margin: 20px 0;
+                            width: 100%;
+                            & > span {
+                                display: block;
+                            }
+                            &.active > span {
+                                color: #2899e6;
+                            }
+                        }
+                    }
                 }
-            }
-        }
-    }
-
-    .custom-selector-second {
-        display: inline-block;
-        width: 80px;
-        font-size: 12px;
-        vertical-align: top;
-        text-align: left;
-        box-sizing: border-box;
-        padding: 0 15px;
-        max-height: 310px;
-        overflow: auto;
-        &.custom-selector-second-list {
-            right: -100%;
-        }
-        & > .custom-selector-item {
-            margin: 20px 0;
-            width: 100%;
-            & > span {
-                display: block;
-            }
-            &.active > span {
-                color: #2899e6;
-            }
-        }
-    }
-
-    .userlist-sortType {
-        background-color: #fff;
-        text-align: center;
-        padding: 40px 0;
-        i {
-            cursor: pointer;
-        }
-        &-item {
-            display: inline-block;
-            color: #222;
-            border-right: 1px solid #e4e4e4;
-            width: 90px;
-            &:nth-last-child(1) {
-                border-right: none;
-            }
-        }
-
-        .custom-selector {
-            display: inline-block;
-            cursor: pointer;
-
-            & > h3 {
-                font-weight: normal;
-                font-size: 16px;
-                color: #808080;
-                display: inline-block;
-                min-width: 30px;
-            }
-            .time-title {
-                font-size: 14px;
-                font-weight: normal;
-                margin-top: 15px;
-            }
-
-            .custom-selector-second-box {
-                box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-                border-radius: 4px;
-                background-color: #fff;
-                position: absolute;
-                z-index: 5;
-                text-align: left;
-                font-size: 0;
-                width: auto;
-                margin-left: -20px;
-                margin-top: 22px;
-
-            }
-
-        }
-
-        #area-selector {
-            h3 {
-                text-overflow: ellipsis;
-                overflow: hidden;
-                white-space: nowrap;
-                width: 65px;
-            }
-            .custom-selector-second {
-                width: auto;
             }
         }
     }

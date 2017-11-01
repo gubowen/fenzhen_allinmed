@@ -1,5 +1,5 @@
-<template id="oldSick">
-  <section class="viewItem medical-record-form-item" data-role="mr-record-4">
+<template>
+  <section class="oldSick viewItem medical-record-form-item" data-role="mr-record-4">
     <form action="">
       <section class="old-sick medical-record-main">
         <article class="old-sick-out" v-html=" oldSickOut"></article>
@@ -253,190 +253,22 @@
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
-  @import "../../scss/index";
-
-  .medical-record-main {
-    width: 100%;
-    padding: 25px 28px;
-    box-sizing: border-box;
-  }
-
-  .medical-record-form {
-    overflow: auto;
-    height: 72%;
-    box-sizing: border-box;
-    &.on {
-      padding-bottom: 340px;
-    }
-    footer {
-      text-align: right;
-      margin-top: 24px;
-      .detail-saveBtn {
-        background: #7A8EC1;
-        border-radius: 4px;
-        width: 70px;
-        height: 30px;
-        line-height: 30px;
-        font-size: 14px;
-        color: #fff;
-        text-align: center;
-        cursor: pointer;
-        margin-right: 10px;
-      }
-    }
-    .medical-title {
-      width: 52px;
-      font-size: 13px;
-      color: #555;
-      letter-spacing: 0;
-      line-height: 14px;
-      margin-right: 8px;
-      text-align: right;
-      display: inline-block;
-      white-space: nowrap;
-    }
-    .medical-text {
-      font-size: 14px;
-      color: #808080;
-      letter-spacing: 0;
-      line-height: 14px;
-      margin-right: 15px;
-
-    }
-    .medical-text-long {
-      //margin-left: -28px;
-
-      width: 80px;
-    }
-    select {
-      background: #F9F9F9;
-      border: 1px solid #E1E2E7;
-      border-radius: 4px;
-      padding: 5px 0 5px 0;
-      font-size: 14px;
-      line-height: 14px;
-      min-width: 80px;
-      width: 84px;
-      vertical-align: middle;
-    }
-    .select-100 {
-      width: 250px;
-    }
-    textarea {
-      background: #F9F9F9;
-      border: 1px solid #E1E2E7;
-      border-radius: 4px;
-      width: 255px;
-
-      padding: 5px;
-      box-sizing: border-box;
-      vertical-align: middle;
-    }
-    li {
-      margin-top: 25px;
-    }
-    li:first-child {
-      margin-top: 15px;
-    }
-    .body-check {
-      .input-95 {
-        width: 72px;
-      }
-    }
-    .major-check {
-      text-align: center;
-      input[type="text"] {
-        margin: 0 auto;
-        display: block;
-      }
-      header {
-        position: relative;
-        margin-bottom: 30px;
-        margin-top: 50px;
-        text-align: center;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          width: 216px;
-          left: 50%;
-          margin-left: -108px;
-          border: 1px solid #E1E2E7;
-        }
-        h2 {
-          font-size: 12px;
-          color: #AAAAAA;
-          letter-spacing: 0;
-          line-height: 12px;
-          margin: 0 auto;
-          padding: 0 10px;
-          background: #fff;
-          text-align: center;
-          position: relative;
-          z-index: 2;
-          display: inline-block;
-        }
-      }
-      .img-check {
-        ul {
-          li {
-            margin: 0 0 30px 0;
-            width: 104px;
-            height: 107px;
-            float: left;
-            text-align: center;
-            &.noData {
-              width: 100%;
-              height: 20px;
-              float: none;
-              color: #aaa;
-              font-size: 13px;
-            }
-            img {
-              width: 80px;
-              height: 80px;
-              border-radius: 4px;
-              cursor: pointer;
-            }
-            p {
-              margin-top: 12px;
-              font-size: 13px;
-              color: #555555;
-              letter-spacing: 0;
-              line-height: 13px;
-
-            }
-          }
-        }
-        ul:after {
-          content: "";
-          display: block;
-          clear: both;
-          visibility: hidden;
-        }
-      }
-      .detail-saveBtn {
-        margin-right: 35px;
-      }
-
-    }
-  }
+  @import "../../scss/record_common";
 
   .old-sick {
     .old-sick-history-list {
       margin-top: 30px;
-      textarea {
-        height: auto;
-        padding: 5px;
+      li{
+        .medical-title{
+
+        }
+        textarea {
+          height: auto;
+          padding: 5px;
+          vertical-align: middle;
+        }
       }
+
     }
-  }
-
-  .mt10 {
-    margin-top: 10px;
-  }
-
-  .mt20 {
-    margin-top: 20px;
   }
 </style>

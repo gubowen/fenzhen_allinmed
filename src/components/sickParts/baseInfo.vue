@@ -1,4 +1,4 @@
-<template>
+d<template>
   <div id="baseInfo">
     <section class="viewItem medical-record-form-item ">
       <form action="">
@@ -25,8 +25,7 @@
               </select>
               </li>
               <li>
-                <span class="base-title ">籍贯</span>
-                <address-selector  :dataListInfo.sync ="addressResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex" :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
+                <span class="base-title ">籍贯</span><address-selector  :dataListInfo.sync ="addressResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex" :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
               </li>
               <li>
                 <span class="base-title">家庭住址</span><input class="base-input J-homeAddress"
@@ -47,8 +46,7 @@
             <section>
               <ul>
                 <li>
-                  <span class="base-title">出生地</span>
-                  <address-selector  :dataListInfo.sync ="birthResult"  :dataBack.sync="birthResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex" v-if="childrenShow"></address-selector>
+                  <span class="base-title">出生地</span><address-selector  :dataListInfo.sync ="birthResult"  :dataBack.sync="birthResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex" v-if="childrenShow"></address-selector>
                 </li>
                 <li>
                   <span class="base-title">生育状况</span><select class="select-120 J-fertility-boy"
@@ -92,13 +90,11 @@
                 </select>
                 </li>
                 <li>
-                  <span class="base-title">结婚年龄</span>
-                  <select class="J-marriageAge" v-model="marriageAgeSelectValue">
+                  <span class="base-title">结婚年龄</span><select class="J-marriageAge" v-model="marriageAgeSelectValue">
                     <option v-for="option in marriageAge" v-bind:value="option.value">
                       {{option.text}}
                     </option>
-                  </select>
-                  <span class="base-title ml20">吸烟史</span><select class="J-isSmoke" v-model="isSmokeSelectValue">
+                  </select><span class="base-title ml20">吸烟史</span><select class="J-isSmoke" v-model="isSmokeSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">从不吸烟</option>
                   <option value="2">曾经吸烟</option>
@@ -504,11 +500,6 @@
   //baseInfo.scss
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  .medical-record-main {
-    width: 100%;
-    padding: 25px 28px 60px 28px;
-    box-sizing: border-box;
-  }
   .base-info {
     .base-title {
       width: 54px;
@@ -548,139 +539,6 @@
       line-height: 14px;
       width: 239px;
     }
-    .userlist-sortType {
-      background: #f9f9f9;
-      border: 1px solid #e1e2e7;
-      border-radius: 4px;
-      padding: 5px 10px;
-      font-size: 14px;
-      line-height: 14px;
-      height: 18px;
-      width: 230px;
-      display: inline-block;
-      position: relative;
-      .userlist-sortType-item {
-        border: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        .custom-selector {
-          width: 100%;
-          height: 100%;
-          .custom-selector-title {
-            width: 100%;
-            font-size: 14px;
-            height: 100%;
-            line-height: 18px;
-            text-align: left;
-          }
-          .icon-downArrow:after {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-          }
-          .custom-selector-second-box {
-            margin-left: 0;
-          }
-        }
-      }
-    }
-  }
-  .custom-selector-second {
-    display: none;
-    width: 80px;
-    font-size: 12px;
-    vertical-align: top;
-    text-align: left;
-    box-sizing: border-box;
-    padding: 0 15px;
-    max-height: 310px;
-    overflow: auto;
-    &.custom-selector-second-list {
-      right: -100%;
-    }
-    & > .custom-selector-item {
-      margin: 20px 0;
-      width: 100%;
-      & > span {
-        display: block;
-      }
-      &.active > span {
-        color: #2899e6;
-      }
-    }
-  }
-  .userlist-sortType {
-    background-color: #fff;
-    text-align: center;
-    padding: 40px 0;
-    i {
-      cursor: pointer;
-    }
-    &-item {
-      display: inline-block;
-      color: #222;
-      border-right: 1px solid #e4e4e4;
-      width: 90px;
-      &:nth-last-child(1) {
-        border-right: none;
-      }
-    }
-
-    .custom-selector {
-      display: inline-block;
-      cursor: pointer;
-
-      & > h3 {
-        font-weight: normal;
-        font-size: 16px;
-        color: #808080;
-        display: inline-block;
-        min-width: 30px;
-      }
-      .time-title {
-        font-size: 14px;
-        font-weight: normal;
-        margin-top: 15px;
-      }
-
-      .custom-selector-second-box {
-        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-        border-radius: 4px;
-        background-color: #fff;
-        position: absolute;
-        z-index: 5;
-        text-align: left;
-        font-size: 0;
-        width: auto;
-        margin-left: -20px;
-        margin-top: 10px;
-
-      }
-
-    }
-
-    #area-selector {
-      h3 {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 65px;
-      }
-      .custom-selector-second {
-        width: auto;
-      }
-    }
-  }
-  .icon-downArrow:after {
-    content: '';
-    display: inline-block;
-    background: url("../../assets/img00/index/home_arrow_unfold.png") no-repeat;
-    background-size: 100% 100%;
-    width: 10px;
-    height: 10px;
-    vertical-align: 1px;
-    margin-right: 10px;
   }
 </style>
 
