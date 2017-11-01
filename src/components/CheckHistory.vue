@@ -25,7 +25,7 @@
                                 v-show="ele.msgType.toLowerCase()==='custom' &&JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
-                        <p v-show="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
+                        <p v-if="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
                         <figure v-if="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">初诊建议</header>
@@ -49,7 +49,7 @@
                             </section>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestion'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">检查/检验建议</header>
                             <template v-if="ele.msgType.toLowerCase()==='custom'">
@@ -61,20 +61,20 @@
                             </template>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='videoTriage'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='videoTriage'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">视诊</header>
                             <section class="check-suggestion-content">
-                              <article class="check-suggestion-item"><span>{{ele.content}} </span></article>
+                              <article class="check-suggestion-item"><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.content}} </span></article>
                             </section>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='ensureOperation'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='ensureOperation'">
                           <figcaption class="messageList-item-text">你好，分诊医生已收到您的全部信息，正在帮您预约' + {{ele.doctorName}} + '医生，会在12小时内给您答复。
                             <span>立即咨询></span>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
                           <figcaption class="messageList-item-text">
                             上一位服务该患者的分诊医生已下班，如有需要请继续沟通
                           </figcaption>
