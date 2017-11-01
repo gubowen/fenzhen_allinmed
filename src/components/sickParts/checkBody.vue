@@ -149,7 +149,7 @@
         }
 
         //textare自适应高度
-        autosize(document.querySelectorAll('textarea'));
+        autosize(document.querySelectorAll('.J-other'));
       },
       getData(){
         let _this = this;

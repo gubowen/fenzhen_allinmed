@@ -81,7 +81,7 @@
         this.userMessage = JSON.parse(this.$route.params.num);
         this.getData();
         //textare自适应高度
-        autosize(document.querySelectorAll('textarea'));
+        autosize(document.querySelectorAll('.J-textArea'));
       },
       getData: function () {
 

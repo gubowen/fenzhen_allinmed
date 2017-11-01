@@ -313,7 +313,7 @@
 
   .medical-record-form {
     overflow: auto;
-    height: 70%;
+    height: 80%;
     @include query(1500px){
       height: 63%;
     }
