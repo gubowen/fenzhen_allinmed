@@ -26,17 +26,24 @@
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
                         <p v-show="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">初诊建议</header>
                             <section class="preview-suggestion-content">
                               <p class="preview-suggestion-img">
                                 <img src="/static/img/img00/index/dialog_report.png" alt="">
                               </p>
-                              <template v-if="ele.msgType.toLowerCase()==='custom'">
-                                <section class="preview-suggestion-content-text" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                              <template  v-if="Array.isArray(JSON.parse(ele.body.substring(1,ele.body.length-1)).data)">
+                                <section class="preview-suggestion-content-text"  v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
                                   <header class="preview-suggestion-title">{{element.createTime}}</header>
                                   <p class="preview-suggestion-result" >{{element.illnessName}}</p>
+                                </section>
+                              </template>
+
+                              <template  v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data && !(Array.isArray(JSON.parse(ele.body.substring(1,ele.body.length-1)).data))">
+                                <section class="preview-suggestion-content-text" >
+                                  <header class="preview-suggestion-title">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.createTime}}</header>
+                                  <p class="preview-suggestion-result" >{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.illnessName}}</p>
                                 </section>
                               </template>
                             </section>
@@ -165,7 +172,7 @@
         let _this = this;
         _this.pageResult = num * _this.pageNum;
         _this.pageIndex = num + 1;
-        console.log(_this.pageIndex);
+        console.log(_this.pageIndex)
         if(index||index == 0){
             if(_this.currentIndex == index){
                 _this.currentIndex = -1;
@@ -195,7 +202,11 @@
             } else {
               _this.popupShow = false;
               _this.chatHistoryRecordList = res.responseObject.responseData.dataList;
-              _this.totalCount = res.responseObject.responseData.totalCount;
+              if(parseInt(res.responseObject.responseData.totalCount)>2){
+                  _this.totalCount = parseInt(res.responseObject.responseData.totalCount) -2;
+              }else{
+                  _this.totalCount = 0;
+              }
             }
           }
         })
