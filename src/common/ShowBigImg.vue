@@ -159,7 +159,7 @@
         }
     }
 </script>
-<style lang="scss" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss">
     @import "../scss/base.scss";
     .slide-corner-enter-active,.slide-corner-leave-active {
         transition: all 0.5s linear;
@@ -268,6 +268,67 @@
                             user-select:none;
 
                         }
+                    }
+
+                    .swiper-slide-active {
+                        background: #fff;
+                        .scalePic {
+                            width: 120px;
+                            position: absolute;
+                            height: 120px;
+                            bottom: 0;
+                            right: 0;
+                            border: 1px solid #fff;
+                            background-size: 100% 100%;
+                            background: #000;
+                            display: none;
+                            text-align: center;
+                            img {
+                                background-size: 100% 100%;
+                                max-height: 100%;
+                                max-width: 100%;
+                                position: absolute;
+                                bottom: 0;
+                                left: 0;
+                                right: 0;
+                                top: 0;
+                                display: block;
+                                margin: auto;
+                                opacity: 0.6;
+                                filter: Alpha(opacity=60);
+                            }
+                            .demoPic {
+                                width: 100%;
+                                height: 100%;
+                                position: relative;
+                                .demoPicArea {
+
+                                    position: absolute;
+                                    span {
+                                        border: 1px solid #fff;
+                                        height: 100%;
+                                        display: block;
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                        .percentTip {
+                            position: absolute;
+                            width: 80px;
+                            height: 25px;
+                            background: #000;
+                            border-radius: 5px;
+                            color: #fff;
+                            font-size: 14px;
+                            text-align: center;
+                            line-height: 25px;
+                            top: 50%;
+                            left: 50%;
+                        }
+
                     }
                 }
             }
@@ -379,67 +440,6 @@
             }
 
         }
-    }
-
-    .swiper-slide-active {
-        .scalePic {
-            width: 120px;
-            position: absolute;
-            height: 120px;
-            bottom: 0;
-            right: 0;
-            border: 1px solid #fff;
-            background-size: 100% 100%;
-            background: #000;
-            display: none;
-            text-align: center;
-
-            img {
-                background-size: 100% 100%;
-                max-height: 100%;
-                max-width: 100%;
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                top: 0;
-                display: block;
-                margin: auto;
-                opacity: 0.6;
-                filter: Alpha(opacity=60);
-            }
-            .demoPic {
-                width: 100%;
-                height: 100%;
-                position: relative;
-                .demoPicArea {
-
-                    position: absolute;
-                    span {
-                        border: 1px solid #fff;
-                        height: 100%;
-                        display: block;
-                    }
-
-                }
-
-            }
-
-        }
-        .percentTip {
-            position: absolute;
-            width: 80px;
-            height: 25px;
-            background: #000;
-            border-radius: 5px;
-            color: #fff;
-            font-size: 14px;
-            text-align: center;
-            line-height: 25px;
-            top: 50%;
-            left: 50%;
-        }
-
     }
 
     .close {
