@@ -68,9 +68,9 @@
           done(data){
             if (data.responseObject.responseData) {
               if(data.responseObject.responseData.dataList&&data.responseObject.responseData.dataList.length>0){
-                that.remarkList = data.responseObject.responseData.dataList;
+                that.remarkList = data.responseObject.responseData.dataList.reverse();
               }else{
-                  that.remarkList=[]
+                that.remarkList=[]
               }
             }
           }
