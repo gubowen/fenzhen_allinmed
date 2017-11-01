@@ -1,7 +1,7 @@
 <template>
-    <transition name="slide-corner">
+    <transition name="fade">
         <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
-            <div class="background-hidden">
+            <div class="background-hidden" >
                 <div class="rotate-button"></div>
                 <div class="bigger-button"></div>
                 <div class="smaller-button"></div>
@@ -271,7 +271,6 @@
                     }
 
                     .swiper-slide-active {
-                        background: #fff;
                         .scalePic {
                             width: 120px;
                             position: absolute;
