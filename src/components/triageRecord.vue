@@ -14,7 +14,9 @@
           <p class="text" @click="remarkValue = item.remarkContent;remarkId=item.id;showAdd=!showAdd;addType='update';showConfim=false;">{{item.remarkContent}}</p>
           <p class="time">{{getTime(item)}}</p>
           <i class="delete" @click="showConfim=!showConfim;showConfimIndex=index"></i>
-          <confirm :comfirmContent="confimContent" v-if="showConfim&&showConfimIndex==index" @ensureCallback="deleteRemrak(item)" @cancelCallback="showConfim=!showConfim"></confirm>
+          <transition name="scale">
+            <confirm :comfirmContent="confimContent" v-if="showConfim&&showConfimIndex==index" @ensureCallback="deleteRemrak(item)" @cancelCallback="showConfim=!showConfim"></confirm>
+          </transition>
         </article>
       </section>
       <section class="edit" :class="{'active':showAdd}">

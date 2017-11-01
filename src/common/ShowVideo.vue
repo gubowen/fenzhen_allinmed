@@ -1,5 +1,6 @@
 <template>
-  <section class="show-video show-big-img-masker" v-if="$store.state.videoFlag">
+  <transition name="slide-corner">
+    <section class="show-video show-big-img-masker" v-if="$store.state.videoFlag">
     <div class="background-hidden">
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
@@ -18,6 +19,7 @@
       <div class="close" @click="close()"></div>
     </div>
   </section>
+  </transition>
 </template>
 <script>
 
@@ -58,8 +60,15 @@
     }
   }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "../scss/base.scss";
+  .slide-corner-enter-active,.slide-corner-leave-active {
+    transition: all 0.5s linear;
+  }
+  .slide-corner-enter,.slide-corner-leave-to{
+    opacity: 0;
+    transform: translate(100%,100%);
+  }
 
   .show-big-img-masker {
     position: absolute;
@@ -70,8 +79,6 @@
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 5;
     opacity: 1;
-    -webkit-transition: all 0.2s linear;
-    transition: all 0.2s linear;
   }
 
   .background-hidden {

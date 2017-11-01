@@ -1,37 +1,39 @@
 <template>
-    <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
-        <div class="background-hidden">
-            <div class="rotate-button"></div>
-            <div class="bigger-button"></div>
-            <div class="smaller-button"></div>
-            <div class="download-button" v-show="$store.state.SBIType == 'IMImage'"></div>
-            <div class="gallery-top">
-                <div class="swiper-container topSwiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-                            <img :src="item.url"/>
+    <transition name="slide-corner">
+        <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
+            <div class="background-hidden">
+                <div class="rotate-button"></div>
+                <div class="bigger-button"></div>
+                <div class="smaller-button"></div>
+                <div class="download-button" v-show="$store.state.SBIType == 'IMImage'"></div>
+                <div class="gallery-top">
+                    <div class="swiper-container topSwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
+                                <img :src="item.url"/>
+                            </div>
                         </div>
+                        <div class="swiper-pagination swiper-pagination-white"></div>
                     </div>
-                    <div class="swiper-pagination swiper-pagination-white"></div>
+                    <div class="swiper-left-gray" v-show="imgList.length>1"></div>
+                    <div class="swiper-right-gray" v-show="imgList.length>1"></div>
                 </div>
-                <div class="swiper-left-gray" v-show="imgList.length>1"></div>
-                <div class="swiper-right-gray" v-show="imgList.length>1"></div>
-            </div>
-            <div class="close" @click="close()"></div>
-            <div class="gallery-thumbs" v-show="imgList.length>1">
-                <div class="swiper-container thumbSwiper">
-                    <div class="swiper-wrapper">
-                        <div class="swiper-slide" v-for="item in imgList">
-                            <img :src="item.url"/>
+                <div class="close" @click="close()"></div>
+                <div class="gallery-thumbs" v-show="imgList.length>1">
+                    <div class="swiper-container thumbSwiper">
+                        <div class="swiper-wrapper">
+                            <div class="swiper-slide" v-for="item in imgList">
+                                <img :src="item.url"/>
+                            </div>
                         </div>
+                        <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
+                        <div class="swiper-button-next" slot="button-next" v-show="imgList.length>6"></div>
+                        <div class="swiper-pagination swiper-pagination-white"></div>
                     </div>
-                    <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
-                    <div class="swiper-button-next" slot="button-next" v-show="imgList.length>6"></div>
-                    <div class="swiper-pagination swiper-pagination-white"></div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
+    </transition>
 </template>
 <script>
     //  import {swiper, swiperSlide} from 'vue-awesome-swiper'
@@ -157,9 +159,15 @@
         }
     }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" scoped>
     @import "../scss/base.scss";
-
+    .slide-corner-enter-active,.slide-corner-leave-active {
+        transition: all 0.5s linear;
+    }
+    .slide-corner-enter,.slide-corner-leave-to{
+        opacity: 0;
+        transform: translate(100%,100%);
+    }
     .show-big-img-masker {
         position: absolute;
         bottom: 0;
@@ -169,8 +177,6 @@
         background-color: rgba(0, 0, 0, 0.6);
         z-index: 5;
         opacity: 1;
-        -webkit-transition: all 0.2s linear;
-        transition: all 0.2s linear;
     }
 
     .background-hidden {
