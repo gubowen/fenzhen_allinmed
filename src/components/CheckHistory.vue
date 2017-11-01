@@ -103,7 +103,9 @@
     </section>
     <section class="mask-background show"></section>
     <loading v-if="loadingShow"></loading>
-    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </section>
 </template>
 <script>

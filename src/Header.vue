@@ -25,7 +25,9 @@
         </ul>
       </article>
     </div>
-    <confirm :comfirmData="{content:'你确定要退出平台吗？'}" v-if="confirmShow" @ensureCallback="exitLogin" @cancelCallback="cancelLogin"></confirm>
+    <transition name="fade">
+      <confirm :comfirmData="{content:'你确定要退出平台吗？'}" v-if="confirmShow" @ensureCallback="exitLogin" @cancelCallback="cancelLogin"></confirm>
+    </transition>
   </section>
 </template>
 <script>
@@ -242,6 +244,12 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "./scss/base.scss";
 
+  .fade-enter-active,.fade-leave-active {
+    transition: all 0.5s linear;
+  }
+  .fade-enter,.fade-leave-to{
+    opacity: 0;
+  }
   /**
    * @name: 主头部
    * @desc:

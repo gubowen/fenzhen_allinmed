@@ -26,7 +26,9 @@
         </footer>
       </section>
     </form>
-    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </section>
 </template>
 <script>

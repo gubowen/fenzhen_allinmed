@@ -1,5 +1,5 @@
 <template>
-    <section class="main-masker big-confirm exitConfirm">
+    <section class="big-confirm-box">
         <section class="big-confirm-inner">
             <header class="big-confirm-title"><h4>{{comfirmData.title}}</h4><i class="icon-close window-close" @click="cancel"></i></header>
             <article class="big-confirm-content"><p>{{comfirmData.content}}</p></article>
@@ -42,24 +42,15 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
     @import "../scss/base.scss";
-    .main-masker{
+    .big-confirm-box {
         position: absolute;
         bottom: 0;
         right: 0;
         top: 0;
         left: 0;
+        text-align: center;
         background-color: rgba(0,0,0,0.64);
         z-index: 5;
-        opacity: 1;
-        visibility:visible;
-        transition:all 0.2s linear;
-    }
-    .big-confirm {
-        &.exitConfirm{
-            text-align: center;
-            opacity: 1;
-            transition: all 0.2s linear;
-        }
         &:before {
             content: '';
             display: inline-block;
