@@ -13,20 +13,36 @@
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
                              v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+                        <!--时间戳-->
                         <p class="time-stamp">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
+                        <!--图片消息-->
                         <ImageElement v-if="items.type === 'file'" :message="items"></ImageElement>
+                        <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
                                 :message="items"></CheckSuggestion>
+                        <!--问诊单-->
                         <MedicalReport v-if="medicalReport(items)"
                                        :message="items" ref="medicalReport"></MedicalReport>
+                        <!--视诊-->
                         <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
                                      :message="items"></VideoTriage>
+                        <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
                                 :message="items"></PreviewSuggestion>
+                        <!--视诊上传提示-->
+                        <UpdateTips
+                                v-if="items.type==='custom'&&(items.content&&items.content.type==='triageSendTips')"
+                                :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
+                        ></UpdateTips>
+                        <!--检查检验上传提示-->
+                        <UpdateTips
+                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
+                                :showType="'checkSuggessSendTips'"
+                        ></UpdateTips>
                     </article>
                 </transition-group>
             </article>
@@ -52,6 +68,8 @@
     import PreviewSuggestion from "@/components/imParts/previewSuggestion";
     import VideoTriage from "@/components/imParts/videoTriage";
     import CheckSuggestion from "@/components/imParts/checkSuggestion";
+    import UpdateTips from "@/components/imParts/updateTips";
+
     import store from "@/store/store";
     import api from '@/common/js/util';
 
@@ -113,7 +131,8 @@
             ImageElement,
             PreviewSuggestion,
             VideoTriage,
-            CheckSuggestion
+            CheckSuggestion,
+            UpdateTips
         },
         props: {},
         watch: {
