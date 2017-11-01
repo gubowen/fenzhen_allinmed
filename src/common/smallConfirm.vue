@@ -41,7 +41,14 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  @import "./scss/base.scss";
+  @import "../scss/base";
+  .scale-enter-active,.scale-leave-active {
+    transition: all 0.5s linear;
+  }
+  .scale-enter,.scale-leave-to{
+    opacity: 0;
+    transform: scale(0);
+  }
   .modal-confirm {
     position: absolute;
     width: 250px;
