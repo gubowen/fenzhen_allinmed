@@ -49,7 +49,7 @@
         </section>
     </section>
 </template>
-<script type="text/ecmascript-6">
+<script>
     /**
      * @Desc：
      * @Usage:
@@ -197,7 +197,7 @@
                         console.log('连接成功');
                     },
                     onmyinfo (userData) {
-
+                        
                     },
                     onwillreconnect: this.onWillReconnect,
                     onerror: this.onError,
@@ -685,6 +685,7 @@
     @import "./scss/base.scss";
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
+    
     .messageList-box {
         padding: 40px 50px;
         height: 62%;

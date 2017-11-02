@@ -18,6 +18,7 @@ export default function releasePatient(data){
     customerId: data.customerId,
     consultationType: "0"
   }
+
   return new Promise((resolve,reject)=>{
       ajax({
         url: XHRList.triage,
