@@ -292,6 +292,11 @@
                         scene: 'p2p',
                         to: that.targetData.account,
                         text: content,
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"0"
+                        }),
                         done (error, obj) {
                             if (!error) {
                                 resolve(obj);
@@ -314,6 +319,11 @@
                         content: JSON.stringify({
                             "data": data,
                             "type": "checkSuggestion"
+                        }),
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"35",
                         }),
                         done (error, obj) {
                             if (!error) {
@@ -341,6 +351,11 @@
                         content: JSON.stringify({
                             "data": dataList,
                             "type": "previewSuggestion"
+                        }),
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"36",
                         }),
                         done (error, obj) {
                             if (!error) {
@@ -371,6 +386,11 @@
                             type: tType
                         },
                         "type": "videoTriage"
+                    }),
+                    custom:JSON.stringify({
+                        cType:"0",
+                        cId:that.$store.state.userId,
+                        mType:"34",
                     }),
                     done (error, obj) {
                         that.sendSingleMessage(error, obj);
