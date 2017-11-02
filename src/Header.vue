@@ -1,6 +1,7 @@
 <template>
   <section>
-    <div id="header" class="main-header">
+    <transition name="fade" appear>
+      <div id="header" class="main-header">
       <section class="main-header-search">
         <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="this.enableSearch" v-model="searchContent"
                @keyup="searchPatient($event)">
@@ -25,6 +26,7 @@
         </ul>
       </article>
     </div>
+    </transition>
     <transition name="fade">
       <confirm :comfirmData="{content:'你确定要退出平台吗？'}" v-if="confirmShow" @ensureCallback="exitLogin" @cancelCallback="cancelLogin"></confirm>
     </transition>
@@ -248,7 +250,6 @@
     transition: all 0.5s linear;
   }
   .fade-enter,.fade-leave-to{
-    opacity: 0;
   }
   /**
    * @name: 主头部

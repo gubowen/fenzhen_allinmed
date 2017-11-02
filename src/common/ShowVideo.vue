@@ -1,5 +1,5 @@
 <template>
-  <transition name="slide-corner">
+  <transition name="fade">
     <section class="show-video show-big-img-masker" v-if="$store.state.videoFlag">
     <div class="background-hidden">
       <div class="gallery-top">
@@ -62,13 +62,6 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
   @import "../scss/base.scss";
-  .slide-corner-enter-active,.slide-corner-leave-active {
-    transition: all 0.5s linear;
-  }
-  .slide-corner-enter,.slide-corner-leave-to{
-    opacity: 0;
-    transform: translate(100%,100%);
-  }
 
   .show-big-img-masker {
     position: absolute;
@@ -78,7 +71,6 @@
     left: 0;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 5;
-    opacity: 1;
   }
 
   .background-hidden {

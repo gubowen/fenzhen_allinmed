@@ -50,47 +50,48 @@
                     <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3"
                            style="display: none"></audio> <!--新消息提示音-->
                 </nav>
-                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"
-                         id="ev-user-inner">
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-1"
-                             v-show="userListStatus.status == 1">
+                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"  id="ev-user-inner">
+                    <transition name="list-left" appear>
+                        <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
+                            <transition-group name="list-left" tag="section">
+                                <article v-show="userListWating.length > 0" @click="transformData(items,index)"
+                                         :class="[{ active : userWatingActive == index }, 'userlist-mainList-item']"
+                                         v-for="(items,index) in userListWating"
+                                         :key="index"
+                                >
+                                    <figure class="userlist-item-img">
+                                        <img v-bind:src="items.logoUrl" alt="">
+                                        <p v-show="items.messageAlert">{{items.messageAlert}}</p>
+                                    </figure>
+                                    <figcaption class="userlist-item-base-msg">
+                                        <h3>
+                                            <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
+                                            <span class="category short"
+                                                  v-show="items.consultationState==5">重新分诊</span>
+                                            <span class="category short"
+                                                  v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
+                                            <span class="category short"
+                                                  v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
+                                        </h3>
+                                        <article>
+                                        <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
+                                        )}}</span>
+                                        </article>
+                                        <button class="get-triage btn-primary-small"
+                                                @click.stop="getTriagePatient(items,index)">接诊
+                                        </button>
+                                    </figcaption>
 
-                        <article v-show="userListWating.length > 0" @click="transformData(items,index)"
-                                 :class="[{ active : userWatingActive == index }, 'userlist-mainList-item']"
-                                 v-for="(items,index) in userListWating"
-                                 :key="index"
-                        >
-                            <figure class="userlist-item-img">
-                                <img v-bind:src="items.logoUrl" alt="">
-                                <p v-show="items.messageAlert">{{items.messageAlert}}</p>
-                            </figure>
-                            <figcaption class="userlist-item-base-msg">
-                                <h3>
-                                    <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                    <span class="category short"
-                                          v-show="items.consultationState==5">重新分诊</span>
-                                    <span class="category short"
-                                          v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
-                                    <span class="category short"
-                                          v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
-                                </h3>
-                                <article>
-                                    <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"
-                                    )}}</span>
+                                    <span class="time"> {{items.createTime | timeFormat}}</span>
                                 </article>
-                                <button class="get-triage btn-primary-small"
-                                        @click.stop="getTriagePatient(items,index)">接诊
-                                </button>
-                            </figcaption>
-
-                            <span class="time"> {{items.createTime | timeFormat}}</span>
-                        </article>
-                        <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
-
-                    </section>
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2"
-                             v-show="userListStatus.status == 2">
-                        <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
+                            </transition-group>
+                            <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
+                        </section>
+                    </transition>
+                    <transition name="list-right">
+                        <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
+                            <transition-group name="list-right" tag="section">
+                                <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
                                  v-for="(items,index) in userListOnline"
                                  :key="index"
@@ -121,9 +122,10 @@
                             </figcaption>
                             <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
-                        <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
-
-                    </section>
+                            </transition-group>
+                            <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
+                        </section>
+                    </transition>
                 </section>
                 <footer class="user-list-footer">
                     <button class="refresh-user-list-btn" @click="refreshList()">
@@ -626,6 +628,20 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
+    .list-left-enter-active, .list-left-leave-active {
+        transition: all 0.3s;
+    }
+    .list-left-enter, .list-left-leave-to{
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    .list-right-enter-active, .list-right-leave-active {
+        transition: all 0.3s;
+    }
+    .list-right-enter, .list-right-leave-to{
+        opacity: 0;
+        transform: translateX(100px);
+    }
 
     .userList {
         width: 100%;

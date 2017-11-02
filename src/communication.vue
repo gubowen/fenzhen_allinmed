@@ -28,17 +28,15 @@
                         <span>结束沟通</span>
                     </button>
                     <!--快捷提问-->
-                    <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
-                               :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                    <transition name="fade">
+                        <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                    </transition>
                     <!--常用回复-->
                     <used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
-                    <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
-                                  @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
+                    <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
                 </nav>
                 <article class="user-controller-middle">
-          <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
-                    @keyup="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
-
+                    <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput" @keyup="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
                 </article>
                 <footer class="user-controller-footer" v-if="!watingTriage">
                     <span class="user-send-message">按下Enter发送</span>
@@ -53,16 +51,21 @@
         <!--编辑快捷提问-->
         <fast-Reply-Config v-if="$store.state.fastReplyConfig"></fast-Reply-Config>
         <!--检查检验-->
-        <examine-check v-if="$store.state.examineFlag"></examine-check>
+        <transition name="fade">
+            <examine-check v-if="$store.state.examineFlag"></examine-check>
+        </transition>
         <!--初诊建议-->
-        <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
+        <transition name="fade">
+            <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
+        </transition>
 
         <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
         <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
-        <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
-                 v-if="$store.state.previewShow">
-            <PreviewSuggestion></PreviewSuggestion>
-        </section>
+        <transition name="fade">
+            <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}" v-if="$store.state.previewShow">
+                <PreviewSuggestion></PreviewSuggestion>
+            </section>
+        </transition>
     </section>
 </template>
 <script>
@@ -307,6 +310,7 @@
     @import "./scss/modules/_checkSuggestion.scss";
     @import "./scss/modules/_configSuggestion.scss";
 
+
     .center-inner-message {
         float: left;
         width: 100%;
@@ -377,7 +381,7 @@
                 right: 30%;
                 top: auto;
                 transform: rotate(180deg);
-                @incldue query(1500px) {
+                @include query(1500px) {
                     right: 25%;
                 }
             }
