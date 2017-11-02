@@ -1,6 +1,6 @@
 <template>
     <div class="userList">
-        <header-list @searchCallback="searchPatient"></header-list>
+        <header-list @searchCallback="searchPatient" :globeSortFlag.sync="sortFlag"></header-list>
         <div class="center-inner" :class="{'no-content':!noData}">
             <communication
                     :m.message.sync="message"

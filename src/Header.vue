@@ -42,7 +42,8 @@
             isActiveMessage: '在线',
             searchStatus: true,
             enableSearch: true,
-            searchContent: ""
+            searchContent: "",
+            globeSortFlag:false
         }
     },
     watch: {
@@ -58,7 +59,7 @@
         this.getUserStatus();
         this.getBaseMessage();
         this.searchStatus = this.$store.state.searchStatus;
-
+        this.globeClick();
       },
       searchPatient(e) {
         let that = this;
@@ -231,6 +232,14 @@
               name: "login"
           })
           this.confirmShow = false;
+      },
+      globeClick(){
+          document.addEventListener('click',(e)=>{
+              if(e.target.className != 'userlist-status-right' && e.target.className != 'userlist-status-sortList'){
+                  this.globeSortFlag = false;
+                  this.$emit('update:globeSortFlag', this.globeSortFlag);
+              }
+          })
       }
     },
     components:{
