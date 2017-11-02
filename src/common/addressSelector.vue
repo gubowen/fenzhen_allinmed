@@ -232,7 +232,7 @@
                     this.dataBack.cityName='';
                     this.dataBack.districtId='';
                     this.dataBack.districtName='';
-
+                    this.$emit('update:dataBack', this.dataBack);
 
                     this.provinceFlag = false;
                     this.cityFlag = false;
