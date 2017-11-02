@@ -77,7 +77,7 @@
                         <h4>{{docList.fullName}}</h4>
                                                 <p class="rate">匹配度{{docList.suitability}}%</p>
                                                 <span class="netstat"
-                                                      :class="{'rest':docList.adviceStatus == 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
+                                                      :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
                                                 <figure class="doctor-message-tags">' +
                           <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                                                     <span class="tags" v-if="docList.isNearest==1">距离最近</span>
