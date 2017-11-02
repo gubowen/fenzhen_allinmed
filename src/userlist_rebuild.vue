@@ -629,18 +629,18 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
     .list-left-enter-active, .list-left-leave-active {
-        transition: all 0.3s;
+     //   transition: all 0.3s;
     }
     .list-left-enter, .list-left-leave-to{
-        opacity: 0;
-        transform: translateX(-100px);
+      //  opacity: 0;
+      //  transform: translateX(-100px);
     }
     .list-right-enter-active, .list-right-leave-active {
-        transition: all 0.3s;
+    //    transition: all 0.3s;
     }
     .list-right-enter, .list-right-leave-to{
-        opacity: 0;
-        transform: translateX(100px);
+     //   opacity: 0;
+     //   transform: translateX(100px);
     }
 
     .userList {

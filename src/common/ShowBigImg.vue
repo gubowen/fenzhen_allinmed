@@ -1,5 +1,5 @@
 <template>
-    <transition name="fade">
+    <!--<transition name="fade">-->
         <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
             <div class="background-hidden" >
                 <div class="rotate-button"></div>
@@ -33,7 +33,7 @@
                 </div>
             </div>
         </section>
-    </transition>
+    <!--</transition>-->
 </template>
 <script>
     //  import {swiper, swiperSlide} from 'vue-awesome-swiper'

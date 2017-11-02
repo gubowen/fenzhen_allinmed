@@ -254,9 +254,13 @@
                 if (type == '1') {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'checkImage');
+                    let index = this.$store.state.SBIObject.checkImage.length;
+                    this.$store.commit("setSBIIndex",index);
                 } else if (2) {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'diagnoseListImage');
+                    let index = this.$store.state.SBIObject.diagnoseListImage.length;
+                    this.$store.commit("setSBIIndex",index);
                 }
             },
             showVideoFunction(item){
