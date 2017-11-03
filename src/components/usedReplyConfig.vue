@@ -60,7 +60,8 @@
     </section>
     </section>
 </template>
-<script type="text/ecmascript-6">
+<script>
+    
     /**
      * @Desc：
      * @Usage:
@@ -126,6 +127,7 @@
                                     that.$set(that.fixFlagList, index, false);
                                     that.$set(that.fixContentList, index, "");
                                     that.$set(that.fixDeleteList, index, false);
+
                                 });
                             }
                         }
