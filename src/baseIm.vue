@@ -209,40 +209,18 @@
                         if (msg.type.toLowerCase() === 'custom') {
                             //判断是否为新用户
                             if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
+
+                                //消息提醒
+                                let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+                                if (!waitingAlertList) {
+                                    waitingAlertList = {};
+                                }
+                                waitingAlertList[msg.from] = 1;
+                                localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+
                                 store.commit("watingListRefreshFlag", true);
                                 store.commit("setNewWating", true);
                                 store.commit("setMusicPlay", true);
-                                let dataValue = Object.assign({
-                                    customerId: that.$store.state.userId,
-                                    conState: "2,4,5",
-                                    conType: 0,
-                                    sortType: -6
-                                });
-                                api.ajax({
-                                    url: XHRList.watingUserList,
-                                    method: "POST",
-                                    data: dataValue,
-                                    done(res) {
-                                        if (res.responseObject.responseData && res.responseObject.responseStatus) {
-                                            let dataList = res.responseObject.responseData.dataList;
-                                            let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-                                            if (!waitingAlertList) {
-                                                waitingAlertList = {};
-                                            }
-                                            console.log(waitingAlertList);
-                                            dataList.forEach(function (item, index) {
-                                                if (msg.from == ("0_" + item.caseId)) {
-                                                    waitingAlertList[msg.from] = 1;
-                                                }
-                                            });
-                                            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-
-                                        }
-                                    },
-                                    fail(err) {
-                                        console.log("请求失败：" + err);
-                                    }
-                                });
                             }
                         }
                         that.receiveMessage(that.targetData.account, msg);
