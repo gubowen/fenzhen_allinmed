@@ -93,8 +93,8 @@
                                         if (value.refQuestionList[1].symptomOptions && value.refQuestionList[1].symptomOptions.length > 0) {
                                             if (value.refQuestionList[1].symptomOptions[0].optionName && value.refQuestionList[1].symptomOptions[0].optionName.length > 0) {
                                                 var optionNameStr = value.refQuestionList[1].symptomOptions[0].optionName;
-                                                optionNameStr = optionNameStr.substring(optionNameStr.length - 1) == '：' ? optionNameStr.substring(0, optionNameStr.length - 1) : optionNameStr;
-                                                _this.VASLevelL = optionNameStr;
+                                               // optionNameStr = optionNameStr.substring(optionNameStr.length - 1) == '：' ? optionNameStr.substring(0, optionNameStr.length - 1) : optionNameStr;
+                                                _this.VASLevelL = optionNameStr.substring(0,2);
                                             }
                                         }
                                     }

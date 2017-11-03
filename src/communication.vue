@@ -55,17 +55,13 @@
             <examine-check v-if="$store.state.examineFlag"></examine-check>
         </transition>
         <!--初诊建议-->
-        <transition name="fade">
-            <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
-        </transition>
+        <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
 
         <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
         <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
-        <transition name="fade">
-            <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}" v-if="$store.state.previewShow">
-                <PreviewSuggestion></PreviewSuggestion>
-            </section>
-        </transition>
+        <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}" v-if="$store.state.previewShow">
+            <PreviewSuggestion></PreviewSuggestion>
+        </section>
     </section>
 </template>
 <script>

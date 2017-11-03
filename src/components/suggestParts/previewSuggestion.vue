@@ -369,7 +369,7 @@
     transform: translate(-50%,-50%);
     width: 800px;
     background-color: #fff;
-    z-index: 5;
+    z-index: 10;
     .window-close {
       position: absolute;
       right: -34px;
