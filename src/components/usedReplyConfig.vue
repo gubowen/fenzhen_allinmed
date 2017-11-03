@@ -12,7 +12,7 @@
             </header>
             <section class="jump-box-term-box" id="ev-used-reply-config-box">
                 <section class="jump-box-term-add" v-if="fixFlagList['-1']">
-                    <input type="text" class="add-input" placeholder="请输入常用回复" v-model="fixContentList['-1']"
+                    <input type="text" class="add-input" placeholder="请输入常用回复" v-model.trim="fixContentList['-1']"
                            @input="contentLimit('-1')"/>
                     <figure class="term-add-button">
                         <button class="btn-primary term-add-save" @click.stop="createNewItem('-1')">保存</button>
@@ -26,9 +26,7 @@
                         <figure class="jump-box-term-button" v-if="!fixFlagList[index]">
                             <p class="fix"
                                @click.stop="fixFlagList[index]=true;fixContentList[index]=item.replyContent">修改</p>
-                            <p class="del" @click.stop="fixDeleteList[index]=true">删除
-
-
+                            <p class="del" @click.stop="toggleDeleteModal(index)">删除
 
                                 <section class="modal-confirm show" v-if="fixDeleteList[index]">
                                     <article class="modal-confirm-content">
@@ -37,8 +35,10 @@
                     <figure class="modal-confirm-button">
                         <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback(item,index)">确定
 
+
                         </button>
                         <button class="btn-primary modal-confirm-cancel" @click.stop="fixDeleteList[index]=false">取消
+
 
                         </button>
                     </figure>
@@ -47,7 +47,7 @@
                 </figure>
                 <section class="jump-box-member-config" style="display: block;" v-if="fixFlagList[index]">
                     <input type="text" class="jump-box-member-input" placeholder="请输入常用回复"
-                           v-model="fixContentList[index]"
+                           v-model.trim="fixContentList[index]"
                            @input="contentLimit(index)"/>
                     <figure class="member-add-button">
                         <button class="btn-primary member-add-save" @click.stop="createNewItem(index)">保存</button>
@@ -96,9 +96,16 @@
             this.getReplyList();
         },
         methods: {
+            toggleDeleteModal(index){
+                for (let i in this.fixDeleteList){
+                    this.fixDeleteList[i]=false;
+                }
+                this.fixDeleteList[index]=true
+            },
             getReplyList(){
                 let that = this;
                 store.commit("startLoading")
+
                 ajax({
                     url: XHRList.usedList,
                     method: "POST",
