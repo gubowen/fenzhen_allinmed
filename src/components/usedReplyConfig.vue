@@ -152,8 +152,8 @@
                             store.commit("stopLoading");
                             that.replyList.removeByValue(item);
                             that.fixDeleteList[index] = false;
-                            delete that.fixContentList[that.replyList.length - 1];
-                            delete that.fixFlagList[that.replyList.length - 1];
+                            delete that.fixContentList[that.replyList.length];
+                            delete that.fixFlagList[that.replyList.length];
                         }
                     }
                 })
@@ -203,6 +203,7 @@
                             that.fixContentList[index] = "";
                             that.$set(that.fixFlagList, that.replyList.length - 1, false);
                             that.$set(that.fixContentList, that.replyList.length - 1, "");
+                            that.$set(that.fixDeleteList, that.replyList.length - 1, false);
                         }
                     }
                 })

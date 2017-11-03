@@ -60,7 +60,7 @@
     methods: {
       getReplyList(){
         let that = this;
-        store.commit("startLoading")
+        store.commit("startLoading");
         ajax({
           url: XHRList.usedList,
           method: "POST",
@@ -75,8 +75,12 @@
               store.commit("stopLoading")
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
-                that.replyList = dataList.reverse();
+                  that.replyList = dataList.reverse();
+              }else{
+                  that.replyList=[];
               }
+            }else{
+                that.replyList=[];
             }
           }
         })
