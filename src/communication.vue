@@ -173,7 +173,6 @@
                             that.controllerInput = "";
                             that.controllerInputStatus = 0;
                         }
-
                     }
                 };
                 if (e.keyCode) {

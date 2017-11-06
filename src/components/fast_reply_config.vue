@@ -65,7 +65,7 @@
                 <i class="icon-member-add-cancel" @click.stop="memberFixFlag[index]['-1']=false"></i>
               </figure>
             </section>
-            <article class="jump-box-member-item" v-for="(cItem,cIndex) in item.children">
+            <article class="jump-box-member-item" v-for="(cItem,cIndex) in item.children" :key="cIndex">
               <span v-show="!memberFixFlag[index][cIndex]">{{cItem.questionDesc}}</span>
               <figure class="jump-box-member-item-button" v-if="cItem.questionType==2"
                       v-show="!memberFixFlag[index][cIndex]">
@@ -133,7 +133,9 @@
         termFixFlag: {
           "-1": false
         },
-        termFixContent: {},
+        termFixContent: {
+          "-1": ""
+        },
         addInputContent: "",
         memberFixFlag: {},
         memberFixContent: {},
