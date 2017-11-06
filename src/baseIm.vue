@@ -8,7 +8,7 @@
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
-                    {{`由于${$store.state.currentItem.returnReason}，该患者被退回`}}</p>
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName?$store.state.currentItem.doctorName+'医生':''}退回`}}</p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
@@ -388,7 +388,7 @@
                     limit: 100
                 });
             },
-            transformMessageTime: function (time) {
+            transformMessageTime (time) {
                 var format = function (num) {
                     return num > 9 ? num : "0" + num;
                 };
@@ -417,7 +417,7 @@
                 return result;
             },
             //发送单条数据...
-            sendSingleMessage: function (error, msg) {
+            sendSingleMessage (error, msg) {
                 let patientListArray  = this.$store.state.patientList;
                 patientListArray.unshift(this.$store.state.currentItem);
                 patientListArray.removeByValue(this.$store.state.currentItem);
@@ -439,51 +439,7 @@
                     }, 120);
                 }
             },
-            //接收用户信息...
-//            //新消息提示机制...
-//            newMessageTips: function (account) {
-//                if ($(".main-header-toggle-list-item.active").attr("data-id") == 0) {
-//                    var element = $(".userlist-mainList-item[data-account='" + account.substring(2) + "']");
-//                    // if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-//                    //     var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-//                    //         newTipsNumber = ntnCache[account];
-//                    // } else {
-//                    //     var ntnCache = {}, newTipsNumber = 0;
-//                    // }
-//
-//                    var newTipsNumber = 0;
-//                    var ntnCache = {};
-//                    if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-//                        var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-//                            newTipsNumber = ntnCache[account];
-//                    }
-//
-//                    var ntnCacheObject = {};
-//                    if (this.ntnCacheList[account] != undefined) {
-//                        newTipsNumber = this.ntnCacheList[account];
-//                    } else {
-//                        ntnCacheObject[account] = 0;
-//                        newTipsNumber = ntnCacheObject[account];
-//                        this.ntnCacheList[account] = newTipsNumber;
-//
-//                    }
-//                    newTipsNumber++;
-//                    ntnCache[account] = newTipsNumber;
-//                    this.ntnCacheList[account] = newTipsNumber;
-//                    localStorage.setItem("ntnCache", JSON.stringify(ntnCache));
-//
-//                    if (!element.hasClass("active") && $(".userlist-mainList-item[data-account='" + account.substring(2) + "']").length > 0) {
-//                        var _role = element.parents(".userlist-mainList").attr("data-role");
-//
-//                        element.find(".userlist-item-img p").show().addClass("on").text((newTipsNumber >= 100 ? "..." : newTipsNumber));
-//                        if (_role != 'ut-tabs-2') {
-//                            $(".userlist-status-item[data-role='" + _role + "']").addClass("new");
-//                            $('#music')[0].play();
-//                        }
-//
-//                    }
-//                }
-//            },
+
             // 新消息提示
             newMessageTips(target, element){
                 const _this = this;

@@ -20,7 +20,7 @@
                     </figure>
 
                 </section>
-                <section class="jump-box-term" v-for="(item,index) in replyList">
+                <section class="jump-box-term" v-for="(item,index) in replyList" :key="index">
                     <article class="jump-box-term-title">
                         <h3 v-if="!fixFlagList[index]">{{item.replyContent}}</h3>
                         <figure class="jump-box-term-button" v-if="!fixFlagList[index]">
@@ -33,14 +33,8 @@
                             <p>确定删除该回复吗？</p>
                     </article>
                     <figure class="modal-confirm-button">
-                        <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback(item,index)">确定
-
-
-                        </button>
-                        <button class="btn-primary modal-confirm-cancel" @click.stop="fixDeleteList[index]=false">取消
-
-
-                        </button>
+                        <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback(item,index)">确定</button>
+                        <button class="btn-primary modal-confirm-cancel" @click.stop="fixDeleteList[index]=false">取消</button>
                     </figure>
                 </section>
                 </p>
@@ -127,7 +121,6 @@
                                     that.$set(that.fixFlagList, index, false);
                                     that.$set(that.fixContentList, index, "");
                                     that.$set(that.fixDeleteList, index, false);
-
                                 });
                             }
                         }
