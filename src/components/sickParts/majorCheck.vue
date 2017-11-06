@@ -178,6 +178,7 @@
                             }
                             //获取视频
                             if (data_list[1].videoMap.length) {
+                                  _this.videoList =[];
                                 $.each(data_list[1].videoMap, function (key, value) {
                                     _this.videoList.push(value);
                                 });
@@ -212,8 +213,6 @@
                           console.log("请求失败：" + error);
                         }
                 })
-
-
 
             },
             saveData(){
