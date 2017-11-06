@@ -22,7 +22,7 @@
                     <li v-for="ele in chatHistoryRecordList">
                       <article>
                         <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
-                                v-show="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
+                                v-if=" ele.msgType.toLowerCase()==='file' || ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
                         <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
@@ -81,6 +81,11 @@
                         <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
                           <figcaption class="messageList-item-text">
                             上一位服务该患者的分诊医生已下班，如有需要请继续沟通
+                          </figcaption>
+                        </figure>
+                        <figure v-if="ele.msgType.toLowerCase() === 'file'">
+                          <figcaption class="messageList-item-text">
+                                <img :src="ele.attUrl" />
                           </figcaption>
                         </figure>
                       </article>
