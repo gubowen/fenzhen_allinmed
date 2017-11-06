@@ -145,7 +145,7 @@
         phoneError: '',//用户发送验证码手机号提示语
         validateCodeError: '',
 
-        loginStr: '登陆',//登录按钮显示的术语；
+        loginStr: '登录',//登录按钮显示的术语；
 
         validateCode: '',    //验证码
         validateCodeId: '',  //验证码主键
