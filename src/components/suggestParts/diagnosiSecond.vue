@@ -38,7 +38,7 @@
                         <section class="doc-filter-search-box" v-show="docCutNum==1">
                             <ul class="doc-filter-box" :class="{'quHighly':!viewMore}">
                                 <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList"
-                                    @click="getAllDocCustomer({tag:item,type:'filter',num:0,cutNum:index})">
+                                    @click="getAllDocCustomer({tag:item,type:'filter',num:0,value:1,cutNum:index})">
                                     {{getTagName(item)}}
                                 </li>
                             </ul>
@@ -49,7 +49,7 @@
                                 <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20"
                                        v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
                                 <button class="doc-search-btn" :class="{on:docSearchValue.trim().length>0}"
-                                        @click="getAllDocCustomer({type:'search',num:0})">搜索
+                                        @click="getAllDocCustomer({type:'search',num:0,value:1})">搜索
                                 </button>
                             </div>
                         </section>
@@ -143,21 +143,21 @@
                                     <div class="pagination pager">
                                         <ul class="pages">
                                             <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}"
-                                                @click="getAllDocCustomer({num:0})">首页
+                                                @click="getAllDocCustomer({num:0,value:1})">首页
                                             </li>
                                             <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}"
-                                                @click="getAllDocCustomer({num:allDoc.pageIndex-2})">上一页
+                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)-1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)-1]})">上一页
                                             </li>
                                             <li class="page-number" :class="{'pgCurrent':allDoc.pageIndex == item}"
-                                                v-for="(item,index) in pages" @click="getAllDocCustomer({num:index})">{{item}}
+                                                v-for="(item,index) in allDoc.pageArr" @click="getAllDocCustomer({num:index,value:item})">{{item}}
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.pageIndex})">下一页
+                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)-1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)-1]})">下一页
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:Math.ceil(allDoc.totalCount/allDoc.pageNum)-1})">
+                                                @click="getAllDocCustomer({num:Math.ceil(allDoc.totalCount/allDoc.pageNum)-1,value:Math.ceil(allDoc.totalCount/allDoc.pageNum)})">
                                                 末页
                                             </li>
                                         </ul>
@@ -393,9 +393,10 @@
                     allDocList: [],
                     allDocState: false,
                     totalCount: 0,
-                    pageNum: 20,
+                    pageNum: 15,
                     pageIndex: 1,
-                    pageResult: 0
+                    pageResult: 0,
+                    pageArr:[],
                 },
                 noDocData: false,
                 searchTagName: "",
@@ -419,7 +420,7 @@
         mounted(){
             this.getTargetList();
             this.getMatchDocCustomer();
-            this.getAllDocCustomer({num: 0});
+            this.getAllDocCustomer({num: 0,value:1},"1");
             this.getFourList({
                 url: XHRList.getTeachingKnowledge,
                 listName: "teachingKnowledgeList"
@@ -515,12 +516,14 @@
                     }
                 })
             },
-            getAllDocCustomer(obj){
+            getAllDocCustomer(obj,isInit){
+                console.log(obj)
+                if(obj.value == "•••") return false;
                 store.commit("startLoading");
                 let that = this;
                 let searchAreasExpertise = "";
-                that.allDoc.pageResult = obj.num * that.allDoc.pageNum;
-                that.allDoc.pageIndex = obj.num + 1;
+                that.allDoc.pageResult = (obj.value-1) * that.allDoc.pageNum;
+                that.allDoc.pageIndex = obj.value;
                 if (obj.type == "filter") {
                     this.tagCutNum = obj.cutNum;
                     this.searchTagName = obj.tag.tagName;
@@ -567,14 +570,64 @@
                             }
                             that.allDoc.allDocList = dataList;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
+                            that.noDocData = false;
                         } else {
                             that.allDoc.allDocList = [];
                             that.noDocData = true;
                         }
                         document.querySelector(".scrollTop").scrollTop = 0;
+                        that.pages(isInit,obj.num,obj.value);
                         store.commit("stopLoading");
                     }
                 });
+            },
+            pages(init,clickNum,clickValue){
+                let that =this;
+                let pagesLength = Math.ceil(that.allDoc.totalCount / that.allDoc.pageNum);
+                //初始化
+                if(init == 1){
+                    if(pagesLength>10){
+                        that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-1,pagesLength];
+                    }else{
+                        for (let i = 1; i <= Math.ceil(pagesLength); i++) {
+                            that.allDoc.pageArr.push(i);
+                        }
+                    }
+                }else{
+                    let ellipsis = "•••",ellipsisNum;
+                    if(pagesLength>10){
+                        //点击首页
+                        if(clickValue == 1){
+                            that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-1,pagesLength];
+                            return false;
+                        }
+                        //确定"•••"的位置
+                        that.allDoc.pageArr.forEach(function (value,key) {
+                            if(ellipsis == value){
+                                ellipsisNum = key;
+                            }
+                        });
+                        let addNum = Number(that.allDoc.pageArr[ellipsisNum-1])+1;
+                        if(clickNum == ellipsisNum-1){
+                            that.allDoc.pageArr.splice(ellipsisNum,0,addNum);
+                            that.allDoc.pageArr.splice(0,1);
+                        }else if(clickNum == 0 && Number(that.allDoc.pageArr[0]) != 1){
+                            that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
+                            that.allDoc.pageArr.splice(ellipsisNum,1);
+                        }
+                        if(pagesLength-that.allDoc.pageArr[clickNum] <= 2 && that.allDoc.pageArr[clickNum+1] == ellipsis){
+                            that.allDoc.pageArr.splice(clickNum+1,1);
+                        }else if(pagesLength-that.allDoc.pageArr[clickNum]>2 && that.allDoc.pageArr[5] != ellipsis){
+                            that.allDoc.pageArr.splice(5,0,ellipsis);
+                        }
+                    }else{
+                        that.allDoc.pageArr = [];
+                        for (let i = 1; i <= Math.ceil(pagesLength); i++) {
+                            that.allDoc.pageArr.push(i);
+                        }
+                    }
+                }
+                console.log(that.allDoc.pageArr)
             },
             //推荐医生---复选、全选、筛选、分页
             setCheckedState(arr){
@@ -961,15 +1014,7 @@
                 }
             }
         },
-        computed: {
-            pages(){
-                let pageArr = [], that = this;
-                for (let i = 1; i <= Math.ceil(that.allDoc.totalCount / that.allDoc.pageNum); i++) {
-                    pageArr.push(i);
-                }
-                return pageArr;
-            }
-        },
+        computed: {},
         watch: {
             previewDiagnoseSuggest: {
                 handler(){
