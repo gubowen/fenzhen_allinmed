@@ -34,7 +34,7 @@
               </li>
               <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
             </ul>
-            <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000" v-model="visualInspection"/>
+            <textarea type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000" v-model="visualInspection" ref="inputLimitController"/>
           </section>
         </article>
         <article class="major-check-video">
@@ -42,7 +42,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-activityState" maxlength="1000" v-model="activityState"/>
+                <textarea type="text" placeholder="请填写" class="J-activityState" maxlength="1000" v-model="activityState" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -52,7 +52,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000" v-model="muscleStrength"/>
+                <textarea type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000" v-model="muscleStrength" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -73,6 +73,7 @@
     import addressSelector from '@/common/addressSelector'
     import popup from  '@/common/popup';
 
+    import autosize from "autosize";
     export default{
         name: 'majorCheck',
         data(){
@@ -108,6 +109,8 @@
                 this.userMessage = this.$store.state.currentItem;
                 this.getData();
 
+                console.log(this.$refs.inputLimitController)
+                autosize(this.$refs.inputLimitController)
             },
             getData() {
                 let _this = this;
@@ -126,6 +129,7 @@
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {
+
                     },
                     done(res) {
                         if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
@@ -277,7 +281,7 @@
   @import "../../scss/record_common";
 
   .major-check {
-    input[type="text"] {
+    textarea {
       margin: 0 auto;
       display: block;
     }
