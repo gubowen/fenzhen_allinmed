@@ -82,6 +82,7 @@
         this.getData();
         //textare自适应高度
         autosize(document.querySelectorAll('.J-textArea'));
+
       },
       getData: function () {
 
@@ -132,6 +133,9 @@
                       break;
                     default :
                   }
+                    setTimeout(()=>{
+                        autosize.update(document.querySelectorAll('.J-textArea'));
+                    },200);
                 }
               }
             } else {
