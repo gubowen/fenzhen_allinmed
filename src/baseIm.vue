@@ -73,6 +73,7 @@
     import store from "@/store/store";
     import api from '@/common/js/util';
 
+    import nimEnv from "@/base/nimEnv";
 
     Vue.filter('transformMessageTime', function (time) {
         var format = function (num) {
@@ -190,7 +191,7 @@
                 let that = this;
                 this.nim = nim.getInstance({
                     // debug: true,
-                    appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+                    appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
                     onconnect (data) {
