@@ -34,7 +34,7 @@
               </li>
               <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
             </ul>
-            <textarea type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000" v-model="visualInspection" ref="inputLimitController"/>
+            <textarea type="text" placeholder="请填写" class="J-visualInspection J-other" maxlength="1000" v-model="visualInspection" ref="inputLimitController"/>
           </section>
         </article>
         <article class="major-check-video">
@@ -42,7 +42,7 @@
           <section>
             <ul>
               <li>
-                <textarea type="text" placeholder="请填写" class="J-activityState" maxlength="1000" v-model="activityState" ref="inputLimitController"/>
+                <textarea type="text" placeholder="请填写" class="J-activityState J-other" maxlength="1000" v-model="activityState" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -52,7 +52,7 @@
           <section>
             <ul>
               <li>
-                <textarea type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000" v-model="muscleStrength" ref="inputLimitController"/>
+                <textarea type="text" placeholder="请填写" class="J-muscleStrength J-other" maxlength="1000" v-model="muscleStrength" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -109,8 +109,10 @@
                 this.userMessage = this.$store.state.currentItem;
                 this.getData();
 
-                console.log(this.$refs.inputLimitController)
-                autosize(this.$refs.inputLimitController)
+               // console.log(this.$refs.inputLimitController)
+                //autosize(this.$refs.inputLimitController);
+                autosize(document.querySelectorAll('.J-other'));
+
             },
             getData() {
                 let _this = this;
@@ -211,6 +213,10 @@
                                 _this.activityState = res.responseObject.responseData.dataList[0].activityState;
                                 _this.muscleStrength = res.responseObject.responseData.dataList[0].muscleStrength;
                                 _this.$store.commit("setNewSickId",res.responseObject.responseData.dataList[0].id);
+
+                                setTimeout(()=>{
+                                    autosize.update(document.querySelectorAll('.J-other'));
+                                },200)
                             }
                         },
                         fail(error){

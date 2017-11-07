@@ -150,6 +150,7 @@
 
         //textare自适应高度
         autosize(document.querySelectorAll('.J-other'));
+
       },
       getData(){
         let _this = this;
@@ -178,6 +179,10 @@
               _this.bmi = dataList.bmi;                                  //BMI
               _this.bodySurfaceArea = dataList.bodySurfaceArea;          //体表面积
               _this.other = dataList.other;                              //其他
+
+                setTimeout(()=>{
+                    autosize.update(document.querySelectorAll('.J-other'));
+                },200)
             } else {
               console.log("无数据！");
             }
