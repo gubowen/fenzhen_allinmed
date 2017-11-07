@@ -18,7 +18,7 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'file'" :message="items"></ImageElement>
+                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"></ImageElement>
                         <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
@@ -206,6 +206,7 @@
                     onmsg (msg) {
                         //自定义消息
                         console.log(msg);
+
                         if (msg.type.toLowerCase() === 'custom') {
                             //判断是否为新用户
                             if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
@@ -496,6 +497,7 @@
             receiveMessage (targetUser, element) {
                 //获取当前患者消息
                 const _this = this;
+
                 if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);

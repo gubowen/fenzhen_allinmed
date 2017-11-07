@@ -20,6 +20,7 @@
    * Created by Qiangkailiang on 17/10/23.
    */
    import EXIF from "exif-js";
+   import imageEXIF from "@/base/imageRotate";
   export default{
     data(){
       return {
@@ -27,31 +28,12 @@
       }
     },
     mounted(){
-        let ImageList = [];
-        const that=this;
-        if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
-            this.$store.state.SBIObject.IMImage.forEach(function(item,index){
-                ImageList.push( {"url":item.url});
-            })
-        }
-        ImageList.push( {"url":this.message.file.url});
-        this.$store.commit('setSBIObject',{'IMImage':ImageList});
-        setTimeout(()=>{
-            EXIF.getData(this.$refs.imageElement,function(){
-                let orientation = EXIF.getTag(this, "Orientation")
-                if (parseInt(orientation)===6){
-                    console.log(orientation)
-                    that.exifFlag=true;
-                }
-            })
-        },20)
-
-
+        this.removeBaseImageMsg(this.message.file.url);
+        this.installSBIList();
     },
     methods:{
       showBigImgFunction(message){
           let _this = this;
-
           this.$store.state.SBIObject.IMImage.forEach(function(item,index){
               if(message == item.url){
                   _this.$store.commit("setSBIIndex",index);
@@ -59,11 +41,30 @@
           });
           this.$store.commit("setSBIFlag",true);
           this.$store.commit("setSBIType",'IMImage');
-      }
+      },
+        removeBaseImageMsg(url){
+            this.message.file.url=this.nim.viewImageStripMeta({
+                url: url,
+                strip: true
+            });
+        },
+        installSBIList(){
+            let ImageList = [];
+            if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
+                this.$store.state.SBIObject.IMImage.forEach(function(item,index){
+                    ImageList.push( {"url":item.url});
+                })
+            }
+            ImageList.push( {"url":this.message.file.url});
+            this.$store.commit('setSBIObject',{'IMImage':ImageList});
+        }
     },
     props: {
       message:{
             type:Object
+        },
+        nim:{
+          type:Object
         }
     }
   }
