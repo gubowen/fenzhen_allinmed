@@ -62,11 +62,7 @@
     min-height: 155px;
     box-sizing: border-box;
     z-index: 5;
-    opacity: 0;
-    transition: all 0.2s linear;
-    &.show {
-      opacity: 1;
-    }
+
     &.upShow {
       bottom: 60px;
       top: auto;
