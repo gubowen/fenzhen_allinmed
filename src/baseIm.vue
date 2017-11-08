@@ -630,12 +630,13 @@
     
     .messageList-box {
         padding: 40px 50px;
-        height: 62%;
+        height: 72.5%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
+        box-sizing: border-box;
         @include query(1500px){
-            height: 45%;
+            height: 71.5%;
         }
         &.watingBoxStyle {
             height: 85%;
@@ -711,12 +712,19 @@
         }
     }
 
+    .user-controller{
+        @include query(1500px){
+            height: 24%;
+        }
+    }
+
     .messageList-targetName {
         background: rgba(255, 255, 255, 0.97);
         box-shadow: 0 1px 1px 0 #ECEFF6;
         position: absolute;
         top: 0;
-        height: 55px;
+        height: 5.5%;
+        min-height:55px;
         left: 0;
         right: 0;
         line-height: 55px;
