@@ -453,7 +453,7 @@ d<template>
           telephone: this.telephone,                      //联系方式
           socialId: this.socialId.value,                   //string	是	社保类型
           socialAddress: this.socialAddress,
-          nation: this.nationDataSelectValue,             //民族
+          nation: this.nationDataSelectValue=='请选择'?'未填写': this.nationDataSelectValue,             //民族
           isMarriage: this.marriageSelectValue,           //婚姻状况
           homeAddress: this.homeAddress,                  //家庭住址
           workplace: this.workplace,                      //工作单位
