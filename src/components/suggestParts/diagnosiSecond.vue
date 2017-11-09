@@ -153,7 +153,7 @@
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)-1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)-1]})">下一页
+                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)+1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)+1]})">下一页
                                             </li>
                                             <li class="pgNext"
                                                 :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
@@ -587,7 +587,7 @@
                 //初始化
                 if(init == 1){
                     if(pagesLength>10){
-                        that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-1,pagesLength];
+                        that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
                     }else{
                         for (let i = 1; i <= Math.ceil(pagesLength); i++) {
                             that.allDoc.pageArr.push(i);
@@ -598,7 +598,7 @@
                     if(pagesLength>10){
                         //点击首页
                         if(clickValue == 1){
-                            that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-1,pagesLength];
+                            that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
                             return false;
                         }
                         //确定"•••"的位置
@@ -607,18 +607,47 @@
                                 ellipsisNum = key;
                             }
                         });
-                        let addNum = Number(that.allDoc.pageArr[ellipsisNum-1])+1;
-                        if(clickNum == ellipsisNum-1){
-                            that.allDoc.pageArr.splice(ellipsisNum,0,addNum);
-                            that.allDoc.pageArr.splice(0,1);
-                        }else if(clickNum == 0 && Number(that.allDoc.pageArr[0]) != 1){
-                            that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
-                            that.allDoc.pageArr.splice(ellipsisNum,1);
-                        }
-                        if(pagesLength-that.allDoc.pageArr[clickNum] <= 2 && that.allDoc.pageArr[clickNum+1] == ellipsis){
-                            that.allDoc.pageArr.splice(clickNum+1,1);
-                        }else if(pagesLength-that.allDoc.pageArr[clickNum]>2 && that.allDoc.pageArr[5] != ellipsis){
-                            that.allDoc.pageArr.splice(5,0,ellipsis);
+                        //添加删除"•••"，如果"•••"两边数字差小于3，删除"•••"，否则添加"•••"；
+//                        if(clickNum == ellipsisNum-1 && that.allDoc.pageArr[ellipsisNum+1] - that.allDoc.pageArr[clickNum] <=3){
+//                            let addThreeNum = that.allDoc.pageArr[clickNum];
+//                            that.allDoc.pageArr.splice(ellipsisNum,1,addThreeNum+1,addThreeNum+2);
+//                            return false;
+//                        }else if(clickNum == ellipsisNum+1 && that.allDoc.pageArr[clickNum] - that.allDoc.pageArr[ellipsisNum-1] <=3){
+//                            let reduceThreeNum = that.allDoc.pageArr[clickNum];
+//                            that.allDoc.pageArr.splice(ellipsisNum,1,reduceThreeNum-1,reduceThreeNum-2);
+//                            return false;
+//                        }else if(pagesLength){}
+                        //改变数值
+                        if(ellipsisNum){
+
+                            let rightNum = Number(that.allDoc.pageArr[ellipsisNum-1]) +1,
+                                leftNum = Number(that.allDoc.pageArr[ellipsisNum+1]) -1;
+                            if(clickNum == ellipsisNum-1){
+                                that.allDoc.pageArr.splice(ellipsisNum,0,rightNum);
+                                that.allDoc.pageArr.splice(0,1);
+                            }else if(clickNum == 0 && Number(that.allDoc.pageArr[0]) != 1){
+                                that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
+                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }else if(clickNum == ellipsisNum +1){
+                                that.allDoc.pageArr.splice(ellipsisNum+1,0,leftNum);
+                                that.allDoc.pageArr.splice(that.allDoc.pageArr.length-1,1);
+                            }else if(clickNum == that.allDoc.pageArr.length-1 && Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1] != pagesLength)){
+                                that.allDoc.pageArr.push(Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1])+1);
+//                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }
+
+
+                            if(that.allDoc.pageArr[ellipsisNum+1] - that.allDoc.pageArr[clickNum] ==1 || that.allDoc.pageArr[clickNum] - that.allDoc.pageArr[ellipsisNum-1] ==1){
+                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }
+                        }else{
+                            if(clickNum == 0){
+                                that.allDoc.pageArr.splice(4,1,ellipsis);
+                                that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
+                            }else if(clickNum == 7){
+                                that.allDoc.pageArr.splice(5,1,ellipsis);
+                                that.allDoc.pageArr.push(Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1])+1);
+                            }
                         }
                     }else{
                         that.allDoc.pageArr = [];
