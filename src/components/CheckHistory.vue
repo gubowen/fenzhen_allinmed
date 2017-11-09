@@ -85,7 +85,7 @@
                         </figure>
                         <figure v-if="ele.msgType.toLowerCase() === 'file'">
                           <figcaption class="messageList-item-text">
-                                <img :src="ele.attUrl" />
+                                <img :src="ele.attUrl" class="img-show"/>
                           </figcaption>
                         </figure>
                       </article>
