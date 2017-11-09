@@ -45,6 +45,8 @@
   import api from '../../common/js/util';
   import downSelect from  '../../common/downSelector.vue';
   import diagnosiSecond from './diagnosiSecond.vue';
+
+  import store from "@/store/store";
   export default{
     name: 'check-suggestion',
     data(){
@@ -172,6 +174,7 @@
           maxResult: 999,	                    //string	是	分页参数
           treeLevel: "2"
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.majorData,
           method: "POST",
@@ -182,9 +185,11 @@
            // console.log(res);
             _this.partList.dataList = res.responseObject.responseData.data_list;
             _this.partList.placeholderText = '专科';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
 
@@ -198,6 +203,7 @@
           illnessName: "",	        //string	否	疾病名称（搜索用）
           isSolr: 1
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.sicknessUrl,
           method: "POST",
@@ -208,9 +214,11 @@
             // console.log(res);
             _this.sickness.dataList = res.responseObject.responseData.dataList;
             _this.sickness.placeholderText = '疾病';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
       },
@@ -225,6 +233,7 @@
           //majorId: _this.partListResult.id, //string	否	专业ID
           //operationName: _this.partListResult.tagName  //string	是	手术名称
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.operationUrl,
           method: "POST",
@@ -234,9 +243,11 @@
           done(res) {
             _this.operationList.dataList = res.responseObject.responseData.dataList;
             _this.operationList.placeholderText = '手术建议';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
       },
