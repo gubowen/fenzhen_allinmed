@@ -393,7 +393,7 @@
                     allDocList: [],
                     allDocState: false,
                     totalCount: 0,
-                    pageNum: 15,
+                    pageNum: 20,
                     pageIndex: 1,
                     pageResult: 0,
                     pageArr:[],
