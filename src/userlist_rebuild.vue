@@ -569,6 +569,7 @@
                         this.userListStatus.status = 2;
                         this.userListStatus.first = false;
                         this.userListStatus.second = true;
+                        this.userOnlineActive = 0 ;
 
 
                         store.commit("setInputReadOnly", false);
