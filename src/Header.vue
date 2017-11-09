@@ -217,10 +217,14 @@
 //            name: "home"
 //          })
             if (window.location.origin.includes("triage.allinmed.cn")) {
-                window.location.href='/index.html';
+                this.$router.push({
+                    path:"/"
+                })
             }
             if (!window.location.hostname.includes("triage.allinmed.cn")) {
-                window.location.href='/index_local.html';
+                this.$router.push({
+                    path:"/"
+                })
             }
         }
       },
