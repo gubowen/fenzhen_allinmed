@@ -596,8 +596,8 @@
                 }else{
                     let ellipsis = "•••",ellipsisNum;
                     if(pagesLength>10){
-                        //点击首页
-                        if(clickValue == 1){
+                        //点击首页、末页
+                        if(clickValue == 1 || clickValue == Math.ceil(that.allDoc.totalCount/that.allDoc.pageNum)){
                             that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
                             return false;
                         }
