@@ -28,8 +28,12 @@
                                         class="question">问诊目的：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
                             </article>
                             <article class="special-message-item-list">
-                                <span class="answer"><p
-                                        class="question">所在地区：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.provinceName}}&nbsp;&nbsp;{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.cityName}}</span>
+                                <span class="answer"><p class="question">所在地区：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.provinceName}}&nbsp;&nbsp;{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.cityName}}</span>
+                            </article>
+                        </article>
+                        <article class="special-message-item-text">
+                            <article class="special-message-item-list">
+                                <p class="answer"><span class="question">患者是问诊人的：</span>本人</p>
                             </article>
                         </article>
                     </article>
@@ -135,6 +139,7 @@
                             let dataList = res.responseObject.responseData.dataList;
                             if (dataList && dataList.length) {
                                 that.medicalReportMsg = dataList[0];
+                                console.log(that.medicalReportMsg);
                                 // console.log(that.medicalReportMsg = dataList[0]);
                             }
                         }

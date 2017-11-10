@@ -7,10 +7,8 @@
             <ul>
               <li><span class="base-title">所在地区</span><span class="base-text">{{address}}</span></li>
               <li style="display: none;"><span class="base-title">联系方式</span><span class="base-text">{{telephone}}</span></li>
-              <li><span class="base-title">社保类型</span><span class="base-text" :data-value="socialId.value">{{socialId.text}}</span>
-              </li>
-              <li><span class="base-title base-title-long">社保所在地</span><span class="base-text">{{socialAddress}}</span>
-              </li>
+              <li><span class="base-title">社保类型</span><span class="base-text" :data-value="socialId.value">{{socialId.text}}</span></li>
+              <li><span class="base-title base-title-long">社保所在地</span><span class="base-text">{{socialAddress}}</span></li>
               <li><span class="base-title">民族</span><select class="J-nation" v-model="nationDataSelectValue">
                 <option v-for="option in nation" v-bind:value="option.nationality">
                   {{option.nationality}}
