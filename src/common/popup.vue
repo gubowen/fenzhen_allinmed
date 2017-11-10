@@ -1,5 +1,5 @@
 <template>
-  <section class="middle-tip-modal popup " :class="{'show':showFlag}">
+  <section class="middle-tip-modal popup">
     <figure class="middle-tip-box-text">
       <img v-show="obj.hasImg" src="/static/img/img00/login/save_loading.png">
       <p class="popup-text">{{obj.text}}</p>
@@ -21,9 +21,9 @@
     },
     mounted(){
       let _this = this;
-      _this.showFlag = true;
+//      _this.showFlag = true;
       setTimeout(function () {
-        _this.showFlag = false;
+//        _this.showFlag = false;
         _this.$emit('update:payPopupShow', false);
       }, 2000)
     }
@@ -31,4 +31,11 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "../scss/modules/_popup";
+  .fade-scale-enter-active,.fade-scale-leave-active {
+    transition: all 0.5s linear;
+  }
+  .fade-scale-enter,.fade-scale-leave-to{
+    opacity: 0;
+    transform:scale(0) translate(-50%,-50%);
+  }
 </style>

@@ -7,30 +7,44 @@
             <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply" v-if="!watingTriage">
-                    <button class="user-controller-fastReply" @click="fastRely()"><i class="icon-fastReply"></i><span>快捷提问</span>
+                    <button class="user-controller-fastReply" @click.stop="fastRely()">
+                        <i class="icon-fastReply"></i>
+                        <span>快捷提问</span>
                     </button>
-                    <button class="user-controller-result" @click="usedRely()"><i
-                            class="icon-userReply"></i><span>常用回复</span>
+                    <button class="user-controller-result" @click.stop="usedRely()">
+                        <i class="icon-userReply"></i>
+                        <span>常用回复</span>
                     </button>
-                    <button class="user-controller-report" @click="suggestion()"><i class="icon-suggestion"></i><span>初诊建议</span>
+                    <button class="user-controller-report" @click="suggestion()">
+                        <i class="icon-suggestion"></i>
+                        <span>初诊建议</span>
                     </button>
-                    <button class="user-controller-check" @click="examine()"><i
-                            class="icon-checkout"></i><span>检查检验</span>
+                    <button class="user-controller-check" @click="examine()">
+                        <i class="icon-checkout"></i>
+                        <span>检查检验</span>
                     </button>
-                    <button class="user-controller-check" @click="reTriageShow=true"><i
-                            class="icon-checkout"></i><span>结束沟通</span></button>
+                    <button class="user-controller-check" @click="reTriageShow=true">
+                        <i class="icon-checkout"></i>
+                        <span>结束沟通</span>
+                    </button>
                     <!--快捷提问-->
-                    <fast-Rely v-if="fastRelyStatus" :controllerInputStatus.sync="controllerInputStatus"
-                               :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                    <transition name="fade">
+                        <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
+                                   :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                    </transition>
                     <!--常用回复-->
-                    <used-Rely v-if="usedRelyStatus" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
-                    <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
-                                  @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
+                    <transition name="fade">
+                        <used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    </transition>
+                    <transition name="fade">
+                        <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
+                                      @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
+                    </transition>
+
                 </nav>
                 <article class="user-controller-middle">
-          <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
-                    @keyup="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
-
+                    <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
+                              @keyup="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
                 </article>
                 <footer class="user-controller-footer" v-if="!watingTriage">
                     <span class="user-send-message">按下Enter发送</span>
@@ -41,18 +55,30 @@
             </section>
         </section>
         <!--编辑常用回复-->
-        <UsedReplyConfig v-if="$store.state.usedReplyConfig"></UsedReplyConfig>
+        <transition name="fade">
+            <UsedReplyConfig v-if="$store.state.usedReplyConfig"></UsedReplyConfig>
+        </transition>
         <!--编辑快捷提问-->
-        <fast-Reply-Config v-if="$store.state.fastReplyConfig"></fast-Reply-Config>
+        <transition name="fade">
+            <fast-Reply-Config v-if="$store.state.fastReplyConfig"></fast-Reply-Config>
+        </transition>
         <!--检查检验-->
-        <examine-check v-if="$store.state.examineFlag"></examine-check>
+        <transition name="fade">
+            <examine-check v-if="$store.state.examineFlag"></examine-check>
+        </transition>
         <!--初诊建议-->
-        <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
-
-        <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
+        <transition name="fade">
+            <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
+        </transition>
+        <transition name="fade">
+            <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
+        </transition>
+        <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
         <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
                  v-if="$store.state.previewShow">
-            <PreviewSuggestion></PreviewSuggestion>
+            <transition name="fade">
+                <PreviewSuggestion></PreviewSuggestion>
+            </transition>
         </section>
     </section>
 </template>
@@ -69,6 +95,7 @@
     import triagePatient from "@/base/triagePatient";
     import releasePatient from "@/base/releasePatient";
     import ShowBigImg from './common/ShowBigImg';
+    import ShowVideo from './common/ShowVideo';
     import store from "@/store/store";
 
     export default {
@@ -103,6 +130,7 @@
             CheckSuggestion,
             ExamineCheck,
             ShowBigImg,
+            ShowVideo,
             BaseIm,
             SmallConfirm,
             PreviewSuggestion,
@@ -163,7 +191,6 @@
                             that.controllerInput = "";
                             that.controllerInputStatus = 0;
                         }
-
                     }
                 };
                 if (e.keyCode) {
@@ -184,15 +211,25 @@
             },
             //快捷提问按钮
             fastRely(){
-                let _this = this;
-                _this.fastRelyStatus = !_this.fastRelyStatus;
-                _this.usedRelyStatus = false;
+                let flag = true;
+                if (this.$store.state.fastReplyShow) {
+                    flag = false;
+                } else {
+                    flag = true;
+                    store.commit("setUsedReplyShow", false);
+                }
+                store.commit("setFastReplyShow", flag);
             },
             //常用回复
             usedRely(){
-                let _this = this;
-                _this.usedRelyStatus = !_this.usedRelyStatus;
-                _this.fastRelyStatus = false;
+                let flag = true;
+                if (this.$store.state.usedReplyShow) {
+                    flag = false;
+                } else {
+                    flag = true;
+                    store.commit("setFastReplyShow", false);
+                }
+                store.commit("setUsedReplyShow", flag);
             },
 
             //患者转移至其他分诊医生：
@@ -200,32 +237,15 @@
                 let consultationId = [];
                 let watingList = this.$store.state.watingList;
                 let patientList = this.$store.state.patientList;
-//        if (this.$store.state.quitPatientList.length === 0) {
-//          this.reTriageShow = false;
-//          return false;
-//        }
-//        this.$store.state.quitPatientList.forEach((element, index) => {
-//          consultationId.push(element.consultationId);
-//        });
-//        if (!this.$store.state.quitPatientItem){
-//          this.reTriageShow = false;
-//          return false;
-//        }
+                store.commit("startLoading");
                 releasePatient({
-//          customerId: this.$store.state.userId,
-//          consultationId: consultationId.join(",")
                     customerId: this.$store.state.userId,
                     consultationId: this.$store.state.currentItem.consultationId
                 }).then((res) => {
 
-//          this.$store.state.quitPatientList.forEach((element, index) => {
-//            patientList.removeByValue(element);
-//            watingList.unshift(element);
-//          });
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
-                    watingList.unshift(this.$store.state.currentItem);
-                    store.commit("setPatientList", patientList);
+                    store.commit("watingListRefreshFlag", true);
                     store.commit("setWatingList", watingList);
 
                     this.reTriageShow = false;
@@ -248,14 +268,15 @@
                     this.$emit("update:userWatingActive", -1);
                     let items = patientList[parseInt(num)];
 
-                    this.$store.commit('setPatientId', items.patientId);
-                    this.$store.commit('setPatientName', items.patientName);
-                    this.$store.commit('setCaseId', items.caseId);
-                    this.$store.commit("setConsultationId", items.consultationId);
+                    this.$store.commit('setPatientId', items ? items.patientId : "");
+                    this.$store.commit('setPatientName', items ? items.patientName : "");
+                    this.$store.commit('setCaseId', items ? items.caseId : "");
+                    this.$store.commit("setConsultationId", items ? items.consultationId : "");
 
-                    this.$store.commit("setCurrentItem", items);
+                    this.$store.commit("setCurrentItem", items ? items : {});
 
                     this.$store.commit('setSBIObject', '');
+                    store.commit("stopLoading");
                 })
             },
 
@@ -372,7 +393,7 @@
                 right: 30%;
                 top: auto;
                 transform: rotate(180deg);
-                @incldue query(1500px) {
+                @include query(1500px) {
                     right: 25%;
                 }
             }

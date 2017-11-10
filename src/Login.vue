@@ -1,106 +1,108 @@
 <template>
-  <section class="main-inner test">
-    <header class="main-header">
-      <article class="main-header-title">
-        <i class="icon-logo"></i>
-        <h1>唯医互联网骨科医院</h1>
-      </article>
-    </header>
-    <section class="login-content-inner">
-      <!--登录盒子-->
-      <section class="login-content" id="ev-loginBox" style="display: inline-block;" v-show="loginFlag">
-        <header class="login-title">
-          用户登录
-        </header>
-        <section class="login-input-item">
-          <h3><span>用户名</span></h3>
-          <input type="text" class="login-input-box" v-model="userNameVal" @focus="userNameEvent"
-                 v-validate="'required|mobile'" name="userName">
-          <i class="icon-loginCancel" v-show="userNameVal.length > 0" @click="userLoginCancelClear()"></i>
-          <p class="error-text icon-errorTips" v-show=" userNameError.length > 0 "><span>{{ userNameError }}</span></p>
-          <!--<p class="error-text icon-errorTips" v-show=" errors.has('userNameVal')"><span>{{ errors.first('userNameVal') }}</span></p>-->
+  <transition name="fade" appear>
+    <section class="main-inner test">
+      <header class="main-header">
+        <article class="main-header-title">
+          <i class="icon-logo"></i>
+          <h1>唯医互联网骨科医院</h1>
+        </article>
+      </header>
+      <section class="login-content-inner">
+        <!--登录盒子-->
+        <section class="login-content" id="ev-loginBox" style="display: inline-block;" v-show="loginFlag">
+          <header class="login-title">
+            用户登录
+          </header>
+          <section class="login-input-item">
+            <h3><span>用户名</span></h3>
+            <input type="text" class="login-input-box" v-model="userNameVal" @focus="userNameEvent"
+                   v-validate="'required|mobile'" name="userName">
+            <i class="icon-loginCancel" v-show="userNameVal.length > 0" @click="userLoginCancelClear()"></i>
+            <p class="error-text icon-errorTips" v-show=" userNameError.length > 0 "><span>{{ userNameError }}</span></p>
+            <!--<p class="error-text icon-errorTips" v-show=" errors.has('userNameVal')"><span>{{ errors.first('userNameVal') }}</span></p>-->
+          </section>
+          <section class="login-input-item">
+            <h3><span>密码</span></h3>
+            <input type="password" class="login-input-box" v-model="passWord" @focus="userNameEvent"
+                   @keyup.13="submitEvent" v-validate="'required|passw'" name="passWord">
+            <i class="icon-loginCancel" v-show="passWord.length > 0" @click="passWordCancelClear"></i>
+            <p class="error-text icon-errorTips" v-show="passWordError.length > 0 "><span>{{passWordError}}</span></p>
+            <!--<p class="error-text icon-errorTips" v-show=" errors.has('passWord')"><span>{{ errors.first('passWord') }}</span></p>-->
+          </section>
+          <button class="login-btn btn-primary" id="user-login-btn" @click="submitEvent()">{{loginStr}}</button>
+          <footer class="login-forget-password" id="ev-forget-pwd"><a href="javascript:void(0)"
+                                                                      @click="goToFixPassword()">忘记密码</a></footer>
         </section>
-        <section class="login-input-item">
-          <h3><span>密码</span></h3>
-          <input type="password" class="login-input-box" v-model="passWord" @focus="userNameEvent"
-                 @keyup.13="submitEvent" v-validate="'required|passw'" name="passWord">
-          <i class="icon-loginCancel" v-show="passWord.length > 0" @click="passWordCancelClear"></i>
-          <p class="error-text icon-errorTips" v-show="passWordError.length > 0 "><span>{{passWordError}}</span></p>
-          <!--<p class="error-text icon-errorTips" v-show=" errors.has('passWord')"><span>{{ errors.first('passWord') }}</span></p>-->
-        </section>
-        <button class="login-btn btn-primary" id="user-login-btn" @click="submitEvent()">{{loginStr}}</button>
-        <footer class="login-forget-password" id="ev-forget-pwd"><a href="javascript:void(0)"
-                                                                    @click="goToFixPassword()">忘记密码</a></footer>
-      </section>
-      <!--修改密码中的手机验证-->
-      <section class="login-content" id="ev-validateCode" v-show="validateCodeFlag">
-        <header class="login-title">忘记密码</header>
-        <section class="login-input-item" data-path="1">
-          <h3><span>手机号</span></h3>
-          <input type="text" class="login-input-box" id="ev-validate-mobile" v-model="mobile" @focus="mobileEvent"
-                 v-validate="'required|mobile'" name="phone">
-          <i class="icon-loginCancel" v-show="mobile.length>0" @click="mobileCancelClear"></i>
-          <p class="error-text icon-errorTips" id="ev-validate-mobile-error" v-show="phoneError.length>0"><span>{{phoneError}}</span>
-          </p>
-          <!--<p class="error-text icon-errorTips" v-show="errors.has('phone')"><span>{{errors.first('phone') }}</span></p>-->
-        </section>
-        <section class="login-input-item" data-path="1" id="validateCodeBox">
-          <h3><span>验证码</span></h3>
-          <input type="text" class="login-input-box login-input-validate-code" id="ev-validate-code"
-                 @focus="validateCodeEvent" v-model="validateCode" v-validate="'required|num_length:4'"
-                 name="validateCode">
-          <i class="icon-loginCancel" v-show="validateCode.length > 0" @click="validateCodeCancelClear"></i>
-          <button class="login-send-validate-code btn-primary" @click="sendValidateCode()"
-                  :class="{ send:loginSendValidateCodeFlag}" :disabled="loginSendValidateCodeFlag">
-            {{loginSendValidateCode}}
-          </button>
-          <p class="error-text icon-errorTips" id="ev-validate-code-error" v-show="validateCodeError.length>0"><span>{{validateCodeError}}</span>
-          </p>
-          <!--<p class="error-text icon-errorTips" v-show="errors.has('validateCode')"><span>{{errors.first('validateCode')}}</span></p>-->
-          <p class="validate-code-tips" :class="{show:validateCodeTips}">获取验证码已超过10次，请明天再试</p>
-        </section>
-        <button class="login-btn btn-primary" id="ev-validate-submit" @click="validateSubmit()">提交</button>
-        <footer class="login-forget-password" id="ev-login"><a href="javascript:void(0)" @click="goToLogin()">登录</a>
-        </footer>
+        <!--修改密码中的手机验证-->
+        <section class="login-content" id="ev-validateCode" v-show="validateCodeFlag">
+          <header class="login-title">忘记密码</header>
+          <section class="login-input-item" data-path="1">
+            <h3><span>手机号</span></h3>
+            <input type="text" class="login-input-box" id="ev-validate-mobile" v-model="mobile" @focus="mobileEvent"
+                   v-validate="'required|mobile'" name="phone">
+            <i class="icon-loginCancel" v-show="mobile.length>0" @click="mobileCancelClear"></i>
+            <p class="error-text icon-errorTips" id="ev-validate-mobile-error" v-show="phoneError.length>0"><span>{{phoneError}}</span>
+            </p>
+            <!--<p class="error-text icon-errorTips" v-show="errors.has('phone')"><span>{{errors.first('phone') }}</span></p>-->
+          </section>
+          <section class="login-input-item" data-path="1" id="validateCodeBox">
+            <h3><span>验证码</span></h3>
+            <input type="text" class="login-input-box login-input-validate-code" id="ev-validate-code"
+                   @focus="validateCodeEvent" v-model="validateCode" v-validate="'required|num_length:4'"
+                   name="validateCode">
+            <i class="icon-loginCancel" v-show="validateCode.length > 0" @click="validateCodeCancelClear"></i>
+            <button class="login-send-validate-code btn-primary" @click="sendValidateCode()"
+                    :class="{ send:loginSendValidateCodeFlag}" :disabled="loginSendValidateCodeFlag">
+              {{loginSendValidateCode}}
+            </button>
+            <p class="error-text icon-errorTips" id="ev-validate-code-error" v-show="validateCodeError.length>0"><span>{{validateCodeError}}</span>
+            </p>
+            <!--<p class="error-text icon-errorTips" v-show="errors.has('validateCode')"><span>{{errors.first('validateCode')}}</span></p>-->
+            <p class="validate-code-tips" :class="{show:validateCodeTips}">获取验证码已超过10次，请明天再试</p>
+          </section>
+          <button class="login-btn btn-primary" id="ev-validate-submit" @click="validateSubmit()">提交</button>
+          <footer class="login-forget-password" id="ev-login"><a href="javascript:void(0)" @click="goToLogin()">登录</a>
+          </footer>
 
-      </section>
-      <!--确定密码盒子-->
-      <section class="login-content" id="ev-fixPwd" v-show="passwordFlag">
-        <header class="login-title">忘记密码</header>
-        <section class="login-input-item" data-path="2">
-          <h3><span>新密码</span></h3>
-          <input type="password" class="login-input-box" id="ev-newpwd" v-model="newPassword" @focus="newPasswordEvent"
-                 @blur="newPasswordBlur()" v-validate="'required|passw'" name="newPassword">
-          <p class="error-text icon-errorTips" id="ev-newpwd-error" v-show="newPasswordError.length > 0"><span>{{newPasswordError}}</span>
-          </p>
-          <!--<p class="error-text icon-errorTips"  v-show="errors.has('newPassword')"><span>{{errors.first('newPassword')}}</span></p>-->
         </section>
-        <section class="login-input-item" data-path="2">
-          <h3><span>确认密码</span></h3>
-          <input type="password" class="login-input-box" id="ev-requrire-newpwd" v-model="newPassword2"
-                 @focus="newPasswordEvent2" name="newPassword2">
-          <p class="error-text icon-errorTips" id="ev-requrire-newpwd-error" v-show="newPasswordError2.length > 0 ">
-            <span>{{newPasswordError2}}</span></p>
-          <!--<p class="error-text icon-errorTips"   v-show="errors.has('newPassword2')"><span>{{errors.first('newPassword2')}}</span></p>-->
+        <!--确定密码盒子-->
+        <section class="login-content" id="ev-fixPwd" v-show="passwordFlag">
+          <header class="login-title">忘记密码</header>
+          <section class="login-input-item" data-path="2">
+            <h3><span>新密码</span></h3>
+            <input type="password" class="login-input-box" id="ev-newpwd" v-model="newPassword" @focus="newPasswordEvent"
+                   @blur="newPasswordBlur()" v-validate="'required|passw'" name="newPassword">
+            <p class="error-text icon-errorTips" id="ev-newpwd-error" v-show="newPasswordError.length > 0"><span>{{newPasswordError}}</span>
+            </p>
+            <!--<p class="error-text icon-errorTips"  v-show="errors.has('newPassword')"><span>{{errors.first('newPassword')}}</span></p>-->
+          </section>
+          <section class="login-input-item" data-path="2">
+            <h3><span>确认密码</span></h3>
+            <input type="password" class="login-input-box" id="ev-requrire-newpwd" v-model="newPassword2"
+                   @focus="newPasswordEvent2" name="newPassword2">
+            <p class="error-text icon-errorTips" id="ev-requrire-newpwd-error" v-show="newPasswordError2.length > 0 ">
+              <span>{{newPasswordError2}}</span></p>
+            <!--<p class="error-text icon-errorTips"   v-show="errors.has('newPassword2')"><span>{{errors.first('newPassword2')}}</span></p>-->
+          </section>
+          <button class="login-btn btn-primary" id="ev-fix-submit" @click="savePassword()">保存</button>
         </section>
-        <button class="login-btn btn-primary" id="ev-fix-submit" @click="savePassword()">保存</button>
+        <!--密码修改成功自动登录盒子-->
+        <section class="login-content" id="ev-fix-finish" v-show="finishFlag">
+          <figure class="login-fix-success-img">
+            <img src="./assets/img00/login/login_ modify_finish.png" alt="">
+          </figure>
+          <figcaption class="login-fix-success-content">
+            <h4>
+              <span>成功修改密码，<em>{{successfulSecond}}</em>秒后将</span><a id="ev-goToLogin" href="javascript:void(0)"
+                                                                     @click="autoLogin()">自动登录</a>
+            </h4>
+            <p>下次登录请使用新密码</p>
+          </figcaption>
+        </section>
       </section>
-      <!--密码修改成功自动登录盒子-->
-      <section class="login-content" id="ev-fix-finish" v-show="finishFlag">
-        <figure class="login-fix-success-img">
-          <img src="./assets/img00/login/login_ modify_finish.png" alt="">
-        </figure>
-        <figcaption class="login-fix-success-content">
-          <h4>
-            <span>成功修改密码，<em>{{successfulSecond}}</em>秒后将</span><a id="ev-goToLogin" href="javascript:void(0)"
-                                                                   @click="autoLogin()">自动登录</a>
-          </h4>
-          <p>下次登录请使用新密码</p>
-        </figcaption>
-      </section>
+      <loading v-show="loadingShow"></loading>
     </section>
-    <loading v-show="loadingShow"></loading>
-  </section>
+  </transition>
 </template>
 <script>
   import axios from  "axios";
@@ -143,7 +145,7 @@
         phoneError: '',//用户发送验证码手机号提示语
         validateCodeError: '',
 
-        loginStr: '登陆',//登录按钮显示的术语；
+        loginStr: '登录',//登录按钮显示的术语；
 
         validateCode: '',    //验证码
         validateCodeId: '',  //验证码主键

@@ -50,15 +50,15 @@
                                       style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseMain}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list"
-                                        v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0].questionName">
+                                        v-if="getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).typeShow">
                                 <p class="question">疼痛性质：</p>
                                 <span class="answer"
-                                      style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0].symptomOptions[0].optionName}}</span>
+                                      style="display:inline-block;max-width:80%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).type}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list"
-                                        v-if="medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName">
+                                        v-if="getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VASShow">
                                 <p class="question">VAS评分：</p>
-                                <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].symptomOptions[0].optionName.substring(0,2)}}</span>
+                                <span class="answer" style="display:inline-block;max-width:80%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VAS}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list" v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
                                 <p class="question">其他症状：</p>
@@ -66,24 +66,25 @@
                             </figcaption>
                         </article>
                     </article>
-                    <article class="special-message-item"
-                             v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
-                        <header class="special-message-item-title"><span>现病史</span></header>
+                    <article class="special-message-item">
+                        <header class="special-message-item-title">
+                            <span>现病史</span>
+                        </header>
                         <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap.treatmentName.length > 0">
+                                 v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
                             <span class="answer"><p
                                     class="question">曾就诊情况：</p>{{medicalReportMsg.patientCasemap.treatmentName}}&nbsp;&nbsp;&nbsp;{{medicalReportMsg.patientCasemap.illnessName}}</span>
                         </article>
                         <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap.takeMedicine.length > 0">
+                                 v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.takeMedicine.length > 0">
                             <span class="answer"><p
                                     class="question">服用药物：</p>{{medicalReportMsg.patientCasemap.takeMedicine}}</span>
                         </article>
                         <figcaption class="special-message-item-list img-box"
-                                    v-if="medicalReportMsg.patientCasemap.attachmentList.length > 0">
+                                    v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
                             <figure class="special-message-item-img "
-                                    v-for="imgs in medicalReportMsg.patientCasemap.attachmentList">
-                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction()">
+                                    v-for="(imgs,index) in medicalReportMsg.patientCasemap.attachmentList">
+                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction(index)">
                             </figure>
                         </figcaption>
                     </article>
@@ -132,7 +133,7 @@
                     data: {
                         caseId: this.$store.state.currentItem.caseId,
                         isOrder: 0,
-                        attUseFlag: 3
+                        attUseFlag: 6
                     },
                     done(res){
                         if (res.responseObject.responseData) {
@@ -146,6 +147,34 @@
                     }
                 })
             },
+                getPainMessage(item){
+                    let painItem;
+                    if (item){
+                        item.forEach((element,index)=>{
+                            if (element.optionName==="疼痛"){
+                                painItem=element;
+                                return false;
+                            }
+                        })
+                    }
+
+                    console.log(!Object.is(painItem,{}))
+                    if (painItem){
+                        return {
+                            VASShow:true,
+                            VAS:painItem.refQuestionList[1].symptomOptions[0].optionName.substring(0,2),
+                            typeShow:true,
+                            type:painItem.refQuestionList[0].symptomOptions[0].optionName
+                        }
+                    }else{
+                        return {
+                            VASShow:false,
+                            typeShow:false,
+                        };
+                    }
+//                    medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[0]&&medicalReportMsg.resultMainList[0].symptomOptions[0].refQuestionList[1].questionName
+
+                },
             getMRTitle(type){
                 let result = "";
                 switch (parseInt(type)) {
@@ -162,15 +191,24 @@
                 return result;
             },
             //查看大图
-            showBigImgFunction(){
+            showBigImgFunction(index){
                 let _this = this;
                 _this.showBigImageList = [];
 
                 _this.medicalReportMsg.patientCasemap.attachmentList.forEach(function (item, index) {
                     _this.showBigImageList.push({"url": item.caseAttUrl});
                 });
-                _this.$store.commit("setSBIObject", {'medicalReport': _this.showBigImageList});
+
+                let allList ={};
+                allList = _this.$store.state.SBIObject;
+                allList['medicalReport'] = _this.showBigImageList;
+
+
+                _this.$store.commit("setSBIObject",allList);
                 _this.$store.commit("setSBIType", 'medicalReport');
+
+                _this.$store.commit("setSBIIndex",index);
+
                 _this.$store.commit("setSBIFlag", true);
             }
 

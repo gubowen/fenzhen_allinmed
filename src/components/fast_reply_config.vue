@@ -25,7 +25,7 @@
             <h3 v-show="!termFixFlag[index]">{{item.questionDesc}}</h3>
             <figure class="jump-box-term-button" v-if="item.questionType==2" v-show="!termFixFlag[index]">
               <p class="fix" @click.stop="termFixFlag[index]=true;termFixContent[index]=item.questionDesc">修改</p>
-              <p class="del" @click.stop="deleteTermShowFlag[index]=true">删除
+              <p class="del" @click.stop="deleteShowFlag(index)">删除
 
                 <section class="modal-confirm show" v-if="deleteTermShowFlag[index]">
                   <article class="modal-confirm-content">
@@ -65,7 +65,7 @@
                 <i class="icon-member-add-cancel" @click.stop="memberFixFlag[index]['-1']=false"></i>
               </figure>
             </section>
-            <article class="jump-box-member-item" v-for="(cItem,cIndex) in item.children">
+            <article class="jump-box-member-item" v-for="(cItem,cIndex) in item.children" :key="cIndex">
               <span v-show="!memberFixFlag[index][cIndex]">{{cItem.questionDesc}}</span>
               <figure class="jump-box-member-item-button" v-if="cItem.questionType==2"
                       v-show="!memberFixFlag[index][cIndex]">
@@ -76,7 +76,7 @@
                     <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
                     <figure class="modal-confirm-button">
                       <button class="btn-ensure modal-confirm-ensure"
-                              @click.stop="deleteCallback('term',item,index,cItem,cIndex)">确定
+                              @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定
 
                       </button>
                       <button class="btn-primary modal-confirm-cancel"
@@ -133,7 +133,9 @@
         termFixFlag: {
           "-1": false
         },
-        termFixContent: {},
+        termFixContent: {
+          "-1": ""
+        },
         addInputContent: "",
         memberFixFlag: {},
         memberFixContent: {},
@@ -313,6 +315,12 @@
             break;
         }
       },
+      deleteShowFlag(index){
+          for (let i in this.deleteTermShowFlag){
+              this.deleteTermShowFlag[i]=false;
+          }
+          this.deleteTermShowFlag[index]=true;
+      },
       deleteCallback(type, item, index, cItem, cIndex){
         const that = this;
         if (type === "term") {
@@ -342,9 +350,9 @@
             },
             done(res){
               if (res.responseObject.responseStatus) {
-                that.termList[index].children.removeByValue(item);
-                that.deleteTermShowFlag[index] = false;
-                delete that.deleteTermShowFlag[index];
+                that.termList[index].children.removeByValue(cItem);
+                that.deleteMemberShowFlag[index][cIndex] = false;
+                delete that.deleteMemberShowFlag[index][cIndex];
               }
             }
           })

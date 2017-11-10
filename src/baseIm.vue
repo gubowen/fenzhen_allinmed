@@ -7,31 +7,49 @@
             <!--v-for="items in messageInfo"-->
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
+                <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName?$store.state.currentItem.doctorName+'医生':''}退回`}}</p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
                              v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+                        <!--时间戳-->
                         <p class="time-stamp">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
-                        <ImageElement v-if="items.type === 'file'" :message="items"></ImageElement>
+                        <!--图片消息-->
+                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"></ImageElement>
+                        <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
                                 :message="items"></CheckSuggestion>
+                        <!--问诊单-->
                         <MedicalReport v-if="medicalReport(items)"
                                        :message="items" ref="medicalReport"></MedicalReport>
+                        <!--视诊-->
                         <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
                                      :message="items"></VideoTriage>
+                        <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
                                 :message="items"></PreviewSuggestion>
+                        <!--视诊上传提示-->
+                        <UpdateTips
+                                v-if="items.type==='custom'&&(items.content&&items.content.type==='triageSendTips')"
+                                :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
+                        ></UpdateTips>
+                        <!--检查检验上传提示-->
+                        <UpdateTips
+                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
+                                :showType="'checkSuggessSendTips'"
+                        ></UpdateTips>
                     </article>
                 </transition-group>
             </article>
         </section>
     </section>
 </template>
-<script type="text/ecmascript-6">
+<script>
     /**
      * @Desc：
      * @Usage:
@@ -50,8 +68,12 @@
     import PreviewSuggestion from "@/components/imParts/previewSuggestion";
     import VideoTriage from "@/components/imParts/videoTriage";
     import CheckSuggestion from "@/components/imParts/checkSuggestion";
-    import store from "@/store/store";
+    import UpdateTips from "@/components/imParts/updateTips";
 
+    import store from "@/store/store";
+    import api from '@/common/js/util';
+
+    import nimEnv from "@/base/nimEnv";
 
     Vue.filter('transformMessageTime', function (time) {
         var format = function (num) {
@@ -81,6 +103,10 @@
         }
         return result;
     });
+
+    const XHRList = {
+        watingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+    };
     export default{
         data(){
             return {
@@ -96,7 +122,8 @@
                 medicalReportImgList: [],
                 ShowBigImgList: [],
                 diagnosisId: "",
-                diagnosisShow: false
+                diagnosisShow: false,
+
             }
         },
         components: {
@@ -106,6 +133,7 @@
             PreviewSuggestion,
             VideoTriage,
             CheckSuggestion,
+            UpdateTips
         },
         props: {},
         watch: {
@@ -163,14 +191,14 @@
                 let that = this;
                 this.nim = nim.getInstance({
                     // debug: true,
-                    appKey: '50c93d2ab7e207fd83231a245c07bfbc',
+                    appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
                     onconnect (data) {
                         console.log('连接成功');
                     },
                     onmyinfo (userData) {
-
+                        
                     },
                     onwillreconnect: this.onWillReconnect,
                     onerror: this.onError,
@@ -178,12 +206,23 @@
                     onofflinemsgs: this.onOfflineMsgs,
                     onmsg (msg) {
                         //自定义消息
-                        console.log(msg)
+                        console.log(msg);
+
                         if (msg.type.toLowerCase() === 'custom') {
                             //判断是否为新用户
                             if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
-                                store.commit("watingListRefreshFlag", true)
+
+                                //消息提醒
+                                let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+                                if (!waitingAlertList) {
+                                    waitingAlertList = {};
+                                }
+                                waitingAlertList[msg.from] = 1;
+                                localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+
+                                store.commit("watingListRefreshFlag", true);
                                 store.commit("setNewWating", true);
+                                store.commit("setMusicPlay", true);
                             }
                         }
                         that.receiveMessage(that.targetData.account, msg);
@@ -233,6 +272,11 @@
                         scene: 'p2p',
                         to: that.targetData.account,
                         text: content,
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"0"
+                        }),
                         done (error, obj) {
                             if (!error) {
                                 resolve(obj);
@@ -256,6 +300,11 @@
                             "data": data,
                             "type": "checkSuggestion"
                         }),
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"35",
+                        }),
                         done (error, obj) {
                             if (!error) {
                                 that.sendSingleMessage(error, obj);
@@ -272,13 +321,21 @@
             //发送初诊建议...
             sendPreviewSuggestion (data) {
                 const that = this;
+                let dataList = [{}];
                 return new Promise((resolve, reject) => {
+                    dataList[0] = data;
+                    console.log(dataList)
                     this.nim.sendCustomMsg({
                         scene: 'p2p',
                         to: that.targetData.account,
                         content: JSON.stringify({
-                            "data": data,
+                            "data": dataList,
                             "type": "previewSuggestion"
+                        }),
+                        custom:JSON.stringify({
+                            cType:"0",
+                            cId:that.$store.state.userId,
+                            mType:"36",
                         }),
                         done (error, obj) {
                             if (!error) {
@@ -310,6 +367,11 @@
                         },
                         "type": "videoTriage"
                     }),
+                    custom:JSON.stringify({
+                        cType:"0",
+                        cId:that.$store.state.userId,
+                        mType:"34",
+                    }),
                     done (error, obj) {
                         that.sendSingleMessage(error, obj);
                     }
@@ -328,8 +390,45 @@
                     limit: 100
                 });
             },
+            transformMessageTime (time) {
+                var format = function (num) {
+                    return num > 9 ? num : "0" + num;
+                };
+                var normalTime = function (time) {
+                    var d = new Date(time);
+                    var obj = {
+                        y: d.getFullYear(),
+                        m: d.getMonth() + 1,
+                        dd: d.getDate(),
+                        h: d.getHours(),
+                        mm: format(d.getMinutes())
+                    };
+                    return obj;
+                };
+                var result = "";
+                var now = new Date().getTime(),
+                    day1 = normalTime(time).y + "-" + normalTime(time).m + "-" + normalTime(time).dd,
+                    day2 = normalTime(now).y + "-" + normalTime(now).m + "-" + normalTime(now).dd;
+                if (day1 === day2) {
+                    result = normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y === normalTime(now).y) {
+                    result = normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y !== normalTime(now).y) {
+                    result = normalTime(time).y + "年" + normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                }
+                return result;
+            },
             //发送单条数据...
-            sendSingleMessage: function (error, msg) {
+            sendSingleMessage (error, msg) {
+                let patientListArray  = this.$store.state.patientList;
+                patientListArray.unshift(this.$store.state.currentItem);
+                patientListArray.removeByValue(this.$store.state.currentItem);
+//                this.$store.commit("unshift",this.$store.state.currentItem);
+                //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
+                //this.$store.state.patientList.unshift(this.$store.state.currentItem);
+                this.$store.commit("setPatientList",patientListArray);
+                this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
+                store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
                 console.log(msg);
                 console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
@@ -342,104 +441,73 @@
                     }, 120);
                 }
             },
-            //接收用户信息...
-            //列表置顶...
-            userItemToTop (account, time) {
 
-            },
-            //新消息提示机制...
-            newMessageTips: function (account) {
-                if ($(".main-header-toggle-list-item.active").attr("data-id") == 0) {
-                    var element = $(".userlist-mainList-item[data-account='" + account.substring(2) + "']");
-                    // if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-                    //     var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-                    //         newTipsNumber = ntnCache[account];
-                    // } else {
-                    //     var ntnCache = {}, newTipsNumber = 0;
-                    // }
+            // 新消息提示
+            newMessageTips(target, element){
+                const _this = this;
+                let patientList = this.$store.state.patientList;
+                patientList.forEach(function (item, index) {
+                    if (("0_" + item.caseId) == element.from) {
 
-                    var newTipsNumber = 0;
-                    var ntnCache = {};
-                    if (localStorage.getItem("ntnCache") && JSON.parse(localStorage.getItem("ntnCache"))[account]) {
-                        var ntnCache = JSON.parse(localStorage.getItem("ntnCache")),
-                            newTipsNumber = ntnCache[account];
-                    }
-
-                    var ntnCacheObject = {};
-                    if (this.ntnCacheList[account] != undefined) {
-                        newTipsNumber = this.ntnCacheList[account];
-                    } else {
-                        ntnCacheObject[account] = 0;
-                        newTipsNumber = ntnCacheObject[account];
-                        this.ntnCacheList[account] = newTipsNumber;
-
-                    }
-                    newTipsNumber++;
-                    ntnCache[account] = newTipsNumber;
-                    this.ntnCacheList[account] = newTipsNumber;
-                    localStorage.setItem("ntnCache", JSON.stringify(ntnCache));
-
-                    if (!element.hasClass("active") && $(".userlist-mainList-item[data-account='" + account.substring(2) + "']").length > 0) {
-                        var _role = element.parents(".userlist-mainList").attr("data-role");
-
-                        element.find(".userlist-item-img p").show().addClass("on").text((newTipsNumber >= 100 ? "..." : newTipsNumber));
-                        if (_role != 'ut-tabs-2') {
-                            $(".userlist-status-item[data-role='" + _role + "']").addClass("new");
-                            $('#music')[0].play();
+                        if (item.messageAlert == '') {
+                            item.messageAlert = "1";
+                        } else {
+                            item.messageAlert = parseInt(item.messageAlert) + 1;
                         }
 
+                        let caseIdInfo = "0_" + item.caseId;
+                        let patientAlertList = {};
+                        patientAlertList[caseIdInfo] = item.messageAlert;
+
+                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+                        _this.$store.commit("setNewOnline", true);
+                        _this.$store.commit('setMusicPlay', true);
+                        setTimeout(function () {
+                            _this.$store.commit('setMusicPlay', false);
+
+                        }, 2000);
                     }
-                }
+                });
+                this.$store.commit("setPatientList", patientList);
+
+                //等待列表
+                let watingList = this.$store.state.watingList;
+                watingList.forEach(function (item, index) {
+                    if (("0_" + item.caseId) == element.from) {
+                        if (item.messageAlert == '') {
+                            item.messageAlert = "1";
+                        } else {
+                            item.messageAlert = parseInt(item.messageAlert) + 1;
+                        }
+                        let caseIdInfo = "0_" + item.caseId;
+                        let waitingAlertList = {};
+                        waitingAlertList[caseIdInfo] = item.messageAlert;
+
+                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+                        _this.$store.commit("setNewWating", true);
+                        _this.$store.commit('setMusicPlay', true);
+                        setTimeout(function () {
+                            _this.$store.commit('setMusicPlay', false);
+
+                        }, 2000);
+                    }
+                });
+                this.$store.commit("setWatingList", watingList);
             },
             //接受消息...
             receiveMessage (targetUser, element) {
                 //获取当前患者消息
                 const _this = this;
-                if ((element.from.includes("0_")&&targetUser===element.from)||(element.to.includes("0_")&&targetUser===element.to)) {
+
+                if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
+
                     this.communicationList.push(element);
                 } else {
                     //接诊列表
-                    let patientList = this.$store.state.patientList;
-                    patientList.forEach((item, index) =>{
-                        if (("0_" + item.caseId) == element.from) {
-
-                            if (item.messageAlert == '') {
-                                item.messageAlert = "1";
-                            } else {
-                                item.messageAlert = parseInt(item.messageAlert) + 1;
-                            }
-
-                            let caseIdInfo = "0_" + item.caseId;
-                            let patientAlertList = {};
-                            patientAlertList[caseIdInfo] = item.messageAlert;
-
-                            localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
-                            _this.$store.commit("setNewOnline", true);
-                        }
-                    });
-                    this.$store.commit("setPatientList", patientList);
-
-                    //等待列表
-                    let watingList = this.$store.state.watingList;
-                    watingList.forEach(function (item, index) {
-                        if (("0_" + item.caseId) == element.from) {
-                            if (item.messageAlert == '') {
-                                item.messageAlert = "1";
-                            } else {
-                                item.messageAlert = parseInt(item.messageAlert) + 1;
-                            }
-                            let caseIdInfo = "0_" + item.caseId;
-                            let waitingAlertList = {};
-                            waitingAlertList[caseIdInfo] = item.messageAlert;
-
-                            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                            _this.$store.commit("setNewWating", true);
-                        }
-                    });
-                    this.$store.commit("setWatingList", watingList);
+                    this.newMessageTips(targetUser, element);
                 }
 
                 setTimeout(() => {
@@ -559,14 +627,19 @@
     @import "./scss/base.scss";
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
+    
     .messageList-box {
         padding: 40px 50px;
-        height: 60%;
+        height: 72.5%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
-        &.watingBoxStyle{
-            height: 90%;
+        box-sizing: border-box;
+        @include query(1500px){
+            height: 71.5%;
+        }
+        &.watingBoxStyle {
+            height: 85%;
         }
         .messageList-item {
             position: relative;
@@ -631,8 +704,17 @@
                     line-height: 1.5;
                     border-radius: 5px;
                     word-break: break-all;
+                    @include query(1500px) {
+                        margin: 0 12px;
+                    }
                 }
             }
+        }
+    }
+
+    .user-controller{
+        @include query(1500px){
+            height: 24%;
         }
     }
 
@@ -641,7 +723,8 @@
         box-shadow: 0 1px 1px 0 #ECEFF6;
         position: absolute;
         top: 0;
-        height: 55px;
+        height: 5.5%;
+        min-height:55px;
         left: 0;
         right: 0;
         line-height: 55px;
@@ -668,6 +751,9 @@
         margin: 0 24px;
         overflow: hidden;
         text-align: left;
+        @include query(1500px) {
+            margin:0 12px;
+        }
         .check-suggestion-message-title {
             background: #A6C7EE;
             font-size: 12px;

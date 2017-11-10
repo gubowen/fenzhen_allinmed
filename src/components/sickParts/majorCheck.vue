@@ -1,5 +1,5 @@
-<template id="majorCheck">
-  <section class="viewItem medical-record-form-item" data-role="mr-record-6">
+<template>
+  <section class="majorCheck viewItem medical-record-form-item" data-role="mr-record-6">
     <form action="">
       <section class="major-check medical-record-main">
         <article>
@@ -26,9 +26,15 @@
                   <p>患病处照片</p>
                 </section>
               </li>
-              <li class='noData' v-show="videoCaseAttUrl.length == 0">患者未上传资料</li>
+              <li v-show="videoList.length > 0" v-for="item in videoList">
+                <section>
+                  <img :src="item.caseAttUrl" @click="showVideoFunction(item)"/>
+                  <p>动作视频</p>
+                </section>
+              </li>
+              <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
             </ul>
-            <input type="text" placeholder="请填写" class="J-visualInspection" maxlength="1000"/>
+            <textarea type="text" placeholder="请填写" class="J-visualInspection J-other" maxlength="1000" v-model="visualInspection" ref="inputLimitController"/>
           </section>
         </article>
         <article class="major-check-video">
@@ -36,7 +42,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-activityState" maxlength="1000"/>
+                <textarea type="text" placeholder="请填写" class="J-activityState J-other" maxlength="1000" v-model="activityState" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -46,7 +52,7 @@
           <section>
             <ul>
               <li>
-                <input type="text" placeholder="请填写" class="J-muscleStrength" maxlength="1000"/>
+                <textarea type="text" placeholder="请填写" class="J-muscleStrength J-other" maxlength="1000" v-model="muscleStrength" ref="inputLimitController"/>
               </li>
             </ul>
           </section>
@@ -56,6 +62,9 @@
         </footer>
       </section>
     </form>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </section>
 </template>
 <script>
@@ -64,21 +73,32 @@
     import addressSelector from '@/common/addressSelector'
     import popup from  '@/common/popup';
 
-
+    import autosize from "autosize";
     export default{
         name: 'majorCheck',
         data(){
             return {
                 getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
+                sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
+                sickSaveUrl: '/call/patient/case/hpi/v1/save/',
                 userMessage: {},
                 caseAttUrl: [],
-                videoCaseAttUrl: []
+                videoCaseAttUrl: [],
+                videoList:[],
+                visualInspection:'',
+                activityState:'',
+                muscleStrength:'',
+                popupShow:false,
+                popupObj: {}
             }
         },
         watch: {
             '$store.state.currentItem'(){
                 this.init();
             }
+        },
+        components:{
+            popup
         },
 //    activated(){
 //      this.userMessage = this.$store.state.currentItem;
@@ -87,8 +107,11 @@
         methods: {
             init() {
                 this.userMessage = this.$store.state.currentItem;
-                console.log(this.userMessage);
                 this.getData();
+
+               // console.log(this.$refs.inputLimitController)
+                //autosize(this.$refs.inputLimitController);
+                autosize(document.querySelectorAll('.J-other'));
 
             },
             getData() {
@@ -101,18 +124,16 @@
                     caseAttSpecVideo: 9,	    //string	是	附件规格(1-原始文件、2-缩略图源文件、3-225*150、4-157*109、5-140*190、6-110*150、7-75*52、8-480*320、9-1280*720、10-900*600、12-300*200、13-450*300、14-750*500)
                     firstResult: 0,	            //string	是
                     maxResult: 100,	            //string	是
-                    attUseFlag: 3
+                    attUseFlag: 6
                 };
-
-                console.log(dataValue);
                 api.ajax({         //获取基本信息
                     url: _this.getDataUrl,
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {
+
                     },
                     done(res) {
-                        console.log(res);
                         if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
                             let data_list = res.responseObject.responseData.data_list;
                             //获取图片
@@ -143,6 +164,7 @@
 
                                 if(checkImageList.length > 0 && diagnoseList.length > 0){
                                     let allList ={};
+                                    allList = _this.$store.state.SBIObject;
                                     allList['checkImage'] = checkImageList;
                                     allList['diagnoseListImage'] = diagnoseList;
                                     _this.$store.commit('setSBIObject',allList);
@@ -160,154 +182,228 @@
                                 console.log( _this.caseAttUrl);
                                 console.log( _this.videoCaseAttUrl)
                             }
+                            //获取视频
+                            if (data_list[1].videoMap.length) {
+                                  _this.videoList =[];
+                                $.each(data_list[1].videoMap, function (key, value) {
+                                    _this.videoList.push(value);
+                                });
+
+                            }
                         }
                     }, fail(error){
                         console.log("请求失败：" + error);
                     }
                 });
+
+                let nowSickDataValue = {
+                    caseId: _this.$store.state.caseId
+                };
+                //现病史详情
+                api.ajax({
+                        url: _this.sickDetailUrl,
+                        method: "POST",
+                        data: nowSickDataValue,
+                        beforeSend(config) {
+                        },
+                        done(res) {
+                            if(res.responseObject.responseMessage != 'NO DATA'){
+                                console.log(res);
+                                _this.visualInspection = res.responseObject.responseData.dataList[0].visualInspection;
+                                _this.activityState = res.responseObject.responseData.dataList[0].activityState;
+                                _this.muscleStrength = res.responseObject.responseData.dataList[0].muscleStrength;
+                                _this.$store.commit("setNewSickId",res.responseObject.responseData.dataList[0].id);
+
+                                setTimeout(()=>{
+                                    autosize.update(document.querySelectorAll('.J-other'));
+                                },200)
+                            }
+                        },
+                        fail(error){
+                          console.log("请求失败：" + error);
+                        }
+                })
+
             },
             saveData(){
+                let _this = this;
+                let id = '';
+                console.log(_this.$store.state.newSickId);
+                    id = _this.$store.state.newSickId ? _this.$store.state.newSickId :'';
+               let dataValue = {
+                    id:id,
+                    visualInspection:_this.visualInspection,
+                    activityState:_this.activityState,
+                    muscleStrength:_this.muscleStrength,
+                    patientId:_this.$store.state.patientId,
+                    caseId:_this.$store.state.caseId
+                };
+                console.log(dataValue);
+                api.ajax({                    //保存现病史信息
+                        url: _this.sickSaveUrl,
+                        method: "POST",
+                        data: dataValue,
+                        beforeSend(config) {
+                        },
+                        done(res) {
+                            _this.getData();
+                            _this.popupShow = true;
+                            _this.popupObj = {
+                                text: '保存成功'
+                            };
+                        },fail(error){
+                        console.log("请求失败：" + error);
+                    }
+                });
+
+
 
             },
             showBigImgFunction(type){
                 if (type == '1') {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'checkImage');
+                    let index = this.$store.state.SBIObject.checkImage.length;
+                    this.$store.commit("setSBIIndex",index);
                 } else if (2) {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'diagnoseListImage');
+                    let index = this.$store.state.SBIObject.diagnoseListImage.length;
+                    this.$store.commit("setSBIIndex",index);
                 }
+            },
+            showVideoFunction(item){
+                this.$store.commit('setVideoObject',item.videoList[0].caseAttUrl);
+                this.$store.commit('setVideoFlag',true);
             }
         },
         mounted(){
             this.init();
         }
     }
-
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  @import "../../scss/index";
 
-  .medical-record-form {
-    .major-check {
-      input[type="text"] {
+  .major-check {
+    textarea {
+      margin: 0 auto;
+      display: block;
+    }
+    header {
+      position: relative;
+      margin-bottom: 30px;
+      margin-top: 50px;
+      text-align: center;
+      &:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        width: 216px;
+        left: 50%;
+        margin-left: -108px;
+        border: 1px solid #E1E2E7;
+      }
+      h2 {
+        font-size: 12px;
+        color: #AAAAAA;
+        letter-spacing: 0;
+        line-height: 12px;
         margin: 0 auto;
-        display: block;
-      }
-      header {
-        position: relative;
-        margin-bottom: 30px;
-        margin-top: 50px;
+        padding: 0 10px;
+        background: #fff;
         text-align: center;
-        &:before {
-          content: "";
-          position: absolute;
-          top: 50%;
-          width: 216px;
-          left: 50%;
-          margin-left: -108px;
-          border: 1px solid #E1E2E7;
-        }
-        h2 {
-          font-size: 12px;
-          color: #AAAAAA;
-          letter-spacing: 0;
-          line-height: 12px;
-          margin: 0 auto;
-          padding: 0 10px;
-          background: #fff;
+        position: relative;
+        z-index: 2;
+        display: inline-block;
+        width:90px;
+      }
+    }
+    .img-check {
+      ul {
+        li {
+          margin: 0 0 30px 0;
+          width: 104px;
+          height: 107px;
+          float: left;
           text-align: center;
-          position: relative;
-          z-index: 2;
-          display: inline-block;
-        }
-      }
-      .img-check {
-        ul {
-          li {
-            margin: 0 0 30px 0;
-            width: 104px;
-            height: 107px;
-            float: left;
-            text-align: center;
-            &.noData {
-              width: 100%;
-              height: 20px;
-              float: none;
-              color: #aaa;
-              font-size: 13px;
-            }
-            img {
-              width: 80px;
-              height: 80px;
-              border-radius: 4px;
-              cursor: pointer;
-            }
-            p {
-              margin-top: 12px;
-              font-size: 13px;
-              color: #555555;
-              letter-spacing: 0;
-              line-height: 13px;
+          &.noData {
+            width: 100%;
+            height: 20px;
+            float: none;
+            color: #aaa;
+            font-size: 13px;
+          }
+          img {
+            width: 80px;
+            height: 80px;
+            border-radius: 4px;
+            cursor: pointer;
+          }
+          p {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #555555;
+            letter-spacing: 0;
+            line-height: 13px;
 
-            }
           }
         }
-        ul:after {
-          content: "";
-          display: block;
-          clear: both;
-          visibility: hidden;
-        }
       }
-      .video-check {
-        ul {
-          li {
-            margin: 0 0 30px 0;
-            height: 107px;
-            float: left;
-            text-align: center;
-            margin-right: 30px;
-            &.noData {
-              width: 100%;
-              height: 20px;
-              float: none;
-              margin-right: 0;
-              font-size: 13px;
-              line-height: 20px;
-              color: #aaa;
-            }
+      ul:after {
+        content: "";
+        display: block;
+        clear: both;
+        visibility: hidden;
+      }
+    }
+    .video-check {
+      ul {
+        li {
+          margin: 0 0 30px 0;
+          height: 107px;
+          float: left;
+          text-align: center;
+          margin-right: 30px;
+          &.noData {
+            width: 100%;
+            height: 20px;
+            float: none;
+            margin-right: 0;
+            font-size: 13px;
+            line-height: 20px;
+            color: #aaa;
+          }
 
-            img {
-              width: auto;
-              height: 80px;
-              border-radius: 4px;
-            }
-            p {
-              margin-top: 12px;
-              font-size: 13px;
-              color: #555555;
-              letter-spacing: 0;
-              line-height: 13px;
-            }
+          img {
+            width: auto;
+            height: 80px;
+            border-radius: 4px;
           }
-          &:first-child {
-            margin-left: 12px;
+          p {
+            margin-top: 12px;
+            font-size: 13px;
+            color: #555555;
+            letter-spacing: 0;
+            line-height: 13px;
           }
         }
-        ul:after {
-          content: "";
-          display: block;
-          clear: both;
-          visibility: hidden;
+        &:first-child {
+          margin-left: 12px;
         }
       }
+      ul:after {
+        content: "";
+        display: block;
+        clear: both;
+        visibility: hidden;
+      }
+    }
+    footer{
       .detail-saveBtn {
         margin-right: 35px;
       }
-
     }
   }
 </style>

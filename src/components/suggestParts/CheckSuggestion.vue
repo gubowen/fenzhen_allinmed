@@ -11,21 +11,27 @@
     <section class="main-masker config-suggestion check-suggestion disease-teach-detail on show">
       <section class="check-suggestion-box" v-show="homePageShow">
         <i class="icon-close window-close" @click="closeWindow()"></i>
-        <header class="check-suggestion-title">
+        <header class="check-suggestion-title" @click = 'closeSelect()'>
           <article>
             <h2>初诊建议</h2>
           </article>
           <!--<button class="jump-box-add-term icon-suggestion-preview"><span>预览</span></button>-->
         </header>
-        <section class="check-suggestion-inner">
+        <section class="check-suggestion-inner" @click = 'closeSelect()'>
           <section class="check-suggestion-title">
             <h2>初步诊断：</h2>
           </section>
           <nav class="search-sortType">
-            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult"></down-select>
-            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult"></down-select>
-            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult"></down-select>
-            <down-select :dataListInfo.sync="operationList" :dataBack.sync="operationListResult"></down-select>
+            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :iconFlag="showIconFlag"    :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :iconFlag="showIconFlag" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :iconFlag="showIconFlag" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select  v-if='operationShowFlag' :dataListInfo.sync="operationList" :iconFlag="showIconFlag" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <section class="search-sortType-item" v-if="!operationShowFlag">
+              <ul class="search-selector" >
+                <input class="custom-selector-title firstListTitle" placeholder="手术建议" readonly>
+                <i class="icon-downArrow"></i>
+              </ul>
+            </section>
           </nav>
           <section class="search-suggestion-footer">
             <button type="button" class="search-next" :class="{'disable':nextFlag}" @click="!nextFlag&&toNextPage()">下一步</button>
@@ -39,6 +45,8 @@
   import api from '../../common/js/util';
   import downSelect from  '../../common/downSelector.vue';
   import diagnosiSecond from './diagnosiSecond.vue';
+
+  import store from "@/store/store";
   export default{
     name: 'check-suggestion',
     data(){
@@ -50,7 +58,7 @@
           disabledFlag:false
         },
         partListResult:{},
-
+        currentSelectorIndex: -1,
         nextPageShow:false,
         nextPageDate:{},
         homePageShow:true,
@@ -94,7 +102,9 @@
 
         parentId:'',
         operationName:'',
-        nextFlag:true
+        nextFlag:true,
+        operationShowFlag:true,
+        showIconFlag:false
       }
     },
     props: {
@@ -108,17 +118,28 @@
       },
       sicknessResult:{
         handler(curVal,oldVal){
-          this.progressList.disabledFlag = false;
+            if(this.sicknessResult.illnessName && this.sicknessResult.illnessName.length>0){
+              this.progressList.disabledFlag = false;
+              if(this.progressResult && this.progressResult.progressName){
+                  this.nextFlag = false;
+              }
+            }else{
+              this.nextFlag = true ;
+              this.progressList.disabledFlag = true;
+            }
         }
       },
       progressResult:{
         handler(curVal,oldVal){
-          if(curVal == '暂不需手术'){
-                this.nextFlag = false ;
+          if(curVal.progressName == '暂不需手术'){
+              this.nextFlag = false ;
+              this.operationList.disabledFlag = true;
+              this.operationShowFlag = false;
           }else{
-            this.nextFlag =true;
+              this.nextFlag =true;
+              this.operationList.disabledFlag = false;
+              this.operationShowFlag = true;
           }
-          this.operationList.disabledFlag = false;
         }
       },
       operationListResult:{
@@ -136,6 +157,10 @@
         this.partSelect();
         this.sicknessSelect();
       },
+      closeSelect(ev){
+          this.currentSelectorIndex = -1;
+          this.showIconFlag = false;
+      },
       closeWindow(){
         this.nextPageShow = false;
         this.homePageShow = true;
@@ -149,6 +174,7 @@
           maxResult: 999,	                    //string	是	分页参数
           treeLevel: "2"
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.majorData,
           method: "POST",
@@ -159,9 +185,11 @@
            // console.log(res);
             _this.partList.dataList = res.responseObject.responseData.data_list;
             _this.partList.placeholderText = '专科';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
 
@@ -175,6 +203,7 @@
           illnessName: "",	        //string	否	疾病名称（搜索用）
           isSolr: 1
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.sicknessUrl,
           method: "POST",
@@ -185,9 +214,11 @@
             // console.log(res);
             _this.sickness.dataList = res.responseObject.responseData.dataList;
             _this.sickness.placeholderText = '疾病';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
       },
@@ -199,9 +230,10 @@
           firstResult: 0,	              //string	是	分页参数
           treeLevel: 1,
           maxResult: 999,	              //string	是	分页参数
-          specialtyId: _this.partListResult.id, //string	否	专业ID
-          operationName: _this.partListResult.tagName  //string	是	手术名称
+          //majorId: _this.partListResult.id, //string	否	专业ID
+          //operationName: _this.partListResult.tagName  //string	是	手术名称
         };
+          store.commit("startLoading");
         api.ajax({
           url: _this.operationUrl,
           method: "POST",
@@ -211,9 +243,11 @@
           done(res) {
             _this.operationList.dataList = res.responseObject.responseData.dataList;
             _this.operationList.placeholderText = '手术建议';
+              store.commit("stopLoading");
           },
           fail(error){
             console.log("请求失败：" + error);
+              store.commit("stopLoading");
           }
         })
       },
@@ -223,11 +257,13 @@
         _this.homePageShow = false;
 
         let degreeType='';
-        if (_this.progressResult == "暂不需手术") {
+        if (_this.progressResult.progressName == "暂不需手术") {
+            _this.operationListResult.operationId ='';
+            _this.operationListResult.operationId ='';
           degreeType = 0;
-        } else if (_this.progressResult== "需手术") {
+        } else if (_this.progressResult.progressName== "需手术") {
           degreeType = 1;
-        } else if (_this.progressResult == "急需手术") {
+        } else if (_this.progressResult.progressName == "急需手术") {
           degreeType = 2;
         }
 

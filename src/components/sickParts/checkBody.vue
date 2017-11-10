@@ -1,5 +1,5 @@
-<template id="checkBody">
-  <section class="viewItem medical-record-form-item">
+<template>
+  <section class="checkBody viewItem medical-record-form-item">
     <form action="">
       <section class="body-check medical-record-main">
         <article>
@@ -57,7 +57,9 @@
         </article>
       </section>
     </form>
-    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </section>
 </template>
 <script>
@@ -147,7 +149,8 @@
         }
 
         //textare自适应高度
-        autosize(document.querySelectorAll('textarea'));
+        autosize(document.querySelectorAll('.J-other'));
+
       },
       getData(){
         let _this = this;
@@ -155,7 +158,6 @@
           patientId: this.userMessage.patientId,
           caseId: this.userMessage.caseId
         };
-        console.log(dataValue);
         api.ajax({         //获取基本信息
           url: _this.getDataUrl,
           method: "POST",
@@ -177,6 +179,10 @@
               _this.bmi = dataList.bmi;                                  //BMI
               _this.bodySurfaceArea = dataList.bodySurfaceArea;          //体表面积
               _this.other = dataList.other;                              //其他
+
+                setTimeout(()=>{
+                    autosize.update(document.querySelectorAll('.J-other'));
+                },200)
             } else {
               console.log("无数据！");
             }
@@ -213,6 +219,7 @@
           },
           done(res) {
             if (res != "" && res.responseObject.responseStatus != false) {
+                _this.getData();
               console.log("保存成功！");
               _this.popupShow = true;
               _this.popupObj = {
@@ -262,19 +269,10 @@
       this.init()
     }
   }
-  ;
 </script>
-<style type="text/css" lang="scss" rel="stylesheet/scss">
+<style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  @import "../../scss/index";
-
-  .medical-record-main {
-    width: 100%;
-    padding: 25px 28px 60px 28px;
-    box-sizing: border-box;
-  }
-
   .medical-record-form {
     .body-check {
       .input-95 {

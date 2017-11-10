@@ -11,6 +11,7 @@
 .user-controller {
   position: absolute;
   bottom: 5.5%;
+  height:23%;
   left: 0;
   right: 0;
   background-color: #FFFFFF;
@@ -22,6 +23,9 @@
     background-color: #fff;
     overflow: hidden;
     text-align: right;
+    @include query(1600px){
+      padding-bottom: 25px;
+    }
     .user-send-message {
       font-size: 15px;
       line-height: 35px;
@@ -45,13 +49,21 @@
   .user-controller-fastBtn {
     padding: 10px 40px;
     font-size: 0;
+    @include query(1500px){
+      padding:10px 10px;
+    }
     & > button {
       cursor: pointer;
       font-size: 16px;
       color: #808080;
       margin-right: 40px;
       @include query(1500px){
-        margin-right: 20px;
+        margin-right: 10px;
+      }
+      & > i {
+        @include query(1500px){
+          margin-right: 0;
+        }
       }
       &.reply-on {
         color: #6B748C;

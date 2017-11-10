@@ -2,7 +2,7 @@
   <aside class="medical-record-remark" :class="{on:showRecord}">
     <header class="medical-record-remark-header">
       <section class="remark-add">
-        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="showAdd=!showAdd"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
+        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
         <h3 class="remark-name" v-show="!showRecord" @click.stop="showRecord=true"><i></i><span>展开添加分诊记录</span></h3>
         <p class="remark-toggle" v-show="showRecord" @click.stop="showRecord=false"><i></i><span>收起分诊记录</span></p>
       </section>
@@ -14,7 +14,9 @@
           <p class="text" @click="remarkValue = item.remarkContent;remarkId=item.id;showAdd=!showAdd;addType='update';showConfim=false;">{{item.remarkContent}}</p>
           <p class="time">{{getTime(item)}}</p>
           <i class="delete" @click="showConfim=!showConfim;showConfimIndex=index"></i>
-          <confirm :comfirmContent="confimContent" v-if="showConfim&&showConfimIndex==index" @ensureCallback="deleteRemrak(item)" @cancelCallback="showConfim=!showConfim"></confirm>
+          <transition name="scale">
+            <confirm :comfirmContent="confimContent" v-if="showConfim&&showConfimIndex==index" @ensureCallback="deleteRemrak(item)" @cancelCallback="showConfim=!showConfim"></confirm>
+          </transition>
         </article>
       </section>
       <section class="edit" :class="{'active':showAdd}">
@@ -45,13 +47,13 @@
           remarkList:[]
         }
     },
+    mounted(){
+        this.getRemarkList();
+    },
     watch:{
-       '$store.state.caseId'(){
+       '$store.state.currentItem'(){
            this.getRemarkList();
        }
-    },
-    mounted(){
-
     },
     methods:{
       getRemarkList(){
@@ -68,9 +70,9 @@
           done(data){
             if (data.responseObject.responseData) {
               if(data.responseObject.responseData.dataList&&data.responseObject.responseData.dataList.length>0){
-                that.remarkList = data.responseObject.responseData.dataList;
+                that.remarkList = data.responseObject.responseData.dataList.reverse();
               }else{
-                  that.remarkList=[]
+                that.remarkList=[]
               }
             }
           }
