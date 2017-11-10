@@ -6,7 +6,7 @@
     <section class="jump-box-viewers viewInner">
       <section class="jump-box-viewers-item viewItem" data-role="fr-tabs-1">
         <ul class="jump-box-list" id="ev-used-reply-box">
-          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$emit('update:usedRelyStatus',false)">
+          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$store.state.usedReplyShow=false">
             <span>{{item.replyContent}}</span>
           </li>
         </ul>
@@ -60,7 +60,7 @@
     methods: {
       getReplyList(){
         let that = this;
-        store.commit("startLoading")
+        store.commit("startLoading");
         ajax({
           url: XHRList.usedList,
           method: "POST",
@@ -75,8 +75,12 @@
               store.commit("stopLoading")
               let dataList = data.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
-                that.replyList = dataList.reverse();
+                  that.replyList = dataList.reverse();
+              }else{
+                  that.replyList=[];
               }
+            }else{
+                that.replyList=[];
             }
           }
         })

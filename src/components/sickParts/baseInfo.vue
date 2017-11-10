@@ -1,4 +1,4 @@
-<template>
+d<template>
   <div id="baseInfo">
     <section class="viewItem medical-record-form-item ">
       <form action="">
@@ -23,8 +23,7 @@
               </select>
               </li>
               <li>
-                <span class="base-title ">籍贯</span>
-                <address-selector  :dataListInfo.sync ="addressResult"  :dataBack.sync="addressResult"></address-selector>
+                <span class="base-title ">籍贯</span><address-selector  :dataListInfo.sync ="addressResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex" :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
               </li>
               <li>
                 <span class="base-title">家庭住址</span><input class="base-input J-homeAddress"
@@ -45,8 +44,7 @@
             <section>
               <ul>
                 <li>
-                  <span class="base-title">出生地</span>
-                  <address-selector  :dataListInfo.sync ="birthResult" :dataBack.sync="birthResult"></address-selector>
+                  <span class="base-title">出生地</span><address-selector  :dataListInfo.sync ="birthResult"  :dataBack.sync="birthResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex" v-if="childrenShow"></address-selector>
                 </li>
                 <li>
                   <span class="base-title">生育状况</span><select class="select-120 J-fertility-boy"
@@ -78,24 +76,23 @@
                   <span class="base-title">配偶状况</span><select class="J-spouseStatus" v-model="spouseStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select><span class="base-title ml20">子女状况</span><select class="J-childrenStatusSelect" v-model="childrenStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
-                  <option value="4">已故</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select>
                 </li>
                 <li>
-                  <span class="base-title">结婚年龄</span>
-                  <select class="J-marriageAge" v-model="marriageAgeSelectValue">
+                  <span class="base-title">结婚年龄</span><select class="J-marriageAge" v-model="marriageAgeSelectValue">
                     <option v-for="option in marriageAge" v-bind:value="option.value">
                       {{option.text}}
                     </option>
-                  </select>
-                  <span class="base-title ml20">吸烟史</span><select class="J-isSmoke" v-model="isSmokeSelectValue">
+                  </select><span class="base-title ml20">吸烟史</span><select class="J-isSmoke" v-model="isSmokeSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">从不吸烟</option>
                   <option value="2">曾经吸烟</option>
@@ -135,9 +132,9 @@
                 </select><span class="base-title ml20">兄妹状况</span><select class="J-siblingsStatus" v-model="siblingsStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
-                  <option value="2">严重患病</option>
-                  <option value="3">身体残疾</option>
-                  <option value="4">已故</option>
+                  <option value="2">患病</option>
+                  <option value="3">严重患病</option>
+                  <option value="4">身体残疾</option>
                 </select>
                 </li>
                 <li>
@@ -168,7 +165,9 @@
         </section>
       </form>
     </section>
-    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </div>
 </template>
 <script>
@@ -235,8 +234,10 @@
           districtId: '',
           districtName: ''
         },
+        childrenShow:false,
         popupShow:false,
-        popupObj: {}
+        popupObj: {},
+        currentSelectorIndex:1
       }
     },
     props: {
@@ -260,6 +261,7 @@
     },
     methods: {
       init() {
+        this.childrenShow = false;
         this.userMessage = this.$store.state.currentItem;
         this.addData();
       },
@@ -322,7 +324,6 @@
           done(res) {
             if (res.responseObject.responseData.dataList && res.responseObject.responseStatus == true) {
               let data = res.responseObject.responseData.dataList[0];
-              // console.log(data);
               _this.id = data.id;
               //所在地区
               _this.address = data.province + " " + data.city + " " + data.district;
@@ -362,6 +363,14 @@
               _this.addressResult.districtId=data.nativeDistrictId;
               _this.addressResult.districtName=data.nativeDistrict;
 
+              //出生地
+                _this.birthResult.provinceId=data.birthplaceProvinceId;
+                _this.birthResult.provinceName=data.birthplaceProvince;
+                _this.birthResult.cityId=data.birthplaceCityId;
+                _this.birthResult.cityName=data.birthplaceCity;
+                _this.birthResult.districtId=data.birthplaceDistrictId;
+                _this.birthResult.districtName=data.birthplaceDistrict;
+
               //  $("#base-info-address").find(".firstListTitle").text(nativeAddress).attr("data-province", data.nativeProvinceId).attr("data-city", data.nativeCityId).attr("data-district", data.nativeDistrictId);                                   //籍贯
               //社保所在地
               data.socialProvince ? _this.socialAddress = data.socialProvince + " " + data.socialCity + " " + data.socialDistrict : _this.socialAddress = "未填写";
@@ -384,9 +393,9 @@
               data.childrenStatus != '' && data.childrenStatus > 0 ? _this.childrenStatusSelectValue = data.childrenStatus : _this.childrenStatusSelectValue = 0;
               //结婚年龄
 
-
+                _this.marriageAge=[];
               _this.marriageAge.push({value: "", text: "请选择"});
-              for (let i = 15; i < 60; i++) {
+              for (let i = 15; i <= 60; i++) {
                 _this.marriageAge.push({value: i, text: i});
               }
               data.marriageAge != '' && data.marriageAge > 0 ? _this.marriageAgeSelectValue = data.marriageAge : _this.marriageAgeSelectValue = "";
@@ -397,7 +406,7 @@
               //毒品史
               data.isNarcotics != '' && data.isNarcotics > 0 ? _this.isNarcoticsSelectValue = data.isNarcotics : _this.isNarcoticsSelectValue = 0;
               //父母状况
-              data.parentStatus != '' && data.parentStatus > 0 ? _this.parentStratusSelectValue = data.isNarcotics : _this.parentStratusSelectValue = 0;
+              data.parentStatus != '' && data.parentStatus > 0 ? _this.parentStratusSelectValue = data.parentStatus : _this.parentStratusSelectValue = 0;
               //兄妹状况
               data.siblingsStatus != '' && data.siblingsStatus > 0 ? _this.siblingsStatusSelectValue = data.siblingsStatus : _this.siblingsStatusSelectValue = 0;
               //传染病
@@ -411,7 +420,7 @@
 //            $("#base-info-address").find(".firstListTitle").text(nativeAddress).attr("data-province", data.nativeProvinceId).attr("data-city", data.nativeCityId).attr("data-district", data.nativeDistrictId);                                   //籍贯
 //            //出生地
 //            $("#base-info-born-address").find(".firstListTitle").text(birthplaceInfo).attr("data-province", data.birthplaceProvinceId).attr("data-city", data.birthplaceCityId).attr("data-district", data.birthplaceDistrictId);                           //出生地
-
+              _this.childrenShow = true;
             }
           },
           fail(error){
@@ -442,7 +451,7 @@
           telephone: this.telephone,                      //联系方式
           socialId: this.socialId.value,                   //string	是	社保类型
           socialAddress: this.socialAddress,
-          nation: this.nationDataSelectValue,             //民族
+          nation: this.nationDataSelectValue=='请选择'?'未填写': this.nationDataSelectValue,             //民族
           isMarriage: this.marriageSelectValue,           //婚姻状况
           homeAddress: this.homeAddress,                  //家庭住址
           workplace: this.workplace,                      //工作单位
@@ -450,7 +459,7 @@
           childrenStatus: this.childrenStatusSelectValue, //子女状况
           fertility: this.fertilityBoySelectValue + ',' + this.fertilityGirlSelectValue,  //生育状况
           marriageAge: this.marriageAgeSelectValue,       //结婚年龄
-          isSmoke: this.isDrinkSelectValue,               //吸烟史
+          isSmoke: this.isSmokeSelectValue,               //吸烟史
           isDrink: this.isDrinkSelectValue,               //饮酒史
           isNarcotics: this.isNarcoticsSelectValue,        //毒品史
           parentStatus: this.parentStratusSelectValue,    //父母状况
@@ -466,6 +475,8 @@
           beforeSend(config) {
           },
           done(res){
+              _this.baseInfoGet();
+
             _this.popupShow = true;
             _this.popupObj = {
               text: '保存成功'
@@ -487,11 +498,6 @@
   //baseInfo.scss
   @import "../../scss/library/_common-modules";
   @import "../../scss/record_common";
-  .medical-record-main {
-    width: 100%;
-    padding: 25px 28px 60px 28px;
-    box-sizing: border-box;
-  }
   .base-info {
     .base-title {
       width: 54px;
@@ -502,6 +508,7 @@
       margin-right: 8px;
       text-align: right;
       display: inline-block;
+      vertical-align: middle;
       white-space: nowrap;
 
     }
@@ -516,6 +523,7 @@
       line-height: 14px;
       display: inline-block;
       width: 248px;
+      vertical-align: middle;
     }
     li {
       margin-top: 15px;
@@ -529,139 +537,6 @@
       line-height: 14px;
       width: 239px;
     }
-    .userlist-sortType {
-      background: #f9f9f9;
-      border: 1px solid #e1e2e7;
-      border-radius: 4px;
-      padding: 5px 10px;
-      font-size: 14px;
-      line-height: 14px;
-      height: 18px;
-      width: 230px;
-      display: inline-block;
-      position: relative;
-      .userlist-sortType-item {
-        border: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        .custom-selector {
-          width: 100%;
-          height: 100%;
-          .custom-selector-title {
-            width: 100%;
-            font-size: 14px;
-            height: 100%;
-            line-height: 18px;
-            text-align: left;
-          }
-          .icon-downArrow:after {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-          }
-          .custom-selector-second-box {
-            margin-left: 0;
-          }
-        }
-      }
-    }
-  }
-  .custom-selector-second {
-    display: none;
-    width: 80px;
-    font-size: 12px;
-    vertical-align: top;
-    text-align: left;
-    box-sizing: border-box;
-    padding: 0 15px;
-    max-height: 310px;
-    overflow: auto;
-    &.custom-selector-second-list {
-      right: -100%;
-    }
-    & > .custom-selector-item {
-      margin: 20px 0;
-      width: 100%;
-      & > span {
-        display: block;
-      }
-      &.active > span {
-        color: #2899e6;
-      }
-    }
-  }
-  .userlist-sortType {
-    background-color: #fff;
-    text-align: center;
-    padding: 40px 0;
-    i {
-      cursor: pointer;
-    }
-    &-item {
-      display: inline-block;
-      color: #222;
-      border-right: 1px solid #e4e4e4;
-      width: 90px;
-      &:nth-last-child(1) {
-        border-right: none;
-      }
-    }
-
-    .custom-selector {
-      display: inline-block;
-      cursor: pointer;
-
-      & > h3 {
-        font-weight: normal;
-        font-size: 16px;
-        color: #808080;
-        display: inline-block;
-        min-width: 30px;
-      }
-      .time-title {
-        font-size: 14px;
-        font-weight: normal;
-        margin-top: 15px;
-      }
-
-      .custom-selector-second-box {
-        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-        border-radius: 4px;
-        background-color: #fff;
-        position: absolute;
-        z-index: 5;
-        text-align: left;
-        font-size: 0;
-        width: auto;
-        margin-left: -20px;
-        margin-top: 10px;
-
-      }
-
-    }
-
-    #area-selector {
-      h3 {
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-        width: 65px;
-      }
-      .custom-selector-second {
-        width: auto;
-      }
-    }
-  }
-  .icon-downArrow:after {
-    content: '';
-    display: inline-block;
-    background: url("../../assets/img00/index/home_arrow_unfold.png") no-repeat;
-    background-size: 100% 100%;
-    width: 10px;
-    height: 10px;
-    vertical-align: 1px;
-    margin-right: 10px;
   }
 </style>
 

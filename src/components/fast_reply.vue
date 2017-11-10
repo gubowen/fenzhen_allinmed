@@ -76,7 +76,7 @@
                         $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")
                     }
                 } else if (dir === "next") {
-                    if (Math.abs(this.transformIndex.i) < size * 0.7) {
+                    if (Math.abs(this.transformIndex.i) < size ) {
                         this.transformIndex.i--;
                         this.transformIndex.num -= total / size;
                         $(".jump-tabs-wrapper").css("transform", "translateX(" + (this.transformIndex.num) + "px)")
@@ -130,10 +130,10 @@
                 this.nowIndex = index;
             },
             //点击将一条回复加入输入框...
-            clickToSendReply: function (item) {
+            clickToSendReply (item) {
                 store.commit("setFastReply", item.questionDesc)
+                store.commit("setFastReplyShow",false);
                 this.$emit("update:controllerInputStatus", parseInt(item.isUpload));
-                this.$emit("update:fastRelyStatus", false);
             }
         },
         mounted(){

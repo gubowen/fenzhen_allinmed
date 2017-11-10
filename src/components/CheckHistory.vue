@@ -10,10 +10,10 @@
         <section class="check-history">
           <article class="check-history-majorTitle"><span class="check-title-left">诊断结论</span><span class="check-title-right">患者提交病例时间</span></article>
           <ul>
-            <li v-for="(items,index) in diagnoseHistoryList" @click="chatHistoryRecord(items,index)">
+            <li v-for="(items,index) in diagnoseHistoryList">
               <section class="check-history-info">
-                <span class="check-history-title"><i class="icon-downArrow"></i>{{items.mainContent.caseMain}}</span>
-                <span class="check-history-text">{{items.createTime|timeFormatCheckHistory}}</span>
+                <span class="check-history-title" @click.self="chatHistoryRecord(0,items,index)"><i class="icon-downArrow" @click.self="chatHistoryRecord(0,items,index)"></i>{{items.mainContent.caseMain}}</span>
+                <span class="check-history-text" >{{items.createTime|timeFormatCheckHistory}}</span>
               </section>
               <article class="check-history-show" :class="{'on': index == currentIndex}" v-show="chatHistoryRecordList.length >0">
                 <h3>咨询对话历史</h3>
@@ -22,55 +22,86 @@
                     <li v-for="ele in chatHistoryRecordList">
                       <article>
                         <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
-                                v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
+                                v-if=" ele.msgType.toLowerCase()==='file' || ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
-                        <p v-show="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
+                        <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
+                                v-show="ele.msgType.toLowerCase()==='text'">
+                          {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
+                        </header>
+                        <p v-if="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
+                        <figure v-if="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">初诊建议</header>
                             <section class="preview-suggestion-content">
                               <p class="preview-suggestion-img">
                                 <img src="/static/img/img00/index/dialog_report.png" alt="">
                               </p>
-                              <section class="preview-suggestion-content-text" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
-                                <header class="preview-suggestion-title">{{element.createTime}}</header>
-                                <p class="preview-suggestion-result" >{{element.illnessName}}</p>
-                              </section>
+                              <template  v-if="Array.isArray(JSON.parse(ele.body.substring(1,ele.body.length-1)).data)">
+                                <section class="preview-suggestion-content-text"  v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                                  <header class="preview-suggestion-title">{{element.createTime}}</header>
+                                  <p class="preview-suggestion-result" >{{element.illnessName}}</p>
+                                </section>
+                              </template>
+
+                              <template  v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data && !(Array.isArray(JSON.parse(ele.body.substring(1,ele.body.length-1)).data))">
+                                <section class="preview-suggestion-content-text" >
+                                  <header class="preview-suggestion-title">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.createTime}}</header>
+                                  <p class="preview-suggestion-result" >{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.illnessName}}</p>
+                                </section>
+                              </template>
                             </section>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestion'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestion'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">检查/检验建议</header>
-                            <section class="check-suggestion-content">
-                              <article class="check-suggestion-item" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
-                                <span>{{element.adviceName}}</span>
-                              </article>
-                            </section>
+                            <template v-if="ele.msgType.toLowerCase()==='custom'">
+                              <section class="check-suggestion-content">
+                                <article class="check-suggestion-item" v-for="element in  JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                                  <span>{{element.adviceName}}</span>
+                                </article>
+                              </section>
+                            </template>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='videoTriage'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='videoTriage'">
                           <figcaption class="check-suggestion-message">
                             <header class="check-suggestion-message-title">视诊</header>
                             <section class="check-suggestion-content">
-                              <article class="check-suggestion-item"><span>{{ele.content}} </span></article>
+                              <article class="check-suggestion-item"><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.content}} </span></article>
                             </section>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='ensureOperation'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='ensureOperation'">
                           <figcaption class="messageList-item-text">你好，分诊医生已收到您的全部信息，正在帮您预约' + {{ele.doctorName}} + '医生，会在12小时内给您答复。
                             <span>立即咨询></span>
                           </figcaption>
                         </figure>
-                        <figure v-show="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
+                        <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
                           <figcaption class="messageList-item-text">
                             上一位服务该患者的分诊医生已下班，如有需要请继续沟通
+                          </figcaption>
+                        </figure>
+                        <figure v-if="ele.msgType.toLowerCase() === 'file'">
+                          <figcaption class="messageList-item-text">
+                                <img :src="ele.attUrl" class="img-show"/>
                           </figcaption>
                         </figure>
                       </article>
                     </li>
                   </ul>
+                  <div class="page-container" v-if="totalCount>pageNum&&diagnoseHistoryList.length>0">
+                    <div class="pagination pager">
+                      <ul class="pages">
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(0,items)">首页</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(pageIndex-2,items)">上一页</li>
+                        <li class="page-number" :class="{'pgCurrent':pageIndex == item}" v-for="(item,key) in pages" @click.stop="chatHistoryRecord(key,items)">{{item}}</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageIndex,items)">下一页</li>
+                        <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(Math.ceil(totalCount/pageNum)-1,items)">末页</li>
+                      </ul>
+                    </div>
+                  </div>
                 </section>
               </article>
             </li>
@@ -81,7 +112,9 @@
     </section>
     <section class="mask-background show"></section>
     <loading v-if="loadingShow"></loading>
-    <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    <transition name="fade-scale">
+      <popup v-if="popupShow" :obj.sync="popupObj" :payPopupShow.sync="popupShow"></popup>
+    </transition>
   </section>
 </template>
 <script>
@@ -110,6 +143,10 @@
         diagnoseHistoryList: [],
         chatHistoryRecordList: [],
         currentIndex: -1,
+        totalCount:0,
+        pageNum:5,
+        pageIndex:1,
+        pageResult:0,
         loadingShow: false,
         popupShow: false,
         popupObj: {}
@@ -142,28 +179,30 @@
           }
         })
       },
-      chatHistoryRecord(items, index){
+      chatHistoryRecord(num,items, index){
         let _this = this;
-        if(_this.currentIndex == index){
-            _this.currentIndex = -1;
-        }else{
-          _this.currentIndex = index;
+        _this.pageResult = num * _this.pageNum;
+        _this.pageIndex = num + 1;
+        console.log(_this.pageIndex)
+        if(index||index == 0){
+            if(_this.currentIndex == index){
+                _this.currentIndex = -1;
+            }else{
+                _this.currentIndex = index;
+            }
         }
         _this.chatHistoryRecordList = [];
-        let maxResult = 5;
         let dataValue = {
           fromAccount: "1_doctor00001",   // localStorage.getItem("patientId"),
           receiveAccount: "0_" + items.caseId,
-          firstResult: 0,
-          maxResult: maxResult,
+          firstResult: _this.pageResult,
+          maxResult: _this.pageNum,
           sortType: 1
         };
         api.ajax({
           url: _this.chatHistoryRecordUrl,
           method: "POST",
           data: dataValue,
-          beforeSend(config) {
-          },
           done(res) {
             if (res.responseObject.responseMessage == "NO DATA") {
               _this.chatHistoryRecordList = [];
@@ -174,20 +213,71 @@
             } else {
               _this.popupShow = false;
               _this.chatHistoryRecordList = res.responseObject.responseData.dataList;
+              if(parseInt(res.responseObject.responseData.totalCount)>2){
+                  _this.totalCount = parseInt(res.responseObject.responseData.totalCount) -2;
+              }else{
+                  _this.totalCount = 0;
+              }
             }
-          },
-          fail(error){
           }
         })
       }
     },
+    computed: {
+          pages(){
+              let pageArr = [], that = this;
+              for (let i = 1; i <= Math.ceil(that.totalCount / that.pageNum); i++) {
+                  pageArr.push(i);
+              }
+              return pageArr;
+          }
+      },
     mounted(){
       this.init();
     }
   }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
+<style lang="scss" rel="stylesheet/scss" scoped>
   @import "../scss/pages/employee/commonMask";
   @import "../scss/modules/_middleMessageBox";
+  //分页
+  .page-container {
+    padding-bottom: 30px;
+    .pagination {
+      height: 36px;
+      margin-top: 45px;
+      padding: 0;
+      .pages {
+        text-align: center;
+      }
+      .pgEmpty {
+        color: #eee;
+        cursor: default;
+      }
+      .pgNext {
+        width: 50px;
+      }
+      li {
+        display: inline-block;
+        width: 36px;
+        height: 36px;
+        line-height: 36px;
+        margin-right: 8px;
+        text-align: center;
+        color: grey;
+        background-color: #fff;
+        font-size: 14px;
+        overflow: hidden;
+        padding: 0;
+        cursor: pointer;
+      }
+      .pgCurrent {
+        height: 36px;
+        width: 36px;
+        background: #3d84c6;
+        color: #fff;
+      }
+    }
+  }
 
 </style>

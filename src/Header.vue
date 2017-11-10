@@ -1,54 +1,67 @@
 <template>
-  <div id="header" class="main-header">
-    <section class="main-header-search">
-      <input class="main-search" type="text" placeholder="请输入患者姓名" v-model="searchContent"
-             @keyup="searchPatient($event)">
-      <i class="icon-header-search" @click="clickToSearch"></i>
-    </section>
-    <article class="main-header-title" @click="refresh()">
-      <i class="icon-logo"></i>
-      <h1>唯医互联网骨科医院</h1>
-    </article>
-    <article class="main-header-base-msg">
-      <article class="main-header-tips">
-        您好，<span>{{$store.state.userName}}</span>医生
-
-
+  <section>
+    <transition name="fade" appear>
+      <div id="header" class="main-header">
+      <section class="main-header-search">
+        <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="this.enableSearch" v-model="searchContent"
+               @keyup="searchPatient($event)">
+        <i class="icon-header-search" v-show="this.enableSearch" @click="clickToSearch"></i>
+      </section>
+      <article class="main-header-title" @click="refresh()">
+        <i class="icon-logo"></i>
+        <h1>唯医互联网骨科医院</h1>
       </article>
-      <ul class="main-header-config">
-        <li class="main-header-config-item">
-          <router-link to="/setting" tag="a">个人设置</router-link>
-        </li>
-        <hr class="main-header-line">
-        <li class="main-header-config-item">
-          <router-link to="/login" tag="a">退出</router-link>
-        </li>
-      </ul>
-    </article>
-  </div>
+      <article class="main-header-base-msg">
+        <article class="main-header-tips">
+          您好，<span>{{$store.state.userName}}</span>医生
+
+
+        </article>
+        <ul class="main-header-config">
+          <li class="main-header-config-item">
+            <router-link to="/setting" tag="a">个人设置</router-link>
+          </li>
+          <hr class="main-header-line">
+          <li class="main-header-config-item" @click="confirmShow = !confirmShow">退出</li>
+        </ul>
+      </article>
+    </div>
+    </transition>
+    <transition name="fade">
+      <confirm :comfirmData="{content:'你确定要退出平台吗？'}" v-if="confirmShow" @ensureCallback="exitLogin" @cancelCallback="cancelLogin"></confirm>
+    </transition>
+  </section>
 </template>
 <script>
   import axios from "axios";
+  import confirm from "./common/bigConfim";
   export  default{
     name: 'header',
     data(){
-      return {
-        isActive: false,
-        isActiveMessage: '在线',
-        searchStatus: true,
-        searchContent: ""
-      }
+        return {
+            isActive: false,
+            confirmShow: false,
+            isActiveMessage: '在线',
+            searchStatus: true,
+            enableSearch: true,
+            searchContent: "",
+            globeSortFlag:false
+        }
     },
     watch: {
-      '$store.state.searchStatus': function () {
-        this.searchStatus = this.$store.state.searchStatus;
-      }
+        '$store.state.searchStatus': function () {
+            this.searchStatus = this.$store.state.searchStatus;
+        },
+        '$store.state.enableSearch': function () {
+            this.enableSearch = this.$store.state.enableSearch;
+        }
     },
     methods: {
       init(){
         this.getUserStatus();
         this.getBaseMessage();
         this.searchStatus = this.$store.state.searchStatus;
+        this.globeClick();
       },
       searchPatient(e) {
         let that = this;
@@ -200,11 +213,43 @@
       refresh(){
 
         if (window.location.href.indexOf("setting") != -1) {
-          this.$router.push({
-            name: "home"
-          })
+//          this.$router.push({
+//            name: "home"
+//          })
+            if (window.location.origin.includes("triage.allinmed.cn")) {
+                this.$router.push({
+                    path:"/"
+                })
+            }
+            if (!window.location.hostname.includes("triage.allinmed.cn")) {
+                this.$router.push({
+                    path:"/"
+                })
+            }
         }
+      },
+      cancelLogin(){
+          console.log(111)
+          this.confirmShow = false;
+      },
+      exitLogin(){
+          console.log(111)
+          this.$router.push({
+              name: "login"
+          })
+          this.confirmShow = false;
+      },
+      globeClick(){
+          document.addEventListener('click',(e)=>{
+              if(e.target.className != 'userlist-status-right' && e.target.className != 'userlist-status-sortList'){
+                  this.globeSortFlag = false;
+                  this.$emit('update:globeSortFlag', this.globeSortFlag);
+              }
+          })
       }
+    },
+    components:{
+      confirm
     },
     mounted(){
       this.init();
@@ -214,6 +259,11 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
   @import "./scss/base.scss";
 
+  .fade-enter-active,.fade-leave-active {
+    transition: all 0.5s linear;
+  }
+  .fade-enter,.fade-leave-to{
+  }
   /**
    * @name: 主头部
    * @desc:
