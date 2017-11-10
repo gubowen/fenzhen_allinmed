@@ -130,10 +130,10 @@
                 this.nowIndex = index;
             },
             //点击将一条回复加入输入框...
-            clickToSendReply: function (item) {
+            clickToSendReply (item) {
                 store.commit("setFastReply", item.questionDesc)
+                store.commit("setFastReplyShow",false);
                 this.$emit("update:controllerInputStatus", parseInt(item.isUpload));
-                this.$emit("update:fastRelyStatus", false);
             }
         },
         mounted(){

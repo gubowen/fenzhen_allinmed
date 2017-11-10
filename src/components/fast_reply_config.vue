@@ -25,7 +25,7 @@
             <h3 v-show="!termFixFlag[index]">{{item.questionDesc}}</h3>
             <figure class="jump-box-term-button" v-if="item.questionType==2" v-show="!termFixFlag[index]">
               <p class="fix" @click.stop="termFixFlag[index]=true;termFixContent[index]=item.questionDesc">修改</p>
-              <p class="del" @click.stop="deleteTermShowFlag[index]=true">删除
+              <p class="del" @click.stop="deleteShowFlag(index)">删除
 
                 <section class="modal-confirm show" v-if="deleteTermShowFlag[index]">
                   <article class="modal-confirm-content">
@@ -314,6 +314,12 @@
             this.memberFixFlag[base.index][base.cIndex] = false;
             break;
         }
+      },
+      deleteShowFlag(index){
+          for (let i in this.deleteTermShowFlag){
+              this.deleteTermShowFlag[i]=false;
+          }
+          this.deleteTermShowFlag[index]=true;
       },
       deleteCallback(type, item, index, cItem, cIndex){
         const that = this;

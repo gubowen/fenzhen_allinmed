@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div id="app" @click="$store.state.usedReplyShow=false;$store.state.fastReplyShow=false">
         <!--<img src="./assets/logo.png">-->
         <!--<keep-alive>-->
         <!--<router-view></router-view>-->

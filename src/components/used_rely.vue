@@ -6,7 +6,7 @@
     <section class="jump-box-viewers viewInner">
       <section class="jump-box-viewers-item viewItem" data-role="fr-tabs-1">
         <ul class="jump-box-list" id="ev-used-reply-box">
-          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$emit('update:usedRelyStatus',false)">
+          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$store.state.usedReplyShow=false">
             <span>{{item.replyContent}}</span>
           </li>
         </ul>

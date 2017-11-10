@@ -7,11 +7,11 @@
             <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply" v-if="!watingTriage">
-                    <button class="user-controller-fastReply" @click="fastRely()">
+                    <button class="user-controller-fastReply" @click.stop="fastRely()">
                         <i class="icon-fastReply"></i>
                         <span>快捷提问</span>
                     </button>
-                    <button class="user-controller-result" @click="usedRely()">
+                    <button class="user-controller-result" @click.stop="usedRely()">
                         <i class="icon-userReply"></i>
                         <span>常用回复</span>
                     </button>
