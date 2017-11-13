@@ -25,7 +25,7 @@ export default new Router({
       path: '/login', name: 'login', component: login
     },
     {
-      path: '/home', name: 'home', component: userlist,
+      path: '/home', name: 'home', component: userlist, redirect:"/home/mainSpeak/",
       children: [
         {name: 'baseInfo', path: '/home/baseInfo/', component: baseInfo},
         {name: 'mainSpeak', path: '/home/mainSpeak/', component: mainSpeak},

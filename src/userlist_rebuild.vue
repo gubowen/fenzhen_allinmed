@@ -398,7 +398,9 @@
                 this.targetData.avatar = items.logoUrl;
                 this.fastRelyStatusParent = false;
 
-
+                this.$router.push({
+                    name:"home"
+                })
             },
             //三个状态的点击切换（沟通中、已结束、被退回）
             statusChange (status) {

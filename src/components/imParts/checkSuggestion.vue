@@ -1,6 +1,6 @@
 <template>
   <article>
-    <figure class="messageList-item-content" style="margin-bottom: 40px;">
+    <figure class="messageList-item-content" style="margin-bottom: 30px;">
       <!--文字-->
       <figcaption class="messageList-item-text" >
         非常抱歉，由于缺少重要的检查资料，暂时无法做出诊断。建议您尽快进行以下检查，并上传检查资料，唯医骨科将继续为您咨询。

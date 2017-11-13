@@ -47,10 +47,10 @@
 }
 
 ::-webkit-scrollbar {
-  width: 4px;
+  width: 8px;
   height: 70px;
   position: absolute;
-
+  background: #fff;
 }
 
 ::-webkit-scrollbar-track {
@@ -60,9 +60,8 @@
 
 ::-webkit-scrollbar-thumb {
 
-  opacity: 0.6;
-  background: #7A8EC1;
-  border-radius: 6px;
+  background-color: #c1c1c1;
+  border-radius: 4px;
 
 }
 

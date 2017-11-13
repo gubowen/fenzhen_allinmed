@@ -448,8 +448,8 @@
             padding: 5px 0 5px 0;
             font-size: 14px;
             line-height: 14px;
-            min-width: 80px;
-            width: 84px;
+            min-width: 76px;
+            width: 76px;
         }
         .select-100 {
             width: 250px;

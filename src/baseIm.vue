@@ -645,7 +645,7 @@
             position: relative;
             zoom: 1;
             overflow: hidden;
-            margin-bottom: 40px;
+            margin-bottom: 30px;
 
             &.others-message {
                 .messageList-item-content {
@@ -864,8 +864,8 @@
     .time-stamp {
         font-size: 13px;
         color: #AAAAAA;
-        margin-bottom: 30px;
-        margin-top: 40px;
+        margin-bottom: 20px;
+        /*margin-top: 40px;*/
         text-align: center;
     }
 
