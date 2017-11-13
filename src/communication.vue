@@ -48,7 +48,10 @@
                 </article>
                 <footer class="user-controller-footer" v-if="!watingTriage">
                     <span class="user-send-message">按下Enter发送</span>
-                    <button class="btn-primary user-controller-send-btn" @click="sendMessage">发送</button>
+                    <button class="btn-primary user-controller-send-btn" @click="sendMessage">
+                        <span>发送</span>
+                        <img :class="{'send-loading':!$store.state.beingSend}" v-if="!$store.state.beingSend" src="/static/img/img00/common/save_complete.png" alt="loading...">
+                    </button>
                 </footer>
 
 
@@ -322,6 +325,32 @@
     @import "./scss/modules/_masker.scss";
     @import "./scss/modules/_checkSuggestion.scss";
     @import "./scss/modules/_configSuggestion.scss";
+    .user-controller-send-btn{
+        position: relative;
+        .send-loading{
+            display:inline-block;
+            width:15px;
+            height:15px;
+            position: absolute;
+            margin-left:-20px;
+            animation: rotate 1s linear forwards infinite;
+        }
+    }
+    @keyframes rotate {
+        0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0); }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+    @-webkit-keyframes rotate {
+        0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0); }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
 
     .center-inner-message {
         float: left;

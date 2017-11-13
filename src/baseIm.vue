@@ -266,8 +266,12 @@
             },
             sendMessage (content) {
                 const that = this;
+                if(!that.$store.state.beingSend){
+                    return false;
+                }
                 //单条信息发送
                 return new Promise((resolve, reject) => {
+                    that.$store.commit("setSendStatus",false);
                     this.nim.sendText({
                         scene: 'p2p',
                         to: that.targetData.account,
@@ -278,6 +282,7 @@
                             mType:"0"
                         }),
                         done (error, obj) {
+                            that.$store.commit("setSendStatus",true);
                             if (!error) {
                                 resolve(obj);
                                 that.sendSingleMessage(error, obj)

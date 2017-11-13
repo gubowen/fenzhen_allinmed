@@ -13,15 +13,18 @@
     <figure class="messageList-item-content">
       <!--检查检验-->
       <figcaption class="check-suggestion-message">
-        <header class="check-suggestion-message-title">检查/检验建议</header>
-        <section class="check-suggestion-content">
-          <article class="check-suggestion-item" v-for="checks  in message.content.data" v-if="message.content.data.length">
-            <span>{{checks.adviceName}}</span>
-          </article>
-          <article class="check-suggestion-item" v-if="!message.content.data.length">
-            <span>{{message.content.data.adviceName}}</span>
-          </article>
-        </section>
+        <header class="check-suggestion-message-title" style="height:auto;padding-right: 15px;font-size:14px">
+          <span style="text-indent: 24px;display:inline-block;">检查/检验建议：</span>
+          <span class="checkTestItems" v-for="checks  in message.content.data" v-if="message.content.data.length">{{checks.adviceName}}</span>
+        </header>
+        <!--<section class="check-suggestion-content">-->
+          <!--<article class="check-suggestion-item" v-for="checks  in message.content.data" v-if="message.content.data.length">-->
+            <!--<span>{{checks.adviceName}}</span>-->
+          <!--</article>-->
+          <!--<article class="check-suggestion-item" v-if="!message.content.data.length">-->
+            <!--<span>{{message.content.data.adviceName}}</span>-->
+          <!--</article>-->
+        <!--</section>-->
       </figcaption>
       <figure class="messageList-item-img">
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
@@ -54,5 +57,10 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-
+  .checkTestItems{
+    &:not(:last-child):after{
+      content:" | ";
+      display:inline-block;
+    }
+  }
 </style>

@@ -9,10 +9,10 @@
               <li v-show="caseAttUrl.length > 0" v-for="item in caseAttUrl">
                 <section>
                   <img :src="item" @click="showBigImgFunction(1)"/>
-                  <p>检查资料</p>
+                  <!--<p>检查资料</p>-->
                 </section>
               </li>
-              <li class='noData' v-show="caseAttUrl.length == 0">患者未上传资料</li>
+              <!--<li class='noData' v-show="caseAttUrl.length == 0">患者未上传资料</li>-->
             </ul>
           </section>
         </article>
@@ -32,7 +32,7 @@
                   <p>动作视频</p>
                 </section>
               </li>
-              <li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>
+              <!--<li class='noData' v-show="videoCaseAttUrl.length == 0 && videoList == 0">患者未上传资料</li>-->
             </ul>
             <textarea type="text" placeholder="请填写" class="J-visualInspection J-other" maxlength="1000" v-model="visualInspection" ref="inputLimitController"/>
           </section>
@@ -130,9 +130,6 @@
                     url: _this.getDataUrl,
                     method: "POST",
                     data: dataValue,
-                    beforeSend(config) {
-
-                    },
                     done(res) {
                         if (res.responseObject.responseData.data_list && res.responseObject.responseStatus == true) {
                             let data_list = res.responseObject.responseData.data_list;
@@ -146,17 +143,23 @@
                                         case "2":
                                         case "3":
                                         case "5":
-                                            let arr=[];
-                                            arr[0] =  value.caseAttUrl;
-                                            _this.caseAttUrl =arr;
+//                                            let arr=[];
+//                                            arr[0] =  value.caseAttUrl;
+//                                            _this.caseAttUrl =arr;
+                                            if(_this.caseAttUrl.length<9){
+                                                _this.caseAttUrl.push(value.caseAttUrl);
+                                            }
                                             checkImageList.push({"url": value.caseAttUrl});
                                             break;
                                         case "1":
                                         case "4":
                                         case "6":
-                                            let arrs=[];
-                                            arrs[0] = value.caseAttUrl;
-                                            _this.videoCaseAttUrl= arrs;
+//                                            let arrs=[];
+//                                            arrs[0] = value.caseAttUrl;
+//                                            _this.videoCaseAttUrl= arrs;
+                                            if(_this.videoCaseAttUrl.length<4){
+                                                _this.videoCaseAttUrl.push(value.caseAttUrl);
+                                            }
                                             diagnoseList.push({"url": value.caseAttUrl});
                                             break;
                                     }
