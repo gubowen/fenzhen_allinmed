@@ -113,7 +113,7 @@
                     </section>
                 </article>
                 <footer>
-                    <button type="button" class="detail-saveBtn" @click="saveData">保存</button>
+                    <button type="button" class="detail-saveBtn" @click="saveData" v-show="$store.state.currentItem.consultationState == 0">保存</button>
                 </footer>
             </section>
         </form>

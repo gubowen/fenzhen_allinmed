@@ -636,7 +636,7 @@
         margin-left: 1px;
         box-sizing: border-box;
         @include query(1500px){
-            height: 71.5%;
+            height: 68%;
         }
         &.watingBoxStyle {
             height: 85%;

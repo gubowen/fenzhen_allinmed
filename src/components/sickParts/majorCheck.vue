@@ -2,7 +2,7 @@
   <section class="majorCheck viewItem medical-record-form-item" data-role="mr-record-6">
     <form action="">
       <section class="major-check medical-record-main">
-        <article>
+        <article v-if="caseAttUrl.length > 0">
           <header><h2>检验及诊断结果</h2></header>
           <section class="img-check">
             <ul class="talkImgMore">
@@ -58,7 +58,7 @@
           </section>
         </article>
         <footer>
-          <button type="button" class="detail-saveBtn" @click="saveData">保存</button>
+          <button type="button" class="detail-saveBtn" @click="saveData" v-show="$store.state.currentItem.consultationState == 0">保存</button>
         </footer>
       </section>
     </form>

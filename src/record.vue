@@ -1,6 +1,6 @@
 <template id="record">
     <aside class="medical-record" v-if="showFlag">
-        <button class="btn-primary user-controller-get-triage" v-if="watingTriage" @click="getPatient">接诊</button>
+        <!--<button class="btn-primary user-controller-get-triage" v-if="watingTriage" @click="getPatient">接诊</button>-->
         <header class="medical-record-title-text" v-show="!$store.state.inputReadOnly">
             <h2>病历编辑</h2>
         </header>
