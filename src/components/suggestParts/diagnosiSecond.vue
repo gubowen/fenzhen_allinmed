@@ -18,6 +18,7 @@
                         <li class="config-suggestion-tabs-item" :class="{'active':cutNum==index}" v-for="(item,index) in tabList"
                             @click="cutNum = index;FirstIndex = -1 ;secondIndex = -1 ;ThirdIndex =-1 ;FourIndex = -1">{{item}}
                         </li>
+
                     </ul>
                 </nav>
                 <section class="config-suggestion-viewers">
