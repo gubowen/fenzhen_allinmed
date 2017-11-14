@@ -141,6 +141,7 @@
                             if (dataList && dataList.length) {
                                 that.medicalReportMsg = dataList[0];
                                 console.log(that.medicalReportMsg);
+                                that.$emit("loadCallback");
                                 // console.log(that.medicalReportMsg = dataList[0]);
                             }
                         }

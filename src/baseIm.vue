@@ -18,14 +18,14 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"></ImageElement>
+                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim" @loadCallback="loadCallback"></ImageElement>
                         <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
                                 :message="items"></CheckSuggestion>
                         <!--问诊单-->
                         <MedicalReport v-if="medicalReport(items)"
-                                       :message="items" ref="medicalReport"></MedicalReport>
+                                       :message="items" ref="medicalReport" @loadCallback="loadCallback"></MedicalReport>
                         <!--视诊-->
                         <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
                                      :message="items"></VideoTriage>
@@ -240,6 +240,11 @@
                         that.receiveMessage(that.targetData.account, msg);
                     },
                 });
+            },
+            loadCallback(){
+                setTimeout(() => {
+                    this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                }, 120);
             },
             medicalReport(items){
                 let flag = true;

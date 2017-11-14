@@ -30,6 +30,7 @@
     mounted(){
         this.removeBaseImageMsg(this.message.file.url);
         this.installSBIList();
+        this.initImageFn();
     },
     methods:{
       showBigImgFunction(message){
@@ -57,6 +58,14 @@
             }
             ImageList.push( {"url":this.message.file.url});
             this.$store.commit('setSBIObject',{'IMImage':ImageList});
+        },
+        initImageFn(){
+            const that=this;
+
+            this.$refs.imageElement.onload=function () {
+                that.$emit("loadCallback");
+            };
+
         }
     },
     props: {
