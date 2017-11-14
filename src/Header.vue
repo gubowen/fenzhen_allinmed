@@ -3,7 +3,7 @@
         <transition name="fade" appear>
             <div id="header" class="main-header">
                 <section class="main-header-search">
-                    <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="this.enableSearch"
+                    <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="$store.state.enableSearch"
                            v-model="searchContent"
                            @keyup="searchPatient($event)">
                     <i class="icon-header-search" v-show="this.enableSearch" @click="clickToSearch"></i>
@@ -63,7 +63,7 @@
             init(){
                 this.getUserStatus();
                 this.getBaseMessage();
-                this.searchStatus = this.$store.state.searchStatus;
+            //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
             },
             searchPatient(e) {
@@ -220,6 +220,7 @@
 //          this.$router.push({
 //            name: "home"
 //          })
+                    this.$store.commit('enableSearchFn',true);    
                     if (window.location.origin.includes("triage.allinmed.cn")) {
                         this.$router.push({
                             path: "/"
