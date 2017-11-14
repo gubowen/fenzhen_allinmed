@@ -289,7 +289,7 @@
     //头部
     .main-header {
         width: 100%;
-        height: 70px;
+        height: 50px;
         text-align: center;
         padding-left: 13px;
         padding-right: 40px;;
@@ -298,7 +298,7 @@
         top: 0;
         left: 0;
         right: 0;
-        line-height: 70px;
+        line-height: 50px;
         z-index: 5;
         box-shadow: 0 2px 8px 0 #E5E9F4;
     }
@@ -327,11 +327,11 @@
         font-size: 0;
         & > h1 {
             display: inline-block;
-            font-size: 20px;
+            font-size: 16px;
             font-weight: normal;
             color: #6B748C;
             cursor: pointer;
-            padding-left: 10px;
+            padding-left: 6px;
         }
     }
 
@@ -433,8 +433,9 @@
         display: inline-block;
         background: url("./assets/img00/header/logo_top.png") no-repeat;
         background-size: 100% 100%;
-        width: 44px;
-        height: 44px;
-        vertical-align: -19px;
+        width: 30px;
+        height: 30px;
+        vertical-align: middle;
+        margin-top:-7px;
     }
 </style>

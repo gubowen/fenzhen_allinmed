@@ -292,7 +292,8 @@
   margin-left:12px;
   display: inline-block;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 16px;
+  margin-top: -6px;
 }
 
 .icon-sex-male {
@@ -302,7 +303,8 @@
   margin-left:12px;
   display: inline-block;
   vertical-align: middle;
-  font-size: 14px;
+  font-size: 16px;
+  margin-top: -6px;
 }
 .icon-refresh-btn:before{
   content: '';
@@ -323,6 +325,6 @@
   position: absolute;
   right: 15px;
   top: 50%;
-  margin-top: -7px;
+  margin-top: -17px;
   cursor: pointer;
 }

@@ -9,7 +9,7 @@
  */
 
 .messageList-box {
-  padding: 40px 50px;
+  padding: 40px 25px;
   height: 60%;
   overflow: auto;
   background-color: #f6f9fa;
@@ -82,27 +82,27 @@
   }
 }
 
-.messageList-targetName {
-  background: rgba(255, 255, 255, 0.97);
-  box-shadow: 0 1px 1px 0 #ECEFF6;
-  position: absolute;
-  top: 0;
-  height: 55px;
-  left: 0;
-  right: 0;
-  line-height: 55px;
-  padding-left: 40px;
-  box-sizing: border-box;
-  z-index: 2;
-  & > h3 {
-    font-weight: normal;
-    font-size: 16px;
-    color: #555555;
-    span {
-      color: #00BEAF;
-    }
-  }
-}
+//.messageList-targetName {
+//  background: rgba(255, 255, 255, 0.97);
+//  box-shadow: 0 1px 1px 0 #ECEFF6;
+//  position: absolute;
+//  top: 0;
+//  height: 55px;
+//  left: 0;
+//  right: 0;
+//  line-height: 55px;
+//  padding-left: 40px;
+//  box-sizing: border-box;
+//  z-index: 2;
+//  & > h3 {
+//    font-weight: normal;
+//    font-size: 16px;
+//    color: #555555;
+//    span {
+//      color: #00BEAF;
+//    }
+//  }
+//}
 
 .messageList {
   height: 100%;

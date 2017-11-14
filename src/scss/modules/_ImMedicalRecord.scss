@@ -31,7 +31,7 @@
 }
 
 .special-message-item {
-  margin: 30px 0;
+  margin: 16px 0;
 
   &.inline-message {
     .special-message-item-list {
@@ -41,6 +41,7 @@
   }
   &-title {
     position: relative;
+    font-size:15px;
     &:before {
       content: '';
       position: absolute;
@@ -61,8 +62,8 @@
 }
 
 .special-message-item-text {
-  font-size: 0;
-  margin: 10px 0;
+  font-size:16px;
+  margin: 2px 0;
   & > h4 {
     padding-left: 6px;
     font-size: 20px;
@@ -75,30 +76,32 @@
   & > span {
     font-size: 16px;
     color: #222222;
-    margin-left: 40px;
+    margin-left: 10px;
     display: inline-block;
     vertical-align: middle;
     line-height: 16px;
+    margin-top:3px;
   }
 }
-
+.medical-report-name{
+  margin:10px 0;
+}
 .special-message-item-list {
   display: block;
-  margin: 5px 0;
   margin-right: 40px;
 
   .question {
-    font-size: 14px;
+    font-size: 16px;
     color: #808080;
     display: inline;
   }
   .answer {
     display: block;
-    font-size: 14px;
+    font-size: 16px;
     color: #222222;
 
     &.empty {
-      font-size: 14px;
+      font-size: 16px;
       color: #AAAAAA;
     }
   }
@@ -187,6 +190,7 @@
 }
 .illness-direct-name{
   &.special-message-item-text{
+    font-size:16px;
     & > span{
       margin-left: 12px;
     }
@@ -222,7 +226,7 @@
 .messageList-item-triage-report {
   & > h3 {
     font-weight: normal;
-    font-size: 14px;
+    font-size: 16px;
   }
   .messageList-item-triage-report-img {
     text-align: center;

@@ -24,7 +24,7 @@
                         <span>检查检验</span>
                     </button>
                     <button class="user-controller-check" @click="reTriageShow=true">
-                        <i class="icon-checkout"></i>
+                        <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
                     <!--快捷提问-->
@@ -362,6 +362,16 @@
             padding-top: 55px;
             height: 100%;
         }
+    }
+
+
+    .icon-finish {
+        display: inline-block;
+        background: url("./assets/img00/controller/end.png") no-repeat;
+        background-size: 100% 100%;
+        width: 18px;
+        height: 18px;
+        vertical-align: middle;
     }
 
     .center-inner-wrapper {
