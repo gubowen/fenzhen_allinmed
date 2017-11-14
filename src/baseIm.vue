@@ -171,17 +171,26 @@
                     return;
                 }
             },
-            'connectFlag' (flag) {
-                if (!flag) {
+            '$store.state.caseId' (id) {
+                if (!id) {
                     return;
                 } else {
+                    this.targetData = {
+                        account: "0_" + id
+                    };
+                    this.getMessageList("history");
+                }
+            },
+            'connectFlag'(flag){
+                if (!flag){
+                    return;
+                }else{
                     this.targetData = {
                         account: "0_" + this.$store.state.caseId
                     };
                     this.getMessageList("history");
                 }
-
-            },
+            }
         },
         computed: {},
         mounted(){
