@@ -22,12 +22,11 @@
                     <li v-for="ele in chatHistoryRecordList">
                       <article>
                         <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
-                                v-if=" ele.msgType.toLowerCase()==='file' || ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'">
+                                v-if=" ele.msgType.toLowerCase()==='file' || ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'new-health'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type != 'medicalReport'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType!==5">
                           {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                         </header>
-                        <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}"
-                                v-show="ele.msgType.toLowerCase()==='text'">
-                          {{$store.state.patientName +ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
+                        <header :class="{'doctor-letter':ele.fromAccount == '1_doctor00001'}">
+
                         </header>
                         <p v-if="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
                         <figure v-if="ele.msgType.toLowerCase()==='custom' && JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
