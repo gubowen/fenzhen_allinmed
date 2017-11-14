@@ -8,7 +8,7 @@
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
-                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName?$store.state.currentItem.doctorName+'医生':''}退回`}}</p>
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ? $store.state.currentItem.doctorName + '医生' : ''}退回`}}</p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
@@ -123,7 +123,7 @@
                 ShowBigImgList: [],
                 diagnosisId: "",
                 diagnosisShow: false,
-
+                connectFlag: false,
             }
         },
         components: {
@@ -171,16 +171,26 @@
                     return;
                 }
             },
-            '$store.state.currentItem' (obj) {
-                if (!obj) {
+            '$store.state.caseId' (id) {
+                if (!id) {
                     return;
                 } else {
                     this.targetData = {
-                        account: "0_" + obj.caseId
+                        account: "0_" + id
                     };
                     this.getMessageList("history");
                 }
             },
+            'connectFlag'(flag){
+                if (!flag){
+                    return;
+                }else{
+                    this.targetData = {
+                        account: "0_" + this.$store.state.caseId
+                    };
+                    this.getMessageList("history");
+                }
+            }
         },
         computed: {},
         mounted(){
@@ -189,16 +199,18 @@
         methods: {
             init(){
                 let that = this;
+                that.connectFlag = false;
                 this.nim = nim.getInstance({
-                     debug: true,
+//                     debug: true,
                     appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
                     onconnect (data) {
                         console.log('连接成功');
+                        that.connectFlag = true;
                     },
                     onmyinfo (userData) {
-                        
+
                     },
                     onwillreconnect: this.onWillReconnect,
                     onerror: this.onError,
@@ -266,23 +278,23 @@
             },
             sendMessage (content) {
                 const that = this;
-                if(!that.$store.state.beingSend){
+                if (!that.$store.state.beingSend) {
                     return false;
                 }
                 //单条信息发送
                 return new Promise((resolve, reject) => {
-                    that.$store.commit("setSendStatus",false);
+                    that.$store.commit("setSendStatus", false);
                     this.nim.sendText({
                         scene: 'p2p',
                         to: that.targetData.account,
                         text: content,
-                        custom:JSON.stringify({
-                            cType:"0",
-                            cId:that.$store.state.userId,
-                            mType:"0"
+                        custom: JSON.stringify({
+                            cType: "0",
+                            cId: that.$store.state.userId,
+                            mType: "0"
                         }),
                         done (error, obj) {
-                            that.$store.commit("setSendStatus",true);
+                            that.$store.commit("setSendStatus", true);
                             if (!error) {
                                 resolve(obj);
                                 that.sendSingleMessage(error, obj)
@@ -305,10 +317,10 @@
                             "data": data,
                             "type": "checkSuggestion"
                         }),
-                        custom:JSON.stringify({
-                            cType:"0",
-                            cId:that.$store.state.userId,
-                            mType:"35",
+                        custom: JSON.stringify({
+                            cType: "0",
+                            cId: that.$store.state.userId,
+                            mType: "35",
                         }),
                         done (error, obj) {
                             if (!error) {
@@ -337,10 +349,10 @@
                             "data": dataList,
                             "type": "previewSuggestion"
                         }),
-                        custom:JSON.stringify({
-                            cType:"0",
-                            cId:that.$store.state.userId,
-                            mType:"36",
+                        custom: JSON.stringify({
+                            cType: "0",
+                            cId: that.$store.state.userId,
+                            mType: "36",
                         }),
                         done (error, obj) {
                             if (!error) {
@@ -372,10 +384,10 @@
                         },
                         "type": "videoTriage"
                     }),
-                    custom:JSON.stringify({
-                        cType:"0",
-                        cId:that.$store.state.userId,
-                        mType:"34",
+                    custom: JSON.stringify({
+                        cType: "0",
+                        cId: that.$store.state.userId,
+                        mType: "34",
                     }),
                     done (error, obj) {
                         that.sendSingleMessage(error, obj);
@@ -390,6 +402,7 @@
                     scene: 'p2p',
                     to: that.targetData.account,
                     done(error, obj) {
+                        console.log(error)
                         that.renderHistoryMessage(that.targetData.account, error, obj, from);
                     },
                     limit: 100
@@ -425,13 +438,13 @@
             },
             //发送单条数据...
             sendSingleMessage (error, msg) {
-                let patientListArray  = this.$store.state.patientList;
+                let patientListArray = this.$store.state.patientList;
                 patientListArray.unshift(this.$store.state.currentItem);
                 patientListArray.removeByValue(this.$store.state.currentItem);
 //                this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
-                this.$store.commit("setPatientList",patientListArray);
+                this.$store.commit("setPatientList", patientListArray);
                 this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
                 store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
@@ -517,7 +530,6 @@
                     //接诊列表
                     this.newMessageTips(targetUser, element);
                 }
-
 
 
             },
@@ -634,7 +646,7 @@
     @import "./scss/base.scss";
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
-    
+
     .messageList-box {
         padding: 40px 50px;
         height: 72.5%;
@@ -642,8 +654,8 @@
         background-color: #f6f9fa;
         margin-left: 1px;
         box-sizing: border-box;
-        @include query(1500px){
-            height: 68%;
+        @include query(1500px) {
+            height: 61%;
         }
         &.watingBoxStyle {
             height: 98%;
@@ -719,9 +731,9 @@
         }
     }
 
-    .user-controller{
-        @include query(1500px){
-            height: 24%;
+    .user-controller {
+        @include query(1500px) {
+            height: 30%;
         }
     }
 
@@ -731,7 +743,7 @@
         position: absolute;
         top: 0;
         height: 5.5%;
-        min-height:55px;
+        min-height: 55px;
         left: 0;
         right: 0;
         line-height: 55px;
@@ -759,7 +771,7 @@
         overflow: hidden;
         text-align: left;
         @include query(1500px) {
-            margin:0 12px;
+            margin: 0 12px;
         }
         .check-suggestion-message-title {
             background: #A6C7EE;
