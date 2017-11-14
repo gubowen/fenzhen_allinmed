@@ -74,7 +74,7 @@
                                                   v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                         </h3>
                                         <article>
-                                            <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;{{items.patientAge}} {{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
+                                            <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;{{items.patientAge}} {{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}&nbsp;{{items.partName}}</span>
                                         </article>
                                         <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
                                     </figcaption>
@@ -108,7 +108,7 @@
                                 </h3>
                                 <article>
                                     <span class="text">
-                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}</span>
+                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}&nbsp;{{items.partName}}</span>
                                 </article>
                                 <!--<figure class="quit-triage">-->
                                 <!--<span class="text">转移患者</span>-->

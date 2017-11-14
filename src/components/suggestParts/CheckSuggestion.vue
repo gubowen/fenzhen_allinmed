@@ -273,7 +273,7 @@
           patientId: _this.$store.state.patientId,	                     //	string	是	患者id
           diagnosisType: "1",	                                                 //	string	是	1-初诊
           majorId: _this.partListResult.id,                                 //	string	是	部位id
-          majorName: _this.partListResult.tagName,	             //	string	是	部位名称
+          majorName: _this.partListResult.tagName.indexOf("&") != -1?_this.partListResult.tagName.replace(/&/g, ","):_this.partListResult.tagName,	             //	string	是	部位名称
           illnessId: _this.sicknessResult.illnessId,	                             //	string	是	疾病id
           illnessName: _this.sicknessResult.illnessName,	         //	string	是	疾病名称
           operationId: _this.operationListResult.operationId || "",	                         //	string	是	手术id
