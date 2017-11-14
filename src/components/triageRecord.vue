@@ -52,8 +52,16 @@
     },
     watch:{
        '$store.state.currentItem'(){
+           this.showRecord = false;
            this.getRemarkList();
-       }
+       },
+        showRecord(){
+           if(this.showRecord){
+               document.querySelector(".medical-record-form").style.cssText="height:40%;";
+           }else{
+               document.querySelector(".medical-record-form").style.cssText="height:80%;";
+           }
+        }
     },
     methods:{
       getRemarkList(){
