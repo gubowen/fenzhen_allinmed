@@ -245,7 +245,7 @@
             'message.createTime' () {
                 this.noData = true;
                 this.$router.push({
-                    name: "baseInfo",
+                    name: "mainSpeak",
                     params: {
                         num: this.data
                     }

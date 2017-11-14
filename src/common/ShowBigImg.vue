@@ -1,6 +1,7 @@
 <template>
-  <section class="show-big-img show-big-img-masker" v-if="$store.state.SBIFlag">
+  <section class="show-big-img show-big-img-masker full-screen" v-if="$store.state.SBIFlag">
     <div class="background-hidden">
+      <div class="close" @click="close()"></div>
       <div class="rotate-button"></div>
       <div class="bigger-button"></div>
       <div class="smaller-button"></div>
@@ -17,7 +18,7 @@
         <div class="swiper-left-gray" v-show="imgList.length>1"></div>
         <div class="swiper-right-gray" v-show="imgList.length>1"></div>
       </div>
-      <div class="close" @click="close()"></div>
+
       <div class="gallery-thumbs" v-show="imgList.length>1">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
@@ -139,200 +140,242 @@
     opacity: 1;
     -webkit-transition: all 0.2s linear;
     transition: all 0.2s linear;
-  }
-
-  .background-hidden {
-    position: absolute;
-    top: 65px;
-    bottom: 65px;
-    left: 250px;
-    right: 250px;
-    background: #000;
-    padding: 65px 135px;
-
-    .bigger-button {
-      background: url("/static/img/img00/employee/picture_zoom.png") 50% 50% no-repeat;
-      background-color: rgba(255, 255, 255, .3);
-      border-radius: 4px;
-      width: 34px;
-      height: 34px;
+    .background-hidden {
       position: absolute;
-      top: 72px;
-      right: 27px;
-      box-sizing: border-box;
-      cursor: pointer;
+      top: 65px;
+      bottom: 65px;
+      left: 250px;
+      right: 250px;
+      background: #000;
+      padding: 65px 135px;
 
-      &.on {
-        background: url("/static/img/img00/employee/photo_zoom out.png") 50% 50% no-repeat;
+      .bigger-button {
+        background: url("/static/img/img00/employee/picture_zoom.png") 50% 50% no-repeat;
         background-color: rgba(255, 255, 255, .3);
-      }
+        border-radius: 4px;
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        top: 72px;
+        right: 27px;
+        box-sizing: border-box;
+        cursor: pointer;
 
-    }
-    .rotate-button {
-      background: url("/static/img/img00/employee/picture_rotate.png") 50% 50% no-repeat;
-      background-color: rgba(255, 255, 255, .3);
-      border-radius: 4px;
-      width: 34px;
-      height: 34px;
-      position: absolute;
-      top: 31px;
-      right: 27px;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-    .smaller-button {
-      background: url("/static/img/img00/employee/picture_narrow.png") 50% 50% no-repeat;
-      background-color: rgba(255, 255, 255, .3);
-      border-radius: 4px;
-      width: 34px;
-      height: 34px;
-      position: absolute;
-      top: 113px;
-      right: 27px;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-    .download-button {
-      background: url("/static/img/img00/employee/picture_down.png") 50% 50% no-repeat;
-      background-color: rgba(255, 255, 255, .3);
-      border-radius: 4px;
-      width: 34px;
-      height: 34px;
-      position: absolute;
-      top: 154px;
-      right: 27px;
-      box-sizing: border-box;
-      cursor: pointer;
-    }
-
-    .gallery-top {
-      width: 100%;
-      height: 100%;
-      .swiper-container {
-        margin-left: auto;
-        margin-right: auto;
-        height: 100%;
-        width: 100%;
-
-        .swiper-wrapper {
-          .swiper-slide {
-            border: 1px solid grey;
-            box-sizing: border-box;
-            width: 100%;
-            height: 100%;
-            img {
-              display: block;
-              height: 100%;
-            }
-          }
+        &.on {
+          background: url("/static/img/img00/employee/photo_zoom out.png") 50% 50% no-repeat;
+          background-color: rgba(255, 255, 255, .3);
         }
-      }
 
-      .swiper-button-prev {
-        display: none;
       }
-      .swiper-button-next {
-        display: none;
-      }
-
-      .swiper-left-gray {
-        background: url("/static/img/img00/employee/photo_arrow_left_big.png") no-repeat;
-        width: 50px;
-        height: 50px;
-        left: 55px;
+      .rotate-button {
+        background: url("/static/img/img00/employee/picture_rotate.png") 50% 50% no-repeat;
+        background-color: rgba(255, 255, 255, .3);
+        border-radius: 4px;
+        width: 34px;
+        height: 34px;
         position: absolute;
-        top: 50%;
+        top: 31px;
+        right: 27px;
+        box-sizing: border-box;
+        cursor: pointer;
       }
-
-      .swiper-right-gray {
-        background: url("/static/img/img00/employee/photo_arrow_right_big.png") no-repeat;
-        width: 50px;
-        height: 50px;
-        right: 55px;
+      .smaller-button {
+        background: url("/static/img/img00/employee/picture_narrow.png") 50% 50% no-repeat;
+        background-color: rgba(255, 255, 255, .3);
+        border-radius: 4px;
+        width: 34px;
+        height: 34px;
         position: absolute;
-        top: 50%;
+        top: 113px;
+        right: 27px;
+        box-sizing: border-box;
+        cursor: pointer;
+      }
+      .download-button {
+        background: url("/static/img/img00/employee/picture_down.png") 50% 50% no-repeat;
+        background-color: rgba(255, 255, 255, .3);
+        border-radius: 4px;
+        width: 34px;
+        height: 34px;
+        position: absolute;
+        top: 154px;
+        right: 27px;
+        box-sizing: border-box;
+        cursor: pointer;
       }
 
-      .rotate90 {
-        transform: rotate(90deg);
-        -webkit-transform: rotate(90deg);
-      }
-
-      .rotate180 {
-        transform: rotate(180deg);
-        -webkit-transform: rotate(180deg);
-      }
-
-      .rotate270 {
-        transform: rotate(270deg);
-        -webkit-transform: rotate(270deg);
-      }
-
-    }
-    .gallery-thumbs {
-      height: 100px;
-      box-sizing: border-box;
-      padding: 18px 0;
-      top: auto;
-      bottom: 0;
-      background: rgba(63, 63, 63, .9);
-      left: 0;
-      right: 0;
-      width: auto;
-      position: absolute;
-      z-index: 1;
-      @include animate-fadeOut(1s, 2s, linear, forwards, 1);
-      &:hover {
-        @include animate-fadeIn(0.1s, 0s, linear, forwards, 1);
-      }
-      .swiper-wrapper-center {
-        justify-content: center;
-
-      }
-      .swiper-container {
-        margin-left: auto;
-        margin-right: auto;
-        height: 100%;
+      .gallery-top {
         width: 100%;
-        .swiper-wrapper {
-          .swiper-slide {
-            width: auto;
-            &.swiper-slide-active {
-              img {
-                border: 2px solid #fff;
-                background: white;
+        height: 100%;
+        .swiper-container {
+          margin-left: auto;
+          margin-right: auto;
+          height: 100%;
+          width: 100%;
 
+          .swiper-wrapper {
+            .swiper-slide {
+              border: 1px solid grey;
+              box-sizing: border-box;
+              width: 100%;
+              height: 100%;
+              img {
+                display: block;
+                height: 100%;
               }
             }
-
-            img {
-              display: inline-block;
-              height: 100%;
-              width: auto;
-              border: 2px solid rgba(63, 63, 63, 0.9);
-              box-sizing: border-box;
-              cursor: pointer;
-            }
           }
         }
+
         .swiper-button-prev {
-          width: 8px;
-          height: 12px;
-          background-size: 100% 100%;
-          left: 12px;
-          margin-top: -6px;
+          display: none;
         }
         .swiper-button-next {
-          width: 8px;
-          height: 12px;
-          background-size: 100% 100%;
-          right: 12px;
-          margin-top: -6px;
+          display: none;
         }
+
+        .swiper-left-gray {
+          background: url("/static/img/img00/employee/photo_arrow_left_big.png") no-repeat;
+          width: 50px;
+          height: 50px;
+          left: 55px;
+          position: absolute;
+          top: 50%;
+        }
+
+        .swiper-right-gray {
+          background: url("/static/img/img00/employee/photo_arrow_right_big.png") no-repeat;
+          width: 50px;
+          height: 50px;
+          right: 55px;
+          position: absolute;
+          top: 50%;
+        }
+
+        .rotate90 {
+          transform: rotate(90deg);
+          -webkit-transform: rotate(90deg);
+        }
+
+        .rotate180 {
+          transform: rotate(180deg);
+          -webkit-transform: rotate(180deg);
+        }
+
+        .rotate270 {
+          transform: rotate(270deg);
+          -webkit-transform: rotate(270deg);
+        }
+
+      }
+      .gallery-thumbs {
+        height: 100px;
+        box-sizing: border-box;
+        padding: 18px 0;
+        top: auto;
+        bottom: 0;
+        background: rgba(63, 63, 63, .9);
+        left: 0;
+        right: 0;
+        width: auto;
+        position: absolute;
+        z-index: 1;
+        @include animate-fadeOut(1s, 2s, linear, forwards, 1);
+        &:hover {
+          @include animate-fadeIn(0.1s, 0s, linear, forwards, 1);
+        }
+        .swiper-wrapper-center {
+          justify-content: center;
+
+        }
+        .swiper-container {
+          margin-left: auto;
+          margin-right: auto;
+          height: 100%;
+          width: 100%;
+          .swiper-wrapper {
+            .swiper-slide {
+              width: auto;
+              &.swiper-slide-active {
+                img {
+                  border: 2px solid #fff;
+                  background: white;
+
+                }
+              }
+
+              img {
+                display: inline-block;
+                height: 100%;
+                width: auto;
+                border: 2px solid rgba(63, 63, 63, 0.9);
+                box-sizing: border-box;
+                cursor: pointer;
+              }
+            }
+          }
+          .swiper-button-prev {
+            width: 8px;
+            height: 12px;
+            background-size: 100% 100%;
+            left: 12px;
+            margin-top: -6px;
+          }
+          .swiper-button-next {
+            width: 8px;
+            height: 12px;
+            background-size: 100% 100%;
+            right: 12px;
+            margin-top: -6px;
+          }
+        }
+
+      }
+    }
+
+    &.full-screen{
+      .background-hidden{
+        top:0;
+        bottom:0;
+        left:0;
+        right:0;
+      }
+      .close{
+
+        background:url("/static/img/img00/employee/picture_close.png") 50% 50% no-repeat;
+        background-color: rgba(255, 255, 255, 0.3);
+        cursor: pointer;
+        width:60px;
+        height:60px;
+        top: -10px;
+        right: -15px;
+        border-radius: 50%;
+      }
+      .close:hover{
+        background-color: rgba(255, 255, 255, 0.6);
+      }
+      .rotate-button{
+        top: 72px;
+        right: 27px;
       }
 
+      .bigger-button {
+        top: 113px;
+        right: 27px;
+      }
+
+      .smaller-button{
+        top: 154px;
+        right: 27px;
+      }
+      .download-button{
+        top: 195px;
+        right: 27px;
+      }
     }
   }
+
+
 
   .swiper-slide-active {
     .scalePic {
@@ -404,7 +447,6 @@
     cursor: pointer;
   }
 
-
   .centerTip {
     width: 320px;
     height: 240px;
@@ -416,50 +458,46 @@
     transform: translate(-50%, -50%);
     background: #fff;
     border-radius: 4px 4px 0 0;
-    z-index: 5
-  }
-
-  .centerTip .tip-head {
-    width: 100%;
-    height: 56px;
-    background: #d9dfec;
-    border-radius: 4px 4px 0 0;
-    text-align: center;
-    line-height: 56px;
-    font-size: 18px;
-    color: #222
-  }
-
-  .centerTip .tip-content {
-    width: 100%;
-    height: 184px;
-    padding-top: 32px;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box
-  }
-
-  .centerTip .tip-btn {
-    width: 200px;
-    height: 48px;
-    margin: 0 auto 18px;
-    background: #7a8ec1;
-    -webkit-box-shadow: 0 2px 6px 0;
-    box-shadow: 0 2px 6px 0;
-    font-size: 16px;
-    color: #fff;
-    line-height: 48px;
-    text-align: center;
-    cursor: pointer
-  }
-
-  .centerTip .tip-close {
-    width: 16px;
-    height: 16px;
-    background: url(/image/img00/employee/picture_close.png) 50% 50% no-repeat;
-    position: absolute;
-    top: 0;
-    right: -36px;
-    cursor: pointer
+    z-index: 5;
+    .tip-head {
+      width: 100%;
+      height: 56px;
+      background: #d9dfec;
+      border-radius: 4px 4px 0 0;
+      text-align: center;
+      line-height: 56px;
+      font-size: 18px;
+      color: #222
+    }
+    .tip-content {
+      width: 100%;
+      height: 184px;
+      padding-top: 32px;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box
+    }
+    .tip-btn {
+      width: 200px;
+      height: 48px;
+      margin: 0 auto 18px;
+      background: #7a8ec1;
+      -webkit-box-shadow: 0 2px 6px 0;
+      box-shadow: 0 2px 6px 0;
+      font-size: 16px;
+      color: #fff;
+      line-height: 48px;
+      text-align: center;
+      cursor: pointer
+    }
+    .tip-close {
+      width: 16px;
+      height: 16px;
+      background: url(/image/img00/employee/picture_close.png) 50% 50% no-repeat;
+      position: absolute;
+      top: 0;
+      right: -36px;
+      cursor: pointer
+    }
   }
 
   .tip-save-result{
