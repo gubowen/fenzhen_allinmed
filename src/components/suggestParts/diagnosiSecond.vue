@@ -578,11 +578,12 @@
                 } else {
                     this.allDoc.allDocState = !(this.allDoc.allDocState);
                 }
-                arr.forEach(function (key, value) {
-                    key.isChecked = !(key.isChecked);
-                })
+//                arr.forEach(function (key, value) {
+//                    key.isChecked = !(key.isChecked)
+//                })
                 if ((this.matchDoc.matchDocState && type == "match") || (this.allDoc.allDocState && type == "all")) {
                     arr.forEach(function (key, value) {
+                        key.isChecked = true
                         let docId = key.customerId, flag = true;
                         that.previewDiagnoseSuggest.doctorList.forEach(function (element, index) {
                             if (element.customerId == docId) {
@@ -597,6 +598,7 @@
                     })
                 } else {
                     arr.forEach(function (key, value) {
+                        key.isChecked = false;
                         let docId = key.customerId;
                         that.previewDiagnoseSuggest.doctorList.forEach(function (element, index) {
                             if (element.customerId == docId) {
