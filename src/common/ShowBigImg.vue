@@ -1,16 +1,16 @@
 <template>
+  <!--<transition name="fade">-->
   <section class="show-big-img show-big-img-masker full-screen" v-if="$store.state.SBIFlag">
-    <div class="background-hidden">
-      <div class="close" @click="close()"></div>
+    <div class="background-hidden " >
       <div class="rotate-button"></div>
       <div class="bigger-button"></div>
       <div class="smaller-button"></div>
-      <div class="download-button" v-show="!($store.state.SBIType == 'medicalReport')"></div>
+      <div class="download-button" v-show="$store.state.SBIType == 'IMImage'"></div>
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
           <div class="swiper-wrapper">
             <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-              <div class="swiper-zoom-container"><img :src="item.url"/></div>
+              <img :src="item.url"/>
             </div>
           </div>
           <div class="swiper-pagination swiper-pagination-white"></div>
@@ -18,12 +18,12 @@
         <div class="swiper-left-gray" v-show="imgList.length>1"></div>
         <div class="swiper-right-gray" v-show="imgList.length>1"></div>
       </div>
-
+      <div class="close" @click="close()"></div>
       <div class="gallery-thumbs" v-show="imgList.length>1">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-              <div class="swiper-zoom-container"><img :src="item.url"/></div>
+            <div class="swiper-slide" v-for="item in imgList">
+              <img :src="item.url"/>
             </div>
           </div>
           <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
@@ -33,21 +33,22 @@
       </div>
     </div>
   </section>
+  <!--</transition>-->
 </template>
 <script>
-  //  import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import Vue from 'vue'
-  import VueAwesomeSwiper from 'vue-awesome-swiper'
-  import Swiper from 'swiper';
-  import 'swiper/dist/css/swiper.css';
-  import showBigImg  from '../common/js/showBigImg';
+    //  import {swiper, swiperSlide} from 'vue-awesome-swiper'
+    import Vue from 'vue'
+    import VueAwesomeSwiper from 'vue-awesome-swiper'
+    import Swiper from 'swiper';
+    import 'swiper/dist/css/swiper.css';
+    import showBigImg  from '../common/js/showBigImg';
 
-  Vue.use(VueAwesomeSwiper);
-  export default{
-    name: 'show-big-img',
-    data(){
-      return {
-        imgList: [
+    Vue.use(VueAwesomeSwiper);
+    export default{
+        name: 'show-big-img',
+        data(){
+            return {
+                imgList: [
 //          {
 //            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
 //          }
@@ -61,74 +62,105 @@
 //          {
 //            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
 //          }
-        ]
-      }
-    },
-    components: {
-      VueAwesomeSwiper
-    },
-    props: {
-      showBigImgFlag: {
-        type: Boolean
-      }
-    },
-    watch: {
-      '$store.state.SBIList'(content){
-        this.init();
-      }
-    },
-    methods: {
-      init(){
-        this.imgList = [];
-        this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
-        console.log( this.imgList);
-        console.log( this.$store.state.SBIType);
-      },
-      close(){
-        this.$store.commit("setSBIFlag", false);
-      }
-    },
-    mounted(){
-      this.init();
-    },
-    updated(){
-      let topSwiper = new Swiper('.topSwiper', {
-        direction: 'horizontal',
-        zoom: true,
-        prevButton: '.swiper-left-gray',
-        nextButton: '.swiper-right-gray',//前进按钮的css选择器或HTML元素。
-        onInit: function (swiper) {
-          console.log(swiper.activeIndex + "当前索引");
-          console.log("sipwer初始化完成!,回调函数，初始化后执行。");
-          $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                ]
+            }
         },
-        onTap: function (swiper, event) {
-          console.log(swiper.activeIndex); //swiper当前的活动块的索引
+        components: {
+            VueAwesomeSwiper
         },
-        onSlideChangeStart(swiper){
-          console.log(swiper.activeIndex + "当前索引");
+        props: {
+            showBigImgFlag: {
+                type: Boolean
+            }
+        },
+        watch: {
+            '$store.state.SBIList'(content){
+                this.init();
+            }
+        },
+        methods: {
+            init(){
+                this.imgList = [];
+                this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
+                let that = this;
+                this.imgList.forEach(function (element,value) {
+                    that.imgList[value].url = that.clipImg(element.url);
+                })
+            },
+            close(){
+                this.$store.commit("setSBIFlag", false);
+            },
+            clipImg(imgUrl){
+                if(imgUrl.indexOf("_c") != -1){
+                    let beforeUrl = imgUrl.substring(0,imgUrl.indexOf("_c")+2);
+                    let afterUrl = imgUrl.substring(imgUrl.lastIndexOf("."));
+                    return beforeUrl+afterUrl;
+                }else{
+                    return imgUrl;
+                }
+            }
+        },
+        mounted(){
+            this.init();
+        },
+        updated(){
 
+            let index = this.$store.state.SBIIndex?this.$store.state.SBIIndex : 0 ;
+            let topSwiper = new Swiper('.topSwiper', {
+                direction: 'horizontal',
+                zoom: true,
+                initialSlide: index,
+                prevButton: '.swiper-left-gray',
+                nextButton: '.swiper-right-gray',//前进按钮的css选择器或HTML元素。
+                onInit: function (swiper) {
+                    console.log(swiper.activeIndex + "当前索引");
+                    console.log("sipwer初始化完成!,回调函数，初始化后执行。");
+                    //  setTimeout(function(){
+                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                    //  },500);
+                },
+                onTap: function (swiper, event) {
+                    console.log(swiper.activeIndex); //swiper当前的活动块的索引
+                },
+                onSlideChangeStart(swiper){
+                    console.log(swiper.activeIndex + "当前索引");
+                    // setTimeout(function(){
+                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                    // },500);
+
+
+                }
+            });
+
+            let thumbSwiper = new Swiper('.thumbSwiper', {
+                initialSlide: index,
+                spaceBetween: 10,
+                direction: 'horizontal',
+                centeredSlides: true,
+                slidesPerView: 'auto',
+                touchRatio: 1,
+                slideToClickedSlide: true,
+                observer: true,
+                prevButton: '.swiper-button-prev',
+                nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
+                loopedSlides: 5,
+                paginationType: '',
+                imgElementCallBack: function () {
+                    console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+                },
+                onTap:function (swiper,event) {
+                    swiper.slideTo(swiper.activeIndex)
+                }
+
+
+            });
+            topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
+            thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
         }
-      });
-
-      let thumbSwiper = new Swiper('.thumbSwiper', {
-        direction: 'horizontal',
-        prevButton: '.swiper-button-prev',
-        nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
-        loopedSlides: 5,
-        spaceBetween: 10,
-        centeredSlides: true,
-        slidesPerView: 'auto',
-        slideToClickedSlide: true
-      });
-      topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
-      thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
     }
-  }
 </script>
-<style lang="scss" type="text/css" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss">
   @import "../scss/base.scss";
-
   .show-big-img-masker {
     position: absolute;
     bottom: 0;
@@ -137,9 +169,6 @@
     left: 0;
     background-color: rgba(0, 0, 0, 0.6);
     z-index: 5;
-    opacity: 1;
-    -webkit-transition: all 0.2s linear;
-    transition: all 0.2s linear;
     .background-hidden {
       position: absolute;
       top: 65px;
@@ -219,10 +248,77 @@
               box-sizing: border-box;
               width: 100%;
               height: 100%;
+              overflow: hidden;
               img {
                 display: block;
+                position: absolute;
                 height: 100%;
+                -webkit-user-select:none;
+                -moz-user-select:none;
+                -ms-user-select:none;
+                user-select:none;
+
               }
+            }
+
+            .swiper-slide-active {
+              .scalePic {
+                width: 120px;
+                position: absolute;
+                height: 120px;
+                bottom: 0;
+                right: 0;
+                border: 1px solid #fff;
+                background-size: 100% 100%;
+                background: #000;
+                display: none;
+                text-align: center;
+                img {
+                  background-size: 100% 100%;
+                  max-height: 100%;
+                  max-width: 100%;
+                  position: absolute;
+                  bottom: 0;
+                  left: 0;
+                  right: 0;
+                  top: 0;
+                  display: block;
+                  margin: auto;
+                  opacity: 0.6;
+                  filter: Alpha(opacity=60);
+                }
+                .demoPic {
+                  width: 100%;
+                  height: 100%;
+                  position: relative;
+                  .demoPicArea {
+
+                    position: absolute;
+                    span {
+                      border: 1px solid #fff;
+                      height: 100%;
+                      display: block;
+                    }
+
+                  }
+
+                }
+
+              }
+              .percentTip {
+                position: absolute;
+                width: 80px;
+                height: 25px;
+                background: #000;
+                border-radius: 5px;
+                color: #fff;
+                font-size: 14px;
+                text-align: center;
+                line-height: 25px;
+                top: 50%;
+                left: 50%;
+              }
+
             }
           }
         }
@@ -295,21 +391,24 @@
           width: 100%;
           .swiper-wrapper {
             .swiper-slide {
-              width: auto;
+              width: 64px;
+              height: 64px;
+              border: 2px solid #fff;
+              box-sizing: border-box;
+              text-align: center;
+              background: #fff;
               &.swiper-slide-active {
+                border: 2px solid #00d6c6;
+                background: white;
                 img {
-                  border: 2px solid #fff;
-                  background: white;
-
                 }
               }
 
               img {
                 display: inline-block;
-                height: 100%;
-                width: auto;
-                border: 2px solid rgba(63, 63, 63, 0.9);
-                box-sizing: border-box;
+                max-width:100%;
+                max-height:100%;
+                margin:0 auto;
                 cursor: pointer;
               }
             }
@@ -375,68 +474,6 @@
     }
   }
 
-
-
-  .swiper-slide-active {
-    .scalePic {
-      width: 120px;
-      position: absolute;
-      height: 120px;
-      bottom: 0;
-      right: 0;
-      border: 1px solid #fff;
-      background-size: 100% 100%;
-      background: #000;
-      display: none;
-      text-align: center;
-
-      img {
-        background-size: 100% 100%;
-        max-height: 100%;
-        max-width: 100%;
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        top: 0;
-        display: block;
-        margin: auto;
-        opacity: 0.6;
-        filter: Alpha(opacity=60);
-      }
-      .demoPic {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        .demoPicArea {
-
-          position: absolute;
-          span {
-            border: 1px solid #fff;
-            height: 100%;
-            display: block;
-          }
-
-        }
-
-      }
-      .percentTip {
-        position: absolute;
-        width: 80px;
-        height: 25px;
-        background: #000;
-        border-radius: 5px;
-        color: #fff;
-        font-size: 14px;
-        text-align: center;
-        line-height: 25px;
-        top: 50%;
-        left: 50%;
-      }
-    }
-
-  }
-
   .close {
     width: 16px;
     height: 16px;
@@ -500,9 +537,9 @@
     }
   }
 
-  .tip-save-result{
-    width:120px;
-    height:120px;
+  .tip-save-result {
+    width: 120px;
+    height: 120px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -510,21 +547,21 @@
     background: #000;
     border-radius: 8px;
     opacity: 0.9;
-    text-align:center;
+    text-align: center;
     font-size: 16px;
     color: #FFFFFF;
     letter-spacing: 0;
     line-height: 16px;
     z-index: 7;
-    -webkit-transition:opacity 0.5s;
-    img{
-      margin-top:20px;
+    -webkit-transition: opacity 0.5s;
+    img {
+      margin-top: 20px;
     }
-    .text{
-      margin-top:14px;
+    .text {
+      margin-top: 14px;
     }
-    &.on{
-      -webkit-animation: fadeOut 2s  linear 0s forwards 1;
+    &.on {
+      -webkit-animation: fadeOut 2s linear 0s forwards 1;
     }
   }
 </style>
