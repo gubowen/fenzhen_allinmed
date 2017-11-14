@@ -120,7 +120,7 @@
         handler(curVal,oldVal){
             if(this.sicknessResult.illnessName && this.sicknessResult.illnessName.length>0){
               this.progressList.disabledFlag = false;
-              if(this.progressResult && this.progressResult.progressName){
+              if(this.progressResult && this.progressResult.progressName=='暂不需要手术'){
                   this.nextFlag = false;
               }
             }else{

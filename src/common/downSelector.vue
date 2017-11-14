@@ -9,13 +9,13 @@
 <template>
   <section class="search-sortType-item">
     <ul class="search-selector">
-      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click="showData()" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
-      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click="showData()"></i>
-      <section class="search-selector-second-box">
+      <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click.stop="showData()" @keyup="dataListInfo.placeholderText == '疾病'&& searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
+      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click.stop="showData()"></i>
+      <section class="search-selector-second-box" v-show="conIndex===currentIndexNow">
         <div class="custom-selector-second firstList" v-show="dataShow">
-          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click="selectData()">暂不确定</li>
-          <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click="selectData(item,index)" :class="{'active':index == currentIndex}">
-            <span v-show="item.tagName!=''" >{{item.tagName}}</span>
+          <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click.stop="selectData()">{{noData}}</li>
+          <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click.stop="selectData(item,index)" :class="{'active':index == currentIndex}">
+            <span v-if="dataListInfo.placeholderText == '专科'" >{{item|messageFilter}}</span>
             <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
             <span v-show="item.progressName!=''" >{{item.progressName}}</span>
             <span v-show="item.operationName!=''" >{{item.operationName}}</span>
@@ -23,7 +23,7 @@
         </div>
         <div class="custom-selector-second custom-selector-second-list secondList">
           <ul v-for="(item,index) in dataListInfo.dataList">
-            <li class="custom-selector-item result-item" :class="{'active':index == oldIndex && IndexChildren==currentIndexChildren}" v-for="(itemChildren,IndexChildren) in item.children" v-if="index == currentIndex && secondActive" @click="childrenData(itemChildren,IndexChildren)">
+            <li class="custom-selector-item result-item" :class="{'active':index == oldIndex && IndexChildren==currentIndexChildren}" v-for="(itemChildren,IndexChildren) in item.children" v-if="index == currentIndex && secondActive" @click.stop="childrenData(itemChildren,IndexChildren)">
               <span>{{itemChildren.operationName}}</span>
             </li>
           </ul>
@@ -33,85 +33,144 @@
   </section>
 </template>
 <script>
-  export default{
-    name: 'search-sorType-item',
-    data(){
-      return {
-        dataShow: false,
-        iconFlag: false,
-        resultData: '',
-        currentIndex: -1,
-        oldIndex:-1,
-        secondActive:true,
-        currentIndexChildren:-1
-      }
-    },
-    props: {
-      dataListInfo: {
-        type: Object
-      }
-    },
-    watch:{
-        resultData(){
-            console.log("111");
-        }
-    },
-    methods: {
-      init(){
-      },
-      showData(){
-        this.dataShow = !this.dataShow;
-        this.iconFlag = !this.iconFlag;
-      },
-      selectData(item, index){
-        let _this = this;
-        item = item?item:'';
-        index = index?index:'';
-        _this.currentIndex = index;
-        _this.secondActive = true;
-        if (item.tagName) {
-          this.resultData = item.tagName;
-          _this.$emit('update:dataBack', item);
-          this.dataShow = !this.dataShow;
-          this.iconFlag = !this.iconFlag;
-        } else if (item.illnessName) {
-          this.resultData = item.illnessName;
-          _this.$emit('update:dataBack', item);
-          this.dataShow = !this.dataShow;
-          this.iconFlag = !this.iconFlag;
-        } else if (item.progressName) {
-          this.resultData = item.progressName;
-          _this.$emit('update:dataBack', item.progressName);
-          this.dataShow = !this.dataShow;
-          this.iconFlag = !this.iconFlag;
-        } else if (item.operationName) {
-          if (item.children.length > 0) {
-          } else {
-            _this.resultData = item.operationName;
-            _this.$emit('update:dataBack', item);
-            this.dataShow = !this.dataShow;
-            this.iconFlag = !this.iconFlag;
-          }
+    import api from './js/util';
+    import Vue from "vue";
+
+    Vue.filter('messageFilter', function (data) {
+        if(data.platformId == 2){
+            return "手外-"+ data.tagName;
         }else{
-            _this.resultData = '暂不确定';
-            this.dataShow = !this.dataShow;
-            this.iconFlag = !this.iconFlag;
-            _this.$emit('update:dataBack', {'illnessId':'','illnessName':''});
+            return  data.tagName;
         }
-      },
-      childrenData(item,index){
-        this.oldIndex = this.currentIndex;
-        this.secondActive=false;
-        this.resultData = item.operationName;
-        this.currentIndexChildren = index;
-        this.dataShow = !this.dataShow;
-        this.iconFlag = !this.iconFlag;
-        this.$emit('update:dataBack',item);
-      }
-    }, mounted(){
-      this.init()
+    });
+
+    export default{
+        name: 'search-sorType-item',
+        data(){
+            return {
+                dataShow: false,
+//        iconFlag: false,
+                resultData: '',
+                noData:"暂不确定",
+                currentIndex: -1,
+                oldIndex:-1,
+                secondActive:true,
+                currentIndexChildren:-1
+            }
+        },
+        props: {
+            dataListInfo: {
+                type: Object
+            },
+            conIndex:{
+                type:Number||String
+            },
+            currentIndexNow:{
+                type:Number||String,
+                default:-1
+            },
+            iconFlag:{
+                type:Boolean,
+                default:false
+            }
+
+        },
+        methods: {
+            init(){
+            },
+            showData(){
+                this.$emit("update:currentIndexNow",this.conIndex);
+                this.dataShow = !this.dataShow;
+                this.iconFlag = !this.iconFlag;
+            },
+            selectData(item, index){
+                let _this = this;
+                item = item?item:'';
+                index = index?index:'';
+                _this.currentIndex = index;
+                _this.secondActive = true;
+                if (item.tagName) {
+                    this.resultData = item.tagName;
+                    _this.$emit('update:dataBack', item);
+                    this.dataShow = !this.dataShow;
+                    this.iconFlag = !this.iconFlag;
+                } else if (item.illnessName) {
+                    this.resultData = item.illnessName;
+                    _this.$emit('update:dataBack', item);
+                    this.dataShow = !this.dataShow;
+                    this.iconFlag = !this.iconFlag;
+                } else if (item.progressName) {
+                    this.resultData = item.progressName;
+                    _this.$emit('update:dataBack', item);
+                    this.dataShow = !this.dataShow;
+                    this.iconFlag = !this.iconFlag;
+                } else if (item.operationName) {
+                    if (item.children.length > 0) {
+                    } else {
+                        _this.resultData = item.operationName;
+                        _this.$emit('update:dataBack', item);
+                        this.dataShow = !this.dataShow;
+                        this.iconFlag = !this.iconFlag;
+                    }
+                }else{
+                    _this.resultData = '暂不确定';
+                    this.dataShow = !this.dataShow;
+                    this.iconFlag = !this.iconFlag;
+                    _this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
+                }
+            },
+            childrenData(item,index){
+                this.oldIndex = this.currentIndex;
+                this.secondActive=false;
+                this.resultData = item.operationName;
+                this.currentIndexChildren = index;
+                this.dataShow = !this.dataShow;
+                this.iconFlag = !this.iconFlag;
+                this.$emit('update:dataBack',item);
+            },
+            searchIllness(ev){
+                let that = this;
+                if (ev.keCode == 37 || ev.keyCode == 38 || ev.keyCode == 39 || ev.keyCode == 40) {
+                    return false;
+                }
+                let flag = false;
+                api.ajax({
+                    url: "/call/comm/data/illness/v1/getMapList/",
+                    method: "POST",
+                    data: {
+                        isValid: 1,
+                        firstResult: 0,
+                        maxResult: 999,
+                        illnessName: "",
+                        searchParam: that.resultData,
+                        isSolr: 1
+                    },
+                    done(res) {
+                        if(res.responseObject.responseData.dataList){
+                            that.noData = "暂不确定";
+                            that.secondActive = true;
+                            that.dataListInfo.dataList = res.responseObject.responseData.dataList;
+                        }else{
+                            that.noData = "暂无数据";
+                            that.secondActive = false;
+                            that.dataListInfo.dataList = [];
+                        }
+                    }
+                })
+            }
+        },
+        watch:{
+            resultData(){
+                if(!this.resultData){
+                    this.$emit('update:dataBack', {'illnessId':'','illnessName':''});
+                }
+            }
+        },
+        mounted(){
+            this.init()
+        },
+
     }
-  }
 </script>
 <style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
   .search-sortType {
