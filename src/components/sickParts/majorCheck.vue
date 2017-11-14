@@ -6,9 +6,9 @@
           <header><h2>检验及诊断结果</h2></header>
           <section class="img-check">
             <ul class="talkImgMore">
-              <li v-show="caseAttUrl.length > 0" v-for="item in caseAttUrl">
+              <li v-show="caseAttUrl.length > 0" v-for="(item,index) in caseAttUrl">
                 <section>
-                  <img :src="item" @click="showBigImgFunction(1)"/>
+                  <img :src="item" @click="showBigImgFunction(1,index)"/>
                   <!--<p>检查资料</p>-->
                 </section>
               </li>
@@ -20,9 +20,9 @@
           <header><h2>视诊</h2></header>
           <section class="video-check">
             <ul class="video-check-show">
-              <li v-show="videoCaseAttUrl.length > 0" v-for="item in videoCaseAttUrl">
+              <li v-show="videoCaseAttUrl.length > 0" v-for="(item,index) in videoCaseAttUrl">
                 <section>
-                  <img :src="item" @click="showBigImgFunction(2)"/>
+                  <img :src="item" @click="showBigImgFunction(2,index)"/>
                   <p>患病处照片</p>
                 </section>
               </li>
@@ -182,8 +182,6 @@
                                     allObject['diagnoseListImage'] = diagnoseList;
                                     _this.$store.commit('setSBIObject', allObject);
                                 }
-                                console.log( _this.caseAttUrl);
-                                console.log( _this.videoCaseAttUrl)
                             }
                             //获取视频
                             if (data_list[1].videoMap.length) {
@@ -262,16 +260,16 @@
 
 
             },
-            showBigImgFunction(type){
+            showBigImgFunction(type,index){
                 if (type == '1') {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'checkImage');
-                    let index = this.$store.state.SBIObject.checkImage.length;
+                   // let index = this.$store.state.SBIObject.checkImage.length;
                     this.$store.commit("setSBIIndex",index);
                 } else if (2) {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'diagnoseListImage');
-                    let index = this.$store.state.SBIObject.diagnoseListImage.length;
+                  //  let index = this.$store.state.SBIObject.diagnoseListImage.length;
                     this.$store.commit("setSBIIndex",index);
                 }
             },

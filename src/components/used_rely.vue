@@ -192,7 +192,7 @@
   .jump-box-list {
     font-size: 16px;
     overflow: auto;
-    max-height: 205px;
+    max-height: 274px;
     margin-left: -14px;
     &-item {
       margin: 22px 0;
@@ -229,7 +229,8 @@
     position: absolute;
     cursor: pointer;
     right: 40px;
-    bottom: 40px;
+    bottom: 18px;
+    font-size: 14px;
     & > span {
       margin-left: 9px;
     }

@@ -647,18 +647,15 @@
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
 
-
-
-
     .messageList-box {
-        padding: 40px 50px;
-        height: 70.5%;
+        padding: 40px 25px;
+        height: 71.2%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
         box-sizing: border-box;
         @include query(1500px) {
-            height: 61%;
+            height: 60.7%;
         }
         &.watingBoxStyle {
             height: 94%;
@@ -667,7 +664,7 @@
             position: relative;
             zoom: 1;
             overflow: hidden;
-            margin-bottom: 30px;
+            margin-bottom: 20px;
 
             &.others-message {
                 .messageList-item-content {
@@ -722,6 +719,9 @@
                     padding: 7px 12px;
                     box-sizing: border-box;
                     font-size: 14px;
+                    @include query(1500px) {
+                        font-size: 16px;
+                    }
                     margin: 0 24px;
                     line-height: 1.5;
                     border-radius: 5px;
@@ -736,7 +736,7 @@
 
     .user-controller {
         @include query(1500px) {
-            height: 30%;
+            height: 24%;
         }
     }
 
@@ -886,7 +886,7 @@
     .time-stamp {
         font-size: 13px;
         color: #AAAAAA;
-        margin-bottom: 20px;
+        margin-bottom: 10px;
         /*margin-top: 40px;*/
         text-align: center;
     }
