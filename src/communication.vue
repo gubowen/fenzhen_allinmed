@@ -44,7 +44,7 @@
                 </nav>
                 <article class="user-controller-middle">
                     <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
-                              @keyup="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
+                              @keydown="sendMessage($event)" :readonly="$store.state.inputReadOnly"></textarea>
                 </article>
                 <footer class="user-controller-footer" v-if="!watingTriage">
                     <span class="user-send-message">按下Enter发送</span>
