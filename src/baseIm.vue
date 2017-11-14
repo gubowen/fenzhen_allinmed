@@ -190,7 +190,7 @@
             init(){
                 let that = this;
                 this.nim = nim.getInstance({
-                    // debug: true,
+                     debug: true,
                     appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
