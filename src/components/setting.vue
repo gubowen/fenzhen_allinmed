@@ -109,6 +109,14 @@
     components: {
       headerList
     },
+    beforeRouteLeave: (to, from, next) => {
+      // ...
+      if(to.name==="home"){
+        console.log("回去了")
+        store.commit('enableSearchFn',true);
+      }
+      next(true)
+    },
     methods: {
       init(){
         this.storageGet()
