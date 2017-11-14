@@ -89,35 +89,35 @@
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
                             <transition-group name="list-right" tag="section">
                                 <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
-                                 :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
-                                 v-for="(items,index) in userListOnline"
-                                 :key="index"
-                        >
-                            <figure class="userlist-item-img">
-                                <img v-bind:src="items.logoUrl" alt="">
-                                <p v-show="items.messageAlert">{{items.messageAlert}}</p>
-                            </figure>
-                            <figcaption class="userlist-item-base-msg">
-                                <h3>
+                                         :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
+                                         v-for="(items,index) in userListOnline"
+                                         :key="index"
+                                >
+                                    <figure class="userlist-item-img">
+                                        <img v-bind:src="items.logoUrl" alt="">
+                                        <p v-show="items.messageAlert">{{items.messageAlert}}</p>
+                                    </figure>
+                                    <figcaption class="userlist-item-base-msg">
+                                        <h3>
                   <span
                           class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                    <span class="category short"
-                                          v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
-                                    <span class="category short"
-                                          v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
-                                </h3>
-                                <article>
+                                            <span class="category short"
+                                                  v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
+                                            <span class="category short"
+                                                  v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
+                                        </h3>
+                                        <article>
                                     <span class="text">
                                         {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}&nbsp;{{items.partName}}</span>
+                                        </article>
+                                        <!--<figure class="quit-triage">-->
+                                        <!--<span class="text">转移患者</span>-->
+                                        <!--<i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"-->
+                                        <!--@click="selectQuitItem(items)"></i>-->
+                                        <!--</figure>-->
+                                    </figcaption>
+                                    <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                                 </article>
-                                <!--<figure class="quit-triage">-->
-                                <!--<span class="text">转移患者</span>-->
-                                <!--<i class="quit-select" :class="{'off':!items.triageSelect,'on':items.triageSelect}"-->
-                                <!--@click="selectQuitItem(items)"></i>-->
-                                <!--</figure>-->
-                            </figcaption>
-                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
-                        </article>
                             </transition-group>
                             <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                         </section>
@@ -640,18 +640,18 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
     .list-left-enter-active, .list-left-leave-active {
-     //   transition: all 0.3s;
+        //   transition: all 0.3s;
     }
     .list-left-enter, .list-left-leave-to{
-      //  opacity: 0;
-      //  transform: translateX(-100px);
+        //  opacity: 0;
+        //  transform: translateX(-100px);
     }
     .list-right-enter-active, .list-right-leave-active {
-    //    transition: all 0.3s;
+        //    transition: all 0.3s;
     }
     .list-right-enter, .list-right-leave-to{
-     //   opacity: 0;
-     //   transform: translateX(100px);
+        //   opacity: 0;
+        //   transform: translateX(100px);
     }
 
     .userList {

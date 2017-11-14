@@ -81,7 +81,7 @@
                     this.showAddress = this.dataListInfo.provinceName + '-' + this.dataListInfo.cityName + '-' + this.dataListInfo.districtName;
                 }
                 this.showProvince();
-
+                this.showCity();
                 this.showDistrict();
             },
             showProvince(){
@@ -213,22 +213,26 @@
                     this.showAddress = item.regionName;
                     this.dataBack.provinceId = item.regionId;
                     this.dataBack.provinceName = item.regionName;
-                 //       console.log(this.cityList);
-                //    if(this.cityList == '{}'){
-                        this.showCity();
-                  //  }
-                }
-
-
-                this.cityFlag = true;
-                this.districtFlag = false;
+                    this.cityFlag = true;
+                    this.districtFlag = false;
+                }else{
+                    this.provinceFlag =false;
+                    this.cityFlag = false;
+                    this.districtFlag = false;
+                    this.dataBack.provinceName ='';
+                    this.dataBack.cityId ='';
+                    this.dataBack.cityName ='';
+                    this.dataBack.districtId ='';
+                    this.dataBack.districtName ='';
+                    this.showAddress = '请选择';
+                    this.$emit('update:dataBack', this.dataBack);
+                    }
             },
             selectCity(item){
                 if (item) {
                     this.dataBack.cityId = item.regionId;
                     this.dataBack.cityName = item.regionName;
                     this.showAddress = this.dataBack.provinceName + '-' + item.regionName;
-
                     this.districtFlag = true;
                 } else {
                     this.showAddress = this.dataBack.provinceName + '-' + '未知';

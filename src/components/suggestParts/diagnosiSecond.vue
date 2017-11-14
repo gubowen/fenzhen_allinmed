@@ -41,16 +41,16 @@
                             </a>
                             <div class="doc-search-box">
                                 <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
-                                <button class="doc-search-btn" :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
-                                <dignosi-address :dataListInfo.sync="addressResult" :dataBack.sync="addressResult"></dignosi-address><select class="doc-type">
-                                    <option value="1">类型不限</option>
-                                    <option value="2">权威医生</option>
-                                    <option value="3">轻问诊医生</option>
-                                </select><select class="doc-type">
-                                    <option value="1">状态不限</option>
-                                    <option value="2">在线</option>s
-                                    <option value="3">休息</option>
+                                <dignosi-address :dataListInfo.sync="addressResult" :dataBack.sync="addressResult"></dignosi-address><select class="doc-type" v-model="doctorType">
+                                    <option value="">类型不限</option>
+                                    <option value="1">权威医生</option>
+                                    <option value="0">轻问诊医生</option>
+                                </select><select class="doc-type" v-model="onlineState">
+                                    <option value="">状态不限</option>
+                                    <option value="1">在线</option>s
+                                    <option value="0">休息</option>
                                 </select>
+                                <button class="doc-search-btn on"  @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
                             </div>
                         </section>
                         <!--全选按钮-->
@@ -81,7 +81,9 @@
                                                 <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
-                                            <article class="doctor-message-goodAt">擅长：{{docList.illnessNameList}}</article>
+                                            <article class="doctor-message-goodAt" >
+                                                擅长：{{docList.illnessNameList}}
+                                            </article>
                                             <article class="doctor-message-num">
                                                 <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
@@ -112,7 +114,12 @@
                                                 <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
-                                            <article class="doctor-message-goodAt">擅长：<span v-html="docList.illnessNameList"></span></article>
+                                            <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0">
+                                                <spna>擅长：</spna><span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span>
+                                                <a href="javascript:;" class="viewMoreBox" @click.stop="current(index)" v-show="docList.illnessNameList.length>30">
+                                                    <button class="viewMore" :class="{'rotate':currentIndex == index}"></button>
+                                                </a>
+                                            </article>
                                             <article class="doctor-message-num">
                                                 <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
@@ -358,7 +365,10 @@
                     cityName: '',
                     districtId: '',
                     districtName: ''
-                }
+                },
+                doctorType:'',
+                onlineState:'',
+                currentIndex:-1
             }
         },
         mounted(){
@@ -471,6 +481,10 @@
                     this.searchTagName = obj.tag.tagName;
                     this.docSearchValue = "";
                 }
+
+
+
+
                 if (this.searchTagName == "全部") {
                     searchAreasExpertise = "";
                 } else if (this.searchTagName.indexOf("&") != -1) {
@@ -489,8 +503,20 @@
                     patientId: that.$store.state.patientId,
                     searchParam: that.docSearchValue.trim(),
                     searchAreasExpertise: searchAreasExpertise,
-                    degreeType: that.checkData.degreeType
+                    degreeType: that.checkData.degreeType,
+
                 };
+                if(obj.type=='search'){
+                    if(this.addressResult.districtId){
+                        data.searchRegion = this.addressResult.districtId ;
+                    }else if (this.addressResult.provinceId){
+                        data.searchRegion = this.addressResult.provinceId ;
+                    }else if(this.addressResult.cityId){
+                        data.searchRegion = this.addressResult.cityId ;
+                    }
+                    data.doctorType = that.doctorType;
+                    data.onlineState = that.onlineState;
+                }
                 //全部医生首页
                 ajax({
                     url: XHRList.filterSearchDocMessage,
@@ -896,6 +922,15 @@
                         }
                     })
                 }
+            },
+            current(index){
+                if(this.currentIndex == index){
+                    this.currentIndex = -1;
+                }else{
+                    this.currentIndex = index ;
+                }
+
+
             }
         },
         computed: {
@@ -1530,7 +1565,7 @@
                 width: 200px;
                 height: 26px;
                 padding-right: 30px;
-                margin-right: 16px;
+                /*margin-right: 16px;*/
                 border: 1px solid #E3E3E3;
                 border-radius: 4px;
                 text-indent: 10px;
@@ -1543,7 +1578,8 @@
                 }
             }
             .doc-search-btn {
-                float: left;
+                /*float: left;*/
+                display:inline-block;
                 width: 52px;
                 line-height: 26px;
                 text-align: center;
@@ -1688,6 +1724,38 @@
         font-size: 14px;
         max-width: 500px;
         line-height: 1.5;
+        position: relative;
+        &>span{
+            height:20px;
+            overflow: hidden;
+            display:inline-block;
+            width:400px;
+            vertical-align: top;
+        }
+        &>span.on{height:auto;}
+        .viewMoreBox {
+            cursor: pointer;
+            display: block;
+            width: 18px;
+            height: 18px;
+            position: absolute;
+            top:0;
+            right:-100px;
+            z-index: 2;
+            .viewMore {
+                cursor: pointer;
+                display: inline-block;
+                vertical-align: middle;
+                width: 18px;
+                height: 4px;
+                background: url("../../assets/img00/check/dot_more.png") no-repeat;
+                background-size: 100% 100%;
+                &.rotate {
+                    transform: rotate(90deg);
+                }
+            }
+        }
+
         .high-light-search-text {
             color: #252525;
             font-weight: bold;
