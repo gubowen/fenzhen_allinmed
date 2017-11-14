@@ -510,14 +510,15 @@
                     }
 
                     this.communicationList.push(element);
+                    setTimeout(() => {
+                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                    }, 120);
                 } else {
                     //接诊列表
                     this.newMessageTips(targetUser, element);
                 }
 
-                setTimeout(() => {
-                    this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                }, 120);
+
 
             },
             //输出历史消息...
@@ -644,7 +645,7 @@
             height: 68%;
         }
         &.watingBoxStyle {
-            height: 85%;
+            height: 98%;
         }
         .messageList-item {
             position: relative;

@@ -6,7 +6,7 @@
             </figure>
             <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
-                <nav class="user-controller-fastBtn" data-template="tpl-fastReply" v-if="!watingTriage">
+                <nav class="user-controller-fastBtn" data-template="tpl-fastReply">
                     <button class="user-controller-fastReply" @click.stop="fastRely()">
                         <i class="icon-fastReply"></i>
                         <span>快捷提问</span>

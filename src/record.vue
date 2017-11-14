@@ -4,7 +4,7 @@
         <header class="medical-record-title-text" v-show="!$store.state.inputReadOnly">
             <h2>病历编辑</h2>
         </header>
-        <section class="medical-record-content" v-show="!$store.state.inputReadOnly">
+        <section class="medical-record-content">
             <header class="medical-record-title">
                 <figure class="medical-record-img" @click="showCheckHistory()">
                     <!--<img src="http://img.jfdown.com/jfdown/201409/rw4fi0eoppn.jpg" alt="">-->

@@ -344,7 +344,7 @@
                 if (this.userListStatus.first) {
                     this.watingTriage = true;
                     this.userWatingActive = index;
-                    store.commit("setInputReadOnly", false);
+                    store.commit("setInputReadOnly", true);
 
                     let waitingList = this.$store.state.watingList;
                     items.messageAlert = '';
