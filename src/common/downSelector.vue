@@ -39,6 +39,7 @@
     Vue.filter('messageFilter', function (data) {
         if(data.platformId == 2){
             return "手外-"+ data.tagName;
+
         }else{
             return  data.tagName;
         }
