@@ -25,10 +25,10 @@ export default new Router({
       path: '/login', name: 'login', component: login
     },
     {
-      path: '/home', name: 'home', component: userlist, redirect:"/home/mainSpeak/",
+      path: '/home', name: 'home', component: userlist,
       children: [
+          {name: 'mainSpeak', path: '/home/mainSpeak/', component: mainSpeak},
         {name: 'baseInfo', path: '/home/baseInfo/', component: baseInfo},
-        {name: 'mainSpeak', path: '/home/mainSpeak/', component: mainSpeak},
         {name: 'nowSick', path: '/home/nowSick/', component: nowSick},
         {name: 'oldSick', path: '/home/oldSick/', component: oldSick},
         {name: 'checkBody', path: '/home/checkBody/', component: checkBody},
