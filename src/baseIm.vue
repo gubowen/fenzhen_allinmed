@@ -647,9 +647,12 @@
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
 
+
+
+
     .messageList-box {
         padding: 40px 50px;
-        height: 72.5%;
+        height: 70.5%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
@@ -658,7 +661,7 @@
             height: 61%;
         }
         &.watingBoxStyle {
-            height: 98%;
+            height: 94%;
         }
         .messageList-item {
             position: relative;
