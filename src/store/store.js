@@ -97,8 +97,8 @@ export default new Vuex.Store({
         setPatientActiveIndex(state,index){
            state.patientActiveIndex = index;
         },
-        enableSearchFn(state){
-            state.enableSearch = false;
+        enableSearchFn(state,data){
+            state.enableSearch = data;
         },
         setInputReadOnly(state, content){
             state.inputReadOnly = content;

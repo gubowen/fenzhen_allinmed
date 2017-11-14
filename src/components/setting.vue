@@ -113,7 +113,7 @@
       init(){
         this.storageGet()
         this.$store.state.searchStatus =false;
-        store.commit('enableSearchFn');
+        store.commit('enableSearchFn',false);
       },
       storageGet(){
         this.userName = this.$store.state.userName;
@@ -237,6 +237,9 @@
       } else {
         this.init();
       }
+    },
+    activated(){
+       this.init();
     }
   }
 </script>
