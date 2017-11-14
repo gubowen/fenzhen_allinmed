@@ -399,7 +399,7 @@
                 this.fastRelyStatusParent = false;
 
                 this.$router.push({
-                    name:"home"
+                    name:"mainSpeak"
                 })
             },
             //三个状态的点击切换（沟通中、已结束、被退回）

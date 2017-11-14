@@ -14,7 +14,7 @@
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
                              v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
-                        <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom&&items.custom.mType==='33'))">{{items.time | transformMessageTime}}</p>
+                        <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom&&(items.custom.mType==='33'||items.custom.mType==='22'||items.custom.mType==='24')))">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
                         <!--图片消息-->
