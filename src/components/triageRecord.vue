@@ -52,6 +52,7 @@
     },
     watch:{
        '$store.state.currentItem'(){
+           this.showRecord = false;
            this.getRemarkList();
        }
     },
