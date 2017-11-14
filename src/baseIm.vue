@@ -199,6 +199,7 @@
         methods: {
             init(){
                 let that = this;
+                that.connectFlag = false;
                 this.nim = nim.getInstance({
 //                     debug: true,
                     appKey: nimEnv(),
