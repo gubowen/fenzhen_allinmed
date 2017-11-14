@@ -109,6 +109,13 @@
     components: {
       headerList
     },
+    beforeRouteLeave: (to, from, next) => {
+      // ...
+      if(to.name==="home"){
+        store.commit('enableSearchFn',true);
+      }
+      next(true);
+    },
     methods: {
       init(){
         this.storageGet()
