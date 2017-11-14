@@ -33,7 +33,7 @@
                         </article>
                         <article class="special-message-item-text">
                             <article class="special-message-item-list">
-                                <p class="answer"><span class="question">患者是问诊人的：</span>本人</p>
+                                <p class="answer"><span class="question">患者是问诊人的：</span>{{medicalReportMsg.patientCasemap?getPatientrelation(medicalReportMsg.patientCasemap.patientRelationId):''}}</p>
                             </article>
                         </article>
                     </article>
@@ -147,7 +147,49 @@
                     }
                 })
             },
-                getPainMessage(item){
+            getPatientrelation(type){
+                let result = "";
+                switch(parseInt(type)){
+                    case 0:
+                        result = "本人";
+                        break;
+                    case 1:
+                        result = "配偶";
+                        break;
+                    case 2:
+                        result = "子女(有证件)";
+                        break;
+                    case 3:
+                        result = "父亲";
+                        break;
+                    case 4:
+                        result = "母亲";
+                        break;
+                    case 5:
+                        result = "爷爷";
+                        break;
+                    case 6:
+                        result = "奶奶";
+                        break;
+                    case 7:
+                        result = "亲戚";
+                        break;
+                    case 8:
+                        result = "朋友";
+                        break;
+                    case 9:
+                        result = "邻居";
+                        break;
+                    case 10:
+                        result = "其他";
+                        break;
+                    case 11:
+                        result = "子女(无证件)";
+                        break;
+                };
+                return result;
+            },
+            getPainMessage(item){
                     let painItem;
                     if (item){
                         item.forEach((element,index)=>{
