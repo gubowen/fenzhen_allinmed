@@ -41,7 +41,7 @@
                                 <button class="viewMore" :class="{'rotate':viewMore}"></button>
                             </a>
                             <div class="doc-search-box">
-                                <input type="text" placeholder="医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
+                                <input type="text" placeholder="医院、医生、医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
                                 <dignosi-address :dataListInfo.sync="addressResult" :dataBack.sync="addressResult"></dignosi-address><select class="doc-type" v-model="doctorType">
                                     <option value="">类型不限</option>
                                     <option value="1">权威医生</option>
