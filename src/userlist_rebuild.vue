@@ -41,7 +41,7 @@
                     <i class="userlist-status-right" @click="sortShow()"></i>
                     <div class="userlist-status-sortList" v-show="sortFlag">
                         <ul>
-                            <li @click="sort(0)" :class="{'active':sortActive==1}">患者聊天时间从长到短</li>
+                            <li @click="sort(0)" :class="{'active':sortActive==0}">患者聊天时间从长到短</li>
                             <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
