@@ -616,6 +616,7 @@
                     case 0:
                         _this.getUserList('wating', {'sortType': -6});
                         _this.getUserList('online', {'sortType': -6});
+                        break;
                     case 1:
                         _this.getUserList('wating', {'sortType': 5});
                         _this.getUserList('online', {'sortType': 5});
