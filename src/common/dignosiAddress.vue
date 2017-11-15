@@ -232,7 +232,8 @@
                 if (item) {
                     this.dataBack.cityId = item.regionId;
                     this.dataBack.cityName = item.regionName;
-                    this.showAddress = this.dataBack.provinceName + '-' + item.regionName;
+                   // this.showAddress = this.dataBack.provinceName + '-' + item.regionName;
+                    this.showAddress = item.regionName;
                     this.districtFlag = true;
                 } else {
                     this.showAddress = this.dataBack.provinceName + '-' + '未知';
@@ -245,7 +246,8 @@
             },
             selectDistrict(item){
                 if (item) {
-                    this.showAddress = this.showAddress + '-' + item.regionName;
+                    //this.showAddress = this.showAddress + '-' + item.regionName;
+                    this.showAddress = item.regionName;
                     this.dataBack.districtId = item.regionId;
                     this.dataBack.districtName = item.regionName;
                 } else {
@@ -338,8 +340,8 @@
                         top: 36px;
                     }
                     &-list {
-                        margin-right: -116px;
-                        margin-left: -3px;
+                        margin-right: -120px;
+                        margin-left: 4px;
                         margin-top: 10px;
                     }
                     & > .custom-selector-item {
@@ -355,8 +357,8 @@
                     }
                 }
                 .custom-selector-third-list{
-                    margin-right: -232px;
-                    margin-left: 119px;
+                    margin-right: -240px;
+                    margin-left: 124px;
                     margin-top: 20px;
                 }
             }
