@@ -3,7 +3,7 @@
     <figure class="messageList-item-content" style="margin-bottom: 30px;">
       <!--文字-->
       <figcaption class="messageList-item-text" >
-        非常抱歉，由于缺少重要的检查资料，暂时无法做出诊断。建议您尽快进行以下检查，并上传检查资料，唯医骨科将继续为您咨询。
+        为了给您提供更专业的服务，建议您进行如下检查，并上传检查资料。
       </figcaption>
       <!--医生头像-->
       <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
