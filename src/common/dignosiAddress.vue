@@ -81,8 +81,8 @@
                     this.showAddress = this.dataListInfo.provinceName + '-' + this.dataListInfo.cityName + '-' + this.dataListInfo.districtName;
                 }
                 this.showProvince();
-                this.showCity();
-                this.showDistrict();
+              //  this.showCity();
+             //   this.showDistrict();
             },
             showProvince(){
                 let _this = this;
@@ -213,12 +213,15 @@
                     this.showAddress = item.regionName;
                     this.dataBack.provinceId = item.regionId;
                     this.dataBack.provinceName = item.regionName;
-                    this.cityFlag = true;
+                    this.provinceFlag =false;
+                    this.cityFlag = false;
                     this.districtFlag = false;
+                    this.$emit('update:dataBack', this.dataBack);
                 }else{
                     this.provinceFlag =false;
                     this.cityFlag = false;
                     this.districtFlag = false;
+                    this.dataBack.provinceId='';
                     this.dataBack.provinceName ='';
                     this.dataBack.cityId ='';
                     this.dataBack.cityName ='';

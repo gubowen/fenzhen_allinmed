@@ -329,8 +329,7 @@
                 </section>
             </section>
         </section>
-        <teachingDetail :knowledgeId="knowledgeId" :knowledgeShow.sync="teachingDetailsShow" v-if="teachingDetailsShow"
-                        @goBack="teachingGoBack"></teachingDetail>
+        <teachingDetail :knowledgeId="knowledgeId" :knowledgeShow.sync="teachingDetailsShow" v-if="teachingDetailsShow" @goBack="teachingGoBack"></teachingDetail>
     </section>
 </template>
 <script type="text/ecmascript-6">
@@ -415,7 +414,7 @@
                     districtName: ''
                 },
                 doctorType:'',
-                onlineState:'',
+                onlineState:1,
                 currentIndex:-1
             }
         },
@@ -555,13 +554,19 @@
                 if(obj.type=='search'){
                     if(this.addressResult.districtId){
                         data.searchRegion = this.addressResult.districtId ;
-                    }else if (this.addressResult.provinceId){
-                        data.searchRegion = this.addressResult.provinceId ;
-                    }else if(this.addressResult.cityId){
-                        data.searchRegion = this.addressResult.cityId ;
                     }
-                    data.doctorType = that.doctorType;
-                    data.onlineState = that.onlineState;
+//                    else if (this.addressResult.provinceId){
+//                        data.searchRegion = this.addressResult.provinceId ;
+//                    }else if(this.addressResult.cityId){
+//                        data.searchRegion = this.addressResult.cityId ;
+//                    }
+                    if(that.doctorType){
+                        data.doctorType = that.doctorType;
+                    }
+                    if(that.onlineState){
+                        data.onlineState = that.onlineState;
+                    }
+
                 }
                 //全部医生首页
                 ajax({

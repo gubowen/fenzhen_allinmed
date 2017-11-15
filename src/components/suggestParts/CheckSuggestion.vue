@@ -67,7 +67,7 @@
         sickness:{
           dataList: '',
           placeholderText: '',
-          disabledFlag:true
+          disabledFlag:false
         },
         sicknessResult:{},
 
@@ -87,7 +87,7 @@
               }
             ],
             placeholderText:'程度',
-          disabledFlag:true
+          disabledFlag:false
         },
         progressResult:{},
 
@@ -112,27 +112,32 @@
     watch:{
       partListResult:{
         handler(curVal,oldVal){
-            this.sickness.disabledFlag = false;
-            this.operationData();
+            //this.sickness.disabledFlag = false;
+            if(this.sicknessResult.illnessName && this.sicknessResult.illnessName.length>0){
+                //  this.progressList.disabledFlag = false;
+                if(this.progressResult && this.progressResult.progressName=='暂不需手术'){
+                    this.nextFlag = false;
+                }
+            }else{
+                if(this.operationListResult.operationId){
+                    this.nextFlag = false;
+                }else{
+                    this.nextFlag = true ;
+                }
         }
       },
       sicknessResult:{
         handler(curVal,oldVal){
-            if(this.sicknessResult.illnessName && this.sicknessResult.illnessName.length>0){
-              this.progressList.disabledFlag = false;
-              if(this.progressResult && this.progressResult.progressName=='暂不需要手术'){
-                  this.nextFlag = false;
-              }
-            }else{
-              this.nextFlag = true ;
-              this.progressList.disabledFlag = true;
+           //   this.progressList.disabledFlag = true;
             }
         }
       },
       progressResult:{
         handler(curVal,oldVal){
           if(curVal.progressName == '暂不需手术'){
-              this.nextFlag = false ;
+              if(this.sicknessResul.illnessId){
+                  this.nextFlag = false ;
+              }
               this.operationList.disabledFlag = true;
               this.operationShowFlag = false;
           }else{
@@ -156,6 +161,7 @@
       init(){
         this.partSelect();
         this.sicknessSelect();
+        this.operationData();
       },
       closeSelect(ev){
           this.currentSelectorIndex = -1;

@@ -16,9 +16,9 @@
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click.stop="selectData()">{{noData}}</li>
           <li class="custom-selector-item result-item" v-for="(item,index) in dataListInfo.dataList" @click.stop="selectData(item,index)" :class="{'active':index == currentIndex}">
             <span v-if="dataListInfo.placeholderText == '专科'" >{{item|messageFilter}}</span>
-            <span v-show="item.illnessName!=''" >{{item.illnessName}}</span>
-            <span v-show="item.progressName!=''" >{{item.progressName}}</span>
-            <span v-show="item.operationName!=''" >{{item.operationName}}</span>
+            <span v-if="item.illnessName!=''" >{{item.illnessName}}</span>
+            <span v-if="item.progressName!=''" >{{item.progressName}}</span>
+            <span v-if="item.operationName!=''" >{{item.operationName}}</span>
           </li>
         </div>
         <div class="custom-selector-second custom-selector-second-list secondList">
@@ -50,7 +50,7 @@
         data(){
             return {
                 dataShow: false,
-//        iconFlag: false,
+                iconFlag: false,
                 resultData: '',
                 noData:"暂不确定",
                 currentIndex: -1,
@@ -78,16 +78,24 @@
         },
         methods: {
             init(){
+                setTimeout(()=>{
+                    if(this.dataListInfo.placeholderText == '疾病'){
+                        this.resultData = '暂不确定';
+                        this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
+                    }else if(this.dataListInfo.placeholderText == '程度'){
+                        this.resultData = '暂不需手术';
+                        this.$emit('update:dataBack', {'progressId':'','progressName':'暂不需手术'});
+
+                    }
+                },400);
             },
             showData(){
                 this.$emit("update:currentIndexNow",this.conIndex);
                 this.dataShow = !this.dataShow;
                 this.iconFlag = !this.iconFlag;
             },
-            selectData(item, index){
+            selectData(item = '', index = ''){
                 let _this = this;
-                item = item?item:'';
-                index = index?index:'';
                 _this.currentIndex = index;
                 _this.secondActive = true;
                 if (item.tagName) {
