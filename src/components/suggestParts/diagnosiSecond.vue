@@ -100,11 +100,11 @@
                                              @click="changeCheckedState(docList,index,'all')">
                                         <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
                                         <figcaption class="doctor-message-content">
-                                            <header class="doctor-message-content-head">'
+                                            <header class="doctor-message-content-head">
                                                 <h4>{{docList.fullName}}</h4>
                                                 <p class="rate">匹配度{{docList.suitability}}%</p>
                                                 <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
-                                                <figure class="doctor-message-tags">' +
+                                                <figure class="doctor-message-tags">
                                                     <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                                                     <span class="tags" v-if="docList.isNearest==1">距离最近</span>
                                                     <span class="tags" v-if="docList.isFreeTimes==1" style="background: #FFF1D4;color: #EB9E00;">首次问诊免费</span>
