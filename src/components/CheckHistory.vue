@@ -29,7 +29,7 @@
                                                     {{$store.state.patientName +' '+ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                                                 </header>
                                                 <p v-if="ele.msgType.toLowerCase()==='text'">{{ele.body }}</p>
-                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
+                                                <figure @click.stop="updateShow(ele)" v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type == 'previewSuggestion'">
                                                     <figcaption class="check-suggestion-message">
                                                         <header class="check-suggestion-message-title">初诊建议</header>
                                                         <section class="preview-suggestion-content">
@@ -185,6 +185,13 @@
         methods: {
             init(){
                 this.diagnoseHistory();
+            },
+            updateShow(ele){
+                console.log(ele);
+                document.querySelector(".mask-background").style.display = "none";
+                this.$store.commit("setPreviewType",2);
+                this.$store.commit("setPreviewId",JSON.parse(ele.body.substring(1,ele.body.length-1)).data[0].diagnosisId);
+                this.$store.commit("setPreviewShow",true);
             },
             diagnoseHistory(){
                 let _this = this;
