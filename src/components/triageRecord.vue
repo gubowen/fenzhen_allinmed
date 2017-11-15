@@ -1,5 +1,5 @@
 <template>
-  <aside class="medical-record-remark" :class="{on:showRecord}">
+  <aside class="medical-record-remark" :class="{on:showRecord}" v-show="$store.state.currentItem.consultationState == 0">
     <header class="medical-record-remark-header">
       <section class="remark-add">
         <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
