@@ -93,11 +93,10 @@
                                                     <figcaption class="messageList-item-text" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType =='image'">
                                                         上传图片：患者已上传检查资料，点击至“专科检查”查看。
                                                     </figcaption>
-                                                    <figcaption class="messageList-item-text" v-else="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType =='image'">
+                                                    <figcaption class="messageList-item-text" v-else="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType =='video'">
                                                         上传视频：患者已上传视诊资料，点击至“专科检查”查看。若视频上传中，请稍后再次点击查看。
                                                     </figcaption>
                                                 </figure>
-
                                             </article>
                                         </li>
                                     </ul>
