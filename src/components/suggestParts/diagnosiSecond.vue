@@ -70,7 +70,7 @@
                                                 <h4>{{docList.fullName}}</h4>
                                                 <!--<p class="rate">匹配度{{docList.suitability}}%</p>-->
                                                 <p class="rate">{{docList.doctorType==1?'权威医生':'轻问诊医生'}}</p>
-                                                <span class="netstat" :class="{'rest':docList.adviceStatus == 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
+                                                <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '不接诊'}}</span>
                                                 <figure class="doctor-message-tags">
                                                     <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                                                     <span class="tags" v-if="docList.isNearest==1">距离最近</span>
@@ -87,7 +87,7 @@
                                             </article>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
-                                                <span class="lastNum" v-if="docList.adviceNum.length>0">仅剩{{docList.adviceNum}}个名额</span>
+                                                <span class="lastNum" v-if="docList.adviceNum>0">仅剩{{docList.adviceNum}}个名额</span>
                                             </article>
                                         </figcaption>
                                     </section>
@@ -104,7 +104,7 @@
                                                 <h4>{{docList.fullName}}</h4>
                                                 <!--<p class="rate">匹配度{{docList.suitability}}%</p>-->
                                                 <p class="rate">{{docList.doctorType==1?'权威医生':'轻问诊医生'}}</p>
-                                                <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
+                                                <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '不接诊'}}</span>
                                                 <figure class="doctor-message-tags">
                                                     <span ></span>
                                                     <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
@@ -118,11 +118,12 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0">
-                                                擅长：<span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span><a href="javascript:;" class="viewMoreBox" @click.stop="current(index)" v-show="docList.illnessNameList.length>30">展开>></a>
+                                                    擅长：<span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span>
                                             </article>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="docList.illnessNameList.length>20">展开</a>
                                             <article class="doctor-message-num">
-                                                <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
-                                                <span class="lastNum" v-if="docList.adviceNum.lenght>0">仅剩{{docList.adviceNum}}个名额</span>
+                                                <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
+                                                <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
                                             </article>
                                         </figcaption>
                                     </section>
@@ -1069,11 +1070,13 @@
                     })
                 }
             },
-            current(index){
+            current(index,e){
                 if(this.currentIndex == index){
                     this.currentIndex = -1;
+                    e.target.innerText="展开"
                 }else{
                     this.currentIndex = index ;
+                    e.target.innerText="收起"
                 }
 
 
@@ -1862,48 +1865,30 @@
         font-size: 14px;
         max-width: 500px;
         line-height: 1.5;
-        position: relative;
-
-        overflow : hidden;
-        text-overflow: ellipsis;
-        display: -webkit-box;
-        -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
-
-        &>span{
+        span{
             display:inline-block;
             width:400px;
+            height:20px;
+            overflow: hidden;
             vertical-align: top;
-        }
-        &>span.on{height:auto;}
-        .viewMoreBox {
-            cursor: pointer;
-            display: inline;
-            /*height: 18px;*/
-            z-index: 2;
-            font-size: 14px;
-            color: #6B748C;
-            letter-spacing: 0;
-            line-height: 14px;
-
-
-
-            /*.viewMore {*/
-                /*cursor: pointer;*/
-                /*display: inline-block;*/
-                /*vertical-align: middle;*/
-                /*height: 20px;*/
-                /*background-size: 100% 100%;*/
-                /*&.rotate {*/
-                    /*transform: rotate(90deg);*/
-                /*}*/
-            /*}*/
+            &.on{
+                height:auto;
+            }
         }
 
         .high-light-search-text {
             color: #252525;
             font-weight: bold;
         }
+    }
+
+    .viewMoreBox {
+        width:430px;
+        cursor: pointer;
+        display: block;
+        font-size: 14px;
+        color: #6B748C;
+        text-align:right;
     }
 
     .doctor-message-num {
