@@ -82,8 +82,8 @@
                                                 <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
-                                            <article class="doctor-message-goodAt" >
-                                                擅长：{{docList.illnessNameList}}
+                                            <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
+                                                擅长：{{docList.illnessNameList + docList.operationNameList}}
                                             </article>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
@@ -117,10 +117,10 @@
                                                 <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
-                                            <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0">
-                                                    擅长：<span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span>
+                                            <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
+                                                    擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':currentIndex == index}"></span>
                                             </article>
-                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="docList.illnessNameList.length>20">展开</a>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>20">展开</a>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
@@ -589,7 +589,9 @@
                                             if(element.illnessNameList.length>0){
                                                 element.illnessNameList = element.illnessNameList.replace(_lightWord, "<span class='high-light-search-text'>" + value + "</span>");
                                             }
-//                            element.operationNameList = element.operationNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
+                                            if(element.operationNameList.length>0){
+                                                element.operationNameList = element.operationNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
+                                            }
                                         })
                                     });
                                 }
@@ -1860,7 +1862,7 @@
     }
 
     .doctor-message-goodAt {
-        margin: 16px 0;
+        margin: 16px 0 0 0;
         color: #909090;
         font-size: 14px;
         max-width: 500px;
