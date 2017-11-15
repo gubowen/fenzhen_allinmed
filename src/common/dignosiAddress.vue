@@ -323,7 +323,6 @@
                     vertical-align: top;
                     text-align: left;
                     box-sizing: border-box;
-                    padding: 0 15px;
                     max-height: 310px;
                     overflow: auto;
                     box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
@@ -348,9 +347,18 @@
                         margin-top: 10px;
                     }
                     & > .custom-selector-item {
-                        margin: 20px 0;
+                        height:34px;
+                        line-height: 34px;
                         width: 100%;
+                        padding:0 18px;
+                        box-sizing: border-box;
                         list-style: none;
+                        font-size: 14px;
+                        color: #222222;
+                        letter-spacing: 0;
+                        &:hover{
+                            background: #F6F9FA;
+                        }
                         & > span {
                             display: block;
                         }

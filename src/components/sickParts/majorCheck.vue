@@ -116,6 +116,8 @@
             },
             getData() {
                 let _this = this;
+                _this.caseAttUrl=[];
+                _this.videoCaseAttUrl=[];
                 let dataValue = {
                     caseId: this.userMessage.caseId,	            //string	是	病例id
                     isValid: 1,                  //string	是	1

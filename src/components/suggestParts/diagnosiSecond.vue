@@ -67,11 +67,12 @@
                                              @click.stop="changeCheckedState(docList,index,'match')">
                                         <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
                                         <figcaption class="doctor-message-content">
-                                            <header class="doctor-message-content-head">'
+                                            <header class="doctor-message-content-head">
                                                 <h4>{{docList.fullName}}</h4>
-                                                <p class="rate">匹配度{{docList.suitability}}%</p>
+                                                <!--<p class="rate">匹配度{{docList.suitability}}%</p>-->
+                                                <p class="rate">{{docList.doctorType==1?'权威医生':'轻问诊医生'}}</p>
                                                 <span class="netstat" :class="{'rest':docList.adviceStatus == 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
-                                                <figure class="doctor-message-tags">' +
+                                                <figure class="doctor-message-tags">
                                                     <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                                                     <span class="tags" v-if="docList.isNearest==1">距离最近</span>
                                                     <span class="tags" v-if="docList.isFreeTimes==1" style="background: #FFF1D4;color: #EB9E00;">首次问诊免费</span>
@@ -86,8 +87,8 @@
                                                 擅长：{{docList.illnessNameList}}
                                             </article>
                                             <article class="doctor-message-num">
-                                                <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
-                                                <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
+                                                <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
+                                                <span class="lastNum" v-if="docList.adviceNum.length>0">仅剩{{docList.adviceNum}}个名额</span>
                                             </article>
                                         </figcaption>
                                     </section>
@@ -102,9 +103,11 @@
                                         <figcaption class="doctor-message-content">
                                             <header class="doctor-message-content-head">
                                                 <h4>{{docList.fullName}}</h4>
-                                                <p class="rate">匹配度{{docList.suitability}}%</p>
+                                                <!--<p class="rate">匹配度{{docList.suitability}}%</p>-->
+                                                <p class="rate">{{docList.doctorType==1?'权威医生':'轻问诊医生'}}</p>
                                                 <span class="netstat" :class="{'rest':docList.adviceStatus != 1}">{{docList.adviceStatus == 1 ? '在线' : '休息'}}</span>
                                                 <figure class="doctor-message-tags">
+                                                    <span ></span>
                                                     <span class="tags" v-if="docList.isTop==1">全国TOP10骨科医院</span>
                                                     <span class="tags" v-if="docList.isNearest==1">距离最近</span>
                                                     <span class="tags" v-if="docList.isFreeTimes==1" style="background: #FFF1D4;color: #EB9E00;">首次问诊免费</span>
@@ -122,8 +125,8 @@
                                                 </a>
                                             </article>
                                             <article class="doctor-message-num">
-                                                <span class="price">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
-                                                <span class="lastNum">仅剩{{docList.adviceNum}}个名额</span>
+                                                <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
+                                                <span class="lastNum" v-if="docList.adviceNum.lenght>0">仅剩{{docList.adviceNum}}个名额</span>
                                             </article>
                                         </figcaption>
                                     </section>
@@ -551,7 +554,7 @@
                     degreeType: that.checkData.degreeType,
 
                 };
-                if(obj.type=='search'){
+               // if(obj.type=='search'){
                     if (this.addressResult.provinceId){
                         data.searchRegion = this.addressResult.provinceId ;
                     }
@@ -564,13 +567,13 @@
 //                        data.searchRegion = this.addressResult.cityId ;
 //                    }
                     if(that.doctorType){
-                        data.doctorType = that.doctorType;
+                        data.searchDoctorType = that.doctorType;
                     }
                     if(that.onlineState){
-                        data.onlineState = that.onlineState;
+                        data.searchOnlineState = that.onlineState;
                     }
 
-                }
+             //   }
                 //全部医生首页
                 ajax({
                     url: XHRList.filterSearchDocMessage,
