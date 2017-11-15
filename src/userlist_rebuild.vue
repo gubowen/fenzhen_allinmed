@@ -41,7 +41,7 @@
                     <i class="userlist-status-right" @click="sortShow()"></i>
                     <div class="userlist-status-sortList" v-show="sortFlag">
                         <ul>
-                            <li @click="sort(0)" :class="{'active':sortActive==0}">患者聊天时间从长到短</li>
+                            <li @click="sort(0)" :class="{'active':sortActive==0}">患者最近消息发出时间由近到远</li>
                             <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
@@ -75,7 +75,7 @@
                                                   v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                         </h3>
                                         <article>
-                                            <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;|&nbsp;{{items.patientAge}} {{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}&nbsp;|&nbsp;{{items.partName}}</span>
+                                            <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
                                         </article>
                                         <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
                                     </figcaption>
@@ -109,7 +109,7 @@
                                         </h3>
                                         <article>
                                     <span class="text">
-                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像资料" : "有影像资料"}}&nbsp;|&nbsp;{{items.partName}}</span>
+                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
                                         </article>
                                         <!--<figure class="quit-triage">-->
                                         <!--<span class="text">转移患者</span>-->
