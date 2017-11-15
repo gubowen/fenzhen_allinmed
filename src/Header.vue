@@ -234,15 +234,20 @@
                 }
             },
             cancelLogin(){
-                console.log(111)
                 this.confirmShow = false;
             },
             exitLogin(){
-                console.log(111)
-                this.$router.push({
-                    name: "login"
+                let that =this;
+                axios({
+                    method: "post",
+                    url: "/call/tocure/web/user/logout/",
+                    responseType: 'json'
+                }).then(function (res) {
+                    that.$router.push({
+                        name: "login"
+                    })
+                    that.confirmShow = false;
                 })
-                this.confirmShow = false;
             },
             globeClick(){
                 document.addEventListener('click', (e) => {
