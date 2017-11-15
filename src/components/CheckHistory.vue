@@ -108,8 +108,6 @@
                                                     </figcaption>
                                                 </figure>
 
-
-
                                             </article>
                                         </li>
                                     </ul>
@@ -267,7 +265,6 @@
                             return false;
                             break;
                         case 'notification':
-                            conle.log(bodyInfo.data.actionType);
                             if(bodyInfo.data.actionType === 5){
                                 return false ;
                             }else{
