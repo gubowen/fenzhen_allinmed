@@ -243,9 +243,10 @@
                     url: "/call/tocure/web/user/logout/",
                     responseType: 'json'
                 }).then(function (res) {
-                    that.$router.push({
-                        name: "login"
-                    })
+//                    that.$router.push({
+//                        name: "login"
+//                    })
+                    window.location.reload()
                     that.confirmShow = false;
                 })
             },
