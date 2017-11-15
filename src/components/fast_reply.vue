@@ -5,7 +5,7 @@
         </header>
         <nav class="jump-box-tabs tabsInner" id="ev-show-tabs">
             <button class="jump-box-prev jump-box-tabs-controller">
-                <i class="icon-leftArrow" @click="transformBtn('prev')"></i>
+                <i class="icon-leftArrow" @click.stop="transformBtn('prev')"></i>
             </button>
             <article class="jump-tabs-wrapper" ref="tabItems">
                 <figure class="jump-box-tabs-item tabsItem" :class="{'active': index == nowIndex}"
@@ -15,7 +15,7 @@
                 </figure>
             </article>
             <button class="jump-box-next jump-box-tabs-controller">
-                <i class="icon-rightArrow" @click="transformBtn('next')"></i>
+                <i class="icon-rightArrow" @click.stop="transformBtn('next')"></i>
             </button>
         </nav>
         <section class="jump-box-viewers viewInner" id="ev-show-inners">
@@ -265,6 +265,7 @@
             //margin-left: -9px;
             color: #555;
             padding-right: 55px;
+            line-height: 1.5;
             &:hover {
                 color: #222;
                 &:before {
