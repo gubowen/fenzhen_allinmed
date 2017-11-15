@@ -145,6 +145,7 @@
                     width: 230px;
                     display: inline-block;
                     vertical-align: middle;
+                    word-break: break-all;
                 }
             }
         }
