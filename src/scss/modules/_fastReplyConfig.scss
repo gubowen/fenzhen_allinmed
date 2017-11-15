@@ -147,13 +147,16 @@
   transition:all 0.2s linear;
   .jump-box-member-config{
     .jump-box-member-input{
-      width: 504px;
+      width: 500px;
     }
   }
   & > span{
     font-size: 15px;
     color: #555555;
     cursor: pointer;
+    display: inline-block;
+    max-width:600px;
+    line-height: 1.5;
   }
   .jump-box-member-item-button{
     float: right;
@@ -214,7 +217,7 @@
 .jump-box-member-config{
   margin-top: 20px;
    .jump-box-member-input{
-     width: 504px;
+     width: 500px;
      padding: 5px 14px;
      color: #555;
      font-size:14px;

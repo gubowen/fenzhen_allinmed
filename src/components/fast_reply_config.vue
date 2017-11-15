@@ -71,7 +71,7 @@
                       v-show="!memberFixFlag[index][cIndex]">
                 <i class="icon-question-config"
                    @click.stop="memberFixFlag[index][cIndex]=true;memberFixContent[index][cIndex]=cItem.questionDesc"></i>
-                <i class="icon-question-delete" @click.stop="deleteMemberShowFlag[index][cIndex]=true">
+                <i class="icon-question-delete" @click.stop="deleteMemberShowSwitch(index,cIndex)">
                   <section class="modal-confirm show" v-if="deleteMemberShowFlag[index][cIndex]">
                     <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
                     <figure class="modal-confirm-button">
@@ -320,6 +320,12 @@
               this.deleteTermShowFlag[i]=false;
           }
           this.deleteTermShowFlag[index]=true;
+      },
+      deleteMemberShowSwitch(index,cIndex){
+          for (let i in this.deleteMemberShowFlag[index]){
+              this.deleteMemberShowFlag[index][i]=false;
+          }
+          this.deleteMemberShowFlag[index][cIndex]=true;
       },
       deleteCallback(type, item, index, cItem, cIndex){
         const that = this;

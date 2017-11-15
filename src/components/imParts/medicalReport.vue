@@ -158,13 +158,12 @@
                         result = "配偶";
                         break;
                     case 2:
-                        result = "子女(有证件)";
+                    case 11:
+                        result = "子女";
                         break;
                     case 3:
-                        result = "父亲";
-                        break;
                     case 4:
-                        result = "母亲";
+                        result = "父母";
                         break;
                     case 5:
                         result = "爷爷";
@@ -183,9 +182,6 @@
                         break;
                     case 10:
                         result = "其他";
-                        break;
-                    case 11:
-                        result = "子女(无证件)";
                         break;
                 };
                 return result;

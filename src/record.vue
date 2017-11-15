@@ -376,7 +376,7 @@
                 color: #555555;
                 letter-spacing: 0;
                 line-height: 14px;
-                margin-right: 15px;
+                margin-right: 10px;
                 text-align: right;
                 display: inline-block;
             }
