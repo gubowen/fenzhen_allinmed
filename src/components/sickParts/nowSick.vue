@@ -1210,7 +1210,7 @@
                 color: #555555;
                 letter-spacing: 0;
                 line-height: 1.5;
-                margin-right: 15px;
+                margin-right: 10px;
                 text-align: right;
                 display: inline-block;
                 white-space: nowrap;
