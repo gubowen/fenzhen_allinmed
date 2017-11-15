@@ -65,7 +65,10 @@
                     isOrder: 0,
                     attUseFlag: 6
                 };
-
+                    _this.caseMain= '';       //主要症状
+                    _this.caseAlong='';      //其他症状
+                    _this.painNature= '';      //疼痛性质
+                    _this.VASLevelL= '';     //VAS评分
                 api.ajax({
                     url: _this.MedicalReport,
                     method: "POST",
