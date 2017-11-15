@@ -552,9 +552,12 @@
 
                 };
                 if(obj.type=='search'){
-                    if(this.addressResult.districtId){
-                        data.searchRegion = this.addressResult.districtId ;
+                    if (this.addressResult.provinceId){
+                        data.searchRegion = this.addressResult.provinceId ;
                     }
+//                    if(this.addressResult.districtId){
+//                        data.searchRegion = this.addressResult.districtId ;
+//                    }
 //                    else if (this.addressResult.provinceId){
 //                        data.searchRegion = this.addressResult.provinceId ;
 //                    }else if(this.addressResult.cityId){

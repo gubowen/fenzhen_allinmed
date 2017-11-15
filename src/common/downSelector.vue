@@ -87,7 +87,7 @@
                         this.$emit('update:dataBack', {'progressId':'','progressName':'暂不需手术'});
 
                     }
-                },400);
+                },1000);
             },
             showData(){
                 this.$emit("update:currentIndexNow",this.conIndex);
