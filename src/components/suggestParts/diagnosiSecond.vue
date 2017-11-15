@@ -48,8 +48,7 @@
                                     <option value="0">轻问诊医生</option>
                                 </select><select class="doc-type" v-model="onlineState">
                                     <option value="">状态不限</option>
-                                    <option value="1">在线</option>s
-                                    <option value="0">休息</option>
+                                    <option value="1">在线</option>
                                 </select>
                                 <button class="doc-search-btn on"  :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0,value:1})">搜索</button>
                             </div>
