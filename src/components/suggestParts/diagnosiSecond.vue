@@ -582,13 +582,17 @@
                             if (obj.type == "search") {
                                 //高亮搜索关键字
                                 let lightWord = that.docSearchValue.trim().replace(/\s+/g, ' ').split(" ");
-                                lightWord.forEach(function (value) {
-                                    let _lightWord = new RegExp("(" + value + ")", "g");
-                                    dataList.forEach(function (element) {
-                                        element.illnessNameList = element.illnessNameList.replace(_lightWord, "<span class='high-light-search-text'>" + value + "</span>");
+                                if(lightWord.length>0){
+                                    lightWord.forEach(function (value) {
+                                        let _lightWord = new RegExp("(" + value + ")", "g");
+                                        dataList.forEach(function (element) {
+                                            if(element.illnessNameList.length>0){
+                                                element.illnessNameList = element.illnessNameList.replace(_lightWord, "<span class='high-light-search-text'>" + value + "</span>");
+                                            }
 //                            element.operationNameList = element.operationNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
-                                    })
-                                });
+                                        })
+                                    });
+                                }
                             }
                             that.allDoc.allDocList = dataList;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
