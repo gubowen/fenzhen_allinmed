@@ -119,10 +119,7 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0">
-                                                <spna>擅长：</spna><span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span>
-                                                <a href="javascript:;" class="viewMoreBox" @click.stop="current(index)" v-show="docList.illnessNameList.length>30">
-                                                    <button class="viewMore" :class="{'rotate':currentIndex == index}"></button>
-                                                </a>
+                                                擅长：<span v-html="docList.illnessNameList" :class="{'on':currentIndex == index}"></span><a href="javascript:;" class="viewMoreBox" @click.stop="current(index)" v-show="docList.illnessNameList.length>30">展开>></a>
                                             </article>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
@@ -1867,9 +1864,14 @@
         max-width: 500px;
         line-height: 1.5;
         position: relative;
+
+        overflow : hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+
         &>span{
-            height:20px;
-            overflow: hidden;
             display:inline-block;
             width:400px;
             vertical-align: top;
@@ -1877,25 +1879,26 @@
         &>span.on{height:auto;}
         .viewMoreBox {
             cursor: pointer;
-            display: block;
-            width: 18px;
-            height: 18px;
-            position: absolute;
-            top:0;
-            right:-100px;
+            display: inline;
+            /*height: 18px;*/
             z-index: 2;
-            .viewMore {
-                cursor: pointer;
-                display: inline-block;
-                vertical-align: middle;
-                width: 18px;
-                height: 4px;
-                background: url("../../assets/img00/check/dot_more.png") no-repeat;
-                background-size: 100% 100%;
-                &.rotate {
-                    transform: rotate(90deg);
-                }
-            }
+            font-size: 14px;
+            color: #6B748C;
+            letter-spacing: 0;
+            line-height: 14px;
+
+
+
+            /*.viewMore {*/
+                /*cursor: pointer;*/
+                /*display: inline-block;*/
+                /*vertical-align: middle;*/
+                /*height: 20px;*/
+                /*background-size: 100% 100%;*/
+                /*&.rotate {*/
+                    /*transform: rotate(90deg);*/
+                /*}*/
+            /*}*/
         }
 
         .high-light-search-text {
