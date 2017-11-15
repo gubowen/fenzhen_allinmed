@@ -135,7 +135,7 @@
       progressResult:{
         handler(curVal,oldVal){
           if(curVal.progressName == '暂不需手术'){
-              if(this.sicknessResul.illnessId){
+              if(this.sicknessResult.illnessId){
                   this.nextFlag = false ;
               }
               this.operationList.disabledFlag = true;
