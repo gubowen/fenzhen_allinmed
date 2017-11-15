@@ -32,7 +32,8 @@
                         <!--搜索医生-->
                         <section class="doc-filter-search-box" v-show="docCutNum==1">
                             <ul class="doc-filter-box" :class="{'quHighly':!viewMore}">
-                                <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList" @click="getAllDocCustomer({tag:item,type:'filter',num:0,cutNum:index})">
+                                <li :class="{'on':tagCutNum == index}" v-for="(item,index) in tagTabList"
+                                    @click="getAllDocCustomer({tag:item,type:'filter',num:0,value:1,cutNum:index})">
                                     {{getTagName(item)}}
                                 </li>
                             </ul>
@@ -50,7 +51,7 @@
                                     <option value="1">在线</option>s
                                     <option value="0">休息</option>
                                 </select>
-                                <button class="doc-search-btn on"  @click="getAllDocCustomer({type:'search',num:0})">搜索</button>
+                                <button class="doc-search-btn on"  :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0,value:1})">搜索</button>
                             </div>
                         </section>
                         <!--全选按钮-->
@@ -128,19 +129,27 @@
                                     </section>
                                     <p class="no-mate-doc" v-if="noDocData">没有找到相应的结果</p>
                                 </section>
-                                <div class="page-container" v-if="allDoc.totalCount>allDoc.pageNum&&allDoc.allDocList.length>0">
+                                <div class="page-container"
+                                     v-if="allDoc.totalCount>allDoc.pageNum&&allDoc.allDocList.length>0">
                                     <div class="pagination pager">
                                         <ul class="pages">
-                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer({num:0})">首页</li>
-                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}" @click="getAllDocCustomer({num:allDoc.pageIndex-2})">上一页</li>
-                                            <li class="page-number" :class="{'pgCurrent':allDoc.pageIndex == item}" v-for="(item,index) in pages"
-                                                @click="getAllDocCustomer({num:index})">{{item}}
+                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}"
+                                                @click="getAllDocCustomer({num:0,value:1})">首页
                                             </li>
-                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.pageIndex+2})">下一页
+                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == 1}"
+                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)-1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)-1]})">上一页
                                             </li>
-                                            <li class="pgNext" :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
-                                                @click="getAllDocCustomer({num:allDoc.Math.ceil(allDoc.totalCount/allDoc.pageNum)-1})">末页
+                                            <li class="page-number" :class="{'pgCurrent':allDoc.pageIndex == item}"
+                                                v-for="(item,index) in allDoc.pageArr" @click="getAllDocCustomer({num:index,value:item})">{{item}}
+                                            </li>
+                                            <li class="pgNext"
+                                                :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
+                                                @click="getAllDocCustomer({num:allDoc.pageArr.indexOf(allDoc.pageIndex)+1,value:allDoc.pageArr[allDoc.pageArr.indexOf(allDoc.pageIndex)+1]})">下一页
+                                            </li>
+                                            <li class="pgNext"
+                                                :class="{'pgEmpty':allDoc.pageIndex == Math.ceil(allDoc.totalCount/allDoc.pageNum)}"
+                                                @click="getAllDocCustomer({num:Math.ceil(allDoc.totalCount/allDoc.pageNum)-1,value:Math.ceil(allDoc.totalCount/allDoc.pageNum)})">
+                                                末页
                                             </li>
                                         </ul>
                                     </div>
@@ -151,25 +160,32 @@
                     <section class="config-suggestion-item teachingKnowledge" v-show="cutNum == 1">
                         <section class="check-project">
                             <section class="check-project-list">
-                                <article class="check-project-item" v-for="(oneItem,oneIndex) in teachingKnowledgeList" @click.stop="showNext('FirstIndex',oneIndex)">
+                                <article class="check-project-item" v-for="(oneItem,oneIndex) in teachingKnowledgeList"
+                                         @click.stop="showNext('FirstIndex',oneIndex)">
                                     <span :class="{'icon-downArrow-big':oneItem.children.length>0,'selected':FirstIndex == oneIndex}">{{oneItem.knowledgeName}}</span>
-                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}" v-if="oneItem.children.length>0">
+                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}"
+                                             v-if="oneItem.children.length>0">
                                         <section class='check-project-second-item check-project-second-title'
                                                  :class="{'icon-downArrow':twoItem.children.length>0,'selected':SecondIndex == twoIndex}"
-                                                 v-for="(twoItem,twoIndex) in oneItem.children" @click.stop="showNext('SecondIndex',twoIndex)">
+                                                 v-for="(twoItem,twoIndex) in oneItem.children"
+                                                 @click.stop="showNext('SecondIndex',twoIndex)">
                                             <span>{{twoItem.knowledgeName}}</span>
-                                            <section class="check-project-second-box" v-if="twoItem.children.length>0" :class="{'active':SecondIndex == twoIndex}">
+                                            <section class="check-project-second-box" v-if="twoItem.children.length>0"
+                                                     :class="{'active':SecondIndex == twoIndex}">
                                                 <section class="check-project-second-item select-element"
                                                          :class="{'icon-downArrow':threeItem.children.length>0,'active':threeItem.isChecked}"
-                                                         v-for="(threeItem,threeIndex) in twoItem.children" @click.stop="selectData(threeItem,1)">
+                                                         v-for="(threeItem,threeIndex) in twoItem.children"
+                                                         @click.stop="selectData(threeItem,1)">
                                                     <i class="icon-select-big"></i>
                                                     <span>{{threeItem.knowledgeName}}</span>
                                                     <i class="icon-detail"
                                                        @click.stop="knowledgeId=threeItem.knowledgeId;configShow = false;teachingDetailsShow=true"><span>详情</span></i>
-                                                    <section class="check-project-second-box" v-if="threeItem.children.length>0">
+                                                    <section class="check-project-second-box"
+                                                             v-if="threeItem.children.length>0">
                                                         <section class="check-project-second-item select-element"
                                                                  :class="{'icon-downArrow':fourItem.children.length>0,'active':fourItem.isChecked}"
-                                                                 v-for="(fourItem,fourIndex) in threeItem.children" @click.stop="selectData(fourItem,1)">
+                                                                 v-for="(fourItem,fourIndex) in threeItem.children"
+                                                                 @click.stop="selectData(fourItem,1)">
                                                             <i class="icon-select-big"></i>
                                                             <span>{{fourItem.knowledgeName}}</span>
                                                             <i class="icon-detail"
@@ -187,24 +203,34 @@
                     <section class="config-suggestion-item disposeSuggest" v-show="cutNum == 2">
                         <section class="check-project">
                             <section class="check-project-list">
-                                <article class="check-project-item" v-for="(oneItem,oneIndex) in disposeSuggestList" @click.stop="showNext('FirstIndex',oneIndex)">
+                                <article class="check-project-item" v-for="(oneItem,oneIndex) in disposeSuggestList"
+                                         @click.stop="showNext('FirstIndex',oneIndex)">
                                     <span :class="{'icon-downArrow-big':oneItem.children.length>0,'selected':FirstIndex == oneIndex}">{{oneItem.treatmentName}}</span>
-                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}" v-if="oneItem.children.length>0">
+                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}"
+                                             v-if="oneItem.children.length>0">
                                         <section class='check-project-second-item check-project-second-title'
                                                  :class="{'icon-downArrow':twoItem.children.length>0,'selected':SecondIndex == twoIndex}"
-                                                 v-for="(twoItem,twoIndex) in oneItem.children" @click.stop="showNext('SecondIndex',twoIndex)">
+                                                 v-for="(twoItem,twoIndex) in oneItem.children"
+                                                 @click.stop="showNext('SecondIndex',twoIndex)">
                                             <span>{{twoItem.treatmentName}}</span>
-                                            <section class="check-project-second-box" v-if="twoItem.children.length>0" :class="{'active':SecondIndex == twoIndex}">
-                                                <section :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
-                                                         class="check-project-second-item select-element" v-for="(threeItem,threeIndex) in twoItem.children"
-                                                         @click.stop="showNext('ThirdIndex',threeIndex)">
-                                                    <i class="icon-select-big" @click.stop="selectData(threeItem,2)"></i>
+                                            <section class="check-project-second-box" v-if="twoItem.children.length>0"
+                                                     :class="{'active':SecondIndex == twoIndex}">
+                                                <section
+                                                        :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
+                                                        class="check-project-second-item select-element"
+                                                        v-for="(threeItem,threeIndex) in twoItem.children"
+                                                        @click.stop="showNext('ThirdIndex',threeIndex)">
+                                                    <i class="icon-select-big"
+                                                       @click.stop="selectData(threeItem,2)"></i>
                                                     <span>{{threeItem.treatmentName}}</span>
-                                                    <section class="check-project-second-box" v-if="threeItem.children.length>0" :class="{'active':ThirdIndex == twoIndex}">
+                                                    <section class="check-project-second-box"
+                                                             v-if="threeItem.children.length>0"
+                                                             :class="{'active':ThirdIndex == twoIndex}">
                                                         <section class="check-project-second-item select-element"
                                                                  :class="{'icon-downArrow':fourItem.children.length>0,'selected':FourIndex == fourIndex,'select-disabled':!fourItem.isSelected,'active':fourItem.isChecked}"
                                                                  v-for="(fourItem,fourIndex) in threeItem.children">
-                                                            <i class="icon-select-big" @click.stop="fourItem.isSelected&&selectData(fourItem,2)"></i>
+                                                            <i class="icon-select-big"
+                                                               @click.stop="fourItem.isSelected&&selectData(fourItem,2)"></i>
                                                             <span>{{fourItem.treatmentName}}</span>
                                                         </section>
                                                     </section>
@@ -219,24 +245,34 @@
                     <section class="config-suggestion-item examineSuggest" v-show="cutNum == 3">
                         <section class="check-project">
                             <section class="check-project-list">
-                                <article class="check-project-item" v-for="(oneItem,oneIndex) in examineSuggestList" @click.stop="showNext('FirstIndex',oneIndex)">
+                                <article class="check-project-item" v-for="(oneItem,oneIndex) in examineSuggestList"
+                                         @click.stop="showNext('FirstIndex',oneIndex)">
                                     <span :class="{'icon-downArrow-big':oneItem.children.length>0,'selected':FirstIndex == oneIndex}">{{oneItem.nodeName}}</span>
-                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}" v-if="oneItem.children.length>0">
+                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}"
+                                             v-if="oneItem.children.length>0">
                                         <section class='check-project-second-item check-project-second-title'
                                                  :class="{'icon-downArrow':twoItem.children.length>0,'selected':SecondIndex == twoIndex}"
-                                                 v-for="(twoItem,twoIndex) in oneItem.children" @click.stop="showNext('SecondIndex',twoIndex)">
+                                                 v-for="(twoItem,twoIndex) in oneItem.children"
+                                                 @click.stop="showNext('SecondIndex',twoIndex)">
                                             <span>{{twoItem.nodeName}}</span>
-                                            <section class="check-project-second-box" v-if="twoItem.children.length>0" :class="{'active':SecondIndex == twoIndex}">
-                                                <section :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
-                                                         class="check-project-second-item select-element" v-for="(threeItem,threeIndex) in twoItem.children"
-                                                         @click.stop="showNext('ThirdIndex',threeIndex)">
-                                                    <i class="icon-select-big" @click.stop="selectData(threeItem,3)"></i>
+                                            <section class="check-project-second-box" v-if="twoItem.children.length>0"
+                                                     :class="{'active':SecondIndex == twoIndex}">
+                                                <section
+                                                        :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
+                                                        class="check-project-second-item select-element"
+                                                        v-for="(threeItem,threeIndex) in twoItem.children"
+                                                        @click.stop="showNext('ThirdIndex',threeIndex)">
+                                                    <i class="icon-select-big"
+                                                       @click.stop="selectData(threeItem,3)"></i>
                                                     <span>{{threeItem.nodeName}}</span>
-                                                    <section class="check-project-second-box" v-if="threeItem.children.length>0" :class="{'active':ThirdIndex == twoIndex}">
+                                                    <section class="check-project-second-box"
+                                                             v-if="threeItem.children.length>0"
+                                                             :class="{'active':ThirdIndex == twoIndex}">
                                                         <section class="check-project-second-item select-element"
                                                                  :class="{'icon-downArrow':fourItem.children.length>0,'selected':FourIndex == fourIndex,'select-disabled':!fourItem.isSelected,'active':fourItem.isChecked}"
                                                                  v-for="(fourItem,fourIndex) in threeItem.children">
-                                                            <i class="icon-select-big" @click.stop="fourItem.isSelected&&selectData(fourItem,3)"></i>
+                                                            <i class="icon-select-big"
+                                                               @click.stop="fourItem.isSelected&&selectData(fourItem,3)"></i>
                                                             <span>{{fourItem.nodeName}}</span>
                                                         </section>
                                                     </section>
@@ -251,24 +287,34 @@
                     <section class="config-suggestion-item testSuggest" v-show="cutNum == 4">
                         <section class="check-project">
                             <section class="check-project-list">
-                                <article class="check-project-item" v-for="(oneItem,oneIndex) in testSuggestList" @click.stop="showNext('FirstIndex',oneIndex)">
+                                <article class="check-project-item" v-for="(oneItem,oneIndex) in testSuggestList"
+                                         @click.stop="showNext('FirstIndex',oneIndex)">
                                     <span :class="{'icon-downArrow-big':oneItem.children.length>0,'selected':FirstIndex == oneIndex}">{{oneItem.inspectionName}}</span>
-                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}" v-if="oneItem.children.length>0">
+                                    <section class="check-project-second-box" :class="{'active':FirstIndex == oneIndex}"
+                                             v-if="oneItem.children.length>0">
                                         <section class='check-project-second-item check-project-second-title'
                                                  :class="{'icon-downArrow':twoItem.children.length>0,'selected':SecondIndex == twoIndex}"
-                                                 v-for="(twoItem,twoIndex) in oneItem.children" @click.stop="showNext('SecondIndex',twoIndex)">
+                                                 v-for="(twoItem,twoIndex) in oneItem.children"
+                                                 @click.stop="showNext('SecondIndex',twoIndex)">
                                             <span>{{twoItem.inspectionName}}</span>
-                                            <section class="check-project-second-box" v-if="twoItem.children.length>0" :class="{'active':SecondIndex == twoIndex}">
-                                                <section :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
-                                                         class="check-project-second-item select-element" v-for="(threeItem,threeIndex) in twoItem.children"
-                                                         @click.stop="showNext('ThirdIndex',threeIndex)">
-                                                    <i class="icon-select-big" @click.stop="selectData(threeItem,4)"></i>
+                                            <section class="check-project-second-box" v-if="twoItem.children.length>0"
+                                                     :class="{'active':SecondIndex == twoIndex}">
+                                                <section
+                                                        :class="{'icon-downArrow':threeItem.children.length>0,'selected':ThirdIndex == threeIndex,'active':threeItem.isChecked}"
+                                                        class="check-project-second-item select-element"
+                                                        v-for="(threeItem,threeIndex) in twoItem.children"
+                                                        @click.stop="showNext('ThirdIndex',threeIndex)">
+                                                    <i class="icon-select-big"
+                                                       @click.stop="selectData(threeItem,4)"></i>
                                                     <span>{{threeItem.inspectionName}}</span>
-                                                    <section class="check-project-second-box" v-if="threeItem.children.length>0" :class="{'active':ThirdIndex == twoIndex}">
+                                                    <section class="check-project-second-box"
+                                                             v-if="threeItem.children.length>0"
+                                                             :class="{'active':ThirdIndex == twoIndex}">
                                                         <section class="check-project-second-item select-element"
                                                                  :class="{'icon-downArrow':fourItem.children.length>0,'selected':FourIndex == fourIndex,'select-disabled':!fourItem.isSelected,'active':fourItem.isChecked}"
                                                                  v-for="(fourItem,fourIndex) in threeItem.children">
-                                                            <i class="icon-select-big" @click.stop="fourItem.isSelected&&selectData(fourItem,4)"></i>
+                                                            <i class="icon-select-big"
+                                                               @click.stop="fourItem.isSelected&&selectData(fourItem,4)"></i>
                                                             <span>{{fourItem.inspectionName}}</span>
                                                         </section>
                                                     </section>
@@ -283,7 +329,8 @@
                 </section>
             </section>
         </section>
-        <teachingDetail :knowledgeId="knowledgeId" :knowledgeShow.sync="teachingDetailsShow" v-if="teachingDetailsShow" @goBack="teachingGoBack"></teachingDetail>
+        <teachingDetail :knowledgeId="knowledgeId" :knowledgeShow.sync="teachingDetailsShow" v-if="teachingDetailsShow"
+                        @goBack="teachingGoBack"></teachingDetail>
     </section>
 </template>
 <script type="text/ecmascript-6">
@@ -337,9 +384,10 @@
                     allDocList: [],
                     allDocState: false,
                     totalCount: 0,
-                    pageNum: 20,
+                    pageNum: 10,
                     pageIndex: 1,
-                    pageResult: 0
+                    pageResult: 0,
+                    pageArr:[],
                 },
                 noDocData: false,
                 searchTagName: "",
@@ -374,7 +422,7 @@
         mounted(){
             this.getTargetList();
             this.getMatchDocCustomer();
-            this.getAllDocCustomer({num: 0});
+            this.getAllDocCustomer({num: 0,value:1},"1");
             this.getFourList({
                 url: XHRList.getTeachingKnowledge,
                 listName: "teachingKnowledgeList"
@@ -470,21 +518,19 @@
                     }
                 })
             },
-            getAllDocCustomer(obj){
+            getAllDocCustomer(obj,isInit){
+                console.log(obj)
+                if(obj.value == "•••") return false;
                 store.commit("startLoading");
                 let that = this;
                 let searchAreasExpertise = "";
-                that.allDoc.pageResult = obj.num * that.allDoc.pageNum;
-                that.allDoc.pageIndex = obj.num + 1;
+                that.allDoc.pageResult = (obj.value-1) * that.allDoc.pageNum;
+                that.allDoc.pageIndex = obj.value;
                 if (obj.type == "filter") {
                     this.tagCutNum = obj.cutNum;
                     this.searchTagName = obj.tag.tagName;
                     this.docSearchValue = "";
                 }
-
-
-
-
                 if (this.searchTagName == "全部") {
                     searchAreasExpertise = "";
                 } else if (this.searchTagName.indexOf("&") != -1) {
@@ -538,14 +584,93 @@
                             }
                             that.allDoc.allDocList = dataList;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
+                            that.noDocData = false;
                         } else {
                             that.allDoc.allDocList = [];
                             that.noDocData = true;
                         }
                         document.querySelector(".scrollTop").scrollTop = 0;
+                        that.pages(isInit,obj.num,obj.value);
                         store.commit("stopLoading");
                     }
                 });
+            },
+            pages(init,clickNum,clickValue){
+                let that =this;
+                let pagesLength = Math.ceil(that.allDoc.totalCount / that.allDoc.pageNum);
+                //初始化
+                if(init == 1){
+                    if(pagesLength>10){
+                        that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
+                    }else{
+                        for (let i = 1; i <= Math.ceil(pagesLength); i++) {
+                            that.allDoc.pageArr.push(i);
+                        }
+                    }
+                }else{
+                    let ellipsis = "•••",ellipsisNum;
+                    if(pagesLength>10){
+                        //点击首页、末页
+                        if(clickValue == 1 || clickValue == Math.ceil(that.allDoc.totalCount/that.allDoc.pageNum)){
+                            that.allDoc.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
+                            return false;
+                        }
+                        //确定"•••"的位置
+                        that.allDoc.pageArr.forEach(function (value,key) {
+                            if(ellipsis == value){
+                                ellipsisNum = key;
+                            }
+                        });
+                        //添加删除"•••"，如果"•••"两边数字差小于3，删除"•••"，否则添加"•••"；
+//                        if(clickNum == ellipsisNum-1 && that.allDoc.pageArr[ellipsisNum+1] - that.allDoc.pageArr[clickNum] <=3){
+//                            let addThreeNum = that.allDoc.pageArr[clickNum];
+//                            that.allDoc.pageArr.splice(ellipsisNum,1,addThreeNum+1,addThreeNum+2);
+//                            return false;
+//                        }else if(clickNum == ellipsisNum+1 && that.allDoc.pageArr[clickNum] - that.allDoc.pageArr[ellipsisNum-1] <=3){
+//                            let reduceThreeNum = that.allDoc.pageArr[clickNum];
+//                            that.allDoc.pageArr.splice(ellipsisNum,1,reduceThreeNum-1,reduceThreeNum-2);
+//                            return false;
+//                        }else if(pagesLength){}
+                        //改变数值
+                        if(ellipsisNum){
+
+                            let rightNum = Number(that.allDoc.pageArr[ellipsisNum-1]) +1,
+                                leftNum = Number(that.allDoc.pageArr[ellipsisNum+1]) -1;
+                            if(clickNum == ellipsisNum-1){
+                                that.allDoc.pageArr.splice(ellipsisNum,0,rightNum);
+                                that.allDoc.pageArr.splice(0,1);
+                            }else if(clickNum == 0 && Number(that.allDoc.pageArr[0]) != 1){
+                                that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
+                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }else if(clickNum == ellipsisNum +1){
+                                that.allDoc.pageArr.splice(ellipsisNum+1,0,leftNum);
+                                that.allDoc.pageArr.splice(that.allDoc.pageArr.length-1,1);
+                            }else if(clickNum == that.allDoc.pageArr.length-1 && Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1] != pagesLength)){
+                                that.allDoc.pageArr.push(Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1])+1);
+//                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }
+
+
+                            if(that.allDoc.pageArr[ellipsisNum+1] - that.allDoc.pageArr[clickNum] ==1 || that.allDoc.pageArr[clickNum] - that.allDoc.pageArr[ellipsisNum-1] ==1){
+                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                            }
+                        }else{
+                            if(clickNum == 0){
+                                that.allDoc.pageArr.splice(4,1,ellipsis);
+                                that.allDoc.pageArr.unshift(Number(that.allDoc.pageArr[0])-1);
+                            }else if(clickNum == 7){
+                                that.allDoc.pageArr.splice(5,1,ellipsis);
+                                that.allDoc.pageArr.push(Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1])+1);
+                            }
+                        }
+                    }else{
+                        that.allDoc.pageArr = [];
+                        for (let i = 1; i <= Math.ceil(pagesLength); i++) {
+                            that.allDoc.pageArr.push(i);
+                        }
+                    }
+                }
+                console.log(that.allDoc.pageArr)
             },
             //推荐医生---复选、全选、筛选、分页
             setCheckedState(arr){
@@ -617,7 +742,7 @@
                 } else {
                     this.allDoc.allDocList[index].isChecked = !(this.allDoc.allDocList[index].isChecked);
                 }
-                if ((this.matchDoc.matchDocList.length > 0 && this.matchDoc.matchDocList[index].isChecked && type == "match") || (this.allDoc.allDocList[index].isChecked && type == "all")) {
+                if ((type == "match"&&this.matchDoc.matchDocList.length > 0 && this.matchDoc.matchDocList[index].isChecked) || (type == "all"&&this.allDoc.allDocList.length > 0&&this.allDoc.allDocList[index].isChecked)) {
                     this.previewDiagnoseSuggest.doctorList.forEach(function (key, value) {
                         if (list.customerId == key.customerId) {
                             flag = false;
@@ -634,7 +759,7 @@
                     })
                 }
                 ;
-                if ((this.matchDoc.matchDocList.length > 0 && flag && (this.matchDoc.matchDocList[index].isChecked) || this.allDoc.allDocList[index].isChecked)) {
+                if ((type == "match"&&this.matchDoc.matchDocList.length > 0 && flag && this.matchDoc.matchDocList[index].isChecked) || (type == "all"&&flag &&this.allDoc.allDocList[index].isChecked)) {
                     this.previewDiagnoseSuggest.doctorList.push(list);
                     console.log("该匹配医生已添加");
                 }
@@ -902,9 +1027,17 @@
                                             console.log("四大建议保存成功");
                                         }
                                     })
-                                }
-                                ;
+                                };
                                 //发送IM
+                                let  inquiryResult = that.$store.state.currentItem,
+                                    caseMajorName = that.checkData.majorName,
+                                    caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
+                                    caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
+                                inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                                store.commit('setCurrentItem',inquiryResult);
+
+
+
                                 let nowTime = new Date(),
                                     createTime = (nowTime.getFullYear() + '.' + (nowTime.getMonth() + 1 < 10 ? "0" + (nowTime.getMonth() + 1) : nowTime.getMonth() + 1) + '.' + (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate())).replace(/-/g, ".");
                                 that.closePreview();
@@ -935,15 +1068,7 @@
 
             }
         },
-        computed: {
-            pages(){
-                let pageArr = [], that = this;
-                for (let i = 1; i <= Math.ceil(that.allDoc.totalCount / that.allDoc.pageNum); i++) {
-                    pageArr.push(i);
-                }
-                return pageArr;
-            }
-        },
+        computed: {},
         watch: {
             previewDiagnoseSuggest: {
                 handler(){
