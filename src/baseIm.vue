@@ -20,6 +20,7 @@
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim" @loadCallback="loadCallback"></ImageElement>
                         <!--检查检验-->
+
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
                                 :message="items"></CheckSuggestion>

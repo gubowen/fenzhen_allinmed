@@ -1,12 +1,12 @@
 <template>
   <article>
-    <figure class="messageList-item-content" style="margin-bottom: 30px;">
+    <figure class="messageList-item-content" style="margin-bottom: 30px;float: none;">
       <!--文字-->
-      <figcaption class="messageList-item-text" >
+      <figcaption class="messageList-item-text">
         为了给您提供更专业的服务，建议您进行如下检查，并上传检查资料。
       </figcaption>
       <!--医生头像-->
-      <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
+      <figure class="messageList-item-img">
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
