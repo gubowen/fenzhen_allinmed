@@ -202,7 +202,7 @@
                 let that = this;
                 that.connectFlag = false;
                 this.nim = nim.getInstance({
-//                     debug: true,
+                    debug: true,
                     appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
