@@ -10,13 +10,11 @@
 
 .user-controller {
   position: absolute;
-  bottom: 4%;
-  @include query(1500px){
-    bottom: 12%;
-  }
+
   height:23%;
   left: 0;
   right: 0;
+  bottom: 0;
   background-color: #FFFFFF;
   border-top: 1px solid #f4f6fb;
   .user-controller-footer {

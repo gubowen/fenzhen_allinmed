@@ -83,9 +83,9 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
-                                                擅长：<span>{{docList.illnessNameList + docList.operationNameList}}</span>
+                                                擅长：<span :class="{'on':matchCurrentIndex == index}">{{docList.illnessNameList + docList.operationNameList}}</span>
                                             </article>
-                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>30">{{currentIndex == index?'收起':'展开'}}</a>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="matchCurrent(index,$event)" v-if="(docList.illnessNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length + docList.operationNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length)>30">{{matchCurrentIndex == index?'收起':'展开'}}</a>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
@@ -119,9 +119,9 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
-                                                    擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':currentIndex == index}"></span>
+                                                    擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':allCurrentIndex == index}"></span>
                                             </article>
-                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>30">{{currentIndex == index?'收起':'展开'}}</a>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="allCurrent(index,$event)" v-if="(docList.illnessNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length + docList.operationNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length)>30">{{allCurrentIndex == index?'收起':'展开'}}</a>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
@@ -416,7 +416,8 @@
                 },
                 doctorType:'',
                 onlineState:1,
-                currentIndex:-1
+                matchCurrentIndex:-1,
+                allCurrentIndex:-1
             }
         },
         mounted(){
@@ -600,11 +601,13 @@
                             that.allDoc.allDocList = dataList;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
                             that.noDocData = false;
-                            that.currentIndex = -1;
+                            that.matchCurrentIndex = -1;
+                            that.allCurrentIndex = -1;
                         } else {
                             that.allDoc.allDocList = [];
                             that.noDocData = true;
-                            that.currentIndex = -1;
+                            that.matchCurrentIndex = -1;
+                            that.allCurrentIndex = -1;
                         }
                         document.querySelector(".scrollTop").scrollTop = 0;
                         that.pages(isInit,obj.num,obj.value);
@@ -1075,13 +1078,20 @@
                     })
                 }
             },
-            current(index,e){
-                if(this.currentIndex == index){
-                    this.currentIndex = -1;
-                    e.target.innerText="展开"
+            matchCurrent(index){
+                if(this.matchCurrentIndex == index){
+                    this.matchCurrentIndex = -1;
                 }else{
-                    this.currentIndex = index ;
-                    e.target.innerText="收起"
+                    this.matchCurrentIndex = index ;
+                }
+
+
+            },
+            allCurrent(index){
+                if(this.allCurrentIndex == index){
+                    this.allCurrentIndex = -1;
+                }else{
+                    this.allCurrentIndex = index ;
                 }
 
 

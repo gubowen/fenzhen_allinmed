@@ -360,7 +360,9 @@
             margin: 0 385px;
             position: relative;
             padding-top: 55px;
+            padding-bottom: 40px;
             height: 100%;
+            box-sizing: border-box;
         }
     }
 
