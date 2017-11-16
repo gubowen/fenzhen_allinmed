@@ -23,7 +23,7 @@
                                         <li v-for="ele in chatHistoryRecordList">
                                             <article>
                                                 <header class="doctor-letter" v-if="ele.fromAccount == '1_doctor00001'&& filterInfo(ele)">
-                                                    {{分诊医生 +' '+ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
+                                                    {{'分诊医生' +' '+ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}
                                                 </header>
                                                 <header v-if="ele.fromAccount != '1_doctor00001' && filterInfo(ele)">
                                                     {{$store.state.patientName +' '+ele.createTime.replace(/-/g, "/").substr(0,ele.createTime.replace(/-/g, "/").length-2)}}

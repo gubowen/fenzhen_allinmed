@@ -7,8 +7,10 @@
             <!--v-for="items in messageInfo"-->
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
+                <p class="time-stamp" v-if="$store.state.currentItem.returnReason">{{$store.state.currentItem.createTime.substring(0,$store.state.currentItem.createTime.length-2)}}</p>
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
-                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ? $store.state.currentItem.doctorName + '医生' : ''}退回`}}</p>
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ? $store.state.currentItem.doctorName + '医生' : ''}退回`}}
+                </p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
@@ -202,7 +204,7 @@
                 let that = this;
                 that.connectFlag = false;
                 this.nim = nim.getInstance({
-                    debug: true,
+                    //debug: true,
                     appKey: nimEnv(),
                     account: that.userData.account,
                     token: that.userData.token,
@@ -482,6 +484,10 @@
                         let caseIdInfo = "0_" + item.caseId;
                         let patientAlertList = {};
                         patientAlertList[caseIdInfo] = item.messageAlert;
+                        patientList.removeByValue(item);
+                        patientList.unshift(item);
+
+
 
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                         _this.$store.commit("setNewOnline", true);
@@ -506,6 +512,9 @@
                         let caseIdInfo = "0_" + item.caseId;
                         let waitingAlertList = {};
                         waitingAlertList[caseIdInfo] = item.messageAlert;
+
+                        watingList.removeByValue(item);
+                        watingList.unshift(item);
 
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                         _this.$store.commit("setNewWating", true);
