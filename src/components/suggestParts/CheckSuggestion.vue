@@ -122,11 +122,11 @@
                     this.nextFlag = false;
                 }
             }else{
-                if(this.operationListResult.operationId){
-                    this.nextFlag = false;
-                }else{
-                    this.nextFlag = true ;
-                }
+//                if(this.operationListResult.operationId){
+//                    this.nextFlag = false;
+//                }else{
+//                    this.nextFlag = true ;
+//                }
         }
       },
       sicknessResult:{
