@@ -142,9 +142,9 @@
                     color: #808080;
                     letter-spacing: 0;
                     line-height: 1.5;
-                    width: 230px;
+                    width: 225px;
                     display: inline-block;
-                    vertical-align: middle;
+                    vertical-align: text-top;
                     word-break: break-all;
                 }
             }

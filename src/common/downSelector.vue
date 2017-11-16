@@ -78,7 +78,7 @@
         },
         methods: {
             init(){
-                setTimeout(()=>{
+               // setTimeout(()=>{
                     if(this.dataListInfo.placeholderText == '疾病'){
                         this.resultData = '暂不确定';
                         this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
@@ -87,7 +87,7 @@
                         this.$emit('update:dataBack', {'progressId':'','progressName':'暂不需手术'});
 
                     }
-                },1000);
+             //   },1000);
             },
             showData(){
                 this.$emit("update:currentIndexNow",this.conIndex);

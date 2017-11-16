@@ -69,7 +69,7 @@
         sicknessUrl: "/call/comm/data/illness/v1/getMapList/",
         sickness:{
           dataList: '',
-          placeholderText: '',
+          placeholderText: '疾病',
           disabledFlag:false
         },
         sicknessResult:{},
