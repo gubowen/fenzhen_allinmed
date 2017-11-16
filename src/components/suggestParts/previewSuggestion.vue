@@ -1,6 +1,6 @@
 <template>
   <section class="preview-suggestion-box" v-if="$store.state.previewShow">
-    <i class="icon-close window-close" @click="closePreview"></i>
+    <i class="icon-close window-close" @click="closePreview" v-if="$store.state.previewType !=1"></i>
     <header class="preview-suggestion-title">
       <button type="button" class="btn-border-small-pvw btn-cancel fl" @click="reviseSuggest" v-if="$store.state.previewType ==1 ">修改</button>
       <span>初诊建议</span>

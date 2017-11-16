@@ -83,11 +83,12 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
-                                                擅长：{{docList.illnessNameList + docList.operationNameList}}
+                                                擅长：<span>{{docList.illnessNameList + docList.operationNameList}}</span>
                                             </article>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>30">{{currentIndex == index?'收起':'展开'}}</a>
                                             <article class="doctor-message-num">
-                                                <span class="price" v-if="docList.generalPrice.length>0">¥{{docList.generalPrice}}/{{docList.generalTimes}}次起</span>
-                                                <span class="lastNum" v-if="docList.adviceNum>0">仅剩{{docList.adviceNum}}个名额</span>
+                                                <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
+                                                <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
                                             </article>
                                         </figcaption>
                                     </section>
