@@ -321,6 +321,7 @@
         z-index: 2;
         display: inline-block;
         width:90px;
+        white-space: nowrap;
       }
     }
     .img-check {
