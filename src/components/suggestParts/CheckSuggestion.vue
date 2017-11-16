@@ -57,7 +57,10 @@
           placeholderText: '',
           disabledFlag:false
         },
-        partListResult:{},
+        partListResult:{
+            id:'',
+            tagName:''
+        },
         currentSelectorIndex: -1,
         nextPageShow:false,
         nextPageDate:{},
@@ -102,7 +105,7 @@
 
         parentId:'',
         operationName:'',
-        nextFlag:true,
+        nextFlag:false,
         operationShowFlag:true,
         showIconFlag:false
       }
@@ -274,22 +277,22 @@
         }
 
         _this.nextPageDate = {
-          customerId: _this.$store.state.userId,                          //string	是	医生id
-          caseId: _this.$store.state.caseId,                              //	string	是	病例id
-          patientId: _this.$store.state.patientId,	                     //	string	是	患者id
-          diagnosisType: "1",	                                                 //	string	是	1-初诊
-          majorId: _this.partListResult.id,                                 //	string	是	部位id
-          majorName: _this.partListResult.tagName.indexOf("&") != -1?_this.partListResult.tagName.replace(/&/g, ","):_this.partListResult.tagName,	             //	string	是	部位名称
+          customerId: _this.$store.state.userId,                                    //string	是	医生id
+          caseId: _this.$store.state.caseId,                                        //	string	是	病例id
+          patientId: _this.$store.state.patientId,	                                //	string	是	患者id
+          diagnosisType: "1",	                                                    //	string	是	1-初诊
+          majorId: _this.partListResult.id,                                         //	string	是	部位id
+          majorName: _this.partListResult.tagName?_this.partListResult.tagName.indexOf("&") != -1?_this.partListResult.tagName.replace(/&/g, ","):_this.partListResult.tagName:'',	             //	string	是	部位名称
           illnessId: _this.sicknessResult.illnessId,	                             //	string	是	疾病id
-          illnessName: _this.sicknessResult.illnessName,	         //	string	是	疾病名称
-          operationId: _this.operationListResult.operationId || "",	                         //	string	是	手术id
-          operationName: _this.operationListResult.operationName || "",	 //	string	是	手术名称
-          degreeType: degreeType,                                              //  string	是	1-暂不确定，2-一级，3-二级，4-三级，5-四级，6-五级
+          illnessName: _this.sicknessResult.illnessName,	                         //	string	是	疾病名称
+          operationId: _this.operationListResult.operationId || "",	                 //	string	是	手术id
+          operationName: _this.operationListResult.operationName || "",	            //	string	是	手术名称
+          degreeType: degreeType,                                                   //  string	是	1-暂不确定，2-一级，3-二级，4-三级，5-四级，6-五级
           positionId: "",
           // positionName: $(".firstListTitle", "#direction-selector").val()
           positionName: ""
         };
-        console.log( _this.nextPageDate);
+//        console.log( _this.nextPageDate);
       }
     },
     mounted(){
