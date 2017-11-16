@@ -120,7 +120,7 @@
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
                                                     擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':currentIndex == index}"></span>
                                             </article>
-                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>20">展开</a>
+                                            <a href="javascript:;" class="viewMoreBox" @click.stop="current(index,$event)" v-if="(docList.illnessNameList.length + docList.operationNameList.length)>30">{{currentIndex == index?'收起':'展开'}}</a>
                                             <article class="doctor-message-num">
                                                 <span class="price" v-if="docList.generalPrice.length>0"><i style="color: #F23E34;">¥{{docList.generalPrice}}</i>/{{docList.generalTimes}}次起</span>
                                                 <span class="lastNum" v-if="docList.adviceNum>0">仅剩<i style="color: #00BEAF;">{{docList.adviceNum}}</i>个名额</span>
@@ -599,9 +599,11 @@
                             that.allDoc.allDocList = dataList;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
                             that.noDocData = false;
+                            that.currentIndex = -1;
                         } else {
                             that.allDoc.allDocList = [];
                             that.noDocData = true;
+                            that.currentIndex = -1;
                         }
                         document.querySelector(".scrollTop").scrollTop = 0;
                         that.pages(isInit,obj.num,obj.value);
@@ -1879,6 +1881,7 @@
         }
 
         .high-light-search-text {
+            display:inline;
             color: #252525;
             font-weight: bold;
         }

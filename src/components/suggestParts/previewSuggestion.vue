@@ -153,6 +153,7 @@
           }
         },
         closePreview(){
+          document.querySelector(".mask-background").style.display = "block";
           store.commit("setPreviewShow",false);
           store.commit("setPreviewId","");
           store.commit("setPreviewType",-1);
