@@ -445,8 +445,8 @@
             //发送单条数据...
             sendSingleMessage (error, msg) {
                 let patientListArray = this.$store.state.patientList;
-                patientListArray.removeByValue(this.$store.state.currentItem);
                 patientListArray.unshift(this.$store.state.currentItem);
+                patientListArray.removeByValue(this.$store.state.currentItem);
 //                this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
@@ -655,13 +655,13 @@
 
     .messageList-box {
         padding: 40px 25px;
-        height: 71.2%;
+        height: 80%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
         box-sizing: border-box;
         @include query(1500px) {
-            height: 60.7%;
+            height: 75%;
         }
         &.watingBoxStyle {
             height: 94%;
@@ -742,7 +742,7 @@
 
     .user-controller {
         @include query(1500px) {
-            height: 24%;
+            height: 200px;
         }
     }
 
