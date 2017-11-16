@@ -328,7 +328,7 @@
                     box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
                     border-radius: 4px;
                     background-color: #fff;
-
+                    white-space: nowrap;
                     &-box {
                         /*box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);*/
                         border-radius: 4px;
