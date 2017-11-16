@@ -445,8 +445,8 @@
             //发送单条数据...
             sendSingleMessage (error, msg) {
                 let patientListArray = this.$store.state.patientList;
-                patientListArray.unshift(this.$store.state.currentItem);
                 patientListArray.removeByValue(this.$store.state.currentItem);
+                patientListArray.unshift(this.$store.state.currentItem);
 //                this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
