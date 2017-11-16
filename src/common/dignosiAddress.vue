@@ -318,7 +318,7 @@
                 }
                 .custom-selector-second {
                     display: inline-block;
-                    width: 116px;
+                    width: 156px;
                     font-size: 12px;
                     vertical-align: top;
                     text-align: left;
@@ -350,8 +350,6 @@
                         height:34px;
                         line-height: 34px;
                         width: 100%;
-                        padding:0 18px;
-                        box-sizing: border-box;
                         list-style: none;
                         font-size: 14px;
                         color: #222222;
@@ -361,6 +359,8 @@
                         }
                         & > span {
                             display: block;
+                            padding:0 18px;
+                            box-sizing: border-box;
                         }
                         &.active > span {
                             color: #2899e6;
