@@ -673,7 +673,7 @@
             height: 75%;
         }
         &.watingBoxStyle {
-            height: 94%;
+            height: 105.5%;
         }
         .messageList-item {
             position: relative;

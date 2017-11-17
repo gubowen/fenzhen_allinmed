@@ -10,42 +10,37 @@
       </header>
       <section class="jump-box-term-box" id="ev-fast-reply-box">
         <section class="jump-box-term-add" v-if="termShowFlag[-1]">
-          <input type="text" class="add-input" placeholder="请输入疾病部位名称" v-model="addInputContent"
-                 @input="contentLimit('term','-1')"/>
+          <input type="text" class="add-input" placeholder="请输入疾病部位名称" v-model="addInputContent" @input="contentLimit('term','-1')"/>
           <figure class="term-add-button">
             <button class="btn-primary" @click.stop="configCallback('addTerm')">保存</button>
             <p class="term-add-cancel" @click.stop="termShowFlag[-1]=false">取消</p>
           </figure>
         </section>
-
-        <section class="jump-box-term" v-for="(item,index) in termList" :class="{'active':termShowFlag[index]}"
-                 @click="termShowFlag[index]=!termShowFlag[index]">
+        <section class="jump-box-term" v-for="(item,index) in termList" :class="{'active':termShowFlag[index]}" @click="termShowFlag[index]=!termShowFlag[index]">
           <article class="jump-box-term-title">
             <i class="icon-term-downArrow"></i>
             <h3 v-show="!termFixFlag[index]">{{item.questionDesc}}</h3>
             <figure class="jump-box-term-button" v-if="item.questionType==2" v-show="!termFixFlag[index]">
               <p class="fix" @click.stop="termFixFlag[index]=true;termFixContent[index]=item.questionDesc">修改</p>
-              <p class="del" @click.stop="deleteShowFlag(index)">删除
-
+              <p class="del" @click.stop="deleteShowFlag(index)">删除</p>
                 <section class="modal-confirm show" v-if="deleteTermShowFlag[index]">
                   <article class="modal-confirm-content">
-              <p>确定删除该分组吗？</p>
-              <p>删除后该分组的相关问题会一起删除</p>
-          </article>
-          <figure class="modal-confirm-button">
-            <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('term',item,index)">确定</button>
-            <button class="btn-primary modal-confirm-cancel" @click.stop="deleteTermShowFlag[index]=false">取消</button>
-          </figure>
-        </section>
-        </p>
-        </figure>
-        <section class="jump-box-term-add" v-if="termFixFlag[index]" @click.stop="">
-          <input type="text" class="add-input" placeholder="请输入分组名称" v-model="termFixContent[index]"
-                 @input="contentLimit('term',index)"/>
-          <figure class="term-add-button">
-            <button class="btn-primary term-add-save" @click.stop="configCallback('fixTerm',item,index)">保存</button>
-            <p class="term-add-cancel" @click.stop="termFixFlag[index]=false">取消</p></figure>
-        </section>
+                  <p>确定删除该分组吗？</p>
+                  <p>删除后该分组的相关问题会一起删除</p>
+                  </article>
+                  <figure class="modal-confirm-button">
+                    <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('term',item,index)">确定</button>
+                    <button class="btn-primary modal-confirm-cancel" @click.stop="deleteTermShowFlag[index]=false">取消</button>
+                  </figure>
+                </section>
+            </figure>
+            <section class="jump-box-term-add" v-if="termFixFlag[index]" @click.stop="">
+              <input type="text" class="add-input" placeholder="请输入分组名称" v-model="termFixContent[index]" @input="contentLimit('term',index)"/>
+              <figure class="term-add-button">
+                <button class="btn-primary term-add-save" @click.stop="configCallback('fixTerm',item,index)">保存</button>
+                <p class="term-add-cancel" @click.stop="termFixFlag[index]=false">取消</p>
+              </figure>
+            </section>
         </article>
         <section class="jump-box-member" @click.stop="">
           <header class="jump-box-member-title">
@@ -56,46 +51,32 @@
           </header>
           <article class="jump-box-member-box">
             <section class="jump-box-member-config" v-if="memberFixFlag[index]['-1']">
-              <input type="text" class="jump-box-member-input" placeholder="请输入疾病部位名称"
-                     v-model="memberFixContent[index]['-1']" @input="contentLimit('member',index,'-1')"/>
+              <input type="text" class="jump-box-member-input" placeholder="请输入疾病部位名称" v-model="memberFixContent[index]['-1']" @input="contentLimit('member',index,'-1')"/>
               <figure class="member-add-button">
-                <button class="btn-primary member-add-save" @click.stop="configCallback('addMember',item,index)">保存
-
-                </button>
+                <button class="btn-primary member-add-save" @click.stop="configCallback('addMember',item,index)">保存</button>
                 <i class="icon-member-add-cancel" @click.stop="memberFixFlag[index]['-1']=false"></i>
               </figure>
             </section>
             <article class="jump-box-member-item" v-for="(cItem,cIndex) in item.children" :key="cIndex">
               <span v-show="!memberFixFlag[index][cIndex]">{{cItem.questionDesc}}</span>
-              <figure class="jump-box-member-item-button" v-if="cItem.questionType==2"
-                      v-show="!memberFixFlag[index][cIndex]">
-                <i class="icon-question-config"
-                   @click.stop="memberFixFlag[index][cIndex]=true;memberFixContent[index][cIndex]=cItem.questionDesc"></i>
+              <figure class="jump-box-member-item-button" v-if="cItem.questionType==2" v-show="!memberFixFlag[index][cIndex]">
+                <i class="icon-question-config" @click.stop="memberFixFlag[index][cIndex]=true;memberFixContent[index][cIndex]=cItem.questionDesc"></i>
                 <i class="icon-question-delete" @click.stop="deleteMemberShowSwitch(index,cIndex)">
                   <section class="modal-confirm show" v-if="deleteMemberShowFlag[index][cIndex]">
                     <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
                     <figure class="modal-confirm-button">
-                      <button class="btn-ensure modal-confirm-ensure"
-                              @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定
-
-                      </button>
-                      <button class="btn-primary modal-confirm-cancel"
-                              @click.stop="deleteMemberShowFlag[index][cIndex]=false">取消
-
-                      </button>
+                      <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定</button>
+                      <button class="btn-primary modal-confirm-cancel" @click.stop="deleteMemberShowFlag[index][cIndex]=false">取消</button>
                     </figure>
                   </section>
                 </i>
               </figure>
               <section class="jump-box-member-config" v-if="memberFixFlag[index][cIndex]">
-                <input type="text" class="jump-box-member-input" placeholder="请输入快捷提问"
-                       v-model="memberFixContent[index][cIndex]" @input="contentLimit('member',index,cIndex)"/>
+                <input type="text" class="jump-box-member-input" placeholder="请输入快捷提问" v-model="memberFixContent[index][cIndex]" @input="contentLimit('member',index,cIndex)"/>
                 <figure class="member-add-button">
-                  <button class="btn-primary member-add-save"
-                          @click.stop="configCallback('fixMember',item,index,cItem,cIndex)">保存
-
-                  </button>
-                  <p class="term-add-cancel" @click.stop="memberFixFlag[index][cIndex]=false">取消</p></figure>
+                  <button class="btn-primary member-add-save" @click.stop="configCallback('fixMember',item,index,cItem,cIndex)">保存</button>
+                  <p class="term-add-cancel icon-member-add-cancel" @click.stop="memberFixFlag[index][cIndex]=false"></p>
+                </figure>
               </section>
             </article>
           </article>
@@ -383,7 +364,7 @@
     }
   }
 </script>
-<style lang="scss" scoped type="text/css" rel="stylesheet/scss">
+<style lang="scss" type="text/css" rel="stylesheet/scss" scoped>
   @import "../scss/base.scss";
   @import "../scss/modules/_fastReplyConfig.scss";
   @import "../scss/modules/_modalBox.scss";
