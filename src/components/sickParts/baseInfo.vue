@@ -6,15 +6,14 @@ d<template>
           <article>
             <ul>
               <li><span class="base-title">所在地区</span><span class="base-text">{{address}}</span></li>
-              <li style="display: none;"><span class="base-title">联系方式</span><span class="base-text">{{telephone}}</span></li>
+              <li v-if="false"><span class="base-title">联系方式</span><span class="base-text">{{telephone}}</span></li>
               <li><span class="base-title">社保类型</span><span class="base-text" :data-value="socialId.value">{{socialId.text}}</span></li>
               <li><span class="base-title base-title-long">社保所在地</span><span class="base-text">{{socialAddress}}</span></li>
-              <li><span class="base-title">民族</span><select class="J-nation" v-model="nationDataSelectValue">
+              <li><span class="base-title">民族</span><select class="" v-model="nationDataSelectValue">
                 <option v-for="option in nation" v-bind:value="option.nationality">
                   {{option.nationality}}
                 </option>
-              </select><span
-                class="base-title ml20">婚姻状况</span><select class="J-Marriage" v-model="marriageSelectValue">
+              </select><span class="base-title ml20">婚姻状况</span><select class="" v-model="marriageSelectValue">
                 <option value="">请选择</option>
                 <option value="1">未婚</option>
                 <option value="2">已婚</option>
@@ -26,14 +25,10 @@ d<template>
                 <span class="base-title ">籍贯</span><address-selector  :dataListInfo.sync ="addressResult" :conIndex="1" :currentIndexNow.sync="currentSelectorIndex" :dataBack.sync="addressResult" v-if="childrenShow"></address-selector>
               </li>
               <li>
-                <span class="base-title">家庭住址</span><input class="base-input J-homeAddress"
-                                                           type="text" maxlength="50"
-                                                           placeholder="请填写" v-model="homeAddress"/>
+                <span class="base-title">家庭住址</span><input class="base-input" type="text" maxlength="50" placeholder="请填写" v-model="homeAddress"/>
               </li>
               <li>
-                <span class="base-title">工作单位</span><input class="base-input J-workplace"
-                                                           type="text" maxlength="50"
-                                                           placeholder="请填写" v-model="workplace"/>
+                <span class="base-title">工作单位</span><input class="base-input" type="text" maxlength="50" placeholder="请填写" v-model="workplace"/>
               </li>
             </ul>
           </article>
@@ -47,39 +42,38 @@ d<template>
                   <span class="base-title">出生地</span><address-selector  :dataListInfo.sync ="birthResult"  :dataBack.sync="birthResult" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex" v-if="childrenShow"></address-selector>
                 </li>
                 <li>
-                  <span class="base-title">生育状况</span><select class="select-120 J-fertility-boy"
-                                                              v-model="fertilityBoySelectValue">
-                  <option value="">请选择</option>
-                  <option value="0">0子</option>
-                  <option value="1">1子</option>
-                  <option value="2">2子</option>
-                  <option value="3">3子</option>
-                  <option value="4">4子</option>
-                  <option value="5">5子</option>
-                  <option value="6">6子</option>
-                  <option value="7">7子</option>
-                  <option value="8">8子</option>
-                </select><select class="select-120 ml15 J-fertility-girl" v-model="fertilityGirlSelectValue">
-                  <option value="">请选择</option>
-                  <option value="0">0女</option>
-                  <option value="1">1女</option>
-                  <option value="2">2女</option>
-                  <option value="3">3女</option>
-                  <option value="4">4女</option>
-                  <option value="5">5女</option>
-                  <option value="6">6女</option>
-                  <option value="7">7女</option>
-                  <option value="8">8女</option>
-                </select>
+                  <span class="base-title">生育状况</span><select class="select-120" v-model="fertilityBoySelectValue">
+                      <option value="">请选择</option>
+                      <option value="0">0子</option>
+                      <option value="1">1子</option>
+                      <option value="2">2子</option>
+                      <option value="3">3子</option>
+                      <option value="4">4子</option>
+                      <option value="5">5子</option>
+                      <option value="6">6子</option>
+                      <option value="7">7子</option>
+                      <option value="8">8子</option>
+                    </select><select class="select-120 ml15" v-model="fertilityGirlSelectValue">
+                      <option value="">请选择</option>
+                      <option value="0">0女</option>
+                      <option value="1">1女</option>
+                      <option value="2">2女</option>
+                      <option value="3">3女</option>
+                      <option value="4">4女</option>
+                      <option value="5">5女</option>
+                      <option value="6">6女</option>
+                      <option value="7">7女</option>
+                      <option value="8">8女</option>
+                    </select>
                 </li>
                 <li>
-                  <span class="base-title">配偶状况</span><select class="J-spouseStatus" v-model="spouseStatusSelectValue">
+                  <span class="base-title">配偶状况</span><select class="" v-model="spouseStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
                   <option value="2">患病</option>
                   <option value="3">严重患病</option>
                   <option value="4">身体残疾</option>
-                </select><span class="base-title ml20">子女状况</span><select class="J-childrenStatusSelect" v-model="childrenStatusSelectValue">
+                </select><span class="base-title ml20">子女状况</span><select class="" v-model="childrenStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
                   <option value="2">患病</option>
@@ -88,11 +82,11 @@ d<template>
                 </select>
                 </li>
                 <li>
-                  <span class="base-title">结婚年龄</span><select class="J-marriageAge" v-model="marriageAgeSelectValue">
+                  <span class="base-title">结婚年龄</span><select class="" v-model="marriageAgeSelectValue">
                     <option v-for="option in marriageAge" v-bind:value="option.value">
                       {{option.text}}
                     </option>
-                  </select><span class="base-title ml20">吸烟史</span><select class="J-isSmoke" v-model="isSmokeSelectValue">
+                  </select><span class="base-title ml20">吸烟史</span><select class="" v-model="isSmokeSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">从不吸烟</option>
                   <option value="2">曾经吸烟</option>
@@ -101,13 +95,13 @@ d<template>
                 </select>
                 </li>
                 <li>
-                  <span class="base-title">饮酒史</span><select class="J-isDrink" v-model="isDrinkSelectValue">
+                  <span class="base-title">饮酒史</span><select class="" v-model="isDrinkSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">从不喝酒</option>
                   <option value="2">曾经喝酒</option>
                   <option value="3">偶尔喝酒</option>
                   <option value="4">经常喝酒</option>
-                </select><span class="base-title ml20">毒品史</span><select class="J-isNarcotics" v-model="isNarcoticsSelectValue">
+                </select><span class="base-title ml20">毒品史</span><select class="" v-model="isNarcoticsSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">无</option>
                   <option value="2">有</option>
@@ -123,13 +117,13 @@ d<template>
             <section>
               <ul>
                 <li>
-                  <span class="base-title">父母状况</span><select class="J-parentStatus" v-model="parentStratusSelectValue">
+                  <span class="base-title">父母状况</span><select class="" v-model="parentStratusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">父母健在</option>
                   <option value="2">父亲已故</option>
                   <option value="3">母亲已故</option>
                   <option value="4">父母已故</option>
-                </select><span class="base-title ml20">兄妹状况</span><select class="J-siblingsStatus" v-model="siblingsStatusSelectValue">
+                </select><span class="base-title ml20">兄妹状况</span><select class="" v-model="siblingsStatusSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">健康</option>
                   <option value="2">患病</option>
@@ -138,7 +132,7 @@ d<template>
                 </select>
                 </li>
                 <li>
-                  <span class="base-title">传染病</span><select class="J-isInfection" v-model="isInfectionSelectValue">
+                  <span class="base-title">传染病</span><select class="" v-model="isInfectionSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">无</option>
                   <option value="2">肝炎</option>
@@ -146,7 +140,7 @@ d<template>
                   <option value="4">非典</option>
                   <option value="5">流脑</option>
                   <option value="6">其他</option>
-                </select><span class="base-title ml20">遗传病</span><select class="J-isHeredopathia" v-model="isHeredopathiaSelectValue">
+                </select><span class="base-title ml20">遗传病</span><select class="" v-model="isHeredopathiaSelectValue">
                   <option value="0">请选择</option>
                   <option value="1">无</option>
                   <option value="2">血友病</option>
@@ -343,9 +337,8 @@ d<template>
                   _this.socialId = {value: data.socialId, text: "无"};
               }
               //民族
-              _this.nationDataSelectValue = data.nation ? data.nation : "请选择";
+              _this.nationDataSelectValue =data.nation?(data.nation == '未填写'?'请选择':data.nation):'请选择';
               //婚姻状况
-              // console.log(data.isMarriage);
               _this.marriageSelectValue = data.isMarriage > 0 ? data.isMarriage : "";
               //  data.marriage ? _this.marriageSelectValue = data.marriage : _this.marriageSelectValue = "";
               //籍贯
@@ -357,12 +350,12 @@ d<template>
               _this.addressResult.districtName=data.nativeDistrict;
 
               //出生地
-                _this.birthResult.provinceId=data.birthplaceProvinceId;
-                _this.birthResult.provinceName=data.birthplaceProvince;
-                _this.birthResult.cityId=data.birthplaceCityId;
-                _this.birthResult.cityName=data.birthplaceCity;
-                _this.birthResult.districtId=data.birthplaceDistrictId;
-                _this.birthResult.districtName=data.birthplaceDistrict;
+               _this.birthResult.provinceId=data.birthplaceProvinceId;
+               _this.birthResult.provinceName=data.birthplaceProvince;
+               _this.birthResult.cityId=data.birthplaceCityId;
+               _this.birthResult.cityName=data.birthplaceCity;
+               _this.birthResult.districtId=data.birthplaceDistrictId;
+               _this.birthResult.districtName=data.birthplaceDistrict;
 
               //  $("#base-info-address").find(".firstListTitle").text(nativeAddress).attr("data-province", data.nativeProvinceId).attr("data-city", data.nativeCityId).attr("data-district", data.nativeDistrictId);                                   //籍贯
               //社保所在地
@@ -386,7 +379,7 @@ d<template>
               data.childrenStatus != '' && data.childrenStatus > 0 ? _this.childrenStatusSelectValue = data.childrenStatus : _this.childrenStatusSelectValue = 0;
               //结婚年龄
 
-                _this.marriageAge=[];
+              _this.marriageAge=[];
               _this.marriageAge.push({value: "", text: "请选择"});
               for (let i = 15; i <= 60; i++) {
                 _this.marriageAge.push({value: i, text: i});

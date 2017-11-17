@@ -747,6 +747,9 @@
                 }
             }
         }
+        &::-webkit-scrollbar{
+            background-color: #f6f9fa;
+        }
     }
 
     .user-controller {

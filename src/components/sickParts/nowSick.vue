@@ -123,13 +123,18 @@
 <script>
     import api from '@/common/js/util';
     import popup from  '@/common/popup';
+
+    const XHRList = {
+        sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
+        sickSaveUrl: '/call/patient/case/hpi/v1/save/',
+        mainSpeakInfo: "/call/customer/patient/case/v1/getMainMapById/", //主诉
+    };
+
+
     export default{
         name: "nowSick",
         data(){
             return {
-                sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
-                sickSaveUrl: '/call/patient/case/hpi/v1/save/',
-                mainSpeakInfo: "/call/customer/patient/case/v1/getMainMapById/", //主诉
                 treatmentName: '',
                 illnessName: '',
                 takeMedicine: '',
@@ -932,7 +937,7 @@
                 };
                 //现病史详情
                 api.ajax({
-                    url: _this.sickDetailUrl,
+                    url: XHRList.sickDetailUrl,
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {
@@ -1024,7 +1029,7 @@
                 };
                 console.log(dataValue);
                 api.ajax({
-                    url: _this.sickSaveUrl,
+                    url: XHRList.sickSaveUrl,
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {
@@ -1053,13 +1058,13 @@
                 };
                 //主诉
                 api.ajax({
-                    url: _this.mainSpeakInfo,
+                    url: XHRList.mainSpeakInfo,
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {
                     },
                     done(res) {
-                        var dataList = res.responseObject.responseData.dataList;
+                        let dataList = res.responseObject.responseData.dataList;
                         _this.treatmentName = dataList[0].treatmentName;
                         _this.illnessName = dataList[0].illnessName;
                         _this.takeMedicine = dataList[0].takeMedicine;
@@ -1071,18 +1076,10 @@
             }
         }
     }
-
-
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
     @import "../../scss/library/_common-modules";
-
-    .medical-record-main {
-        width: 100%;
-        padding: 25px 28px 60px 28px;
-        box-sizing: border-box;
-    }
-
+    @import "../../scss/record_common";
     .main-sick {
         .main-title {
             width: auto;
@@ -1152,301 +1149,5 @@
             line-height: 14px;
             width: 235px;
         }
-    }
-
-    .medical-record-form {
-        overflow: auto;
-        //height: 620px;
-        height: 72%;
-        box-sizing: border-box;
-        &.on {
-            padding-bottom: 340px;
-        }
-        .main-speak {
-            .operation-name {
-                margin-top: 100px;
-            }
-
-            header {
-                text-align: center;
-                margin-bottom: 30px;
-                position: relative;
-            }
-
-            .sick-img-one {
-                display: inline-block;
-                position: relative;
-
-            }
-
-            .sick-img {
-                width: 150px;
-                height: auto;
-            }
-            .sick-dot {
-                width: 25px;
-                height: 25px;
-                position: absolute;
-                background: url("/image/img00/employee/dot.png") no-repeat;
-                background-size: 100% 100%;
-            }
-
-            .sick-info {
-                font-size: 14px;
-                color: #808080;
-                letter-spacing: 0;
-                line-height: 1.5;
-            }
-            .J-consult {
-                //display: none;
-            }
-
-            .J-order-operation {
-                //display: none;
-            }
-            .sick-title {
-                width: 78px;
-                font-size: 13px;
-                color: #555555;
-                letter-spacing: 0;
-                line-height: 1.5;
-                margin-right: 10px;
-                text-align: right;
-                display: inline-block;
-                white-space: nowrap;
-                vertical-align: top;
-            }
-            li {
-                margin-top: 24px;
-            }
-
-        }
-        // max-height: 400px;
-        .J-order-operation {
-            //display: none;
-        }
-        input[type="text"] {
-            background: #F9F9F9;
-            border: 1px solid #E1E2E7;
-            border-radius: 4px;
-            padding: 5px 5px;
-            font-size: 14px;
-            line-height: 14px;
-            height: 18px;
-            width: 240px;
-            vertical-align: middle;
-        }
-
-        footer {
-            text-align: right;
-            margin-top: 24px;
-            .detail-saveBtn {
-                background: #7A8EC1;
-                border-radius: 4px;
-                width: 70px;
-                height: 30px;
-                line-height: 30px;
-                font-size: 14px;
-                color: #fff;
-                text-align: center;
-                cursor: pointer;
-                margin-right: 10px;
-            }
-        }
-        .medical-title {
-            width: 52px;
-            font-size: 13px;
-            color: #555;
-            letter-spacing: 0;
-            line-height: 14px;
-            margin-right: 8px;
-            text-align: right;
-            display: inline-block;
-            white-space: nowrap;
-        }
-        .medical-text {
-            font-size: 14px;
-            color: #808080;
-            letter-spacing: 0;
-            line-height: 14px;
-            margin-right: 15px;
-
-        }
-        .medical-text-long {
-            //margin-left: -28px;
-
-            width: 80px;
-        }
-        select {
-            background: #F9F9F9;
-            border: 1px solid #E1E2E7;
-            border-radius: 4px;
-            padding: 5px 0 5px 0;
-            font-size: 14px;
-            line-height: 14px;
-            min-width: 80px;
-            width: 84px;
-            vertical-align: middle;
-        }
-        .select-100 {
-            width: 250px;
-        }
-        textarea {
-            background: #F9F9F9;
-            border: 1px solid #E1E2E7;
-            border-radius: 4px;
-            width: 255px;
-
-            padding: 5px;
-            box-sizing: border-box;
-            vertical-align: middle;
-        }
-        li {
-            margin-top: 25px;
-        }
-        li:first-child {
-            margin-top: 15px;
-        }
-        .body-check {
-            .input-95 {
-                width: 72px;
-            }
-        }
-        .major-check {
-            text-align: center;
-            input[type="text"] {
-                margin: 0 auto;
-                display: block;
-            }
-            header {
-                position: relative;
-                margin-bottom: 30px;
-                margin-top: 50px;
-                text-align: center;
-                &:before {
-                    content: "";
-                    position: absolute;
-                    top: 50%;
-                    width: 216px;
-                    left: 50%;
-                    margin-left: -108px;
-                    border: 1px solid #E1E2E7;
-                }
-                h2 {
-                    font-size: 12px;
-                    color: #AAAAAA;
-                    letter-spacing: 0;
-                    line-height: 12px;
-                    margin: 0 auto;
-                    padding: 0 10px;
-                    background: #fff;
-                    text-align: center;
-                    position: relative;
-                    z-index: 2;
-                    display: inline-block;
-                }
-            }
-            .img-check {
-                ul {
-                    li {
-                        margin: 0 0 30px 0;
-                        width: 104px;
-                        height: 107px;
-                        float: left;
-                        text-align: center;
-                        &.noData {
-                            width: 100%;
-                            height: 20px;
-                            float: none;
-                            color: #aaa;
-                            font-size: 13px;
-                        }
-                        img {
-                            width: 80px;
-                            height: 80px;
-                            border-radius: 4px;
-                            cursor: pointer;
-                        }
-                        p {
-                            margin-top: 12px;
-                            font-size: 13px;
-                            color: #555555;
-                            letter-spacing: 0;
-                            line-height: 13px;
-
-                        }
-                    }
-                }
-                ul:after {
-                    content: "";
-                    display: block;
-                    clear: both;
-                    visibility: hidden;
-                }
-            }
-            .video-check {
-                ul {
-                    li {
-                        margin: 0 0 30px 0;
-                        height: 107px;
-                        float: left;
-                        text-align: center;
-                        margin-right: 30px;
-                        &.noData {
-                            width: 100%;
-                            height: 20px;
-                            float: none;
-                            margin-right: 0;
-                            font-size: 13px;
-                            line-height: 20px;
-                            color: #aaa;
-                        }
-
-                        img {
-                            width: auto;
-                            height: 80px;
-                            border-radius: 4px;
-                        }
-                        p {
-                            margin-top: 12px;
-                            font-size: 13px;
-                            color: #555555;
-                            letter-spacing: 0;
-                            line-height: 13px;
-                        }
-                    }
-                    &:first-child {
-                        margin-left: 12px;
-                    }
-                }
-                ul:after {
-                    content: "";
-                    display: block;
-                    clear: both;
-                    visibility: hidden;
-                }
-
-            }
-            .detail-saveBtn {
-                margin-right: 35px;
-            }
-
-        }
-    }
-
-    .ml20 {
-        margin-left: 23px;
-    }
-
-    .ml15 {
-        margin-left: 15px;
-    }
-
-    .mt10 {
-        margin-top: 10px;
-    }
-
-    .mt20 {
-        margin-top: 20px;
     }
 </style>

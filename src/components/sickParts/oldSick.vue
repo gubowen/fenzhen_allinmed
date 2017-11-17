@@ -37,12 +37,15 @@
   import api from '@/common/js/util';
   import popup from  '@/common/popup';
 
+  const XHRList ={
+      getUrl: '/call/customer/patient/case/history/getMapList/',
+      saveUrl: '/call/customer/patient/case/history/saveOrUpdate/'
+  };
+
   export default{
     name: 'oldSick',
     data(){
       return {
-        getUrl: '/call/customer/patient/case/history/getMapList/',
-        saveUrl: '/call/customer/patient/case/history/saveOrUpdate/',
         oldSickOut: '',
         responsePK: '',
         userMessage: {},
@@ -70,7 +73,6 @@
       '$store.state.currentItem'(){
         this.init();
       }
-
     },
     activated(){
       this.userMessage = this.$store.state.currentItem;
@@ -82,21 +84,17 @@
         this.getData();
         //textare自适应高度
         autosize(document.querySelectorAll('.J-textArea'));
-
       },
       getData() {
-
         let _this = this;
-
         let dataValue = {
           patientId: this.userMessage.patientId,
           caseId: this.userMessage.caseId,
           firstResult: 0,
           maxResult: 100
         };
-
         api.ajax({         //获取基本信息
-          url: _this.getUrl,
+          url: XHRList.getUrl,
           method: "POST",
           data: dataValue,
           beforeSend(config) {
@@ -214,7 +212,7 @@
             caseHistoryList: dataList                        //	string	是	既往史idList
           };
           api.ajax({         //获取基本信息
-            url: _this.saveUrl,
+            url: XHRList.saveUrl,
             method: "POST",
             data: dataValue,
             beforeSend(config) {
@@ -249,10 +247,8 @@
     },
     mounted(){
       this.init();
-
     }
   }
-
 </script>
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "../../scss/library/_common-modules";

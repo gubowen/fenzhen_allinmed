@@ -36,7 +36,7 @@
                 </option>
               </select>
               </li>
-              <li><span class="medical-title">体温</span><input type="text" class="input-95 J-temperature"
+              <li><span class="medical-title">体温</span><input type="text" class="input-95"
                                                               placeholder="请填写" maxlength="20" v-model="temperature"
                                                               @keyup="formatNumber(temperature)"
                                                               @focus="focusEvent(temperature,'℃')"
@@ -44,7 +44,7 @@
                 class="medical-title ml20">BMI</span><input
                 type="text" class="input-95 J-bmi" placeholder="请填写"
                 maxlength="20" readonly v-model="bmi"/></li>
-              <li><span class="medical-title">体表面积</span><input type="text" class="input-95 J-bodySurfaceArea"
+              <li><span class="medical-title">体表面积</span><input type="text" class="input-95"
                                                                 placeholder="请填写" maxlength="20" readonly
                                                                 v-model="bodySurfaceArea"/></li>
               <li><span class="medical-title">其他</span><textarea class="J-other" placeholder="请填写"

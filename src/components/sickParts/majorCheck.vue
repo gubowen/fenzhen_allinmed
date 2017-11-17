@@ -72,15 +72,18 @@
     import axios from "axios";
     import addressSelector from '@/common/addressSelector'
     import popup from  '@/common/popup';
-
     import autosize from "autosize";
+
+    const XHRList ={
+        getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
+        sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
+        sickSaveUrl: '/call/patient/case/hpi/v1/save/'
+    };
+
     export default{
         name: 'majorCheck',
         data(){
             return {
-                getDataUrl: "/call/customer/patient/case/attachment/getMapList/",
-                sickDetailUrl: '/call/patient/case/hpi/v1/getMapById/',
-                sickSaveUrl: '/call/patient/case/hpi/v1/save/',
                 userMessage: {},
                 caseAttUrl: [],
                 videoCaseAttUrl: [],
@@ -129,7 +132,7 @@
                     attUseFlag: 6
                 };
                 api.ajax({         //获取基本信息
-                    url: _this.getDataUrl,
+                    url: XHRList.getDataUrl,
                     method: "POST",
                     data: dataValue,
                     done(res) {
@@ -204,7 +207,7 @@
                 };
                 //现病史详情
                 api.ajax({
-                        url: _this.sickDetailUrl,
+                        url: XHRList.sickDetailUrl,
                         method: "POST",
                         data: nowSickDataValue,
                         beforeSend(config) {
@@ -231,7 +234,7 @@
             saveData(){
                 let _this = this;
                 let id = '';
-                console.log(_this.$store.state.newSickId);
+               // console.log(_this.$store.state.newSickId);
                     id = _this.$store.state.newSickId ? _this.$store.state.newSickId :'';
                let dataValue = {
                     id:id,
@@ -241,9 +244,9 @@
                     patientId:_this.$store.state.patientId,
                     caseId:_this.$store.state.caseId
                 };
-                console.log(dataValue);
+//                console.log(dataValue);
                 api.ajax({                    //保存现病史信息
-                        url: _this.sickSaveUrl,
+                        url: XHRList.sickSaveUrl,
                         method: "POST",
                         data: dataValue,
                         beforeSend(config) {
@@ -262,7 +265,7 @@
 
 
             },
-            showBigImgFunction(type,index){
+            showBigImgFunction(type,index = 0){
                 if (type == '1') {
                     this.$store.commit("setSBIFlag", true);
                     this.$store.commit("setSBIType", 'checkImage');

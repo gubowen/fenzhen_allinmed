@@ -20,11 +20,13 @@
 <script>
     import axios from 'axios'
     import api from '../../common/js/util';
+    const XHRList ={
+        MedicalReport: '/call/customer/patient/case/v1/getMapById/', //问诊单接口-（提供主诉数据）
+    };
     export default{
         name: 'mainSpeak',
         data(){
             return {
-                MedicalReport: '/call/customer/patient/case/v1/getMapById/', //问诊单接口-（提供主诉数据）
                 name: "",
                 sex: '',
                 logo: '',
@@ -49,12 +51,10 @@
             this.userMessage = this.$route.params.num;
             this.init();
         },
-
         watch: {
             '$store.state.currentItem'(){
                 this.init();
             }
-
         },
         methods: {
             init(){
@@ -70,7 +70,7 @@
                     _this.painNature= '';      //疼痛性质
                     _this.VASLevelL= '';     //VAS评分
                 api.ajax({
-                    url: _this.MedicalReport,
+                    url: XHRList.MedicalReport,
                     method: "POST",
                     data: dataValue,
                     beforeSend(config) {

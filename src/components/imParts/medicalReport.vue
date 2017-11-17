@@ -66,27 +66,21 @@
                             </figcaption>
                         </article>
                     </article>
-                    <article class="special-message-item">
+                    <article class="special-message-item"  v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0 ||medicalReportMsg.patientCasemap.takeMedicine.length > 0||medicalReportMsg.patientCasemap.attachmentList.length > 0)">
                         <header class="special-message-item-title">
                             <span>现病史</span>
                         </header>
-                        <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
-                            <span class="answer"><p
-                                    class="question">曾就诊情况：</p>{{medicalReportMsg.patientCasemap.treatmentName}}&nbsp;&nbsp;&nbsp;{{medicalReportMsg.patientCasemap.illnessName}}</span>
+                        <article class="special-message-item-list" v-if="medicalReportMsg.patientCasemap&&(medicalReportMsg.patientCasemap.treatmentName.length > 0 || medicalReportMsg.patientCasemap.treatmentName.length > 0)">
+                            <p class="answer"><span class="question">曾就诊情况：</span>{{medicalReportMsg.patientCasemap.treatmentName}}&nbsp;&nbsp;&nbsp;{{medicalReportMsg.patientCasemap.illnessName}}</p>
                         </article>
-                        <article class="special-message-item-list"
-                                 v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.takeMedicine.length > 0">
-                            <span class="answer"><p
-                                    class="question">服用药物：</p>{{medicalReportMsg.patientCasemap.takeMedicine}}</span>
+                        <article class="special-message-item-list" v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.takeMedicine.length > 0">
+                            <p class="answer"><span class="question">服用药物：</span>{{medicalReportMsg.patientCasemap.takeMedicine}}</p>
                         </article>
-                        <figcaption class="special-message-item-list img-box"
-                                    v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
-                            <figure class="special-message-item-img "
-                                    v-for="(imgs,index) in medicalReportMsg.patientCasemap.attachmentList">
-                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction(index)">
+                        <article class="special-message-item-list img-box" v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
+                            <figure class="special-message-item-img " v-for="(imgs,index) in medicalReportMsg.patientCasemap.attachmentList">
+                                <img :src="imgs.caseAttUrl" @click="showBigImgFunction(index)"/>
                             </figure>
-                        </figcaption>
+                        </article>
                     </article>
                     <article class="special-message-item inline-message"
                              v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.remark.length > 0">

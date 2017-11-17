@@ -174,7 +174,7 @@
         }
     }
 </script>
-<style lang="scss" scoped="" rel="stylesheet/scss">
+<style lang="scss"  rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
 
     .slide-fade-enter-active {
@@ -196,7 +196,8 @@
         height: 100%;
         float: right;
         position: relative;
-        margin-left: -385px;
+        margin-left: -386px;
+        border-left: 1px solid #ededed;
         .user-controller-get-triage {
             position: absolute;
             top: 50%;

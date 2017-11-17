@@ -380,7 +380,7 @@
         position: absolute;
         top: 0;
         right: 0;
-        bottom: 56px;
+        bottom: 0;
         left: 2px;
         background-color: #fff;
         z-index: 3;
