@@ -920,12 +920,12 @@
             }
         },
         methods: {
-            init: function () {
+            init() {
                 this.userMessage = this.$store.state.currentItem;
                 this.initText();
                 this.addData();
             },
-            addData: function () {
+            addData() {
                 let _this = this;
                 let dataValue = {
                     caseId: this.userMessage.caseId
@@ -980,7 +980,7 @@
                     }
                 });
             },
-            saveData: function () {
+            saveData() {
                 let _this = this;
                 let dataValue = {
                     id: this.id,	                                                                    //string	是	主键id创建时不传，修改时传
@@ -1045,7 +1045,7 @@
                     }
                 });
             },
-            initText: function () {
+            initText() {
                 let _this = this;
                 let dataValue = {
                     caseId: this.userMessage.caseId,

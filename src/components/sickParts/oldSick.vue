@@ -63,7 +63,7 @@
         popupObj: {}
       }
     },
-      components:{
+    components:{
           popup
       },
     watch: {
@@ -77,14 +77,14 @@
       this.init();
     },
     methods: {
-      init: function () {
+      init() {
         this.userMessage = JSON.parse(this.$route.params.num);
         this.getData();
         //textare自适应高度
         autosize(document.querySelectorAll('.J-textArea'));
 
       },
-      getData: function () {
+      getData() {
 
         let _this = this;
 
@@ -147,7 +147,7 @@
           }
         });
       },
-      saveData: function () {
+      saveData() {
           let _this = this;
      //   if (this.sickHistory || this.operationHistory || this.medicineHistory || this.outSickHistory || this.allergyHistory || this.plague) {
           let dataList = [];
@@ -247,8 +247,7 @@
 
       }
     },
-    mounted()
-    {
+    mounted(){
       this.init();
 
     }

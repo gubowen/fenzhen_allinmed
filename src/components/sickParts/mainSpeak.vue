@@ -57,7 +57,7 @@
 
         },
         methods: {
-            init: function () {
+            init(){
                 let _this = this;
                 this.userMessage = this.$store.state.currentItem;
                 let dataValue = {

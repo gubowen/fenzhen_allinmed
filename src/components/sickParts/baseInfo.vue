@@ -175,22 +175,17 @@ d<template>
   import api from '@/common/js/util';
   import addressSelector from '@/common/addressSelector'
   import popup from  '@/common/popup';
+
+  const XHRList = {
+      nationSearch: "/call/comm/data/baseinfo/v1/getNationalityList/",
+      getBaseInfo:'/call/customer/patient/baseinfo/v1/getMapList/',
+      saveBaseInfo: "/call/customer/patient/baseinfo/v1/save/",
+  };
   export default {
     name: 'baseInfo',
     data(){
       return {
         id: '',
-        bodyCheckSearch: "/call/customer/patient/case/physical/getMapList/",
-        bodyCheckSave: "/call/customer/patient/case/physical/create/",
-        oldSickSearch: "/call/customer/patient/case/history/getMapList/",
-        oldSickSave: "/call/customer/patient/case/history/saveOrUpdate/",
-        getMainSick: "/call/patient/case/hpi/v1/getMapById/",
-        saveMainSick: "/call/patient/case/hpi/v1/save/",
-        majorCheck: "/call/customer/patient/case/attachment/getMapList/",
-        addressSearch: "/call/comm/data/baseinfo/v1/getRegionList/",
-        nationSearch: "/call/comm/data/baseinfo/v1/getNationalityList/",
-        getBaseInfo:'/call/customer/patient/baseinfo/v1/getMapList/',
-        saveBaseInfo: "/call/customer/patient/baseinfo/v1/save/",
         address: '',
         telephone: '',
         socialId: '',
@@ -257,7 +252,6 @@ d<template>
       '$store.state.currentItem'(){
         this.init();
       }
-
     },
     methods: {
       init() {
@@ -266,9 +260,8 @@ d<template>
         this.addData();
       },
       addData() {
-        let _this = this;
-        _this.nationGet();  //获取民族列表
-        _this.baseInfoGet();//获取基本信息
+        this.nationGet();  //获取民族列表
+        this.baseInfoGet();//获取基本信息
       },
       nationGet() {
         let _this = this;
@@ -278,7 +271,7 @@ d<template>
           "maxResult": 999
         };
         api.ajax({                //获取民族列表
-          url: _this.nationSearch,
+          url: XHRList.nationSearch,
           method: "POST",
           data: dataValue,
           beforeSend(config) {
@@ -316,7 +309,7 @@ d<template>
           patientId: _this.userMessage.patientId     //患者ID 假数据
         };
         api.ajax({         //获取基本信息
-          url: _this.getBaseInfo,
+          url: XHRList.getBaseInfo,
           method: "POST",
           data: dataValue,
           beforeSend(config) {
@@ -431,19 +424,19 @@ d<template>
       saveData() {
         let _this = this;
         let dataValue = {
-          nativeProvinceId: _this.addressResult.provinceId,   //string	是	籍贯省Id
-          nativeProvince:  _this.addressResult.provinceName,	//string	是	籍贯省
-          nativeCityId: _this.addressResult.cityId,	//string	是	籍贯市ID
-          nativeCity:  _this.addressResult.cityName,//string	是	籍贯市
-          nativeDistrictId:  _this.addressResult.districtId,	//string	是	籍贯区县
-          nativeDistrict: _this.addressResult.districtName,	//string	是	籍贯区县
+          nativeProvinceId: this.addressResult.provinceId,   //string	是	籍贯省Id
+          nativeProvince:  this.addressResult.provinceName,	//string	是	籍贯省
+          nativeCityId: this.addressResult.cityId,	//string	是	籍贯市ID
+          nativeCity:  this.addressResult.cityName,//string	是	籍贯市
+          nativeDistrictId:  this.addressResult.districtId,	//string	是	籍贯区县
+          nativeDistrict: this.addressResult.districtName,	//string	是	籍贯区县
 
-          birthplaceProvinceId: _this.birthResult.provinceId,	//string	是	出生地省id
-          birthplaceProvince: _this.birthResult.provinceName,	//string	是	出生地省
-          birthplaceCityId: _this.birthResult.cityId,//string	是	出生地市id
-          birthplaceCity: _this.birthResult.cityName,	//string	是	出生地市
-          birthplaceDistrictId: _this.birthResult.districtId,	//string	是	出生地区/县id
-          birthplaceDistrict:  _this.birthResult.districtName,	//string	是	出生地区/县
+          birthplaceProvinceId: this.birthResult.provinceId,	//string	是	出生地省id
+          birthplaceProvince: this.birthResult.provinceName,	//string	是	出生地省
+          birthplaceCityId: this.birthResult.cityId,//string	是	出生地市id
+          birthplaceCity: this.birthResult.cityName,	//string	是	出生地市
+          birthplaceDistrictId: this.birthResult.districtId,	//string	是	出生地区/县id
+          birthplaceDistrict:  this.birthResult.districtName,	//string	是	出生地区/县
 
           patientId: this.userMessage.patientId,          //患者ID 假数据
           id: this.id,
@@ -469,7 +462,7 @@ d<template>
         };
 
         api.ajax({         //获取基本信息
-          url: _this.saveBaseInfo,
+          url: XHRList.saveBaseInfo,
           method: "POST",
           data: dataValue,
           beforeSend(config) {

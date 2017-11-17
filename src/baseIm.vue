@@ -403,14 +403,14 @@
                 });
             },
             //获取历史消息……
-            getMessageList: function (from) {
+            getMessageList(from) {
                 let that = this;
                 that.communicationList = [];
                 this.nim.getHistoryMsgs({
                     scene: 'p2p',
                     to: that.targetData.account,
                     done(error, obj) {
-                        console.log(error)
+                        console.log(error);
                         that.renderHistoryMessage(that.targetData.account, error, obj, from);
                     },
                     limit: 100
@@ -549,7 +549,7 @@
 
             },
             //输出历史消息...
-            renderHistoryMessage: function (container, error, obj, from) {
+            renderHistoryMessage(container, error, obj, from) {
                 console.log(obj);
                 let that = this;
                 if (!error) {
@@ -581,7 +581,7 @@
                 }
             },
             //消息时间转换...
-            transformMessageTime: function (time) {
+            transformMessageTime(time) {
                 var format = function (num) {
                     return num > 9 ? num : "0" + num;
                 };

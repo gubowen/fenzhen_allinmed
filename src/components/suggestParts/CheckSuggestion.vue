@@ -127,13 +127,13 @@
 //                }else{
 //                    this.nextFlag = true ;
 //                }
+          }
         }
       },
       sicknessResult:{
         handler(curVal,oldVal){
            //   this.progressList.disabledFlag = true;
             }
-        }
       },
       progressResult:{
         handler(curVal,oldVal){
