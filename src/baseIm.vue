@@ -215,7 +215,13 @@
                     onmyinfo (userData) {
 
                     },
-                    onwillreconnect: this.onWillReconnect,
+                    onwillreconnect(obj){
+                        console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
+                    },
+                    onDisconnect(error){
+                        console.log('丢失连接');
+                        console.log(error)
+                    },
                     onerror: this.onError,
                     onroamingmsgs: this.onRoamingMsgs,
                     onofflinemsgs: this.onOfflineMsgs,

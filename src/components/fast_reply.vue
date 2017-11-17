@@ -1,9 +1,9 @@
 <template>
     <section class="jump-box fast-reply show">
-        <header class="jump-box-header">
+        <header class="jump-box-header" @click.stop="">
             <h3>快捷提问</h3>
         </header>
-        <nav class="jump-box-tabs tabsInner" id="ev-show-tabs">
+        <nav class="jump-box-tabs tabsInner" id="ev-show-tabs" @click.stop="">
             <button class="jump-box-prev jump-box-tabs-controller">
                 <i class="icon-leftArrow" @click.stop="transformBtn('prev')"></i>
             </button>

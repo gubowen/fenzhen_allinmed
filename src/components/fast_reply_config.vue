@@ -23,16 +23,18 @@
             <figure class="jump-box-term-button" v-if="item.questionType==2" v-show="!termFixFlag[index]">
               <p class="fix" @click.stop="termFixFlag[index]=true;termFixContent[index]=item.questionDesc">修改</p>
               <p class="del" @click.stop="deleteShowFlag(index)">删除</p>
-                <section class="modal-confirm show" v-if="deleteTermShowFlag[index]">
-                  <article class="modal-confirm-content">
-                  <p>确定删除该分组吗？</p>
-                  <p>删除后该分组的相关问题会一起删除</p>
-                  </article>
-                  <figure class="modal-confirm-button">
-                    <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('term',item,index)">确定</button>
-                    <button class="btn-primary modal-confirm-cancel" @click.stop="deleteTermShowFlag[index]=false">取消</button>
-                  </figure>
-                </section>
+                <transition name="fadeDown">
+                    <section class="modal-confirm show" v-if="deleteTermShowFlag[index]">
+                      <article class="modal-confirm-content">
+                      <p>确定删除该分组吗？</p>
+                      <p>删除后该分组的相关问题会一起删除</p>
+                      </article>
+                      <figure class="modal-confirm-button">
+                        <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('term',item,index)">确定</button>
+                        <button class="btn-primary modal-confirm-cancel" @click.stop="deleteTermShowFlag[index]=false">取消</button>
+                      </figure>
+                    </section>
+                </transition>
             </figure>
             <section class="jump-box-term-add" v-if="termFixFlag[index]" @click.stop="">
               <input type="text" class="add-input" placeholder="请输入分组名称" v-model="termFixContent[index]" @input="contentLimit('term',index)"/>
@@ -62,13 +64,15 @@
               <figure class="jump-box-member-item-button" v-if="cItem.questionType==2" v-show="!memberFixFlag[index][cIndex]">
                 <i class="icon-question-config" @click.stop="memberFixFlag[index][cIndex]=true;memberFixContent[index][cIndex]=cItem.questionDesc"></i>
                 <i class="icon-question-delete" @click.stop="deleteMemberShowSwitch(index,cIndex)">
-                  <section class="modal-confirm show" v-if="deleteMemberShowFlag[index][cIndex]">
-                    <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
-                    <figure class="modal-confirm-button">
-                      <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定</button>
-                      <button class="btn-primary modal-confirm-cancel" @click.stop="deleteMemberShowFlag[index][cIndex]=false">取消</button>
-                    </figure>
-                  </section>
+                  <transition name="fadeDown">
+                      <section class="modal-confirm show" v-if="deleteMemberShowFlag[index][cIndex]">
+                        <article class="modal-confirm-content"><p>确定删除该问题吗？</p></article>
+                        <figure class="modal-confirm-button">
+                          <button class="btn-ensure modal-confirm-ensure" @click.stop="deleteCallback('member',item,index,cItem,cIndex)">确定</button>
+                          <button class="btn-primary modal-confirm-cancel" @click.stop="deleteMemberShowFlag[index][cIndex]=false">取消</button>
+                        </figure>
+                      </section>
+                  </transition>
                 </i>
               </figure>
               <section class="jump-box-member-config" v-if="memberFixFlag[index][cIndex]">
@@ -299,12 +303,16 @@
       deleteShowFlag(index){
           for (let i in this.deleteTermShowFlag){
               this.deleteTermShowFlag[i]=false;
+              for (let j in this.deleteMemberShowFlag[i]){
+                  this.deleteMemberShowFlag[i][j]=false;
+              }
           }
           this.deleteTermShowFlag[index]=true;
       },
       deleteMemberShowSwitch(index,cIndex){
           for (let i in this.deleteMemberShowFlag[index]){
               this.deleteMemberShowFlag[index][i]=false;
+              this.deleteTermShowFlag[i]=false;
           }
           this.deleteMemberShowFlag[index][cIndex]=true;
       },
@@ -368,4 +376,13 @@
   @import "../scss/base.scss";
   @import "../scss/modules/_fastReplyConfig.scss";
   @import "../scss/modules/_modalBox.scss";
+  .fadeDown-enter-active, .fadeDown-leave-active {
+      transition: all ease-in-out .5s
+  }
+
+  .fadeDown-enter, .fadeDown-leave-to /* .fade-leave-active in <2.1.8 */
+  {
+      opacity: 0;
+      transform: translateY(-50%);
+  }
 </style>
