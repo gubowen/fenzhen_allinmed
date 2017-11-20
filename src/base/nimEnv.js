@@ -16,7 +16,7 @@ export default function nimEnv(){
          * triage线上测试环境
          * 使用云信测试账号
          * */
-        nimKey="20506e12706bb54aeac9f3cbce865bd4";
+        nimKey="ce442b9f9458caaefd152ca1a2206de7";
     }else{
         /*
          * 其余任何环境
