@@ -12,8 +12,8 @@
                     <ul>
                         <li v-for="(items,index) in diagnoseHistoryList">
                             <section class="check-history-info">
-                                <span class="check-history-title" @click.self="chatHistoryRecord(0,items,index)"><i class="icon-downArrow"
-                                                                                                                    @click.self="chatHistoryRecord(0,items,index)"></i>{{items.mainContent.caseMain}}</span>
+                                <span class="check-history-title" @click.self="chatHistoryRecord(0,1,items,index)"><i class="icon-downArrow"
+                                                                                                                    @click.self="chatHistoryRecord(0,1,items,index)"></i>{{items.mainContent.caseMain}}</span>
                                 <span class="check-history-text">{{items.createTime|timeFormatCheckHistory}}</span>
                             </section>
                             <article class="check-history-show" :class="{'on': index == currentIndex}" v-show="chatHistoryRecordList.length >0">
@@ -114,16 +114,16 @@
                                     <div class="page-container" v-if="totalCount>pageNum&&diagnoseHistoryList.length>0">
                                         <div class="pagination pager">
                                             <ul class="pages">
-                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(0,items)">首页</li>
-                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(pageIndex-2,items)">上一页</li>
-                                                <li class="page-number" :class="{'pgCurrent':pageIndex == item}" v-for="(item,key) in pages"
-                                                    @click.stop="chatHistoryRecord(key,items)">{{item}}
+                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(0,1,items)">首页</li>
+                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == 1}" @click.stop="chatHistoryRecord(pageArr.indexOf(pageIndex)-1,pageArr[pageArr.indexOf(pageIndex)-1],items)">上一页</li>
+                                                <li class="page-number" :class="{'pgCurrent':pageIndex == item}" v-for="(item,key) in pageArr"
+                                                    @click.stop="chatHistoryRecord(key,item,items)">{{item}}
                                                 </li>
-                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageIndex,items)">
+                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageArr.indexOf(pageIndex)+1,pageArr[pageArr.indexOf(allDoc.pageIndex)+1],items)">
                                                     下一页
                                                 </li>
                                                 <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}"
-                                                    @click.stop="chatHistoryRecord(Math.ceil(totalCount/pageNum)-1,items)">末页
+                                                    @click.stop="chatHistoryRecord(Math.ceil(totalCount/pageNum)-1,Math.ceil(totalCount/pageNum),items)">末页
                                                 </li>
                                             </ul>
                                         </div>
@@ -173,6 +173,7 @@
                 pageNum: 5,
                 pageIndex: 1,
                 pageResult: 0,
+                pageArr:[],
                 loadingShow: false,
                 popupShow: false,
                 popupObj: {}
@@ -212,11 +213,11 @@
                     }
                 })
             },
-            chatHistoryRecord(num, items, index){
+            chatHistoryRecord(num,value, items, index){
+                if(value == "•••") return false;
                 let _this = this;
-                _this.pageResult = num * _this.pageNum;
-                _this.pageIndex = num + 1;
-//                console.log(_this.pageIndex)
+                _this.pageResult = value-1 * _this.pageNum;
+                _this.pageIndex = value;
                 if (index || index == 0) {
                     if (_this.currentIndex == index) {
                         _this.currentIndex = -1;
@@ -257,8 +258,65 @@
                                 }
                             }
                         }
+                        _this.pages(num,value);
                     }
                 })
+            },
+            pages(clickNum,clickValue){
+                let that =this;
+                let pagesLength = Math.ceil(that.totalCount / that.pageNum);
+                //初始化
+                let ellipsis = "•••",ellipsisNum;
+                if(pagesLength>10){
+                    //点击首页、末页
+                    if(clickValue == 1 || clickValue == Math.ceil(that.totalCount/that.pageNum)){
+                        that.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];
+                        return false;
+                    }
+                    //确定"•••"的位置
+                    that.pageArr.forEach(function (value,key) {
+                        if(ellipsis == value){
+                            ellipsisNum = key;
+                        }
+                    });
+                    //改变数值
+                    if(ellipsisNum){
+
+                        let rightNum = Number(that.pageArr[ellipsisNum-1]) +1,
+                            leftNum = Number(that.pageArr[ellipsisNum+1]) -1;
+                        if(clickNum == ellipsisNum-1){
+                            that.pageArr.splice(ellipsisNum,0,rightNum);
+                            that.pageArr.splice(0,1);
+                        }else if(clickNum == 0 && Number(that.pageArr[0]) != 1){
+                            that.pageArr.unshift(Number(that.pageArr[0])-1);
+                            that.pageArr.splice(ellipsisNum,1);
+                        }else if(clickNum == ellipsisNum +1){
+                            that.pageArr.splice(ellipsisNum+1,0,leftNum);
+                            that.pageArr.splice(that.pageArr.length-1,1);
+                        }else if(clickNum == that.pageArr.length-1 && Number(that.pageArr[that.pageArr.length-1] != pagesLength)){
+                            that.pageArr.push(Number(that.pageArr[that.pageArr.length-1])+1);
+                        }
+
+
+                        if(that.pageArr[ellipsisNum+1] - that.pageArr[clickNum] ==1 || that.pageArr[clickNum] - that.pageArr[ellipsisNum-1] ==1){
+                            that.pageArr.splice(ellipsisNum,1);
+                        }
+                    }else{
+                        if(clickNum == 0){
+                            that.pageArr.splice(4,1,ellipsis);
+                            that.pageArr.unshift(Number(that.pageArr[0])-1);
+                        }else if(clickNum == 7){
+                            that.pageArr.splice(5,1,ellipsis);
+                            that.pageArr.push(Number(that.pageArr[that.pageArr.length-1])+1);
+                        }
+                    }
+                }else{
+                    that.pageArr = [];
+                    for (let i = 1; i <= Math.ceil(pagesLength); i++) {
+                        that.pageArr.push(i);
+                    }
+                }
+                console.log(that.pageArr)
             },
             filterInfo(ele){
                // console.log(ele);
@@ -283,15 +341,6 @@
                 }else if(ele.msgType.toLowerCase() === 'text'){
                     return true ;
                 }
-            }
-        },
-        computed: {
-            pages(){
-                let pageArr = [], that = this;
-                for (let i = 1; i <= Math.ceil(that.totalCount / that.pageNum); i++) {
-                    pageArr.push(i);
-                }
-                return pageArr;
             }
         },
         mounted(){
