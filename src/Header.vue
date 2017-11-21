@@ -246,9 +246,12 @@
 //                    that.$router.push({
 //                        name: "login"
 //                    })
-                    window.location.reload()
+                    window.location.reload();
                     that.confirmShow = false;
                 })
+                localStorage.removeItem('patientAlertList');
+                localStorage.removeItem('waitingAlertList');
+
             },
             globeClick(){
                 document.addEventListener('click', (e) => {

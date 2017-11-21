@@ -50,7 +50,7 @@
                     <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3"
                            style="display: none"></audio> <!--新消息提示音-->
                 </nav>
-                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"  id="ev-user-inner">
+                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}" id="ev-user-inner">
                     <transition name="list-left" appear>
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
                             <transition-group name="list-left" tag="section">
@@ -65,11 +65,9 @@
                                     </figure>
                                     <figcaption class="userlist-item-base-msg">
                                         <h3>
-                                            <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                            <span class="category short"
-                                                  v-show="items.consultationState==5">重新分诊</span>
-                                            <span class="category short"
-                                                  v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
+                                            <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                                class="category short" v-show="items.consultationState==5">重新分诊</span><span class="category short"
+                                                                                                                            v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
                                             <span class="category short"
                                                   v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                         </h3>
@@ -99,9 +97,7 @@
                                     </figure>
                                     <figcaption class="userlist-item-base-msg">
                                         <h3>
-                  <span
-                          class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span>
-                                            <span class="category short"
+                  <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span class="category short"
                                                   v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
                                             <span class="category short"
                                                   v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
@@ -336,10 +332,10 @@
                 return flag;
             },
             //给子组件传值..
-            transformData (items, index) {
+            transformData (items, index,getFlag = false) {
                 store.commit("setUsedReplyShow", false);
                 store.commit("setFastReplyShow", false);
-                this.noData=true;
+                this.noData = true;
                 if (this.userListStatus.first) {
                     this.watingTriage = true;
                     this.userWatingActive = index;
@@ -366,9 +362,15 @@
 
                     let patientList = this.$store.state.patientList;
                     items.messageAlert = '';
-                    patientList[index] = items;
-                    this.$store.commit("setPatientList", patientList);
+                    if(getFlag){
+                        patientList.removeByValue(items);
+                        patientList.unshift(items);
+                        this.$store.commit("setPatientList", patientList);
 
+                    }else{
+                        patientList[index] = items;
+                        this.$store.commit("setPatientList", patientList);
+                    }
                     let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
                     if (patientAlertList) {
                         delete patientAlertList["0_" + items.caseId];
@@ -397,7 +399,7 @@
                 this.fastRelyStatusParent = false;
 
                 this.$router.push({
-                    name:"mainSpeak"
+                    name: "mainSpeak"
                 })
             },
             //三个状态的点击切换（沟通中、已结束、被退回）
@@ -416,7 +418,7 @@
             },
             //患者列表
             //type:online为沟通中，wating待分诊
-            getUserList(type, param,fn){
+            getUserList(type, param, fn){
                 let _this = this;
                 _this.userListData = '';
                 _this.userListLoading = [];
@@ -490,7 +492,7 @@
                                 _this.$store.commit("setWatingList", dataList);
                                 _this.userListWating = dataList ? dataList : [];
                             }
-                            fn&&fn();
+                            fn && fn();
                         }
                     },
                     fail(err) {
@@ -561,17 +563,19 @@
 
                     this.getUserList('wating');
                     this.userListStatus.status = 2;
-                    this.getUserList('online',{},()=>{
-                        let triageItem=this.getBeTriagePatient(item);
-                        this.transformData(triageItem, index);
+                    this.getUserList('online', {}, () => {
 
-                        this.watingTriage = false;
-                        this.userListStatus.status = 2;
+
                         this.userListStatus.first = false;
                         this.userListStatus.second = true;
-                        this.userOnlineActive = 0 ;
+                        let triageItem = this.getBeTriagePatient(item);
+                        let getFlag = true;
+                        this.transformData(triageItem, index,getFlag);
 
 
+                        this.userListStatus.status = 2;
+                        this.watingTriage = false;
+                        this.userOnlineActive = 0;
                         store.commit("setInputReadOnly", false);
                         store.commit("stopLoading");
                     });
@@ -594,11 +598,11 @@
                 });
             },
             getBeTriagePatient(item){
-                let caseId=item.caseId;
+                let caseId = item.caseId;
                 let result;
-                this.userListOnline.forEach((element,index)=>{
-                    if (element.caseId===caseId){
-                        result=element;
+                this.userListOnline.forEach((element, index) => {
+                    if (element.caseId === caseId) {
+                        result = element;
                     }
                 });
                 return result;
@@ -641,17 +645,21 @@
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
+
     .list-left-enter-active, .list-left-leave-active {
         //   transition: all 0.3s;
     }
-    .list-left-enter, .list-left-leave-to{
+
+    .list-left-enter, .list-left-leave-to {
         //  opacity: 0;
         //  transform: translateX(-100px);
     }
+
     .list-right-enter-active, .list-right-leave-active {
         //    transition: all 0.3s;
     }
-    .list-right-enter, .list-right-leave-to{
+
+    .list-right-enter, .list-right-leave-to {
         //   opacity: 0;
         //   transform: translateX(100px);
     }
@@ -790,15 +798,17 @@
             }
         }
     }
+
     .time-title {
         font-size: 13px;
         color: #909090;
         margin-bottom: 24px;
     }
+
     .userlist-mainList {
         overflow: auto;
         height: 87%;
-        &-item{
+        &-item {
             padding: 25px 20px 25px 40px;
             font-size: 0;
             background-color: #fff;
@@ -871,6 +881,7 @@
             }
         }
     }
+
     .userlist-item-base-msg {
         //margin-top: 6px;
         display: inline-block;
@@ -944,6 +955,7 @@
             max-width: 250px;
         }
     }
+
     .userlist-item-msg-item {
         margin-top: 14px;
         font-size: 0;
@@ -958,6 +970,7 @@
             margin-right: 10px;
         }
     }
+
     .user-list-footer {
         background: rgba(255, 255, 255, 0.97);
         box-shadow: 0 2px 6px 0 rgba(153, 167, 208, 0.62);
@@ -989,18 +1002,18 @@
             }
         }
     }
+
     .userList-inner-content {
         overflow: auto;
         height: 100%;
     }
+
     .userList-no-data {
         font-size: 14px;
         color: #AAAAAA;
         text-align: center;
         margin-top: 52px;
     }
-
-
 
     .tabsInner.medical-record-tabs {
         text-align: center;
@@ -1023,6 +1036,7 @@
             }
         }
     }
+
     .quit-triage {
         margin-top: 10px;
         .text {
@@ -1046,10 +1060,12 @@
             }
         }
     }
+
     .fadeDown-enter-active,
     .fadeDown-leave-active {
         transition: all ease-in-out .5s
     }
+
     .fadeDown-enter,
     .fadeDown-leave-to
         /* .fade-leave-active in <2.1.8 */
