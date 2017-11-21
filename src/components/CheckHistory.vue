@@ -207,9 +207,6 @@
                     },
                     done(res) {
                         _this.diagnoseHistoryList = res.responseObject.responseData.dataList;
-                    },
-                    fail(error){
-
                     }
                 })
             },
