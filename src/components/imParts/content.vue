@@ -7,8 +7,9 @@
       </figure>
       <!--文字-->
       <figcaption class="messageList-item-text" v-if="message.type == 'text'&&(message.text!=='患者已上传检查资料'&&message.text!=='患者已上传视诊资料')">
+        <p class="resendTips" @click="resendMsg" v-if="message.status==='fail'">!</p>
+        <!--<p class="resendTips" @click="resendMsg" >!</p>-->
         {{message.text}}
-
       </figcaption>
       <figcaption class="messageList-item-text" v-if="message.type == 'text'&&message.text==='患者已上传检查资料'">
         {{message.text + "，点击至"}}
@@ -54,7 +55,10 @@
               num: JSON.stringify(this.$store.state.currentItem)
           }
         })
-      }
+      },
+      resendMsg(){
+         this.$store.commit("setResendMsgInfo",this.message);
+        }
     },
     props: {
       message: {
@@ -64,5 +68,16 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-
+.resendTips{
+    width:15px;
+    height:15px;
+    background: red;
+    color:#fff;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right:10px;
+    text-align: center;
+    line-height: 15px;
+    cursor: pointer;
+}
 </style>

@@ -91,7 +91,8 @@ export default new Vuex.Store({
         },
         newSickId:'',                //现病史Id
         musicPlay:false,
-        beingSend:true
+        beingSend:true,
+        resendMsgInfo:{}
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -239,6 +240,9 @@ export default new Vuex.Store({
         },
         setSendStatus(state,data){
             state.beingSend = data;
+        },
+        setResendMsgInfo(state,data){
+            state.resendMsgInfo = data;
         }
     }
 });

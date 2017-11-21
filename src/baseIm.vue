@@ -12,9 +12,7 @@
                     {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ? $store.state.currentItem.doctorName + '医生' : ''}退回`}}
                 </p>
                 <transition-group name="fadeDown" tag="article">
-                    <article class="messageList-item"
-                             :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
-                             v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+                    <article class="messageList-item" :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']" v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
                         <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom&&(items.custom.mType==='33'||items.custom.mType==='22'||items.custom.mType==='24')))">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
@@ -163,7 +161,7 @@
                 }
             },
             '$store.state.sendVideoTriageFlag'(obj){
-                console.log(obj)
+                console.log(obj);
                 if (obj.flag) {
                     this.sendVideoTriage(obj.data);
                     store.commit("videoTriageSender", {
@@ -193,6 +191,9 @@
                     };
                     this.getMessageList("history");
                 }
+            },
+            '$store.state.resendMsgInfo'(obj){
+                this.resendMsg(obj);
             }
         },
         computed: {},
@@ -286,10 +287,6 @@
                 return flag;
             },
 
-            //查看大图
-            showBigImgFunction(){
-                this.$store.commit("setSBIFlag", true);
-            },
             sendMessage (content) {
                 const that = this;
                 if (!that.$store.state.beingSend) {
@@ -308,6 +305,7 @@
                             mType: "0"
                         }),
                         done (error, obj) {
+                            console.log(obj);
                             that.$store.commit("setSendStatus", true);
                             if (!error) {
                                 resolve(obj);
@@ -319,6 +317,28 @@
                     });
                 });
 
+            },
+            //发送单条数据...
+            sendSingleMessage (error, msg) {
+                let patientListArray = this.$store.state.patientList;
+                patientListArray.removeByValue(this.$store.state.currentItem);
+                patientListArray.unshift(this.$store.state.currentItem);
+//                this.$store.commit("unshift",this.$store.state.currentItem);
+                //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
+                //this.$store.state.patientList.unshift(this.$store.state.currentItem);
+                this.$store.commit("setPatientList", patientListArray);
+                this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
+                store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
+                let that = this;
+                console.log(msg);
+                console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
+                if (!error) {
+                    that.controllerInput = "";
+                    that.mine(msg);
+                    setTimeout(() => {
+                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                    }, 120);
+                }
             },
             //发送检查检验...
             sendCheckSuggestion (data) {
@@ -355,7 +375,7 @@
                 let dataList = [{}];
                 return new Promise((resolve, reject) => {
                     dataList[0] = data;
-                    console.log(dataList)
+                    console.log(dataList);
                     this.nim.sendCustomMsg({
                         scene: 'p2p',
                         to: that.targetData.account,
@@ -408,6 +428,32 @@
                     }
                 });
             },
+            //重新发送
+            resendMsg(obj){
+                let _this= this;
+                return new Promise((resolve, reject)=>{
+                    this.nim.resendMsg({
+                        msg:obj,
+                        done(error,obj){
+                            if (!error) {
+                                resolve(obj);
+                                console.log(obj);
+                                if (data.content) {
+                                    data.content = JSON.parse(data.content);
+                                }
+
+
+                                _this.communicationList[idClient]=data;
+                                console.log("重新发送成功");
+                            } else {
+                                reject(obj)
+                            }
+
+                        }
+                    })
+
+                })
+            },
             //获取历史消息……
             getMessageList(from) {
                 let that = this;
@@ -422,58 +468,6 @@
                     limit: 100
                 });
             },
-            transformMessageTime (time) {
-                var format = function (num) {
-                    return num > 9 ? num : "0" + num;
-                };
-                var normalTime = function (time) {
-                    var d = new Date(time);
-                    var obj = {
-                        y: d.getFullYear(),
-                        m: d.getMonth() + 1,
-                        dd: d.getDate(),
-                        h: d.getHours(),
-                        mm: format(d.getMinutes())
-                    };
-                    return obj;
-                };
-                var result = "";
-                var now = new Date().getTime(),
-                    day1 = normalTime(time).y + "-" + normalTime(time).m + "-" + normalTime(time).dd,
-                    day2 = normalTime(now).y + "-" + normalTime(now).m + "-" + normalTime(now).dd;
-                if (day1 === day2) {
-                    result = normalTime(time).h + ":" + normalTime(time).mm;
-                } else if (normalTime(time).y === normalTime(now).y) {
-                    result = normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
-                } else if (normalTime(time).y !== normalTime(now).y) {
-                    result = normalTime(time).y + "年" + normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
-                }
-                return result;
-            },
-            //发送单条数据...
-            sendSingleMessage (error, msg) {
-                let patientListArray = this.$store.state.patientList;
-                patientListArray.removeByValue(this.$store.state.currentItem);
-                patientListArray.unshift(this.$store.state.currentItem);
-//                this.$store.commit("unshift",this.$store.state.currentItem);
-                //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
-                //this.$store.state.patientList.unshift(this.$store.state.currentItem);
-                this.$store.commit("setPatientList", patientListArray);
-                this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
-                store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
-                let that = this;
-                console.log(msg);
-                console.log('发送' + msg.scene + ' ' + msg.type + '消息' + (!error ? '成功' : '失败') + ', id=' + msg.idClient);
-                if (!error) {
-                    that.controllerInput = "";
-                    that.mine(msg);
-
-                    setTimeout(() => {
-                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                    }, 120);
-                }
-            },
-
             // 新消息提示
             newMessageTips(target, element){
                 const _this = this;
@@ -586,6 +580,34 @@
 
                 }
             },
+            transformMessageTime (time) {
+                var format = function (num) {
+                    return num > 9 ? num : "0" + num;
+                };
+                var normalTime = function (time) {
+                    var d = new Date(time);
+                    var obj = {
+                        y: d.getFullYear(),
+                        m: d.getMonth() + 1,
+                        dd: d.getDate(),
+                        h: d.getHours(),
+                        mm: format(d.getMinutes())
+                    };
+                    return obj;
+                };
+                var result = "";
+                var now = new Date().getTime(),
+                    day1 = normalTime(time).y + "-" + normalTime(time).m + "-" + normalTime(time).dd,
+                    day2 = normalTime(now).y + "-" + normalTime(now).m + "-" + normalTime(now).dd;
+                if (day1 === day2) {
+                    result = normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y === normalTime(now).y) {
+                    result = normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                } else if (normalTime(time).y !== normalTime(now).y) {
+                    result = normalTime(time).y + "年" + normalTime(time).m + "月" + normalTime(time).dd + "日  " + normalTime(time).h + ":" + normalTime(time).mm;
+                }
+                return result;
+            },
             //消息时间转换...
             transformMessageTime(time) {
                 var format = function (num) {
@@ -615,10 +637,16 @@
                 }
                 return result;
             },
+            //查看大图
+            showBigImgFunction(){
+                this.$store.commit("setSBIFlag", true);
+            },
+            //渲染IM
             mine: function (data) {
                 if (data.content) {
                     data.content = JSON.parse(data.content);
                 }
+                console.log(data);
                 this.communicationList.push(data);
             },
             showNext(type, index){
