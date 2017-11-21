@@ -389,7 +389,7 @@
 
   .preview-suggestion-inner {
     overflow: auto;
-    height:93.7%;
+    height:90%;
   }
   .preview-suggestion-item {
     margin: 40px 0;

@@ -129,6 +129,9 @@ export default new Vuex.Store({
         setFastReply(state, content){
             state.fastReplyContent = content;
         },
+        setUesdReply(state,content){
+            state.usedReplyContent=content;
+        },
         setPatientList(state, data){
             state.patientList = data;
         },
