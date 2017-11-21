@@ -213,7 +213,7 @@
             chatHistoryRecord(num,value, items, index){
                 if(value == "•••") return false;
                 let _this = this;
-                _this.pageResult = value-1 * _this.pageNum;
+                _this.pageResult = (value-1) * _this.pageNum;
                 _this.pageIndex = value;
                 if (index || index == 0) {
                     if (_this.currentIndex == index) {
