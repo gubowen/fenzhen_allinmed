@@ -703,7 +703,7 @@
 
     .messageList-box {
         padding: 40px 25px;
-        height: 80%;
+        height: 78%;
         overflow: auto;
         background-color: #f6f9fa;
         margin-left: 1px;
@@ -840,10 +840,9 @@
         display: inline-block;
         vertical-align: middle;
         width: 327px;
-        margin: 0 24px;
+        margin: 20px 24px 0;
         overflow: hidden;
         text-align: left;
-        margin-top:20px;
         @include query(1500px) {
             margin: 20px 12px 0;
         }
