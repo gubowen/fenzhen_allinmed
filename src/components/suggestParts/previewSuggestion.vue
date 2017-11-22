@@ -227,7 +227,7 @@
         },
         sendSuggest(){
           let that = this;
-          let recommendCustomerList = [],recoveryAdviceList = [];
+          let recommendCustomerList = [],recoveryAdviceList = [],docNames = "";
           //推荐医生
           if(this.previewSendData.doctorList.length>0){
             this.previewSendData.doctorList.forEach(function (key) {
@@ -244,6 +244,7 @@
                 recommendId:key.customerId,
                 recommendCause:recommendCause
               })
+              docNames += key.fullName + "、"
             })
           };
           //患教知识
@@ -332,6 +333,8 @@
                       caseIllnessName = (that.previewSendData.diagnoseResult.illnessName=="暂不确定"?"":that.previewSendData.diagnoseResult.illnessName),
                       caseOperationName = (that.previewSendData.diagnoseResult.operationName=="暂不确定"?"":that.previewSendData.diagnoseResult.operationName);
                 inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
+                console.log(inquiryResult);
                 store.commit('setCurrentItem',inquiryResult);
 
 

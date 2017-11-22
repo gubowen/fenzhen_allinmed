@@ -942,7 +942,7 @@
             sendSuggest(){
                 let that = this;
                 if (!this.isLight) {
-                    let recommendCustomerList = [], recoveryAdviceList = [];
+                    let recommendCustomerList = [], recoveryAdviceList = [],docNames = "";
                     //推荐医生
                     if (this.previewDiagnoseSuggest.doctorList.length > 0) {
                         this.previewDiagnoseSuggest.doctorList.forEach(function (key) {
@@ -959,9 +959,9 @@
                                 recommendId: key.customerId,
                                 recommendCause: recommendCause
                             })
+                            docNames += key.fullName + "、"
                         })
-                    }
-                    ;
+                    };
                     //患教知识
                     if (this.previewDiagnoseSuggest.teachingList.length > 0) {
                         this.previewDiagnoseSuggest.teachingList.forEach(function (key) {
@@ -970,8 +970,7 @@
                                 adviceId: key.knowledgeId
                             })
                         })
-                    }
-                    ;
+                    };
                     //处置建议
                     if (this.previewDiagnoseSuggest.disposeList.length > 0) {
                         this.previewDiagnoseSuggest.disposeList.forEach(function (key) {
@@ -980,8 +979,7 @@
                                 adviceId: key.treatmentId
                             })
                         })
-                    }
-                    ;
+                    };
                     //检查建议
                     if (this.previewDiagnoseSuggest.examineList.length > 0) {
                         this.previewDiagnoseSuggest.examineList.forEach(function (key) {
@@ -990,8 +988,7 @@
                                 adviceId: key.nodeId
                             })
                         })
-                    }
-                    ;
+                    };
                     //检验建议
                     if (this.previewDiagnoseSuggest.testList.length > 0) {
                         this.previewDiagnoseSuggest.testList.forEach(function (key) {
@@ -1000,8 +997,7 @@
                                 adviceId: key.inspectionId
                             })
                         })
-                    }
-                    ;
+                    };
                     ajax({
                         url: XHRList.saveData,
                         method: 'POST',
@@ -1054,6 +1050,8 @@
                                     caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
                                     caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
                                 inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
+                                console.log(inquiryResult);
                                 store.commit('setCurrentItem',inquiryResult);
 
 
