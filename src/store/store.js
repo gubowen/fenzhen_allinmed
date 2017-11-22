@@ -67,7 +67,7 @@ export default new Vuex.Store({
         videoObject:'',  //查看视频列表
         previewShow: false,
         previewId: "",
-
+        triageContent:[],
         previewData: {
             diagnoseResult: {},
             doctorList: [],
@@ -131,6 +131,12 @@ export default new Vuex.Store({
         },
         setUesdReply(state,content){
             state.usedReplyContent=content;
+        },
+        setTriageContent(state,data){
+          state.triageContent.push(data);
+        },
+        clearTraigeContent(state){
+            state.triageContent=[];
         },
         setPatientList(state, data){
             state.patientList = data;
