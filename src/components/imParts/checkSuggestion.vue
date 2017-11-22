@@ -7,6 +7,9 @@
       </figcaption>
       <!--医生头像-->
       <figure class="messageList-item-img">
+        <div class="messageList-item-nameTop">
+          <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+        </div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
@@ -27,6 +30,9 @@
         <!--</section>-->
       </figcaption>
       <figure class="messageList-item-img">
+        <div class="messageList-item-nameTop">
+          <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+        </div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>

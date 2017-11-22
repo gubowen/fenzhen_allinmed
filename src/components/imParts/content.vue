@@ -24,8 +24,15 @@
       </figcaption>
       <!--医生头像-->
       <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
+        <div class="messageList-item-nameTop">
+          <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+        </div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
+      <!--<figure v-if="message.from == '1_doctor00001'" class="messageList-item-name">-->
+        <!--<p> 分诊医生</p>-->
+        <!--<p>{{$store.state.userName}}</p>-->
+      <!--</figure>-->
     </figure>
   </article>
 
@@ -80,4 +87,26 @@
     line-height: 15px;
     cursor: pointer;
 }
+  .messageList-item-name{
+    line-height: 35px;
+    display: inline-block;
+    font-size: 14px;
+    height:30px;
+    margin-left:5px;
+    text-align: left;
+    background: #00D6C6;
+    border-radius: 4px;
+    color: #fff;
+    padding:2px 5px;
+    p{
+    line-height: 15px;
+    height:15px;
+      color:#eee;
+      &:last-child{
+        color:#fff;
+      }
+    }
+  }
+
+
 </style>

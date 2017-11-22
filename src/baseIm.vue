@@ -738,6 +738,7 @@
                     .messageList-item-text {
                         background-color: #d4eff7;
                         text-align: left;
+                        margin-top:20px;
                         & > span {
                             color: #7a8ec1;
                         }
@@ -754,11 +755,23 @@
                     width: 35px;
                     height: 35px;
                     border-radius: 50%;
+                    position: relative;
                     & > img {
                         width: 100%;
                         height: 100%;
                         vertical-align: top;
                         border-radius: 50%;
+                    }
+                    .messageList-item-nameTop{
+                        position: absolute;
+                        top:-5px;
+                        height:20px;
+                        display: block;
+                        right: 100%;
+                        font-size: 14px;
+                        line-height: 14px;
+                        width:500px;
+                        padding-right:24px;
                     }
                 }
                 .messageList-item-text {
@@ -825,6 +838,7 @@
         margin: 0 24px;
         overflow: hidden;
         text-align: left;
+        margin-top:20px;
         @include query(1500px) {
             margin: 0 12px;
         }
