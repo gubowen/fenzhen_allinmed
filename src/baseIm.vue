@@ -845,7 +845,7 @@
         text-align: left;
         margin-top:20px;
         @include query(1500px) {
-            margin: 0 12px;
+            margin: 20px 12px 0;
         }
         .check-suggestion-message-title {
             background: #A6C7EE;
