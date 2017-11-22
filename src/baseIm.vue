@@ -910,8 +910,12 @@
     .preview-suggestion-content {
         background: #FFFFFF;
         border: 1px solid #8DC0F9;
+        display: table;
+        width: 100%;
+        box-sizing: border-box;
         .preview-suggestion-img {
-            display: inline-block;
+            /*display: inline-block;*/
+            display: table-cell;
             vertical-align: middle;
             padding: 20px 0;
             width: 77px;
@@ -933,9 +937,11 @@
         .preview-suggestion-content-text {
             padding: 0 20px;
             box-sizing: border-box;
-            display: inline-block;
+            /*display: inline-block;*/
+            display: table-cell;
+            /*width: 100%;*/
             vertical-align: middle;
-            max-width: 245px;
+            /*max-width: 245px;*/
             line-height: 1.3;
 
             & > header {

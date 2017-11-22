@@ -1050,8 +1050,8 @@
                                     caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
                                     caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
                                 inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
-                                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
-                                console.log(inquiryResult);
+//                                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
+//                                console.log(inquiryResult);
                                 store.commit('setCurrentItem',inquiryResult);
 
 
@@ -1067,7 +1067,8 @@
                                         "caseId": that.$store.state.caseId,
                                         "patientName": that.$store.state.patientName,
                                         "createTime": createTime,
-                                        "diagnosisId": diagnosisId
+                                        "diagnosisId": diagnosisId,
+                                        "docNames": docNames.length>0?docNames.substring(0,docNames.length-1):docNames
                                     }
                                 });
                                 console.log("发送IM成功");

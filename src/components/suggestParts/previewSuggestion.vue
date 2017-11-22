@@ -333,8 +333,8 @@
                       caseIllnessName = (that.previewSendData.diagnoseResult.illnessName=="暂不确定"?"":that.previewSendData.diagnoseResult.illnessName),
                       caseOperationName = (that.previewSendData.diagnoseResult.operationName=="暂不确定"?"":that.previewSendData.diagnoseResult.operationName);
                 inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
-                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
-                console.log(inquiryResult);
+//                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
+//                console.log(inquiryResult);
                 store.commit('setCurrentItem',inquiryResult);
 
 
@@ -351,7 +351,8 @@
                       "caseId":that.$store.state.caseId,
                       "patientName":that.$store.state.patientName,
                       "createTime":createTime,
-                      "diagnosisId":diagnosisId
+                      "diagnosisId":diagnosisId,
+                      "docNames": docNames.length>0?docNames.substring(0,docNames.length-1):docNames
                     }
                 });
               }
