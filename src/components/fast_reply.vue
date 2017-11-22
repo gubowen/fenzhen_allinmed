@@ -131,7 +131,7 @@
             },
             //点击将一条回复加入输入框...
             clickToSendReply (item) {
-                store.commit("setFastReply", item.questionDesc)
+                store.commit("setFastReply", this.$store.state.fastReplyContent+item.questionDesc+"  ")
                 store.commit("setFastReplyShow",false);
                 this.$emit("update:controllerInputStatus", parseInt(item.isUpload));
             }

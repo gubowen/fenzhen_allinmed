@@ -219,9 +219,10 @@
                     onwillreconnect(obj){
                         console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...")
                     },
-                    onDisconnect(error){
+                    ondisconnect(error){
                         console.log('丢失连接');
                         console.log(error)
+                
                     },
                     onerror: this.onError,
                     onroamingmsgs: this.onRoamingMsgs,
@@ -311,6 +312,7 @@
                                 resolve(obj);
                                 that.sendSingleMessage(error, obj)
                             } else {
+                                 nim.getInstance();
                                 reject(obj)
                             }
                         }
@@ -463,6 +465,9 @@
                     to: that.targetData.account,
                     done(error, obj) {
                         console.log(error);
+                        if (error){
+                             nim.getInstance();
+                        }
                         that.renderHistoryMessage(that.targetData.account, error, obj, from);
                     },
                     limit: 100
