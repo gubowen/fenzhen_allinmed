@@ -1,12 +1,12 @@
 <template>
   <section class="jump-box used_reply show">
-    <header class="jump-box-header">
+    <header class="jump-box-header" @click.stop="">
       <h3>常用回复</h3>
     </header>
-    <section class="jump-box-viewers viewInner">
-      <section class="jump-box-viewers-item viewItem" data-role="fr-tabs-1">
-        <ul class="jump-box-list" id="ev-used-reply-box">
-          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent=item.replyContent;$store.state.usedReplyShow=false">
+    <section class="jump-box-viewers viewInner" @click.stop="">
+      <section class="jump-box-viewers-item viewItem" data-role="fr-tabs-1" @click.stop="">
+        <ul class="jump-box-list" id="ev-used-reply-box" @click.stop="">
+          <li class="jump-box-list-item" v-for="item in replyList" @click.stop="$store.state.usedReplyContent+=`${item.replyContent}  `;$store.state.usedReplyShow=false">
             <span>{{item.replyContent}}</span>
           </li>
         </ul>
