@@ -667,7 +667,7 @@
                                 that.allDoc.pageArr.splice(that.allDoc.pageArr.length-1,1);
                             }else if(clickNum == that.allDoc.pageArr.length-1 && Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1] != pagesLength)){
                                 that.allDoc.pageArr.push(Number(that.allDoc.pageArr[that.allDoc.pageArr.length-1])+1);
-//                                that.allDoc.pageArr.splice(ellipsisNum,1);
+                                that.allDoc.pageArr.splice(ellipsisNum,1);
                             }
 
 

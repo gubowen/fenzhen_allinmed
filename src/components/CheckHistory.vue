@@ -292,6 +292,7 @@
                             that.pageArr.splice(that.pageArr.length-1,1);
                         }else if(clickNum == that.pageArr.length-1 && Number(that.pageArr[that.pageArr.length-1] != pagesLength)){
                             that.pageArr.push(Number(that.pageArr[that.pageArr.length-1])+1);
+                            that.allDoc.pageArr.splice(ellipsisNum,1);
                         }
 
 
