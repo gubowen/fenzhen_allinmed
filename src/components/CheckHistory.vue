@@ -119,7 +119,7 @@
                                                 <li class="page-number" :class="{'pgCurrent':pageIndex == item}" v-for="(item,key) in pageArr"
                                                     @click.stop="chatHistoryRecord(key,item,items)">{{item}}
                                                 </li>
-                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageArr.indexOf(pageIndex)+1,pageArr[pageArr.indexOf(allDoc.pageIndex)+1],items)">
+                                                <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}" @click.stop="chatHistoryRecord(pageArr.indexOf(pageIndex)+1,pageArr[pageArr.indexOf(pageIndex)+1],items)">
                                                     下一页
                                                 </li>
                                                 <li class="pgNext" :class="{'pgEmpty':pageIndex == Math.ceil(totalCount/pageNum)}"
@@ -291,8 +291,8 @@
                             that.pageArr.splice(ellipsisNum+1,0,leftNum);
                             that.pageArr.splice(that.pageArr.length-1,1);
                         }else if(clickNum == that.pageArr.length-1 && Number(that.pageArr[that.pageArr.length-1] != pagesLength)){
+                            that.pageArr.splice(ellipsisNum+1,1);
                             that.pageArr.push(Number(that.pageArr[that.pageArr.length-1])+1);
-                            that.pageArr.splice(ellipsisNum,1);
                         }
 
 

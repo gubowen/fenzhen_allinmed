@@ -942,7 +942,7 @@
             sendSuggest(){
                 let that = this;
                 if (!this.isLight) {
-                    let recommendCustomerList = [], recoveryAdviceList = [],docNames = "";
+                    let recommendCustomerList = [], recoveryAdviceList = [],docNames = [];
                     //推荐医生
                     if (this.previewDiagnoseSuggest.doctorList.length > 0) {
                         this.previewDiagnoseSuggest.doctorList.forEach(function (key) {
@@ -959,7 +959,11 @@
                                 recommendId: key.customerId,
                                 recommendCause: recommendCause
                             })
-                            docNames += key.fullName + "、"
+                            docNames.push({
+                                fullName:key.fullName,
+                                company:key.company?key.company:'',
+                                medicalTitle:key.medicalTitle
+                            })
                         })
                     };
                     //患教知识
@@ -1068,7 +1072,7 @@
                                         "patientName": that.$store.state.patientName,
                                         "createTime": createTime,
                                         "diagnosisId": diagnosisId,
-                                        "docNames": docNames.length>0?docNames.substring(0,docNames.length-1):docNames
+                                        "docNames": docNames
                                     }
                                 });
                                 console.log("发送IM成功");

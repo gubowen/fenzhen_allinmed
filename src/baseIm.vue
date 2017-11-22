@@ -913,7 +913,7 @@
         width: 100%;
         box-sizing: border-box;
         .preview-suggestion-img {
-            /*display: inline-block;*/
+
             display: table-cell;
             vertical-align: middle;
             padding: 20px 0;
@@ -936,7 +936,7 @@
         .preview-suggestion-content-text {
             padding: 0 20px;
             box-sizing: border-box;
-            /*display: inline-block;*/
+
             display: table-cell;
             /*width: 100%;*/
             vertical-align: middle;

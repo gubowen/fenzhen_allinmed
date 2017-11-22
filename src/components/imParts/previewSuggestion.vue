@@ -12,8 +12,13 @@
           <p class="preview-suggestion-result">
             初诊：{{suggestions.illnessName.length > 0 ? suggestions.illnessName : "暂不确定" }}
           </p>
-          <p class="preview-suggestion-result" v-if="suggestions.docNames&&suggestions.docNames.length > 0" style="line-height: 1.5;">
-            医师姓名：{{suggestions.docNames}}
+          <p class="preview-suggestion-result" v-if="suggestions.docNames&&suggestions.docNames.length > 0" style="line-height: 1.7;">
+            推荐医生:<br/>
+            <span v-for="item in suggestions.docNames" style="display: block">
+              <span>{{item.fullName}}</span>
+              <span>【{{item.medicalTitle}}】</span><br/>
+              <span>{{item.company}}</span>
+            </span>
           </p>
         </figcaption>
         <figcaption class="preview-suggestion-content-text" v-if="!message.content.data.length">
@@ -22,7 +27,12 @@
             初诊：{{message.content.data.illnessName.length > 0 ? message.content.data.illnessName : "暂不确定" }}
           </p>
           <p class="preview-suggestion-result" v-if="message.content.data.docNames&&message.content.data.docNames.length>0" style="line-height: 1.5;">
-            医师姓名：{{message.content.data.docNames}}
+            推荐医生<br/>
+            <span v-for="item in message.content.data.docNames" style="display: block">
+              <span>{{item.fullName}}</span>
+              <span>【{{item.medicalTitle}}】</span><br/>
+              <span>{{item.company}}</span>
+            </span>
           </p>
         </figcaption>
       </section>

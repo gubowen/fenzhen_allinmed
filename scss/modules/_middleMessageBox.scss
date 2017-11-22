@@ -121,6 +121,10 @@
   margin: 0 24px;
   overflow: hidden;
   text-align: left;
+  margin-top:20px;
+  @include query(1500px) {
+      margin: 20px 12px 0;
+  }
   .check-suggestion-message-title {
     background: #A6C7EE;
     font-size: 12px;
