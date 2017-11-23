@@ -248,7 +248,11 @@ export default {
         onmsg(msg) {
           //自定义消息
           console.log(msg);
-
+          if (msg.from.includes("0_") && that.targetData.account === msg.from) {
+            that.$store.state.currentItem.createTime = that.transformMessageTime(
+              msg.time
+            );
+          }
           if (msg.type.toLowerCase() === "custom") {
             //判断是否为新用户
             if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
@@ -935,7 +939,7 @@ export default {
   overflow: hidden;
   text-align: left;
   @include query(1500px) {
-margin: 20px 12px 0 !important;
+    margin: 20px 12px 0 !important;
   }
   .check-suggestion-message-title {
     background: #a6c7ee;
