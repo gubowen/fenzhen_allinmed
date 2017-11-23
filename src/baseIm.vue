@@ -935,7 +935,7 @@ export default {
   overflow: hidden;
   text-align: left;
   @include query(1500px) {
-    margin: 20px 12px 0;
+margin: 20px 12px 0 !important;
   }
   .check-suggestion-message-title {
     background: #a6c7ee;

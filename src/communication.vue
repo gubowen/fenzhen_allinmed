@@ -185,15 +185,15 @@ export default {
           if (that.$store.state.triageContent.length != 0) {
             that.$store.state.triageContent.forEach((element, index) => {
               if (parseInt(element.isUpload) === 0) {
-                sendContent.push(element.content);
+                // sendContent.push(element.content);
               } else {
                 sendContent.push(element.content);
                 triageList.push(element);
               }
             });
             console.log(sendContent);
-            if (sendContent.length !== 0) {
-              that.controllerInput = sendContent.join(" | ");
+    
+            //   that.controllerInput = sendContent.join(" | ");
               that.$refs.baseImComponent
                 .sendMessage(that.controllerInput)
                 .then(obj => {
@@ -202,7 +202,7 @@ export default {
                   store.commit("setUesdReply", "");
                   store.commit("clearTraigeContent");
                 });
-            }
+            
 
             if (triageList.length !== 0) {
               triageList.forEach((element, index) => {
