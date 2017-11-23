@@ -931,7 +931,7 @@ export default {
   display: inline-block;
   vertical-align: middle;
   width: 327px;
-  margin: 20px 24px 0;
+  margin: 20px 24px 0 !important;
   overflow: hidden;
   text-align: left;
   @include query(1500px) {
