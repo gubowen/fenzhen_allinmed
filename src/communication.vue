@@ -178,7 +178,7 @@ export default {
 
       let baseFn = function() {
         let triageList = [];
-        let sendContent =[];
+        let sendContent = [];
         if (that.controllerInput.trim().length === 0) {
           return;
         } else {
@@ -187,39 +187,46 @@ export default {
               if (parseInt(element.isUpload) === 0) {
                 sendContent.push(element.content);
               } else {
-                  sendContent += element.content + " | ";
+                sendContent.push(element.content);
                 triageList.push(element);
               }
             });
-            that.controllerInput=sendContent.join(" | ");
+            console.log(sendContent);
             if (sendContent.length !== 0) {
-              that.$refs.baseImComponent.sendMessage(that.controllerInput).then(obj => {
-                that.controllerInput = "";
-                store.commit("setFastReply", "");
-                store.commit("setUesdReply", "");
-                store.commit("clearTraigeContent");
-              });
+              that.controllerInput = sendContent.join(" | ");
+              that.$refs.baseImComponent
+                .sendMessage(that.controllerInput)
+                .then(obj => {
+                  that.controllerInput = "";
+                  store.commit("setFastReply", "");
+                  store.commit("setUesdReply", "");
+                  store.commit("clearTraigeContent");
+                });
             }
 
             if (triageList.length !== 0) {
               triageList.forEach((element, index) => {
-                store.commit("videoTriageSender", {
-                  flag: true,
-                  data: {
-                    type: element.isUpload,
-                    content:element.content
-                  }
-                });
+                setTimeout(() => {
+                  store.commit("videoTriageSender", {
+                    flag: true,
+                    data: {
+                      type: element.isUpload,
+                      content: element.content
+                    }
+                  });
+                },100);
               });
               that.controllerInput = "";
             }
-          }else{
-            that.$refs.baseImComponent.sendMessage(that.controllerInput).then(obj => {
+          } else {
+            that.$refs.baseImComponent
+              .sendMessage(that.controllerInput)
+              .then(obj => {
                 that.controllerInput = "";
                 store.commit("setFastReply", "");
                 store.commit("setUesdReply", "");
                 store.commit("clearTraigeContent");
-              })
+              });
           }
         }
       };
