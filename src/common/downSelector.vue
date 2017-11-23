@@ -292,6 +292,7 @@
         display: inline-block;
         min-width: 130px;
         width: auto;
+        max-width:230px;
         font-size: 14px;
         color: #222222;
         letter-spacing: 0;
@@ -325,6 +326,7 @@
         }
 
         .custom-selector-item {
+          line-height:20px;
           padding: 10px 18px;
           box-sizing: border-box;
           width: 100%;
