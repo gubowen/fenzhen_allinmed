@@ -807,7 +807,7 @@
 
     .userlist-mainList {
         overflow: auto;
-        height: 87%;
+        height: 85%;
         &-item {
             padding: 25px 20px 25px 40px;
             font-size: 0;
