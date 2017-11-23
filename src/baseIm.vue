@@ -272,6 +272,7 @@ export default {
               store.commit("watingListRefreshFlag", true);
               store.commit("setNewWating", true);
               store.commit("setMusicPlay", true);
+              debugger;
             }
           }
           that.receiveMessage(that.targetData.account, msg);
