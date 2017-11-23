@@ -272,7 +272,7 @@ export default {
               store.commit("watingListRefreshFlag", true);
               store.commit("setNewWating", true);
               store.commit("setMusicPlay", true);
-              debugger;
+
             }
           }
           that.receiveMessage(that.targetData.account, msg);
@@ -332,6 +332,7 @@ export default {
       //单条信息发送
       return new Promise((resolve, reject) => {
         that.$store.commit("setSendStatus", false);
+
         this.nim.sendText({
           scene: "p2p",
           to: that.targetData.account,
@@ -339,7 +340,8 @@ export default {
           custom: JSON.stringify({
             cType: "0",
             cId: that.$store.state.userId,
-            mType: "0"
+            mType: "0",
+            docName:that.$store.state.userName
           }),
           done(error, obj) {
             console.log(obj);
@@ -405,7 +407,8 @@ export default {
           custom: JSON.stringify({
             cType: "0",
             cId: that.$store.state.userId,
-            mType: "35"
+            mType: "35",
+            docName:that.$store.state.userName
           }),
           done(error, obj) {
             if (!error) {
@@ -435,7 +438,8 @@ export default {
           custom: JSON.stringify({
             cType: "0",
             cId: that.$store.state.userId,
-            mType: "36"
+            mType: "36",
+            docName:that.$store.state.userName
           }),
           done(error, obj) {
             if (!error) {
@@ -470,7 +474,8 @@ export default {
         custom: JSON.stringify({
           cType: "0",
           cId: that.$store.state.userId,
-          mType: "34"
+          mType: "34",
+          docName:that.$store.state.userName
         }),
         done(error, obj) {
           that.sendSingleMessage(error, obj);

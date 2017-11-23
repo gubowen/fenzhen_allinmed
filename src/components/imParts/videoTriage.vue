@@ -10,7 +10,7 @@
     </figcaption>
     <figure class="messageList-item-img">
       <div class="messageList-item-nameTop">
-        <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+        <p>{{ '【分诊医生】'+docName}}</p>
       </div>
       <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
     </figure>
@@ -32,6 +32,13 @@
     mounted(){
 
     },
+      computed: {
+    docName() {
+      return JSON.parse(this.message.custom).docName
+        ? JSON.parse(this.message.custom).docName
+        : this.$store.state.userName;
+    }
+  },
     props: {
         message:{
             type:Object

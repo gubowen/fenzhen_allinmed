@@ -31,7 +31,7 @@
       </figcaption>
       <figure class="messageList-item-img">
         <div class="messageList-item-nameTop">
-          <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+          <p>{{ '【分诊医生】'+docName}}</p>
         </div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
@@ -40,7 +40,7 @@
   </article>
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -48,25 +48,32 @@
    *
    * Created by Qiangkailiang on 17/10/23.
    */
-  export default{
-    data(){
-      return {}
-    },
-    mounted(){
-
-    },
-    props: {
-        message:{
-            type:Object
-        }
+export default {
+  data() {
+    return {};
+  },
+  mounted() {
+    
+  },
+  computed: {
+    docName() {
+      return JSON.parse(this.message.custom).docName
+        ? JSON.parse(this.message.custom).docName
+        : this.$store.state.userName;
+    }
+  },
+  props: {
+    message: {
+      type: Object
     }
   }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
-  .checkTestItems{
-    &:not(:last-child):after{
-      content:" | ";
-      display:inline-block;
-    }
+.checkTestItems {
+  &:not(:last-child):after {
+    content: " | ";
+    display: inline-block;
   }
+}
 </style>

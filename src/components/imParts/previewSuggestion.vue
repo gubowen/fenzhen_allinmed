@@ -39,7 +39,7 @@
     </figcaption>
     <figure class="messageList-item-img">
       <div class="messageList-item-nameTop">
-        <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+        <p>{{ '【分诊医生】'+docName}}</p>
       </div>
       <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
     </figure>
@@ -47,7 +47,7 @@
 
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -55,32 +55,43 @@
    *
    * Created by Qiangkailiang on 17/10/23.
    */
-  import store from "@/store/store";
-  export default{
-    data(){
-      return {}
+import store from "@/store/store";
+export default {
+  data() {
+    return {};
+  },
+  mounted() {},
+  computed: {
+    docName() {
+      return JSON.parse(this.message.custom).docName
+        ? JSON.parse(this.message.custom).docName
+        : this.$store.state.userName;
+    }
+  },
+  methods: {
+    updateShow() {
+      store.commit("setPreviewType", 2);
+      store.commit(
+        "setPreviewId",
+        this.message.content.data.length
+          ? this.message.content.data[0].diagnosisId
+          : this.message.content.data.diagnosisId
+      );
+      store.commit("setPreviewShow", true);
+    }
+  },
+  props: {
+    message: {
+      type: Object
     },
-    mounted(){
+    diagnosisShow: {
+      type: Boolean
     },
-    methods: {
-      updateShow(){
-        store.commit("setPreviewType",2);
-        store.commit("setPreviewId",this.message.content.data.length?this.message.content.data[0].diagnosisId:this.message.content.data.diagnosisId);
-        store.commit("setPreviewShow",true);
-      }
-    },
-    props: {
-      message: {
-        type: Object
-      },
-      diagnosisShow: {
-        type: Boolean
-      },
-      diagnosisId: {
-        type: Number
-      }
+    diagnosisId: {
+      type: Number
     }
   }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
 
