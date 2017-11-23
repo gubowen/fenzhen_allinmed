@@ -57,7 +57,12 @@
        },
         showRecord(){
            if(this.showRecord){
-               document.querySelector(".medical-record-form").style.cssText="height:40%;";
+             console.log(document.body.clientWidth)
+             if (document.body.clientWidth<1500){
+               document.querySelector(".medical-record-form").style.cssText="height:25%;";
+             }else{
+               document.querySelector(".medical-record-form").style.cssText="height:49%;";
+             }
            }else{
                document.querySelector(".medical-record-form").style.cssText="height:80%;";
            }
