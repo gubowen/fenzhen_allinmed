@@ -798,13 +798,13 @@ export default {
 
 .messageList-box {
   padding: 40px 25px;
-  height: 82%;
+  height: 82% !important;
   overflow: auto;
   background-color: #f6f9fa;
   margin-left: 1px;
   box-sizing: border-box;
   @include query(1500px) {
-    height: 73%;
+    height: 73% !important;;
   }
   &.watingBoxStyle {
     height: 105.5%;
