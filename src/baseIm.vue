@@ -877,7 +877,7 @@ export default {
       .messageList-item-text {
         display: inline-block;
         vertical-align: top;
-        max-width: 85%;
+        max-width: 80%;
         padding: 7px 12px;
         box-sizing: border-box;
         font-size: 14px;
