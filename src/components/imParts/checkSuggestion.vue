@@ -13,6 +13,7 @@
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
+    
     <figure class="messageList-item-content">
       <!--检查检验-->
       <figcaption class="check-suggestion-message">

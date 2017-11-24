@@ -21,6 +21,14 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': config.dev.env
     }),
+    new webpack.DllReferencePlugin({
+      context: __dirname,
+      /** 
+          下面这个地址对应webpack.dll.config.js中生成的那个json文件的路径
+          这样webpack打包时，就先直接去这个json文件中把那些预编译的资源弄进来
+      **/
+      manifest: require('./dll/vendor-manifest.json')
+  }),
     // https://github.com/glenjamin/webpack-hot-middleware#installation--usage
     new webpack.HotModuleReplacementPlugin(),
     new webpack.NoEmitOnErrorsPlugin(),

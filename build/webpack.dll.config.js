@@ -12,7 +12,7 @@ const path = require('path');
 
 module.exports = {
     entry: {
-        vendor: ['vue', 'vuex', 'vue-router','axios','exif-js','vee-validate','swiper','jquery']
+        vendor: ['vue', 'vuex', 'vue-router', 'axios', 'exif-js', 'vee-validate', 'swiper', 'jquery']
     },
 
     output: {
