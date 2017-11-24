@@ -1,5 +1,5 @@
 <template>
-  <section class="jump-box used_reply show">
+  <section class="jump-box used_reply show" @click.stop="">
     <header class="jump-box-header">
       <h3>常用回复</h3>
     </header>
@@ -210,6 +210,7 @@
         vertical-align: middle;
         -ms-word-break: break-all;
         word-break: break-all;
+        line-height: 1.5;
       }
       &:before {
         content: '';

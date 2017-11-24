@@ -1,5 +1,5 @@
 <template>
-    <section class="jump-box fast-reply show">
+    <section class="jump-box fast-reply show" @click.stop="">
         <header class="jump-box-header" @click.stop="">
             <h3>快捷提问</h3>
         </header>
