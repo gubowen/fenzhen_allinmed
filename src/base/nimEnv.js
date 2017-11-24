@@ -27,7 +27,7 @@ export default function nimEnv() {
                 },
                 done(res) {
                     if (res.responseObject.responseStatus) {
-                        nimKey = res.responseData.accessKey;
+                        nimKey = res.responseObject.responseData.accessKey;
                         resolve(nimKey);
                     }
                 }
