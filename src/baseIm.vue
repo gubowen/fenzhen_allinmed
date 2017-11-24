@@ -252,8 +252,12 @@
                             console.log(error);
                         },
                         onerror: this.onError,
-                        onroamingmsgs: this.onRoamingMsgs,
-                        onofflinemsgs: this.onOfflineMsgs,
+                        onroamingmsgs(obj){
+                            console.log(obj);
+                        },
+                        onofflinemsgs(){
+                             console.log(obj);
+                        },
                         onmsg(msg) {
                             //自定义消息
                             console.log(msg);

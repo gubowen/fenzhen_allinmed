@@ -266,7 +266,7 @@
             },
             '$store.state.watingListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('wating');
+                    this.getUserList('wating',this.filterMethod);
                     store.commit("watingListRefreshFlag", false);
                 } else {
                     return;
@@ -274,7 +274,7 @@
             },
             '$store.state.onlineListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('online');
+                    this.getUserList('online',this.filterMethod);
                     store.commit("onlineListRefresh", false);
                 } else {
                     return;

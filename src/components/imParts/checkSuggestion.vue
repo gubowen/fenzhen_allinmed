@@ -8,7 +8,7 @@
       <!--医生头像-->
       <figure class="messageList-item-img">
         <div class="messageList-item-nameTop">
-          <p>{{ '【分诊医生】'+$store.state.userName}}</p>
+          <p>{{ '【分诊医生】'+docName}}</p>
         </div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
