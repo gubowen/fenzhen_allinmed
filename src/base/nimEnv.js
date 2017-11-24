@@ -6,8 +6,10 @@
  *
  * Created by Qiangkailiang on 17/11/7.
  */
+import ajax from "@/common/js/ajax";
 export default function nimEnv(){
     const host=window.location.host;
+    const XHRList="/call/im/interact/v1/getToken/";
     let nimKey="";
 
 
@@ -16,8 +18,19 @@ export default function nimEnv(){
          * triage线上测试环境
          * 使用云信测试账号
          * */
-        // nimKey="ce442b9f9458caaefd152ca1a2206de7";
-        nimKey="8b9941431e042a5261dbcf5f0eefe450";
+        ajax({
+            url: XHRList,
+            method: "POST",
+            data: {
+              firstResult: 0,
+              maxResult:1
+            },
+            done(res){
+              if (res.responseObject.responseStatus){
+                nimKey=res.responseData.accessKey;
+              }
+            }
+          })
     }else{
         /*
          * 其余任何环境

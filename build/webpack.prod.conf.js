@@ -29,6 +29,8 @@ var webpackConfig = merge(baseWebpackConfig, {
     new webpack.DefinePlugin({
       'process.env': env
     }),
+    // DLLPlugins集中压缩类库
+    // Q:未能直接引入？
     new webpack.DllReferencePlugin({
       context: __dirname,
       manifest,
