@@ -8,16 +8,16 @@
 */
 <template>
   <!--初诊建议-->
-    <section class="main-masker config-suggestion check-suggestion disease-teach-detail on show">
+    <section class="main-masker config-suggestion check-suggestion disease-teach-detail on show" @click = 'closeSelect()'>
       <section class="check-suggestion-box" v-show="homePageShow">
         <i class="icon-close window-close" @click="closeWindow()"></i>
-        <header class="check-suggestion-title" @click = 'closeSelect()'>
+        <header class="check-suggestion-title" >
           <article>
             <h2>初诊建议</h2>
           </article>
           <!--<button class="jump-box-add-term icon-suggestion-preview"><span>预览</span></button>-->
         </header>
-        <section class="check-suggestion-inner" @click = 'closeSelect()'>
+        <section class="check-suggestion-inner">
           <section class="check-suggestion-title">
             <h2>初步诊断：</h2>
           </section>
