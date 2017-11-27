@@ -10,28 +10,28 @@
     <nav class="userlist-sortType address-selector">
         <section class="userlist-sortType-item">
             <section class="custom-selector">
-                <h3 class="custom-selector-title firstListTitle" @click="showData()">{{showAddress}}</h3>
-                <i class="icon-downArrow" @click="showData()"></i>
+                <h3 class="custom-selector-title firstListTitle" @click.stop="showData()">{{showAddress}}</h3>
+                <i class="icon-downArrow" @click.stop="showData()"></i>
                 <section class="custom-selector-second-box" v-show="conIndex===currentIndexNow">
                     <ul class="custom-selector-second firstList J-province" v-show="provinceFlag">
-                        <li class="custom-selector-item secondListTitle" @click="selectProvince()"><span>请选择</span></li>
-                        <li class="custom-selector-item secondListTitle" v-for="item in provinceList" @click="selectProvince(item)">
+                        <li class="custom-selector-item secondListTitle" @click.stop="selectProvince()"><span>请选择</span></li>
+                        <li class="custom-selector-item secondListTitle" v-for="item in provinceList" @click.stop="selectProvince(item)">
                             <span>{{item.regionName}}</span>
                         </li>
                     </ul>
                     <ul class="custom-selector-second custom-selector-second-list secondList" v-show="cityFlag ">
-                        <li class="custom-selector-item result-item" @click="selectCity()">
+                        <li class="custom-selector-item result-item" @click.stop="selectCity()">
                             <span>未知</span>
                         </li>
-                        <li class="custom-selector-item thirdListTitle" v-for=" cItem in  cityList" @click="selectCity(cItem)">
+                        <li class="custom-selector-item thirdListTitle" v-for=" cItem in  cityList" @click.stop="selectCity(cItem)">
                             <span>{{cItem.regionName}}</span>
                         </li>
                     </ul>
                     <ul class="custom-selector-second custom-selector-second-list thirdList" v-show="districtFlag ">
-                        <li class="custom-selector-item result-item" @click="selectDistrict()">
+                        <li class="custom-selector-item result-item" @click.stop="selectDistrict()">
                             <span>未知</span>
                         </li>
-                        <li class="custom-selector-item thirdListTitle" v-for=" ccItem in  districtList" @click="selectDistrict(ccItem)">
+                        <li class="custom-selector-item thirdListTitle" v-for=" ccItem in  districtList" @click.stop="selectDistrict(ccItem)">
                             <span>{{ccItem.regionName}}</span>
                         </li>
                     </ul>

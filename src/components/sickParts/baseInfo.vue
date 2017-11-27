@@ -1,5 +1,5 @@
-d<template>
-  <div id="baseInfo">
+<template>
+  <div id="baseInfo" @click="hiddenSelect">
     <section class="viewItem medical-record-form-item ">
       <form action="">
         <section class="base-info medical-record-main">
@@ -476,6 +476,10 @@ d<template>
             console.log("请求失败：" + error);
           }
          });
+      },
+      hiddenSelect(){
+          this.currentSelectorIndex =-1;
+          console.log(this.currentSelectorIndex);
       }
     }
   }
