@@ -491,6 +491,7 @@
                                             delete patientAlertList[key];
                                         }
                                     }
+                                    localStorage.setItem("patientAlertList",JSON.stringify(patientAlertList));
                                 }
                                     _this.$store.commit("setPatientList", dataList);
                                     _this.userListOnline = dataList ? dataList : [];
@@ -519,6 +520,7 @@
                                         }
                                     }
                                         localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
+                                    }
                                     _this.$store.commit("setWatingList", dataList);
                                     _this.userListWating = dataList ? dataList : [];
                             }
