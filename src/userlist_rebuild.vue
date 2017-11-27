@@ -424,13 +424,28 @@
                 _this.userListLoading = [];
                 _this.userListEnd = [];
                 _this.userListBack = [];
-                let dataValue = Object.assign({
-                    customerId: _this.$store.state.userId,
-                    conState: type === "online" ? "0" : "2,4,5",
-                    conType: 0,
-                    sortType: -6
+                let dataValue={};
 
-                }, param);
+                if(type === "online" ){
+                    dataValue = Object.assign({
+                        customerId:_this.$store.state.userId ,
+                        conState:"0",
+                        conType: 0,
+                        sortType: -6
+
+                    }, param);
+                }else{
+                    dataValue = Object.assign({
+                        conState:"2,4,5",
+                        conType: 0,
+                        sortType: -6
+
+                    }, param);
+
+                }
+
+
+
 //        if (type==="online"){
 //            dataValue=Object.assign(dataValue,{
 //              conType: 0
