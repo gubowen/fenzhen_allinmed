@@ -97,8 +97,9 @@
                                     </figure>
                                     <figcaption class="userlist-item-base-msg">
                                         <h3>
-                  <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span class="category short"
-                                                  v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
+                                            <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                                class="category short"
+                                                v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
                                             <span class="category short"
                                                   v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
                                         </h3>
@@ -266,7 +267,7 @@
             },
             '$store.state.watingListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('wating',this.filterMethod);
+                    this.getUserList('wating', this.filterMethod);
                     store.commit("watingListRefreshFlag", false);
                 } else {
                     return;
@@ -274,7 +275,7 @@
             },
             '$store.state.onlineListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('online',this.filterMethod);
+                    this.getUserList('online', this.filterMethod);
                     store.commit("onlineListRefresh", false);
                 } else {
                     return;
@@ -332,7 +333,7 @@
                 return flag;
             },
             //给子组件传值..
-            transformData (items, index,getFlag = false) {
+            transformData (items, index, getFlag = false) {
                 store.commit("setUsedReplyShow", false);
                 store.commit("setFastReplyShow", false);
                 this.noData = true;
@@ -362,12 +363,12 @@
 
                     let patientList = this.$store.state.patientList;
                     items.messageAlert = '';
-                    if(getFlag){
+                    if (getFlag) {
                         patientList.removeByValue(items);
                         patientList.unshift(items);
                         this.$store.commit("setPatientList", patientList);
 
-                    }else{
+                    } else {
                         patientList[index] = items;
                         this.$store.commit("setPatientList", patientList);
                     }
@@ -424,26 +425,25 @@
                 _this.userListLoading = [];
                 _this.userListEnd = [];
                 _this.userListBack = [];
-                let dataValue={};
+                let dataValue = {};
 
-                if(type === "online" ){
+                if (type === "online") {
                     dataValue = Object.assign({
-                        customerId:_this.$store.state.userId ,
-                        conState:"0",
+                        customerId: _this.$store.state.userId,
+                        conState: "0",
                         conType: 0,
                         sortType: -6
 
                     }, param);
-                }else{
+                } else {
                     dataValue = Object.assign({
-                        conState:"2,4,5",
+                        conState: "2,4,5",
                         conType: 0,
                         sortType: -6
 
                     }, param);
 
                 }
-
 
 
 //        if (type==="online"){
@@ -466,54 +466,69 @@
                             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
 
-                            dataList.forEach(function (item, index) {
-                                item.messageAlert = '';
-                                if (waitingAlertList && waitingAlertList !== '{}') {
-                                    for (let key in waitingAlertList) {
-                                        if (key == ("0_" + item.caseId)) {
-                                            item.messageAlert = waitingAlertList[key];
-                                            _this.newWaitingFlag = true;
-                                            _this.$store.commit('setMusicPlay', true);
-                                            console.log("music2");
-                                            setTimeout(function () {
-                                                console.log("music");
-                                                _this.$store.commit('setMusicPlay', false);
 
-                                            }, 2000);
-                                        }
-                                    }
-                                }
 
+
+
+
+                            if (type === "online") {
                                 if (patientAlertList && patientAlertList !== '{}') {
                                     for (let key in patientAlertList) {
-                                        if (key == ("0_" + item.caseId)) {
-                                            item.messageAlert = patientAlertList[key];
-                                            _this.newPatientFlag = true;
-                                            _this.$store.commit('setMusicPlay', true);
-                                            console.log("music2");
-                                            setTimeout(function () {
-                                                console.log("music");
-                                                _this.$store.commit('setMusicPlay', false);
+                                        let flag = true;
+                                        dataList.forEach(function (item, index) {
+                                            if (key == ("0_" + item.caseId)) {
+                                                item.messageAlert = patientAlertList[key];
+                                                _this.newPatientFlag = true;
 
-                                            }, 2000);
+
+                                                _this.$store.commit('setMusicPlay', true);
+                                                setTimeout(function () {
+                                                    _this.$store.commit('setMusicPlay', false);
+                                                }, 2000);
+                                            }
+                                        });
+                                        if (flag) {
+                                            delete patientAlertList[key];
                                         }
                                     }
                                 }
-                            });
-                            if (type === "online") {
-                                _this.$store.commit("setPatientList", dataList);
-                                _this.userListOnline = dataList ? dataList : [];
-                            } else if (type === "wating") {
-                                _this.$store.commit("setWatingList", dataList);
-                                _this.userListWating = dataList ? dataList : [];
+                                    _this.$store.commit("setPatientList", dataList);
+                                    _this.userListOnline = dataList ? dataList : [];
+
+
+                                } else if (type === "wating") {
+                                    if (waitingAlertList && waitingAlertList !== '{}') {
+                                        for (let key in waitingAlertList) {
+                                            let flag = true;
+                                            dataList.forEach(function (item, index) {
+                                                item.messageAlert = '';
+                                                if (key == ("0_" + item.caseId)) {
+                                                    item.messageAlert = waitingAlertList[key];
+                                                    _this.newWaitingFlag = true;
+                                                    _this.$store.commit('setMusicPlay', true);
+                                                    setTimeout(function () {
+                                                        _this.$store.commit('setMusicPlay', false);
+                                                    }, 2000);
+                                                    flag = false;
+                                                }
+                                            });
+                                            if (flag) {
+
+                                                delete waitingAlertList[key];
+                                            }
+                                        }
+                                    }
+                                        localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
+                                    _this.$store.commit("setWatingList", dataList);
+                                    _this.userListWating = dataList ? dataList : [];
                             }
-                            fn && fn();
+                                fn && fn();
                         }
-                    },
-                    fail(err) {
-                        console.log("请求失败：" + err);
-                    }
-                });
+                    },fail(err)
+                        {
+                            console.log("请求失败：" + err);
+                        }
+                    });
             },
             setSelectValue(dataList){
                 let result = [];
@@ -585,7 +600,7 @@
                         this.userListStatus.second = true;
                         let triageItem = this.getBeTriagePatient(item);
                         let getFlag = true;
-                        this.transformData(triageItem, index,getFlag);
+                        this.transformData(triageItem, index, getFlag);
 
 
                         this.userListStatus.status = 2;
