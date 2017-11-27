@@ -264,7 +264,7 @@
                 let pagesLength = Math.ceil(that.totalCount / that.pageNum);
                 //初始化
                 let ellipsis = "•••",ellipsisNum;
-                if(pagesLength>10){
+                if(pagesLength>9){
                     //点击首页、末页
                     if(clickValue == 1 || clickValue == Math.ceil(that.totalCount/that.pageNum)){
                         that.pageArr = [1,2,3,4,5,"•••",pagesLength-2,pagesLength-1,pagesLength];

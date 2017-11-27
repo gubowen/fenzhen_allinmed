@@ -599,6 +599,7 @@
                                 }
                             }
                             that.allDoc.allDocList = dataList;
+                            that.allDoc.allDocState = false;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
                             that.noDocData = false;
                             that.matchCurrentIndex = -1;
