@@ -253,6 +253,7 @@
             }
           } else {
             _this.passWordError = res.data.responseObject.responseMessage;
+            _this.loginStr = "登录";
             console.log("失败！");
           }
 
