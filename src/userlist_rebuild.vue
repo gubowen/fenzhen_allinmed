@@ -525,12 +525,10 @@
                                     _this.userListWating = dataList ? dataList : [];
                             }
                                 fn && fn();
-                        }
-                    },fail(err)
-                        {
+                        },fail(err){
                             console.log("请求失败：" + err);
                         }
-                    });
+              });
             },
             setSelectValue(dataList){
                 let result = [];
