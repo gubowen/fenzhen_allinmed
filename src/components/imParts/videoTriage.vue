@@ -17,7 +17,7 @@
   </article>
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -25,26 +25,24 @@
    *
    * Created by Qiangkailiang on 17/10/23.
    */
-  export default{
-    data(){
-      return {}
-    },
-    mounted(){
-
-    },
-      computed: {
+export default {
+  data() {
+    return {};
+  },
+  mounted() {},
+  computed: {
     docName() {
-      return JSON.parse(this.message.custom).docName
+      return this.message.custom && JSON.parse(this.message.custom).docName
         ? JSON.parse(this.message.custom).docName
         : this.$store.state.userName;
     }
   },
-    props: {
-        message:{
-            type:Object
-        }
+  props: {
+    message: {
+      type: Object
     }
   }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
 

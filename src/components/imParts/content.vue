@@ -39,7 +39,7 @@
 
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -47,71 +47,69 @@
    *
    * Created by Qiangkailiang on 17/10/23.
    */
-  export default{
-    data(){
-      return {}
-    },
-    mounted(){
-
-    },
-    computed:{
-      docName(){
-        return JSON.parse(this.message.custom).docName?JSON.parse(this.message.custom).docName:this.$store.state.userName
-      }
-    },
-    methods: {
-      goToCheck(){
-        this.$router.push({
-          path: "/home/majorCheck/",
-          params: {
-              num: JSON.stringify(this.$store.state.currentItem)
-          }
-        })
-      },
-      resendMsg(){
-         this.$store.commit("setResendMsgInfo",this.message);
+export default {
+  data() {
+    return {};
+  },
+  mounted() {},
+  computed: {
+    docName() {
+      return this.message.custom && JSON.parse(this.message.custom).docName
+        ? JSON.parse(this.message.custom).docName
+        : this.$store.state.userName;
+    }
+  },
+  methods: {
+    goToCheck() {
+      this.$router.push({
+        path: "/home/majorCheck/",
+        params: {
+          num: JSON.stringify(this.$store.state.currentItem)
         }
+      });
     },
-    props: {
-      message: {
-        type: Object
-      }
+    resendMsg() {
+      this.$store.commit("setResendMsgInfo", this.message);
+    }
+  },
+  props: {
+    message: {
+      type: Object
     }
   }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss">
-.resendTips{
-    width:15px;
-    height:15px;
-    background: red;
-    color:#fff;
-    border-radius: 50%;
-    display: inline-block;
-    margin-right:10px;
-    text-align: center;
-    line-height: 15px;
-    cursor: pointer;
+.resendTips {
+  width: 15px;
+  height: 15px;
+  background: red;
+  color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 10px;
+  text-align: center;
+  line-height: 15px;
+  cursor: pointer;
 }
-  .messageList-item-name{
-    line-height: 35px;
-    display: inline-block;
-    font-size: 14px;
-    height:30px;
-    margin-left:5px;
-    text-align: left;
-    background: #00D6C6;
-    border-radius: 4px;
-    color: #fff;
-    padding:2px 5px;
-    p{
+.messageList-item-name {
+  line-height: 35px;
+  display: inline-block;
+  font-size: 14px;
+  height: 30px;
+  margin-left: 5px;
+  text-align: left;
+  background: #00d6c6;
+  border-radius: 4px;
+  color: #fff;
+  padding: 2px 5px;
+  p {
     line-height: 15px;
-    height:15px;
-      color:#eee;
-      &:last-child{
-        color:#fff;
-      }
+    height: 15px;
+    color: #eee;
+    &:last-child {
+      color: #fff;
     }
   }
-
-
+}
 </style>
