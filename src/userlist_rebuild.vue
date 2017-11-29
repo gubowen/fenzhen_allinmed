@@ -311,7 +311,7 @@
         methods: {
             init(){
                 this.$store.state.searchStatus = true;
-                this.getUserList('wating');
+                this.getUserList('waiting');
                 this.getUserList('online');
             },
             fixByCurrent(item, index){
@@ -460,18 +460,12 @@
 //            store.commit("stopLoading");
                         if (res.responseObject.responseData && res.responseObject.responseStatus) {
                             let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
-
                             let waitingAlertList = {};
                             let patientAlertList = {};
                             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
-
-
-
-
-
-
                             if (type === "online") {
+
                                 if (patientAlertList && patientAlertList !== '{}') {
                                     for (let key in patientAlertList) {
                                         let flag = true;
@@ -495,9 +489,7 @@
                                 }
                                     _this.$store.commit("setPatientList", dataList);
                                     _this.userListOnline = dataList ? dataList : [];
-
-
-                                } else if (type === "wating") {
+                                } else if (type === "waiting") {
                                     if (waitingAlertList && waitingAlertList !== '{}') {
                                         for (let key in waitingAlertList) {
                                             let flag = true;
@@ -518,11 +510,11 @@
                                                 delete waitingAlertList[key];
                                             }
                                         }
-                                    }
                                         localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
                                     }
-                                    _this.$store.commit("setWatingList", dataList);
+                                    _this.$store.commit("setWaitingList", dataList);
                                     _this.userListWating = dataList ? dataList : [];
+                                }
                             }
                                 fn && fn();
                         },fail(err){

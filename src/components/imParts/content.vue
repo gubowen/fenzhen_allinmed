@@ -27,6 +27,7 @@
         <div class="messageList-item-nameTop">
           <p>{{ '【分诊医生】'+docName}}</p>
         </div>
+        <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
       <!--<figure v-if="message.from == '1_doctor00001'" class="messageList-item-name">-->
@@ -70,7 +71,10 @@
       },
       resendMsg(){
          this.$store.commit("setResendMsgInfo",this.message);
-        }
+        },
+      deleteMsg(){
+          this.$store.commit("setDeleteMsgInfo",this.message);
+      }
     },
     props: {
       message: {
@@ -80,7 +84,7 @@
   }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-.resendTips{
+  .resendTips{
     width:15px;
     height:15px;
     background: red;

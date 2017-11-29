@@ -337,6 +337,9 @@
           left: 55px;
           position: absolute;
           top: 50%;
+          &.swiper-button-disabled{
+            background: url("/static/img/img00/employee/photo_arrow_left_big_disabled.png") no-repeat;
+          }
         }
 
         .swiper-right-gray {
@@ -346,6 +349,9 @@
           right: 55px;
           position: absolute;
           top: 50%;
+          &.swiper-button-disabled{
+            background: url("/static/img/img00/employee/photo_arrow_right_big_disabled.png") no-repeat;
+          }
         }
 
         .rotate90 {

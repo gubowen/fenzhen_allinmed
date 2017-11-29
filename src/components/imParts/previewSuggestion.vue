@@ -41,6 +41,7 @@
       <div class="messageList-item-nameTop">
         <p>{{ '【分诊医生】'+docName}}</p>
       </div>
+      <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
       <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
     </figure>
   </article>
@@ -78,6 +79,9 @@ export default {
           : this.message.content.data.diagnosisId
       );
       store.commit("setPreviewShow", true);
+    },
+    deleteMsg(){
+        this.$store.commit("setDeleteMsgInfo",this.message);
     }
   },
   props: {

@@ -92,7 +92,9 @@ export default new Vuex.Store({
         newSickId:'',                //现病史Id
         musicPlay:false,
         beingSend:true,
-        resendMsgInfo:{}
+        resendMsgInfo:{},
+        deleteMsgInfo:{},
+        deleteMsgTime:'2'   //消息撤回时间
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -147,7 +149,7 @@ export default new Vuex.Store({
         setPatientName(state, data){
             state.patientName = data;
         },
-        setWatingList(state, data){
+        setWaitingList(state, data){
             state.watingList = data;
         },
         setCaseId(state, data){
@@ -252,6 +254,9 @@ export default new Vuex.Store({
         },
         setResendMsgInfo(state,data){
             state.resendMsgInfo = data;
+        },
+        setDeleteMsgInfo(state,data){
+            state.deleteMsgInfo = data;
         }
     }
 });

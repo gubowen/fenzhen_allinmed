@@ -51,6 +51,10 @@
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
                                 :showType="'checkSuggessSendTips'"
                         ></UpdateTips>
+                        <!--消息撤回-->
+                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
+                                您撤回了一条消息！
+                        </section>
                     </article>
                 </transition-group>
             </article>
@@ -222,6 +226,9 @@
             },
             "$store.state.resendMsgInfo"(obj) {
                 this.resendMsg(obj);
+            },
+            "$store.state.deleteMsgInfo"(obj){
+                this.deleteMsg(obj);
             }
         },
         computed: {},
@@ -520,6 +527,66 @@
                     });
                 });
             },
+            //撤回
+            deleteMsg(item) {
+                let _this = this;
+                return new Promise((resolve, reject) => {
+                    console.log('正在撤回消息', item);
+                    this.nim.deleteMsg({
+                        msg: item,
+                        done(error) {
+                            if (!error) {
+                                console.log("撤回消息成功.....");
+                                _this.communicationList.removeByValue(item);
+                                resolve(item)
+                            } else {
+                                //_this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
+                                console.log("撤回失败.....");
+                                reject(error,item)
+
+                            }
+                        }
+                    })
+                }).then(msg=>{
+                        console.log(msg);
+                    return new Promise((resolve,reject)=>{
+                        _this.nim.sendCustomMsg({
+                            scene:"p2p",
+                            to:_this.targetData.account,
+                            custom:JSON.stringify({
+                                cType: "0",
+                                cId: _this.$store.state.userId,
+                                mType: "36"
+                            }),
+                            content:JSON.stringify({
+                                type: "deleteMsgTips",
+                                data: {
+                                    from: "分诊医生",
+                                    deleteMsg: msg || {}
+                                }
+                            }),
+                            done(error,msg){
+                                if (msg.type === "custom") {
+                                    msg.content = JSON.parse(msg.content);
+                                }
+
+                                console.log(msg);
+                                _this.communicationList.push(msg);
+                            if(!error){
+                                resolve(error,msg);
+                            }else{
+                                reject(error,msg)
+                            }
+                           }
+                        })
+                    })
+                }).catch((error,msg)=>{
+                    console.log(error);
+                    if(parseInt(error.code)=== 508){
+                        _this.$store.commit('showPopup',{'text':'您只能撤回'+_this.$store.state.deleteMsgTime+'分钟内的消息'});
+                    }
+                });
+            },
             //获取历史消息……
             getMessageList(from) {
                 let that = this;
@@ -595,7 +662,7 @@
                         }, 2000);
                     }
                 });
-                this.$store.commit("setWatingList", watingList);
+                this.$store.commit("setWaitingList", watingList);
             },
             //接受消息...
             receiveMessage(targetUser, element) {
@@ -883,6 +950,28 @@
                         vertical-align: top;
                         border-radius: 50%;
                     }
+                    &:hover{
+                        .deleteMessage{
+                            display:block;
+                        }
+                    }
+                    .deleteMessage{
+                        display: none;
+                        width:35px;
+                        padding:2px 2px;
+                        height:15px;
+                        position: absolute;
+                        right:-2px;
+                        top:35px;
+                        border-radius: 4px;
+                        text-align: center;
+                        line-height: 15px;
+                        font-size: 14px;
+                        background: #fff;
+                        color:#000000;
+                        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+                        cursor: pointer;
+                    }
                     .messageList-item-nameTop {
                         position: absolute;
                         top: -5px;
@@ -913,6 +1002,11 @@
                         margin: 0 12px;
                     }
                 }
+            }
+            .deleteMessage{
+                color:#ccc;
+                font-size: 14px;
+                text-align: center;
             }
         }
         &::-webkit-scrollbar {
@@ -970,7 +1064,8 @@
             line-height: 25px;
             padding-left: 15px;
             box-sizing: border-box;
-            border-top-left-radius: 20px;
+            border-radius: 4px  0  0 4px;
+            margin-bottom:10px;
         }
         .check-suggestion-content {
             background: #ffffff;

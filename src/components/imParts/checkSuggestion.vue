@@ -10,6 +10,7 @@
         <div class="messageList-item-nameTop">
           <p>{{ '【分诊医生】'+docName}}</p>
         </div>
+        <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
@@ -34,6 +35,7 @@
         <div class="messageList-item-nameTop">
           <p>{{ '【分诊医生】'+docName}}</p>
         </div>
+        <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
@@ -61,6 +63,11 @@ export default {
       return JSON.parse(this.message.custom).docName
         ? JSON.parse(this.message.custom).docName
         : this.$store.state.userName;
+    }
+  },
+  methods:{
+    deleteMsg(){
+        this.$store.commit("setDeleteMsgInfo",this.message);
     }
   },
   props: {
