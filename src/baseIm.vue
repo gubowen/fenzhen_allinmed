@@ -1066,6 +1066,11 @@
             box-sizing: border-box;
             border-radius: 4px  0  0 4px;
             margin-bottom:10px;
+         &.previewSuggestion{
+             margin-bottom:0;
+             border-radius: 25px 0 0 0 ;
+         }
+
         }
         .check-suggestion-content {
             background: #ffffff;

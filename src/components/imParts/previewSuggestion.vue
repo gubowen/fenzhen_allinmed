@@ -3,7 +3,7 @@
   <article class="messageList-item-content" style="cursor: pointer;" @click.stop="updateShow">
     <!--初诊建议-->
     <figcaption class="check-suggestion-message">
-      <header class="check-suggestion-message-title">初诊建议</header>
+      <header class="check-suggestion-message-title previewSuggestion">初诊建议</header>
       <section class="preview-suggestion-content" data-id="1503473276490">
         <figure class="preview-suggestion-img">
           <img src="../../assets/img00/index/dialog_report.png" alt=""></figure>
