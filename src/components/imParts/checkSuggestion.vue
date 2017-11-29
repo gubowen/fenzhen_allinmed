@@ -14,7 +14,7 @@
         <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
       </figure>
     </figure>
-    
+
     <figure class="messageList-item-content">
       <!--检查检验-->
       <figcaption class="check-suggestion-message">
@@ -60,7 +60,7 @@ export default {
   },
   computed: {
     docName() {
-      return JSON.parse(this.message.custom).docName
+      return this.message.custom && JSON.parse(this.message.custom).docName
         ? JSON.parse(this.message.custom).docName
         : this.$store.state.userName;
     }

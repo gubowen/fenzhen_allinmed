@@ -64,7 +64,7 @@ export default {
   mounted() {},
   computed: {
     docName() {
-      return JSON.parse(this.message.custom).docName
+      return this.message.custom && JSON.parse(this.message.custom).docName
         ? JSON.parse(this.message.custom).docName
         : this.$store.state.userName;
     }

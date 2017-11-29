@@ -40,7 +40,7 @@
 
 </template>
 <script type="text/ecmascript-6">
-  /**
+/**
    * @Desc：
    * @Usage:
    * @Notify：
@@ -57,7 +57,9 @@
     },
     computed:{
       docName(){
-        return JSON.parse(this.message.custom).docName?JSON.parse(this.message.custom).docName:this.$store.state.userName
+          return this.message.custom && JSON.parse(this.message.custom).docName
+              ? JSON.parse(this.message.custom).docName
+              : this.$store.state.userName;
       }
     },
     methods: {
