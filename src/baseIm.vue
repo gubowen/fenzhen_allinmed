@@ -36,7 +36,7 @@
                                        @loadCallback="loadCallback"></MedicalReport>
                         <!--视诊-->
                         <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
-                                     :message="items"></VideoTriage>
+                                     :message="items" @deleteMsg="deleteMsg(items)"></VideoTriage>
                         <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
@@ -45,7 +45,7 @@
                         <UpdateTips
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='triageSendTips')"
                                 :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
-                        ></UpdateTips>
+                                ></UpdateTips>
                         <!--检查检验上传提示-->
                         <UpdateTips
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
@@ -53,7 +53,8 @@
                         ></UpdateTips>
                         <!--消息撤回-->
                         <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
-                                您撤回了一条消息！
+                            <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
+                            <span v-show="ShowFlagDeleteTips(msg)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                     </article>
                 </transition-group>
@@ -530,6 +531,10 @@
             //撤回
             deleteMsg(item) {
                 let _this = this;
+                if(item.custom&& JSON.parse(item.custom).cId !== _this.$store.state.userId ){
+                        _this.$store.commit('showPopup',{'text':'您无权撤回此消息！'});
+                        return false;
+                }
                 return new Promise((resolve, reject) => {
                     console.log('正在撤回消息', item);
                     this.nim.deleteMsg({
@@ -562,6 +567,7 @@
                                 type: "deleteMsgTips",
                                 data: {
                                     from: "分诊医生",
+                                    doctorName:_this.$store.state.userName,
                                     deleteMsg: msg || {}
                                 }
                             }),
@@ -586,6 +592,21 @@
                         _this.$store.commit('showPopup',{'text':'您只能撤回'+_this.$store.state.deleteMsgTime+'分钟内的消息'});
                     }
                 });
+            },
+            //患者撤回
+            ShowFlagDeleteTips(items){
+                    let flag = false ;
+                if( items.content.data.deleteMsg.from !=='1_doctor00001'){
+                    flag = true ;
+                    let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+                    this.communicationList.forEach((element, index) => {
+                        if (element.idClient === idClient) {
+                            this.communicationList.removeByValue(element);
+                            return;
+                        }
+                    });
+                }
+                return flag;
             },
             //获取历史消息……
             getMessageList(from) {
