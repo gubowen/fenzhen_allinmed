@@ -1012,71 +1012,86 @@
                                 console.log("初步诊断保存成功");
                                 that.closeWindow();
                                 let diagnosisId = data.responseObject.responsePk;
-                                if (recommendCustomerList.length > 0) {
-                                    //推荐医生保存
-                                    ajax({
-                                        url: XHRList.saveRecommendDoc,
-                                        method: 'POST',
-                                        data: {
-                                            caseId: that.$store.state.caseId,
-                                            patientId: that.$store.state.patientId,
-                                            customerId: that.$store.state.userId,
-                                            recommendCustomerList: JSON.stringify(recommendCustomerList),
-                                            diagnosisId: diagnosisId,
-                                            type: 1
-                                        },
-                                        done(data){
-                                            console.log("推荐医生保存成功");
-                                        }
-                                    })
-                                }
-                                ;
-                                if (recoveryAdviceList.length > 0) {
-                                    //四大建议保存
-                                    ajax({
-                                        url: XHRList.savePreviewSuggest,
-                                        method: 'POST',
-                                        data: {
-                                            caseId: that.$store.state.caseId,
-                                            patientId: that.$store.state.patientId,
-                                            customerId: that.$store.state.userId,
-                                            recoveryAdviceList: JSON.stringify(recoveryAdviceList),
-                                            diagnosisId: diagnosisId,
-                                            type: 1
-                                        },
-                                        done(data){
-                                            console.log("四大建议保存成功");
-                                        }
-                                    })
-                                };
-                                //发送IM
-                                let  inquiryResult = that.$store.state.currentItem,
-                                    caseMajorName = that.checkData.majorName,
-                                    caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
-                                    caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
-                                inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
+                                new Promise((resolve, reject)=>{
+                                    if (recommendCustomerList.length > 0) {
+                                        //推荐医生保存
+                                        ajax({
+                                            url: XHRList.saveRecommendDoc,
+                                            method: 'POST',
+                                            data: {
+                                                caseId: that.$store.state.caseId,
+                                                patientId: that.$store.state.patientId,
+                                                customerId: that.$store.state.userId,
+                                                recommendCustomerList: JSON.stringify(recommendCustomerList),
+                                                diagnosisId: diagnosisId,
+                                                type: 1
+                                            },
+                                            done(data){
+                                                if(data.responseObject.responseStatus){
+                                                    console.log("推荐医生保存成功");
+                                                    resolve("保存成功")
+                                                }else{
+                                                    reject("保存失败")
+                                                }
+                                            }
+                                        })
+                                    };
+                                    if (recoveryAdviceList.length > 0) {
+                                        //四大建议保存
+                                        ajax({
+                                            url: XHRList.savePreviewSuggest,
+                                            method: 'POST',
+                                            data: {
+                                                caseId: that.$store.state.caseId,
+                                                patientId: that.$store.state.patientId,
+                                                customerId: that.$store.state.userId,
+                                                recoveryAdviceList: JSON.stringify(recoveryAdviceList),
+                                                diagnosisId: diagnosisId,
+                                                type: 1
+                                            },
+                                            done(data){
+                                                if(data.responseObject.responseStatus){
+                                                    console.log("四大建议保存成功");
+                                                    resolve("保存成功")
+                                                }else{
+                                                    reject("保存失败")
+                                                }
+                                            }
+                                        })
+                                    };
+                                }).then((res)=>{
+                                    console.log(res);
+                                    //发送IM
+                                    let  inquiryResult = that.$store.state.currentItem,
+                                        caseMajorName = that.checkData.majorName,
+                                        caseIllnessName = (that.checkData.illnessName=="暂不确定"?"":that.checkData.illnessName),
+                                        caseOperationName = (that.checkData.operationName=="暂不确定"?"":that.checkData.operationName);
+                                    inquiryResult.diagnosisContent = caseMajorName+' '+caseIllnessName+' '+caseOperationName;
 //                                inquiryResult.docNames = docNames.length>0?docNames.substring(0,docNames.length-1):docNames;
 //                                console.log(inquiryResult);
-                                store.commit('setCurrentItem',inquiryResult);
+                                    store.commit('setCurrentItem',inquiryResult);
 
 
 
-                                let nowTime = new Date(),
-                                    createTime = (nowTime.getFullYear() + '.' + (nowTime.getMonth() + 1 < 10 ? "0" + (nowTime.getMonth() + 1) : nowTime.getMonth() + 1) + '.' + (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate())).replace(/-/g, ".");
-                                that.closePreview();
-                                store.commit("previewSuggestionSender", {
-                                    flag: true,
-                                    data: {
-                                        "illnessName": that.checkData.illnessName ? that.checkData.illnessName : "暂不确定",
-                                        "customerId": that.$store.state.userId,
-                                        "caseId": that.$store.state.caseId,
-                                        "patientName": that.$store.state.patientName,
-                                        "createTime": createTime,
-                                        "diagnosisId": diagnosisId,
-                                        "docNames": docNames
-                                    }
-                                });
-                                console.log("发送IM成功");
+                                    let nowTime = new Date(),
+                                        createTime = (nowTime.getFullYear() + '.' + (nowTime.getMonth() + 1 < 10 ? "0" + (nowTime.getMonth() + 1) : nowTime.getMonth() + 1) + '.' + (nowTime.getDate() < 10 ? "0" + nowTime.getDate() : nowTime.getDate())).replace(/-/g, ".");
+                                    that.closePreview();
+                                    store.commit("previewSuggestionSender", {
+                                        flag: true,
+                                        data: {
+                                            "illnessName": that.checkData.illnessName ? that.checkData.illnessName : "暂不确定",
+                                            "customerId": that.$store.state.userId,
+                                            "caseId": that.$store.state.caseId,
+                                            "patientName": that.$store.state.patientName,
+                                            "createTime": createTime,
+                                            "diagnosisId": diagnosisId,
+                                            "docNames": docNames
+                                        }
+                                    });
+                                    console.log("发送IM成功");
+                                }).catch((err)=>{
+                                    console.log(err);
+                                })
                             }
                         }
                     })
