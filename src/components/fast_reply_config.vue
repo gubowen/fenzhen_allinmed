@@ -1,5 +1,5 @@
 <template>
-  <section class="main-masker jump-box-config-box fast-reply-config on">
+  <section class="main-masker jump-box-config-box fast-reply-config on" @click.stop="">
     <section class="jump-box-config">
       <i class="icon-close window-close" @click="$store.state.fastReplyConfig = false"></i>
       <header class="jump-box-config-title">
