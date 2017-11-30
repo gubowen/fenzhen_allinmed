@@ -54,7 +54,7 @@
                         <!--消息撤回-->
                         <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
-                            <span v-show="ShowFlagDeleteTips(msg)">{{items.content.data.from}}撤回了一条消息！</span>
+                            <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                     </article>
                 </transition-group>
@@ -595,14 +595,15 @@
             },
             //患者撤回
             ShowFlagDeleteTips(items){
-                    let flag = false ;
+                let flag = false ;
+               // console.log(JSON.parse(items.content).data);
                 if( items.content.data.deleteMsg.from !=='1_doctor00001'){
                     flag = true ;
-                    let idClient = JSON.parse(msg.content).data.deleteMsg.idClient;
+                    let idClient = items.content.data.deleteMsg.idClient;
                     this.communicationList.forEach((element, index) => {
                         if (element.idClient === idClient) {
                             this.communicationList.removeByValue(element);
-                            return;
+                            return flag;
                         }
                     });
                 }
