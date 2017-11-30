@@ -533,13 +533,14 @@
       cursor: pointer
     }
     .tip-close {
-      width: 16px;
-      height: 16px;
-      background: url(/image/img00/employee/picture_close.png) 50% 50% no-repeat;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.5) url(/static/img/img00/employee/picture_close.png) 50% 50% no-repeat;
       position: absolute;
-      top: 0;
-      right: -36px;
-      cursor: pointer
+      top: -14px;
+      right: -46px;
+      cursor: pointer;
     }
   }
 

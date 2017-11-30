@@ -1092,6 +1092,10 @@
              margin-bottom:0;
              border-radius: 25px 0 0 0 ;
          }
+         &.videoTriage{
+             margin-bottom:0;
+             border-radius: 25px 0 0 0 ;
+         }
 
         }
         .check-suggestion-content {

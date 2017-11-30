@@ -1,7 +1,7 @@
 <template>
     <article class="messageList-item-content">
         <figcaption class="check-suggestion-message">
-            <header class="check-suggestion-message-title">视诊</header>
+            <header class="check-suggestion-message-title videoTriage">视诊</header>
             <section class="check-suggestion-content">
                 <article class="check-suggestion-item">
                     <span>{{message.content.data.content}}</span>
