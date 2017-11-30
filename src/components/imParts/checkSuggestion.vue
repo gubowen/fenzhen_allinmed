@@ -67,7 +67,8 @@ export default {
   },
   methods:{
     deleteMsg(){
-        this.$store.commit("setDeleteMsgInfo",this.message);
+        this.$emit("deleteMsg");
+        //this.$store.commit("setDeleteMsgInfo",this.message);
     }
   },
   props: {

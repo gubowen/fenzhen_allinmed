@@ -81,7 +81,8 @@ export default {
       store.commit("setPreviewShow", true);
     },
     deleteMsg(){
-        this.$store.commit("setDeleteMsgInfo",this.message);
+        this.$emit("deleteMsg");
+        //this.$store.commit("setDeleteMsgInfo",this.message);
     }
   },
   props: {

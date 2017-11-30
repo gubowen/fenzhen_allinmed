@@ -75,7 +75,8 @@
          this.$store.commit("setResendMsgInfo",this.message);
         },
       deleteMsg(){
-          this.$store.commit("setDeleteMsgInfo",this.message);
+          this.$emit("deleteMsg");
+          //this.$store.commit("setDeleteMsgInfo",this.message);
       }
     },
     props: {

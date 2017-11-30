@@ -21,7 +21,7 @@
                            v-if="!(items.type==='custom'&&(items.custom&&(items.custom.mType==='33'||items.custom.mType==='22'||items.custom.mType==='24')))">
                             {{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
-                        <ContentElement v-if="items.type==='text'" :message="items"></ContentElement>
+                        <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"
                                       @loadCallback="loadCallback"></ImageElement>
@@ -29,7 +29,7 @@
 
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
-                                :message="items"></CheckSuggestion>
+                                :message="items" @deleteMsg="deleteMsg(items)"></CheckSuggestion>
                         <!--问诊单-->
                         <MedicalReport v-if="medicalReport(items)"
                                        :message="items" ref="medicalReport"
@@ -40,7 +40,7 @@
                         <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
-                                :message="items"></PreviewSuggestion>
+                                :message="items"  @deleteMsg="deleteMsg(items)"></PreviewSuggestion>
                         <!--视诊上传提示-->
                         <UpdateTips
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='triageSendTips')"
@@ -227,9 +227,9 @@
             "$store.state.resendMsgInfo"(obj) {
                 this.resendMsg(obj);
             },
-            "$store.state.deleteMsgInfo"(obj){
-                this.deleteMsg(obj);
-            }
+//            "$store.state.deleteMsgInfo"(obj){
+//                this.deleteMsg(obj);
+//            }
         },
         computed: {},
         mounted() {
