@@ -7,10 +7,10 @@
                     :n.sync="noData"
                     :targetData.sync="targetData"
                     :fastRelyStatus.sync="fastRelyStatusParent"
-                    :watingTriage.sync="watingTriage"
+                    :waitingTriage.sync="waitingTriage"
                     :userListStatus.sync="userListStatus"
                     :userOnlineActive.sync="userOnlineActive"
-                    :userWatingActive.sync="userWatingActive"
+                    :userWaitingActive.sync="userWaitingActive"
             ></communication>
             <aside class="center-inner-userlist">
                 <article class="search-result-tips" v-if="filterFinish">
@@ -54,9 +54,9 @@
                     <transition name="list-left" appear>
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
                             <transition-group name="list-left" tag="section">
-                                <article v-show="userListWating.length > 0" @click="transformData(items,index)"
-                                         :class="[{ active : userWatingActive == index }, 'userlist-mainList-item']"
-                                         v-for="(items,index) in userListWating"
+                                <article v-show="userListWaiting.length > 0" @click="transformData(items,index)"
+                                         :class="[{ active : userWaitingActive == index }, 'userlist-mainList-item']"
+                                         v-for="(items,index) in userListWaiting"
                                          :key="index"
                                 >
                                     <figure class="userlist-item-img">
@@ -80,7 +80,7 @@
                                     <span class="time"> {{items.createTime | timeFormat}}</span>
                                 </article>
                             </transition-group>
-                            <p class="userList-no-data" v-show="userListWating.length == 0">没有找到相应的患者</p>
+                            <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
                         </section>
                     </transition>
                     <transition name="list-right">
@@ -126,7 +126,7 @@
                     </button>
                 </footer>
             </aside>
-            <record :recodrdData="message" v-if="noData" :watingTriage.sync="watingTriage" :userListStatus.sync="userListStatus"></record>
+            <record :recodrdData="message" v-if="noData" :waitingTriage.sync="waitingTriage" :userListStatus.sync="userListStatus"></record>
         </div>
         <footer-list></footer-list>
         <check-history v-if="$store.state.checkHistoryFlag"></check-history>
@@ -187,7 +187,7 @@
     });
     const XHRList = {
         onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
-        watingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+        waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
     };
     export  default{
         name: 'userList',
@@ -195,8 +195,8 @@
             return {
                 userListData: "",
                 userListOnline: [],
-                userListWating: [],
-                userWatingActive: -1,
+                userListWaiting: [],
+                userWaitingActive: -1,
                 userOnlineActive: -1,
                 questionShow: '',
                 userName: "默认",
@@ -216,7 +216,7 @@
                     conType: 0
                 },
                 fastRelyStatusParent: false,  //快捷提问
-                watingTriage: false,
+                waitingTriage: false,
                 filterFinish: false,
                 newWaitingFlag: false,
                 newPatientFlag: false,
@@ -259,16 +259,17 @@
                 },
                 deep: true
             },
-            '$store.state.watingList': {
+            '$store.state.waitingList': {
                 handler: (list, oldValue) => {
-                    this.userListWating = list;
+                    this.userListWaiting = list;
+                    this.newWaitingFlag = true
                 },
                 deep: true
             },
-            '$store.state.watingListRefresh'(flag){
+            '$store.state.waitingListRefresh'(flag){
                 if (flag) {
-                    this.getUserList('wating', this.filterMethod);
-                    store.commit("watingListRefreshFlag", false);
+                    this.getUserList('waiting', this.filterMethod);
+                    store.commit("waitingListRefreshFlag", false);
                 } else {
                     return;
                 }
@@ -281,7 +282,7 @@
                     return;
                 }
             },
-            '$store.state.newWating'(flag){
+            '$store.state.newWaiting'(flag){
                 let _this = this;
                 this.newWaitingFlag = flag;
             },
@@ -338,14 +339,14 @@
                 store.commit("setFastReplyShow", false);
                 this.noData = true;
                 if (this.userListStatus.first) {
-                    this.watingTriage = true;
-                    this.userWatingActive = index;
+                    this.waitingTriage = true;
+                    this.userWaitingActive = index;
                     store.commit("setInputReadOnly", true);
 
-                    let waitingList = this.$store.state.watingList;
+                    let waitingList = this.$store.state.waitingList;
                     items.messageAlert = '';
                     waitingList[index] = items;
-                    this.$store.commit("setWatingList", waitingList);
+                    this.$store.commit("setWaitingList", waitingList);
 
                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                     if (waitingAlertList) {
@@ -357,7 +358,7 @@
                     }
 
                 } else {
-                    this.watingTriage = false;
+                    this.waitingTriage = false;
                     this.userOnlineActive = index;
                     store.commit("setInputReadOnly", false);
 
@@ -420,6 +421,7 @@
             //患者列表
             //type:online为沟通中，wating待分诊
             getUserList(type, param, fn){
+                console.log("111");
                 let _this = this;
                 _this.userListData = '';
                 _this.userListLoading = [];
@@ -453,7 +455,7 @@
 //        }
 //        store.commit("startLoading");
                 api.ajax({
-                    url: type === "online" ? XHRList.onlineUserList : XHRList.watingUserList,
+                    url: type === "online" ? XHRList.onlineUserList : XHRList.waitingUserList,
                     method: "POST",
                     data: dataValue,
                     done(res) {
@@ -465,7 +467,6 @@
                             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
                             if (type === "online") {
-
                                 if (patientAlertList && patientAlertList !== '{}') {
                                     for (let key in patientAlertList) {
                                         let flag = true;
@@ -506,14 +507,13 @@
                                                 }
                                             });
                                             if (flag) {
-
                                                 delete waitingAlertList[key];
                                             }
                                         }
                                         localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
                                     }
                                     _this.$store.commit("setWaitingList", dataList);
-                                    _this.userListWating = dataList ? dataList : [];
+                                    _this.userListWaiting = dataList ? dataList : [];
                                 }
                             }
                                 fn && fn();
@@ -542,13 +542,13 @@
                     selectName: content
                 });
                 store.commit("startLoading");
-                this.getUserList("wating", this.filterMethod);
+                this.getUserList("waiting", this.filterMethod);
                 this.getUserList("online", this.filterMethod);
                 store.commit("stopLoading");
 //                this.filterFinish = true;
             },
             refreshList() {
-                this.getUserList("wating", this.filterMethod);
+                this.getUserList("waiting", this.filterMethod);
                 this.getUserList("online", this.filterMethod);
             },
             //选择退回患者
@@ -567,14 +567,14 @@
                     consultationId: item.consultationId,
                     customerId: this.$store.state.userId
                 }, () => {
-                    this.getUserList('wating');
+                    this.getUserList('waiting');
                     store.commit("stopLoading");
                     store.commit("showPopup", {
                         hasImg: false,
                         text: "该患者已被其他分诊医生接诊！"
                     });
                 }, (c) => {
-                    this.getUserList('wating');
+                    this.getUserList('waiting');
                     store.commit("stopLoading");
                     store.commit("showPopup", {
                         hasImg: false,
@@ -583,7 +583,7 @@
                 }).then((res) => {
                     //患者未被抢单
 
-                    this.getUserList('wating');
+                    this.getUserList('waiting');
                     this.userListStatus.status = 2;
                     this.getUserList('online', {}, () => {
 
@@ -596,7 +596,7 @@
 
 
                         this.userListStatus.status = 2;
-                        this.watingTriage = false;
+                        this.waitingTriage = false;
                         this.userOnlineActive = 0;
                         store.commit("setInputReadOnly", false);
                         store.commit("stopLoading");
@@ -638,27 +638,27 @@
                 _this.sortFlag = false;
                 switch (index) {
                     case 0:
-                        _this.getUserList('wating', {'sortType': -6});
+                        _this.getUserList('waiting', {'sortType': -6});
                         _this.getUserList('online', {'sortType': -6});
                         break;
                     case 1:
-                        _this.getUserList('wating', {'sortType': 5});
+                        _this.getUserList('waiting', {'sortType': 5});
                         _this.getUserList('online', {'sortType': 5});
                         break;
                     case 2:
-                        _this.getUserList('wating', {'sortType': 4});
+                        _this.getUserList('waiting', {'sortType': 4});
                         _this.getUserList('online', {'sortType': 4});
                         break;
                     case 3:
-                        _this.getUserList('wating', {'sortType': -5});
+                        _this.getUserList('waiting', {'sortType': -5});
                         _this.getUserList('online', {'sortType': -5});
                         break;
                     case 4:
-                        _this.getUserList('wating', {'sortType': -5});
+                        _this.getUserList('waiting', {'sortType': -5});
                         _this.getUserList('online', {'sortType': -5});
                         break;
                     default:
-                        _this.getUserList('wating', {'sortType': 6});
+                        _this.getUserList('waiting', {'sortType': 6});
                         _this.getUserList('online', {'sortType': 6});
                 }
             }

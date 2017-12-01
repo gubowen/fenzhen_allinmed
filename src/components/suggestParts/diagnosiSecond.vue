@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section @click = 'closeSelect()'>
         <section class="config-suggestion-box" v-if="maskerShow" v-show="!$store.state.previewShow">
             <i class="icon-close window-close" @click="closeWindow"></i>
             <header class="config-suggestion-title">
@@ -42,14 +42,14 @@
                             </a>
                             <div class="doc-search-box">
                                 <input type="text" placeholder="医院、医生、医生擅长" class="doc-search" maxlength="20" v-model="docSearchValue" :class="{on:docSearchValue.trim().length>0}">
-                                <dignosi-address :dataListInfo.sync="addressResult" :dataBack.sync="addressResult"></dignosi-address><select class="doc-type" v-model="doctorType">
-                                    <option value="">类型不限</option>
-                                    <option value="1">权威医生</option>
-                                    <option value="0">轻问诊医生</option>
-                                </select><select class="doc-type" v-model="onlineState">
-                                    <option value="">状态不限</option>
-                                    <option value="1">在线</option>
-                                </select>
+                                <dignosi-address   :provinceFlag.sync="provinceFlag" :dataListInfo.sync="addressResult" :dataBack.sync="addressResult"></dignosi-address><select class="doc-type" v-model="doctorType">
+                                <option value="">类型不限</option>
+                                <option value="1">权威医生</option>
+                                <option value="0">轻问诊医生</option>
+                            </select><select class="doc-type" v-model="onlineState">
+                                <option value="">状态不限</option>
+                                <option value="1">在线</option>
+                            </select>
                                 <button class="doc-search-btn on"  :class="{on:docSearchValue.trim().length>0}" @click="getAllDocCustomer({type:'search',num:0,value:1})">搜索</button>
                             </div>
                         </section>
@@ -119,7 +119,7 @@
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
-                                                    擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':allCurrentIndex == index}"></span>
+                                                擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':allCurrentIndex == index}"></span>
                                             </article>
                                             <a href="javascript:;" class="viewMoreBox" @click.stop="allCurrent(index,$event)" v-if="(docList.illnessNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length + docList.operationNameList.replace(/[^\u4e00-\u9fa5]/gi,'').length)>30">{{allCurrentIndex == index?'收起':'展开'}}</a>
                                             <article class="doctor-message-num">
@@ -340,17 +340,17 @@
     import dignosiAddress  from '@/common/dignosiAddress'
 
     const XHRList = {
-      getTagData: "/call/comm/data/tag/v1/getMapList/",//专业列表
-      filterSearchDocMessage:"/call/customer/auth/v1/getMatchCustomerList/",//筛选搜索推荐医生
-      getTeachingKnowledge:"/call/comm/data/knowledge/v1/getMapList/",//患教知识
-      getDisposeSuggest:"/call/comm/data/treatment/v1/getMapList/",//处置建议
-      getExamineSuggest:"/call/comm/data/check/v1/getMapList/",//检查建议
-      getTestSuggest:"/call/comm/data/inspection/v1/getMapList/",//检验建议
+        getTagData: "/call/comm/data/tag/v1/getMapList/",//专业列表
+        filterSearchDocMessage:"/call/customer/auth/v1/getMatchCustomerList/",//筛选搜索推荐医生
+        getTeachingKnowledge:"/call/comm/data/knowledge/v1/getMapList/",//患教知识
+        getDisposeSuggest:"/call/comm/data/treatment/v1/getMapList/",//处置建议
+        getExamineSuggest:"/call/comm/data/check/v1/getMapList/",//检查建议
+        getTestSuggest:"/call/comm/data/inspection/v1/getMapList/",//检验建议
 
 
-      saveData: "/call/patient/case/diagnosis/v1/create/",//保存初步诊断
-      savePreviewSuggest:"/call/patient/recovery/advice/v1/create/",//保存初诊建议
-      saveRecommendDoc:"/call/patient/recommend/v1/create/",//保存初诊医生
+        saveData: "/call/patient/case/diagnosis/v1/create/",//保存初步诊断
+        savePreviewSuggest:"/call/patient/recovery/advice/v1/create/",//保存初诊建议
+        saveRecommendDoc:"/call/patient/recommend/v1/create/",//保存初诊医生
     };
     export default{
         data(){
@@ -417,7 +417,7 @@
                 doctorType:'',
                 onlineState:1,
                 matchCurrentIndex:-1,
-                allCurrentIndex:-1
+                provinceFlag:false
             }
         },
         mounted(){
@@ -553,10 +553,10 @@
                     degreeType: that.checkData.degreeType,
 
                 };
-               // if(obj.type=='search'){
-                    if (this.addressResult.provinceId){
-                        data.searchRegion = this.addressResult.provinceId ;
-                    }
+                // if(obj.type=='search'){
+                if (this.addressResult.provinceId){
+                    data.searchRegion = this.addressResult.provinceId ;
+                }
 //                    if(this.addressResult.districtId){
 //                        data.searchRegion = this.addressResult.districtId ;
 //                    }
@@ -565,14 +565,14 @@
 //                    }else if(this.addressResult.cityId){
 //                        data.searchRegion = this.addressResult.cityId ;
 //                    }
-                    if(that.doctorType){
-                        data.searchDoctorType = that.doctorType;
-                    }
-                    if(that.onlineState){
-                        data.searchOnlineState = that.onlineState;
-                    }
+                if(that.doctorType){
+                    data.searchDoctorType = that.doctorType;
+                }
+                if(that.onlineState){
+                    data.searchOnlineState = that.onlineState;
+                }
 
-             //   }
+                //   }
                 //全部医生首页
                 ajax({
                     url: XHRList.filterSearchDocMessage,
@@ -691,7 +691,7 @@
                         }
                     }
                 }
-                console.log(that.allDoc.pageArr)
+                //  console.log(that.allDoc.pageArr)
             },
             //推荐医生---复选、全选、筛选、分页
             setCheckedState(arr){
@@ -1099,6 +1099,9 @@
                 }
 
 
+            },
+            closeSelect(ev){
+                this.provinceFlags = false;
             }
         },
         computed: {},

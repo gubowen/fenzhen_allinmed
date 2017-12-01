@@ -22,10 +22,10 @@
             <h2>初步诊断：</h2>
           </section>
           <nav class="search-sortType">
-            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :iconFlag="showIconFlag"    :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :iconFlag="showIconFlag" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :iconFlag="showIconFlag" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
-            <down-select  v-if='operationShowFlag' :dataListInfo.sync="operationList" :iconFlag="showIconFlag" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="partList" :dataBack.sync="partListResult" :iconFlag.sync="showIconFlag"    :conIndex="1" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="sickness" :dataBack.sync="sicknessResult" :iconFlag.sync="showIconFlag" :conIndex="2" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select :dataListInfo.sync="progressList" :dataBack.sync="progressResult" :iconFlag.sync="showIconFlag" :conIndex="3" :currentIndexNow.sync="currentSelectorIndex"></down-select>
+            <down-select  v-if='operationShowFlag' :dataListInfo.sync="operationList" :iconFlag.sync="showIconFlag" :dataBack.sync="operationListResult" :conIndex="4" :currentIndexNow.sync="currentSelectorIndex"></down-select>
             <section class="search-sortType-item" v-if="!operationShowFlag">
               <ul class="search-selector" >
                 <input class="custom-selector-title firstListTitle" placeholder="手术建议" readonly>
@@ -231,7 +231,7 @@
       },
       operationData(){
         let _this = this;
-          console.log(_this.partListResult);
+         // console.log(_this.partListResult);
           let dataValue = {
           isValid: 1,	                  //string	是		1
           firstResult: 0,	              //string	是	分页参数

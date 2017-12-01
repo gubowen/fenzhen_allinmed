@@ -1,6 +1,6 @@
 <template id="record">
     <aside class="medical-record" v-if="showFlag">
-        <!--<button class="btn-primary user-controller-get-triage" v-if="watingTriage" @click="getPatient">接诊</button>-->
+        <!--<button class="btn-primary user-controller-get-triage" v-if="waitingTriage" @click="getPatient">接诊</button>-->
         <header class="medical-record-title-text" v-show="!$store.state.inputReadOnly">
             <h2>病历编辑</h2>
         </header>
@@ -69,7 +69,7 @@
             recordData: {
                 type: Object
             },
-            watingTriage: {
+            waitingTriage: {
                 type: Boolean
             },
             userListStatus: {
@@ -106,7 +106,7 @@
 //患者接诊
             getPatient(){
                 let currentItem = this.$store.state.currentItem;
-                let watingList = this.$store.state.watingList;
+                let waitingList = this.$store.state.waitingList;
                 let patientList = this.$store.state.patientList;
                 triagePatient({
                     consultationId: this.$store.state.consultationId,
@@ -142,11 +142,11 @@
 
                     this.$emit("update:watingTriage", false);
 
-                    watingList.removeByValue(currentItem);
+                    waitingList.removeByValue(currentItem);
                     patientList.unshift(currentItem);
 
                     store.commit("setPatientList", patientList);
-                    store.commit("setWatingList", watingList);
+                    store.commit("setWatingList", waitingList);
                     store.commit("setInputReadOnly", false);
                     this.$emit("update:userListStatus", {
                         first: false,

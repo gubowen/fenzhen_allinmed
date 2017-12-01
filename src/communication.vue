@@ -46,7 +46,7 @@
                     <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
                               @keydown="sendMessage($event)" :readonly="$store.state.inputReadOnly" @input="$store.state.usedReplyContent=controllerInput"></textarea>
                 </article>
-                <footer class="user-controller-footer" v-if="!watingTriage">
+                <footer class="user-controller-footer" v-if="!waitingTriage">
                     <span class="user-send-message">按下Enter发送</span>
                     <button class="btn-primary user-controller-send-btn" @click="sendMessage">
                         <span>发送</span>
@@ -147,13 +147,13 @@
                 type: Boolean
             },
 
-            watingTriage: {
+            waitingTriage: {
                 type: Boolean
             },
             userListStatus: {
                 type: Object
             },
-            userWatingActive: {
+            userWaitingActive: {
                 type: Number
             },
             userOnlineActive: {
@@ -240,7 +240,7 @@
             //患者转移至其他分诊医生：
             reTriageComfirm(){
                 let consultationId = [];
-                let watingList = this.$store.state.watingList;
+                let waitingList = this.$store.state.waitingList;
                 let patientList = this.$store.state.patientList;
                 store.commit("startLoading");
                 releasePatient({
@@ -250,8 +250,8 @@
 
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
-                    store.commit("watingListRefreshFlag", true);
-                    store.commit("setWatingList", watingList);
+                    store.commit("waitingListRefreshFlag", true);
+                    store.commit("setWaitingList", waitingList);
 
                     this.reTriageShow = false;
 
@@ -288,20 +288,20 @@
             //患者接诊
             getPatient(){
                 let currentItem = this.$store.state.currentItem;
-                let watingList = this.$store.state.watingList;
+                let waitingList = this.$store.state.waitingList;
                 let patientList = this.$store.state.patientList;
                 triagePatient({
                     consultationId: this.$store.state.consultationId,
                     customerId: this.$store.state.userId
                 }).then((res) => {
 
-                    this.$emit("update:watingTriage", false);
+                    this.$emit("update:waitingTriage", false);
 
-                    watingList.removeByValue(currentItem);
+                    waitingList.removeByValue(currentItem);
                     patientList.unshift(currentItem);
 
                     store.commit("setPatientList", patientList);
-                    store.commit("setWatingList", watingList);
+                    store.commit("setWaitingList", waitingList);
                     store.commit("setInputReadOnly", false);
                     this.$emit("update:userListStatus", {
                         first: false,

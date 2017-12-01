@@ -10,21 +10,21 @@
     <nav class="userlist-sortType address-selector">
         <section class="userlist-sortType-item">
             <section class="custom-selector">
-                <h3 class="custom-selector-title firstListTitle" @click="showData()">{{showAddress}}</h3>
-                <i class="icon-downArrow" @click="showData()"></i>
+                <h3 class="custom-selector-title firstListTitle" @click.stop="showData()">{{showAddress}}</h3>
+                <i class="icon-downArrow" @click.stop="showData()"></i>
                 <section class="custom-selector-second-box">
                     <ul class="custom-selector-second firstList" v-show="provinceFlag">
-                        <li class="custom-selector-item secondListTitle" @click="selectProvince()"><span>请选择</span></li>
-                        <li class="custom-selector-item secondListTitle" v-for="item in provinceList" @click="selectProvince(item)">
+                        <li class="custom-selector-item secondListTitle" @click.stop="selectProvince()"><span>请选择</span></li>
+                        <li class="custom-selector-item secondListTitle" v-for="item in provinceList" @click.stop="selectProvince(item)">
                             <span>{{item.regionName}}</span>
                         </li>
                     </ul>
-                    <div class="custom-selector-second secondList custom-selector-second-list " v-show="cityFlag">
+                    <div class="custom-selector-second secondList custom-selector-second-list " v-show="cityFlag&&conIndex===currentIndexNow">
                         <ul v-for="(item,key) in cityList" v-show="dataBack.provinceId == key">
-                            <li class="custom-selector-item result-item" @click="selectCity()">
+                            <li class="custom-selector-item result-item" @click.stop="selectCity()">
                                 <span>不限</span>
                             </li>
-                            <li class="custom-selector-item thirdListTitle" v-for=" children in  item" @click="selectCity(children)">
+                            <li class="custom-selector-item thirdListTitle" v-for=" children in  item" @click.stop="selectCity(children)">
                                 <span>{{children.regionName}}</span>
                             </li>
                         </ul>
@@ -52,7 +52,10 @@
             return {
                 addressSearch: "/call/comm/data/baseinfo/v1/getRegionList/",
                 provinceList: [],
-                provinceFlag: false,
+//                provinceFlag: false,
+//                provinceFlag:{
+//                    type:Boolean
+//                },
                 cityList: {},
                 cityFlag: false,
                 districtList: {},
@@ -70,11 +73,15 @@
         },
         props: {
             dataListInfo: {
-                type: Object,
+                type: Object
+            },
+            provinceFlag:{
+                type:Boolean
             }
         },
         methods: {
             init(){
+                console.log(this.provinceFlag);
                 if (this.dataListInfo.provinceName == '') {
 
                 } else {
@@ -205,6 +212,7 @@
             },
             showData(){
                 this.provinceFlag = !this.provinceFlag;
+                this.$emit("update:provinceFlag", true);
                 this.cityFlag = false;
                 this.districtFlag = false;
             },
@@ -214,11 +222,13 @@
                     this.dataBack.provinceId = item.regionId;
                     this.dataBack.provinceName = item.regionName;
                     this.provinceFlag =false;
+//                    this.$emit("update:provinceFlag", this.provinceFlag);
                     this.cityFlag = false;
                     this.districtFlag = false;
                     this.$emit('update:dataBack', this.dataBack);
                 }else{
                     this.provinceFlag =false;
+//                    this.$emit("update:provinceFlag", this.provinceFlag);
                     this.cityFlag = false;
                     this.districtFlag = false;
                     this.dataBack.provinceId='';
@@ -241,6 +251,7 @@
                 } else {
                     this.showAddress = this.dataBack.provinceName + '-' + '未知';
                     this.provinceFlag = false;
+//                    this.$emit("update:provinceFlag", this.provinceFlag);
                     this.cityFlag = false;
                     this.districtFlag = false;
                     this.$emit('update:dataBack', this.dataBack);
@@ -257,6 +268,7 @@
                     this.showAddress = this.showAddress + '-' + '未知';
                 }
                 this.provinceFlag = false;
+//                this.$emit("update:provinceFlag", this.provinceFlag);
                 this.cityFlag = false;
                 this.districtFlag = false;
                 this.$emit('update:dataBack', this.dataBack);

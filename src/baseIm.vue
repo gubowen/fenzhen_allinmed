@@ -285,13 +285,10 @@
                                         waitingAlertList = {};
                                     }
                                     waitingAlertList[msg.from] = 1;
-                                    localStorage.setItem(
-                                        "waitingAlertList",
-                                        JSON.stringify(waitingAlertList)
-                                    );
+                                    localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
 
-                                    store.commit("watingListRefreshFlag", true);
-                                    store.commit("setNewWating", true);
+                                    store.commit("waitingListRefreshFlag", true);
+                                    store.commit("setNewWaiting", true);
                                     store.commit("setMusicPlay", true);
 
                                 }
@@ -644,10 +641,7 @@
                         patientList.removeByValue(item);
                         patientList.unshift(item);
 
-                        localStorage.setItem(
-                            "patientAlertList",
-                            JSON.stringify(patientAlertList)
-                        );
+                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                         _this.$store.commit("setNewOnline", true);
                         _this.$store.commit("setMusicPlay", true);
                         setTimeout(function () {
@@ -658,8 +652,8 @@
                 this.$store.commit("setPatientList", patientList);
 
                 //等待列表
-                let watingList = this.$store.state.watingList;
-                watingList.forEach(function (item, index) {
+                let waitingList = this.$store.state.waitingList;
+                waitingList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
                         if (item.messageAlert == "") {
                             item.messageAlert = "1";
@@ -667,24 +661,21 @@
                             item.messageAlert = parseInt(item.messageAlert) + 1;
                         }
                         let caseIdInfo = "0_" + item.caseId;
+                        debugger;
                         let waitingAlertList = {};
                         waitingAlertList[caseIdInfo] = item.messageAlert;
+                        waitingList.removeByValue(item);
+                        waitingList.unshift(item);
 
-                        watingList.removeByValue(item);
-                        watingList.unshift(item);
-
-                        localStorage.setItem(
-                            "waitingAlertList",
-                            JSON.stringify(waitingAlertList)
-                        );
-                        _this.$store.commit("setNewWating", true);
+                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+                        _this.$store.commit("setNewWaiting", true);
                         _this.$store.commit("setMusicPlay", true);
                         setTimeout(function () {
                             _this.$store.commit("setMusicPlay", false);
                         }, 2000);
                     }
                 });
-                this.$store.commit("setWaitingList", watingList);
+                this.$store.commit("setWaitingList", waitingList);
             },
             //接受消息...
             receiveMessage(targetUser, element) {
@@ -705,6 +696,7 @@
                     }, 120);
                 } else {
                     //接诊列表
+
                     this.newMessageTips(targetUser, element);
                 }
             },

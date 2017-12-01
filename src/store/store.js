@@ -17,8 +17,8 @@ export default new Vuex.Store({
         mobile: '',
         patientList: '',  //患者列表
         patientActiveIndex:-1,
-        watingList: "",   //待分诊列表
-        watingListRefresh: false,
+        waitingList: "",   //待分诊列表
+        waitingListRefresh: false,
         caseId: '',       //病例Id
         patientId: '',    //患者Id
         patientName: '',  //患者姓名
@@ -32,7 +32,7 @@ export default new Vuex.Store({
             first: true,
             second: false
         },
-        newWating: false,
+        newWaiting: false,
         newOnline: false,
         EasyWayTempCache: '',
         userLoginName: '',
@@ -150,7 +150,7 @@ export default new Vuex.Store({
             state.patientName = data;
         },
         setWaitingList(state, data){
-            state.watingList = data;
+            state.waitingList = data;
         },
         setCaseId(state, data){
             state.caseId = data;
@@ -206,14 +206,14 @@ export default new Vuex.Store({
         setPreviewType(state, data){
             state.previewType = data;
         },
-        watingListRefreshFlag(state, data){
-            state.watingListRefresh = data;
+        waitingListRefreshFlag(state, data){
+            state.waitingListRefresh = data;
         },
         onlineListRefresh(state, data){
             state.onlineListRefresh = data;
         },
-        setNewWating(state, flag){
-            state.newWating = flag;
+        setNewWaiting(state, flag){
+            state.newWaiting = flag;
         },
         setNewOnline(state, flag){
             state.newOnline = flag;

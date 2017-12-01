@@ -71,8 +71,8 @@
                 default:-1
             },
             iconFlag:{
-                type:Boolean,
-                default:false
+                type:Boolean||String
+//                default:false
             }
 
         },
