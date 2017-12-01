@@ -715,7 +715,7 @@ export default {
       let patientList = this.$store.state.patientList;
       patientList.forEach(function(item, index) {
         if ("0_" + item.caseId == element.from) {
-          if (item.messageAlert == "") {
+          if (typeof (item.messageAlert) =='undefined'|| item.messageAlert == "") {
             item.messageAlert = "1";
           } else {
             item.messageAlert = parseInt(item.messageAlert) + 1;
@@ -744,7 +744,7 @@ export default {
       let waitingList = this.$store.state.waitingList;
       waitingList.forEach(function(item, index) {
         if ("0_" + item.caseId == element.from) {
-          if (item.messageAlert == "") {
+          if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
             item.messageAlert = "1";
           } else {
             item.messageAlert = parseInt(item.messageAlert) + 1;

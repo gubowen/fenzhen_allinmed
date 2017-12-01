@@ -470,7 +470,9 @@
                                     for (let key in patientAlertList) {
                                         let flag = true;
                                         dataList.forEach(function (item, index) {
-                                            item.messageAlert = '';
+                                            if(typeof (item.messageAlert) == 'undefined'){
+                                                item.messageAlert = '';
+                                            }
                                             if (key == ("0_" + item.caseId)) {
                                                 item.messageAlert = patientAlertList[key];
                                                 _this.newPatientFlag = true;
@@ -493,7 +495,9 @@
                                         for (let key in waitingAlertList) {
                                             let flag = true;
                                             dataList.forEach(function (item, index) {
-                                                item.messageAlert = '';
+                                                if(typeof (item.messageAlert) == 'undefined'){
+                                                    item.messageAlert = '';
+                                                }
                                                 if (key == ("0_" + item.caseId)) {
                                                     item.messageAlert = waitingAlertList[key];
                                                     _this.newWaitingFlag = true;
