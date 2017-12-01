@@ -12,7 +12,7 @@
                 </figure>
                 <figcaption class="setting-form-item-input">
                   <input type="text" name="name" v-show="false">
-                  <input type="text" class="setting-form-input-item" placeholder="姓名" autocomplete="off" data-validate-info="isNoEmpty" name="name" v-model="userName" maxlength="10" @blur="nameCheck(errors)" @focus="userNameErrorMessage=''"  v-validate="'required|nameSpace'">
+                  <input type="text" class="setting-form-input-item" placeholder="姓名" autocomplete="off" data-validate-info="isNoEmpty" name="name" v-model="userName" maxlength="10" @blur="nameCheck(errors)" @focus="userNameErrorMessage=''"  v-validate="'required|nameSpace|special'">
                 </figcaption>
                 <p class="error-text icon-errorTips" v-show="userNameErrorMessage.length>0"><span>{{userNameErrorMessage}}</span></p>
               </section>
@@ -195,14 +195,17 @@
         if( this.oldMobile != this.mobile){
             data.mobile = this.mobile;              //	string	是	手机号
         }
+        debugger;
         axios({
           method: 'post',
           url: '/call/tocure/web/user/updateUniteInfo/',
           data: data,
           transformRequest: [function (data) {
-            data = "paramJson=" + JSON.stringify(data);
-            return data;
-          }]
+            return "paramJson=" + JSON.stringify(data);
+          }],
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
         }).then(function (res) {
           if (res.data != null && res.data.responseObject.responseStatus) {
             if (res.data.responseObject.responseCode == '0B0001') {
