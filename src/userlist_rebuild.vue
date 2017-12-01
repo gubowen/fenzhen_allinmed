@@ -262,7 +262,6 @@
             '$store.state.waitingList': {
                 handler: (list, oldValue) => {
                     this.userListWaiting = list;
-                    this.newWaitingFlag = true
                 },
                 deep: true
             },
@@ -284,6 +283,13 @@
             },
             '$store.state.newWaiting'(flag){
                 let _this = this;
+                _this.$store.commit('setMusicPlay', true);
+                console.log("music2");
+                setTimeout(function () {
+                    console.log("music");
+                    _this.$store.commit('setMusicPlay', false);
+
+                }, 2000);
                 this.newWaitingFlag = flag;
             },
             '$store.state.newOnline'(flag){
@@ -354,7 +360,8 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaitingFlag = false;
+//                        this.newWaitingFlag = false;
+                        this.$store.commit("setNewWaiting", false);
                     }
 
                 } else {
@@ -379,7 +386,8 @@
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                     }
                     if (localStorage.getItem("patientAlertList") == "{}") {
-                        this.newPatientFlag = false;
+                        //this.newPatientFlag = false;
+                        this.$store.commit("setNewOnline", false);
                     }
                 }
                 this.message = items;
@@ -421,7 +429,6 @@
             //患者列表
             //type:online为沟通中，wating待分诊
             getUserList(type, param, fn){
-                console.log("111");
                 let _this = this;
                 _this.userListData = '';
                 _this.userListLoading = [];
@@ -471,11 +478,10 @@
                                     for (let key in patientAlertList) {
                                         let flag = true;
                                         dataList.forEach(function (item, index) {
+                                            item.messageAlert = '';
                                             if (key == ("0_" + item.caseId)) {
                                                 item.messageAlert = patientAlertList[key];
                                                 _this.newPatientFlag = true;
-
-
                                                 _this.$store.commit('setMusicPlay', true);
                                                 setTimeout(function () {
                                                     _this.$store.commit('setMusicPlay', false);

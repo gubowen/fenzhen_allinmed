@@ -268,11 +268,8 @@
                         },
                         onmsg(msg) {
                             //自定义消息
-                            console.log(msg);
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
-                                that.$store.state.currentItem.createTime = that.transformMessageTime(
-                                    msg.time
-                                );
+                                that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
                             if (msg.type.toLowerCase() === "custom") {
                                 //判断是否为新用户
@@ -628,8 +625,10 @@
                 const _this = this;
                 let patientList = this.$store.state.patientList;
                 patientList.forEach(function (item, index) {
+
                     if ("0_" + item.caseId == element.from) {
-                        if (item.messageAlert == "") {
+                        debugger;
+                        if (typeof (item.messageAlert) =='undefined' || item.messageAlert == "") {
                             item.messageAlert = "1";
                         } else {
                             item.messageAlert = parseInt(item.messageAlert) + 1;
@@ -655,13 +654,12 @@
                 let waitingList = this.$store.state.waitingList;
                 waitingList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-                        if (item.messageAlert == "") {
+                        if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
                             item.messageAlert = "1";
                         } else {
                             item.messageAlert = parseInt(item.messageAlert) + 1;
                         }
                         let caseIdInfo = "0_" + item.caseId;
-                        debugger;
                         let waitingAlertList = {};
                         waitingAlertList[caseIdInfo] = item.messageAlert;
                         waitingList.removeByValue(item);
