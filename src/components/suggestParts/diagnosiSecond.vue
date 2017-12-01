@@ -1116,7 +1116,7 @@
 
             },
             closeSelect(ev){
-                this.provinceFlags = false;
+                this.provinceFlag = false;
             }
         },
         computed: {},
