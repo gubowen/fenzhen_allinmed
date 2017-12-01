@@ -1026,7 +1026,7 @@
     }
 
     .userList-inner-content {
-        overflow: auto;
+        overflow: hidden;
         height: 100%;
     }
 
