@@ -94,7 +94,15 @@ export default new Vuex.Store({
         beingSend:true,
         resendMsgInfo:{},
         deleteMsgInfo:{},
-        deleteMsgTime:'2'   //消息撤回时间
+        deleteMsgTime:'2',   //消息撤回时间
+        triagePatientCaseIdFlag:{
+            caseId:"",
+            flag:false
+        },
+        releasePatientCaseIdFlag:{
+            caseId:"",
+            flag:false
+        }
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -257,6 +265,12 @@ export default new Vuex.Store({
         },
         setDeleteMsgInfo(state,data){
             state.deleteMsgInfo = data;
+        },
+        setTriagePatientCaseIdFlag(state,param){
+            state.triagePatientCaseIdFlag=param;
+        },
+        setReleasePatientCaseIdFlag(state,param){
+            state.releasePatientCaseIdFlag=param;
         }
     }
 });

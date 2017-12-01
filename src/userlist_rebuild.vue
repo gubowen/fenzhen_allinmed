@@ -262,6 +262,7 @@
             '$store.state.waitingList': {
                 handler: (list, oldValue) => {
                     this.userListWaiting = list;
+                    this.newWaitingFlag = true
                 },
                 deep: true
             },
@@ -283,13 +284,6 @@
             },
             '$store.state.newWaiting'(flag){
                 let _this = this;
-                _this.$store.commit('setMusicPlay', true);
-                console.log("music2");
-                setTimeout(function () {
-                    console.log("music");
-                    _this.$store.commit('setMusicPlay', false);
-
-                }, 2000);
                 this.newWaitingFlag = flag;
             },
             '$store.state.newOnline'(flag){
@@ -360,8 +354,7 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-//                        this.newWaitingFlag = false;
-                        this.$store.commit("setNewWaiting", false);
+                        this.newWaitingFlag = false;
                     }
 
                 } else {
@@ -386,8 +379,7 @@
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                     }
                     if (localStorage.getItem("patientAlertList") == "{}") {
-                        //this.newPatientFlag = false;
-                        this.$store.commit("setNewOnline", false);
+                        this.newPatientFlag = false;
                     }
                 }
                 this.message = items;
@@ -620,7 +612,10 @@
                     if (localStorage.getItem("waitingAlertList") == "{}") {
                         this.newWaitingFlag = false;
                     }
-
+                    store.commit("setTriagePatientCaseIdFlag",{
+                        caseId:item.caseId,
+                        flag:true
+                    })
                 }).catch((res) => {
                     console.log("网络异常...")
                 });

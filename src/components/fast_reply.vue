@@ -10,8 +10,6 @@
             <article class="jump-tabs-wrapper" ref="tabItems">
                 <figure class="jump-box-tabs-item tabsItem" :class="{'active': index == nowIndex}"
                         v-for="(items,index) in FastReplyList" @click.stop="tabShow(items,index)">{{items.questionDesc}}
-
-
                 </figure>
             </article>
             <button class="jump-box-next jump-box-tabs-controller">
