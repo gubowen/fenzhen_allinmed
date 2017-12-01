@@ -123,13 +123,13 @@
         </section>
       </section>
     </section>
-    <section class="check-suggestion-inner examineTestPreview" v-show="!nextFlag">
+    <section class="check-suggestion-inner examineTestPreview" v-show="!nextFlag" style="height:auto;">
       <header class="check-suggestion-title">
         <article>
           <h2>检查检验建议</h2>
         </article>
       </header>
-      <section>
+      <section style="height:520px;overflow:auto">
         <section class="check-result-content">
           <section class="check-result-info">
             <ul>
