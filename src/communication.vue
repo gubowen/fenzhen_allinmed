@@ -247,6 +247,7 @@ export default {
       let consultationId = [];
       let waitingList = this.$store.state.waitingList;
       let patientList = this.$store.state.patientList;
+
       store.commit("startLoading");
       releasePatient({
         customerId: this.$store.state.userId,
@@ -256,44 +257,46 @@ export default {
           caseId: this.$store.state.caseId,
           flag: true
         });
+this.reTriageShow = false;
+        setTimeout(() => {
+          patientList.removeByValue(this.$store.state.currentItem);
+          this.$store.state.currentItem.triageSelect = false;
+          store.commit("waitingListRefreshFlag", true);
+          store.commit("setWaitingList", waitingList);
 
-        patientList.removeByValue(this.$store.state.currentItem);
-        this.$store.state.currentItem.triageSelect = false;
-        store.commit("waitingListRefreshFlag", true);
-        store.commit("setWaitingList", waitingList);
+          
 
-        this.reTriageShow = false;
+          let num = "";
 
-        let num = "";
-
-        if (patientList.length > 0) {
-          if (this.userOnlineActive <= patientList.length - 1) {
-            num = this.userOnlineActive;
+          if (patientList.length > 0) {
+            if (this.userOnlineActive <= patientList.length - 1) {
+              num = this.userOnlineActive;
+            } else {
+              num = patientList.length - 1;
+            }
+            this.$emit("update:userOnlineActive", num);
           } else {
-            num = patientList.length - 1;
+            this.$emit("update:userOnlineActive", -1);
+            this.$emit("update:n", false);
+            return;
           }
-          this.$emit("update:userOnlineActive", num);
-        } else {
-          this.$emit("update:userOnlineActive", -1);
-          this.$emit("update:n", false);
-          return;
-        }
-        this.$emit("update:userWatingActive", -1);
-        let items = patientList[parseInt(num)];
+          this.$emit("update:userWatingActive", -1);
+          let items = patientList[parseInt(num)];
 
-        this.$store.commit("setPatientId", items ? items.patientId : "");
-        this.$store.commit("setPatientName", items ? items.patientName : "");
-        this.$store.commit("setCaseId", items ? items.caseId : "");
-        this.$store.commit(
-          "setConsultationId",
-          items ? items.consultationId : ""
-        );
+          this.$store.commit("setPatientId", items ? items.patientId : "");
+          this.$store.commit("setPatientName", items ? items.patientName : "");
+          this.$store.commit("setCaseId", items ? items.caseId : "");
+          this.$store.commit(
+            "setConsultationId",
+            items ? items.consultationId : ""
+          );
 
-        this.$store.commit("setCurrentItem", items ? items : {});
+          this.$store.commit("setCurrentItem", items ? items : {});
 
-        this.$store.commit("setSBIObject", "");
+          this.$store.commit("setSBIObject", "");
 
-        store.commit("stopLoading");
+          store.commit("stopLoading");
+        }, 1000);
       });
     },
 

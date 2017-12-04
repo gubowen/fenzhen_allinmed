@@ -234,7 +234,7 @@ export default {
 
           this.nim.sendCustomMsg({
             scene: "p2p",
-            to: "0_"+param.substring,
+                   to: "0_"+param.caseId,
             content: JSON.stringify({
               name: this.$store.state.userName,
               scene: "release",
