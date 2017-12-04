@@ -61,10 +61,10 @@
              if (document.body.clientWidth<1500){
                document.querySelector(".medical-record-form").style.cssText="height:15%;";
              }else{
-               document.querySelector(".medical-record-form").style.cssText="height:49%;";
+               document.querySelector(".medical-record-form").style.cssText="height:45%;";
              }
            }else{
-               document.querySelector(".medical-record-form").style.cssText="height:65%;";
+               document.querySelector(".medical-record-form").style.cssText="height:80%;";
            }
         }
     },
