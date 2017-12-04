@@ -257,14 +257,12 @@ export default {
           caseId: this.$store.state.caseId,
           flag: true
         });
-this.reTriageShow = false;
+        this.reTriageShow = false;
         setTimeout(() => {
           patientList.removeByValue(this.$store.state.currentItem);
           this.$store.state.currentItem.triageSelect = false;
           store.commit("waitingListRefreshFlag", true);
           store.commit("setWaitingList", waitingList);
-
-          
 
           let num = "";
 

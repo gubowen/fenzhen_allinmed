@@ -641,14 +641,15 @@ export default {
               custom: JSON.stringify({
                 cType: "0",
                 cId: _this.$store.state.userId,
-                mType: "36"
+                mType: "36",
+                  idClient:msg.idClient
               }),
               content: JSON.stringify({
                 type: "deleteMsgTips",
                 data: {
                   from: "分诊医生",
                   doctorName: _this.$store.state.userName,
-                  deleteMsg: JSON.stringify(msg) || {}
+                  deleteMsg:msg || {}
                 }
               }),
               done(error, msg) {
