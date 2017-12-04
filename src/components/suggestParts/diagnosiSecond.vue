@@ -115,7 +115,7 @@
                                             </header>
                                             <article class="doctor-message-hospital">
                                                 <span class="hos-address">{{docList.province?docList.province:""}}  {{docList.city?docList.city:""}}  {{docList.district?docList.district:""}}</span>
-                                                <span class="hospital">{{docList.company ? docList.company : ""}}</span>
+                                                <span class="hospital" v-html="docList.company ? docList.company : ''"></span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
@@ -417,6 +417,7 @@
                 doctorType:'',
                 onlineState:1,
                 matchCurrentIndex:-1,
+                allCurrentIndex:-1,
                 provinceFlag:false
             }
         },
@@ -593,6 +594,9 @@
                                             }
                                             if(element.operationNameList.length>0){
                                                 element.operationNameList = element.operationNameList.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>");
+                                            }
+                                            if(element.company&&element.company.length>0){
+                                                element.company = element.company.replace(_lightWord,"<span class='high-light-search-text'>"+value+"</span>")
                                             }
                                         })
                                     });
@@ -1107,6 +1111,7 @@
 
             },
             allCurrent(index){
+                alert("1111")
                 if(this.allCurrentIndex == index){
                     this.allCurrentIndex = -1;
                 }else{
@@ -1840,6 +1845,11 @@
     .doctor-message-content {
         width: 100%;
         position: relative;
+        .high-light-search-text {
+            display:inline;
+            color: #252525;
+            font-weight: bold;
+        }
     }
 
     .doctor-message-content-head {
@@ -1911,12 +1921,6 @@
             &.on{
                 height:auto;
             }
-        }
-
-        .high-light-search-text {
-            display:inline;
-            color: #252525;
-            font-weight: bold;
         }
     }
 
