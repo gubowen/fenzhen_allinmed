@@ -5,7 +5,7 @@
                 <section class="main-header-search">
                     <input class="main-search" type="text" placeholder="请输入患者姓名" v-show="$store.state.enableSearch"
                            v-model="searchContent"
-                           @keyup="searchPatient($event)">
+                           @keyup="searchPatient($event)" maxlength="20">
                     <i class="icon-header-search" v-show="this.enableSearch" @click="clickToSearch"></i>
                 </section>
                 <article class="main-header-title" @click="refresh()">
