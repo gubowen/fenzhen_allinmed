@@ -648,7 +648,7 @@ export default {
                 data: {
                   from: "分诊医生",
                   doctorName: _this.$store.state.userName,
-                  deleteMsg: JSON.stringify(msg) || {}
+                  deleteMsg: msg|| {}
                 }
               }),
               done(error, msg) {
@@ -679,7 +679,7 @@ export default {
     //患者撤回
     ShowFlagDeleteTips(items) {
       let flag = false;
-      // console.log(JSON.parse(items.content).data);
+      console.log(items.content.data.deleteMsg);
       if (items.content.data.deleteMsg.from !== "1_doctor00001") {
         flag = true;
         let idClient = items.content.data.deleteMsg.idClient;
