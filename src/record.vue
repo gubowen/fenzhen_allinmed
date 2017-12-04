@@ -324,7 +324,7 @@
         overflow: auto;
         height: 80%;
         @include query(1500px) {
-            height: 68%;
+            height: 65%;
         }
         &.on {
             height: 320px;
