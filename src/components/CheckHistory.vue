@@ -237,7 +237,8 @@
                     receiveAccount: "0_" + items.caseId,
                     firstResult: _this.pageResult,
                     maxResult: _this.pageNum,
-                    sortType: 1
+                    sortType: 1,
+                    isValid:1
                 };
                 api.ajax({
                     url: _this.chatHistoryRecordUrl,

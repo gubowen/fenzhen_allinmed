@@ -648,7 +648,7 @@ export default {
                 data: {
                   from: "分诊医生",
                   doctorName: _this.$store.state.userName,
-                  deleteMsg: JSON.stringify(msg) || {}
+                  deleteMsg:msg|| {}
                 }
               }),
               done(error, msg) {
