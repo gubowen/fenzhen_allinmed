@@ -92,10 +92,10 @@
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from ==='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName?JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName:'您'}}撤回了一条消息！</span>
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from !=='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.from}}撤回了一条消息！</span>
                                                 </figure>
-                                                <!--<section v-if="ele.msgType.toLowerCase()==='custom'&& ele.content.type==='triagePatientTips'" class="deleteMessage">-->
-                                                    <!--<span v-if="ele.content.scene==='triage'">分诊医生“{{ele.content.name}}”接诊</span>-->
-                                                    <!--<span v-if="ele.content.scene==='release'">分诊医生“{{ele.content.name}}”退诊</span>-->
-                                                <!--</section>-->
+                                                <section v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='triagePatientTips'" class="deleteMessage">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='triage'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”接诊</span>
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”退诊</span>
+                                                </section>
 
                                                 <!--提示信息-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
