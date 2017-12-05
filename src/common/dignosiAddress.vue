@@ -222,7 +222,7 @@
                     this.dataBack.provinceId = item.regionId;
                     this.dataBack.provinceName = item.regionName;
                     this.provinceFlag =false;
-//                    this.$emit("update:provinceFlag", this.provinceFlag);
+                    this.$emit("update:provinceFlag", this.provinceFlag);
                     this.cityFlag = false;
                     this.districtFlag = false;
                     this.$emit('update:dataBack', this.dataBack);
