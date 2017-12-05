@@ -50,7 +50,7 @@
               </header>
               <article class="doctor-message-hospital">
                 <span class="hos-ddress">{{item.province?item.province:""}}  {{item.city?item.city:""}}  {{item.district?item.district:""}}</span>
-                <span class="hospital">{{item.company}}</span>
+                <span class="hospital" v-html="item.company"></span>
                 <span class="medical">{{item.medicalTitle}}</span>
               </article>
               <article class="doctor-message-goodAt">擅长：<span v-html="item.illnessNameList"></span></article>

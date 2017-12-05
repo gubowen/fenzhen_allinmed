@@ -605,11 +605,13 @@
                             that.allDoc.allDocList = dataList;
                             that.allDoc.allDocState = false;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
+                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = false;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
                         } else {
                             that.allDoc.allDocList = [];
+                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = true;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
