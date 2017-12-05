@@ -349,14 +349,14 @@
                         vertical-align: top;
                         text-align: left;
                         box-sizing: border-box;
-                        padding: 0 15px;
+
                         max-height: 310px;
                         overflow: auto;
                         &.custom-selector-second-list {
                             right: -100%;
                         }
                         & > .custom-selector-item {
-                            margin: 20px 0;
+                            padding: 20px 15px;
                             width: 100%;
                             & > span {
                                 display: block;
