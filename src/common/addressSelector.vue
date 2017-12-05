@@ -358,6 +358,7 @@
                         & > .custom-selector-item {
                             padding: 20px 15px;
                             width: 100%;
+                            box-sizing: border-box;
                             & > span {
                                 display: block;
                             }
