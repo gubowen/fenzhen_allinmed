@@ -134,970 +134,1019 @@
     </div>
 </template>
 <script>
-    import {common, modules} from "common";
-    import api from './common/js/util';
-    import TabsViewChange from "tabView";
-    import downSelector from "downSelector";
-    import ymd from "ymd";
-    import record from "./record";
-    import communication from "./communication";
-    import Vue from "vue";
-    import footerList from "./Footer"
-    import headerList from "./Header"
-    import checkHistory  from './components/CheckHistory'
+import { common, modules } from "common";
+import api from "./common/js/util";
+import TabsViewChange from "tabView";
+import downSelector from "downSelector";
+import ymd from "ymd";
+import record from "./record";
+import communication from "./communication";
+import Vue from "vue";
+import footerList from "./Footer";
+import headerList from "./Header";
+import checkHistory from "./components/CheckHistory";
 
-    import triagePatient from "@/base/triagePatient";
+import triagePatient from "@/base/triagePatient";
 
-    import store from "@/store/store";
+import store from "@/store/store";
 
-    Vue.filter('timeFormat', function (time, a) {
-        let result = "";
-        let date = new Date(),
-            y = date.getFullYear(),
-            m = date.getMonth() + 1,
-            d = date.getDate(),
-            h = date.getHours(),
-            mm = date.getMinutes();
-        let nowFirst = new Date(y + "/" + (m >= 10 ? m : "0" + m) + "/" + (d >= 10 ? d : "0" + d)).getTime(),
-            timeFirst = new Date(time.substring(0, 10).replace(/-/g, "/")).getTime();
-        let week = new Date(timeFirst).getDay();
-        if (nowFirst === timeFirst) {
-            result = time.substring(10, 16);
-        } else if (parseInt((nowFirst / (60 * 60 * 24 * 1000) + 4) / 7) === parseInt((timeFirst / (60 * 60 * 24 * 1000) + 4) / 7)) {
-            result = "星期" + common.numToChinese(week);
-        } else {
-            result = time.substring(0, 16);
-        }
-        return result;
-    });
+Vue.filter("timeFormat", function(time, a) {
+  let result = "";
+  let date = new Date(),
+    y = date.getFullYear(),
+    m = date.getMonth() + 1,
+    d = date.getDate(),
+    h = date.getHours(),
+    mm = date.getMinutes();
+  let nowFirst = new Date(
+      y + "/" + (m >= 10 ? m : "0" + m) + "/" + (d >= 10 ? d : "0" + d)
+    ).getTime(),
+    timeFirst = new Date(time.substring(0, 10).replace(/-/g, "/")).getTime();
+  let week = new Date(timeFirst).getDay();
+  if (nowFirst === timeFirst) {
+    result = time.substring(10, 16);
+  } else if (
+    parseInt((nowFirst / (60 * 60 * 24 * 1000) + 4) / 7) ===
+    parseInt((timeFirst / (60 * 60 * 24 * 1000) + 4) / 7)
+  ) {
+    result = "星期" + common.numToChinese(week);
+  } else {
+    result = time.substring(0, 16);
+  }
+  return result;
+});
 
-    Vue.filter('checkState', function (type, a) {
-        let result = "";
-        switch (parseInt(type)) {
-            case 0:
-            case 1:
-            case 2:
-                result = "咨询";
-                break;
-            case 3:
-                result = "待检查";
-                break;
-        }
-        return result;
-    });
-    const XHRList = {
-        onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
-        waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+Vue.filter("checkState", function(type, a) {
+  let result = "";
+  switch (parseInt(type)) {
+    case 0:
+    case 1:
+    case 2:
+      result = "咨询";
+      break;
+    case 3:
+      result = "待检查";
+      break;
+  }
+  return result;
+});
+const XHRList = {
+  onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
+  waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+};
+export default {
+  name: "userList",
+  data() {
+    return {
+      userListData: "",
+      userListOnline: [],
+      userListWaiting: [],
+      userWaitingActive: -1,
+      userOnlineActive: -1,
+      questionShow: "",
+      userName: "默认",
+      message: {},
+      userListStatus: {
+        status: "1",
+        first: true,
+        second: false
+      },
+      noData: false,
+      data: "",
+      targetData: {
+        account: "",
+        avatar: ""
+      },
+      filterMethod: {
+        conType: 0
+      },
+      fastRelyStatusParent: false, //快捷提问
+      waitingTriage: false,
+      filterFinish: false,
+      newWaitingFlag: false,
+      newPatientFlag: false,
+      sortFlag: false,
+      sortActive: "",
+      popupShow: false,
+      popupContent: {
+        text: "",
+        hasImg: false
+      }
     };
-    export  default{
-        name: 'userList',
-        data(){
-            return {
-                userListData: "",
-                userListOnline: [],
-                userListWaiting: [],
-                userWaitingActive: -1,
-                userOnlineActive: -1,
-                questionShow: '',
-                userName: "默认",
-                message: {},
-                userListStatus: {
-                    status: "1",
-                    first: true,
-                    second: false
-                },
-                noData: false,
-                data: '',
-                targetData: {
-                    account: '',
-                    avatar: ''
-                },
-                filterMethod: {
-                    conType: 0
-                },
-                fastRelyStatusParent: false,  //快捷提问
-                waitingTriage: false,
-                filterFinish: false,
-                newWaitingFlag: false,
-                newPatientFlag: false,
-                sortFlag: false,
-                sortActive: '',
-                popupShow: false,
-                popupContent: {
-                    text: "",
-                    hasImg: false
-                },
-
-            }
-        },
-        components: {
-            record,
-            communication,
-            headerList,
-            footerList,
-            checkHistory
-        },
-        watch: {
-            'message.createTime' () {
-                this.noData = true;
-                this.$router.push({
-                    name: "mainSpeak",
-                    params: {
-                        num: this.data
-                    }
-                });
-            },
-            '$store.state.patientActiveIndex'(){
-                this.userOnlineActive = 0;
-            },
-            '$store.state.userId'(){
-                this.init();
-            },
-            '$store.state.patientList': {
-                handler: (list, oldValue) => {
-                    this.userListOnline = list;
-                },
-                deep: true
-            },
-            '$store.state.waitingList': {
-                handler: (list, oldValue) => {
-                    this.userListWaiting = list;
-                    this.newWaitingFlag = true
-                },
-                deep: true
-            },
-            '$store.state.waitingListRefresh'(flag){
-                if (flag) {
-                    this.getUserList('waiting', this.filterMethod);
-                    store.commit("waitingListRefreshFlag", false);
-                } else {
-                    return;
-                }
-            },
-            '$store.state.onlineListRefresh'(flag){
-                if (flag) {
-                    this.getUserList('online', this.filterMethod);
-                    store.commit("onlineListRefresh", false);
-                } else {
-                    return;
-                }
-            },
-            '$store.state.newWaiting'(flag){
-                let _this = this;
-                this.newWaitingFlag = flag;
-            },
-            '$store.state.newOnline'(flag){
-                let _this = this;
-                _this.$store.commit('setMusicPlay', true);
-                console.log("music2");
-                setTimeout(function () {
-                    console.log("music");
-                    _this.$store.commit('setMusicPlay', false);
-
-                }, 2000);
-                this.newPatientFlag = flag;
-
-            }
-        },
-        mounted(){
-            if (this.$store.state.userId) {
-                this.init();
-                store.commit("setUsedReplyShow", false);
-                store.commit("setFastReplyShow", false);
-            }
-        },
-        activated(){
-
-        },
-        methods: {
-            init(){
-                this.$store.state.searchStatus = true;
-                this.getUserList('waiting');
-                this.getUserList('online');
-            },
-            fixByCurrent(item, index){
-                let flag = false;
-                if (index === this.userOnlineActive) {
-                    if (this.$store.state.currentItem.diagnosisContent) {
-                        flag = true;
-                    } else {
-                        flag = false;
-                    }
-                } else {
-                    if (item.diagnosisContent) {
-                        flag = true;
-                    } else {
-                        flag = false;
-                    }
-                }
-
-                return flag;
-            },
-            //给子组件传值..
-            transformData (items, index, getFlag = false) {
-                store.commit("setUsedReplyShow", false);
-                store.commit("setFastReplyShow", false);
-                this.noData = true;
-                if (this.userListStatus.first) {
-                    this.waitingTriage = true;
-                    this.userWaitingActive = index;
-                    store.commit("setInputReadOnly", true);
-
-                    let waitingList = this.$store.state.waitingList;
-                    items.messageAlert = '';
-                    waitingList[index] = items;
-                    this.$store.commit("setWaitingList", waitingList);
-
-                    let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-                    if (waitingAlertList) {
-                        delete waitingAlertList["0_" + items.caseId];
-                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                    }
-                    if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaitingFlag = false;
-                    }
-
-                } else {
-                    this.waitingTriage = false;
-                    this.userOnlineActive = index;
-                    store.commit("setInputReadOnly", false);
-
-                    let patientList = this.$store.state.patientList;
-                    items.messageAlert = '';
-                    if (getFlag) {
-                        patientList.removeByValue(items);
-                        patientList.unshift(items);
-                        this.$store.commit("setPatientList", patientList);
-
-                    } else {
-                        patientList[index] = items;
-                        this.$store.commit("setPatientList", patientList);
-                    }
-                    let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
-                    if (patientAlertList) {
-                        delete patientAlertList["0_" + items.caseId];
-                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
-                    }
-                    if (localStorage.getItem("patientAlertList") == "{}") {
-                        this.newPatientFlag = false;
-                    }
-                }
-                this.message = items;
-
-                this.$store.commit('setPatientId', items.patientId);
-                this.$store.commit('setPatientName', items.patientName);
-                this.$store.commit('setCaseId', items.caseId);
-                localStorage.setItem("caseId", items.caseId);
-                this.$store.commit("setConsultationId", items.consultationId);
-
-                this.$store.commit("setCurrentItem", items);
-
-                this.$store.commit('setSBIObject', {});
-
-                let data = JSON.stringify(items);
-                this.data = data;
-                this.targetData.account = "0_" + items.caseId;
-                this.targetData.avatar = items.logoUrl;
-                this.fastRelyStatusParent = false;
-
-                this.$router.push({
-                    name: "mainSpeak"
-                })
-            },
-            //三个状态的点击切换（沟通中、已结束、被退回）
-            statusChange (status) {
-                //Tab 切换
-                this.userListStatus.status = status;
-                if (status == 1) {
-                    this.userListStatus.first = true;
-                    this.userListStatus.second = false;
-                    this.message.userController = true;
-                } else if (status == 2) {
-                    this.userListStatus.first = false;
-                    this.userListStatus.second = true;
-                    this.message.userController = false;
-                }
-            },
-            //患者列表
-            //type:online为沟通中，wating待分诊
-            getUserList(type, param, fn){
-                let _this = this;
-                _this.userListData = '';
-                _this.userListLoading = [];
-                _this.userListEnd = [];
-                _this.userListBack = [];
-                let dataValue = {};
-
-                if (type === "online") {
-                    dataValue = Object.assign({
-                        customerId: _this.$store.state.userId,
-                        conState: "0",
-                        conType: 0,
-                        sortType: -6
-
-                    }, param);
-                } else {
-                    dataValue = Object.assign({
-                        conState: "2,4,5",
-                        conType: 0,
-                        sortType: -6
-
-                    }, param);
-
-                }
-
-
-//        if (type==="online"){
-//            dataValue=Object.assign(dataValue,{
-//              conType: 0
-//            })
-//        }
-//        store.commit("startLoading");
-                api.ajax({
-                    url: type === "online" ? XHRList.onlineUserList : XHRList.waitingUserList,
-                    method: "POST",
-                    data: dataValue,
-                    done(res) {
-//            store.commit("stopLoading");
-                        if (res.responseObject.responseData && res.responseObject.responseStatus) {
-                            let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
-                            let waitingAlertList = {};
-                            let patientAlertList = {};
-                            waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-                            patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
-                            if (type === "online") {
-                                if (patientAlertList && patientAlertList !== '{}') {
-                                    for (let key in patientAlertList) {
-                                        let flag = true;
-                                        dataList.forEach(function (item, index) {
-                                            if(typeof (item.messageAlert) == 'undefined'){
-                                                item.messageAlert = '';
-                                            }
-                                            if (key == ("0_" + item.caseId)) {
-                                                item.messageAlert = patientAlertList[key];
-                                                _this.newPatientFlag = true;
-                                                _this.$store.commit('setMusicPlay', true);
-                                                setTimeout(function () {
-                                                    _this.$store.commit('setMusicPlay', false);
-                                                }, 2000);
-                                            }
-                                        });
-                                        if (flag) {
-                                            delete patientAlertList[key];
-                                        }
-                                    }
-                                    localStorage.setItem("patientAlertList",JSON.stringify(patientAlertList));
-                                }
-                                    _this.$store.commit("setPatientList", dataList);
-                                    _this.userListOnline = dataList ? dataList : [];
-                                } else if (type === "waiting") {
-                                    if (waitingAlertList && waitingAlertList !== '{}') {
-                                        for (let key in waitingAlertList) {
-                                            let flag = true;
-                                            dataList.forEach(function (item, index) {
-                                                if(typeof (item.messageAlert) == 'undefined'){
-                                                    item.messageAlert = '';
-                                                }
-                                                if (key == ("0_" + item.caseId)) {
-                                                    item.messageAlert = waitingAlertList[key];
-                                                    _this.newWaitingFlag = true;
-                                                    _this.$store.commit('setMusicPlay', true);
-                                                    setTimeout(function () {
-                                                        _this.$store.commit('setMusicPlay', false);
-                                                    }, 2000);
-                                                    flag = false;
-                                                }
-                                            });
-                                            if (flag) {
-                                                delete waitingAlertList[key];
-                                            }
-                                        }
-                                        localStorage.setItem("waitingAlertList",JSON.stringify(waitingAlertList));
-                                    }
-                                    _this.$store.commit("setWaitingList", dataList);
-                                    _this.userListWaiting = dataList ? dataList : [];
-                                }
-                            }
-                                fn && fn();
-                        },fail(err){
-                            console.log("请求失败：" + err);
-                        }
-              });
-            },
-            setSelectValue(dataList){
-                let result = [];
-                if (dataList) {
-                    dataList.forEach((element, index) => {
-                        result.push(Object.assign(element, {
-                            triageSelect: false
-                        }));
-                    });
-                }
-                return result;
-            },
-            filterTemplateList (data) {
-                return '<li class="custom-selector-item secondListTitle ' + (parseInt(data.treeLevel) === 3 ? 'result-item' : '') + '" data-down-role="' + data.regionId + '" data-level="' + data.treeLevel + '"><span>' + data.regionName + '</span></li>';
-            },
-            //患者搜索...
-            searchPatient(content){
-                this.filterMethod = Object.assign(this.filterMethod, {
-                    selectName: content
-                });
-                store.commit("startLoading");
-                this.getUserList("waiting", this.filterMethod);
-                this.getUserList("online", this.filterMethod);
-                store.commit("stopLoading");
-//                this.filterFinish = true;
-            },
-            refreshList() {
-                this.getUserList("waiting", this.filterMethod);
-                this.getUserList("online", this.filterMethod);
-            },
-            //选择退回患者
-            selectQuitItem(item){
-                this.userListOnline.forEach((element, index) => {
-                    element.triageSelect = false;
-                });
-                item.triageSelect = true;
-
-                store.commit("setQuitPatientItem", item)
-            },
-            //接诊
-            getTriagePatient(item, index){
-                store.commit("startLoading");
-                triagePatient({
-                    consultationId: item.consultationId,
-                    customerId: this.$store.state.userId
-                }, () => {
-                    this.getUserList('waiting');
-                    store.commit("stopLoading");
-                    store.commit("showPopup", {
-                        hasImg: false,
-                        text: "该患者已被其他分诊医生接诊！"
-                    });
-                }, (c) => {
-                    this.getUserList('waiting');
-                    store.commit("stopLoading");
-                    store.commit("showPopup", {
-                        hasImg: false,
-                        text: `您最多可以接诊${c}个患者！`
-                    });
-                }).then((res) => {
-                    //患者未被抢单
-
-                    this.getUserList('waiting');
-                    this.userListStatus.status = 2;
-                    this.getUserList('online', {}, () => {
-
-
-                        this.userListStatus.first = false;
-                        this.userListStatus.second = true;
-                        let triageItem = this.getBeTriagePatient(item);
-                        let getFlag = true;
-                        this.transformData(triageItem, index, getFlag);
-
-
-                        this.userListStatus.status = 2;
-                        this.waitingTriage = false;
-                        this.userOnlineActive = 0;
-                        store.commit("setInputReadOnly", false);
-                        store.commit("stopLoading");
-                    });
-
-                    let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
-                    if (waitingAlertList) {
-                        for (let key in waitingAlertList) {
-                            if (key == ("0_" + item.caseId)) {
-                                delete waitingAlertList["0_" + items.caseId];
-                            }
-                        }
-                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                    }
-                    if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaitingFlag = false;
-                    }
-                    store.commit("setTriagePatientCaseIdFlag",{
-                        caseId:item.caseId,
-                        flag:true
-                    })
-                }).catch((res) => {
-                    console.log("网络异常...")
-                });
-            },
-            getBeTriagePatient(item){
-                let caseId = item.caseId;
-                let result;
-                this.userListOnline.forEach((element, index) => {
-                    if (element.caseId === caseId) {
-                        result = element;
-                    }
-                });
-                return result;
-            },
-            sortShow(){
-                this.sortFlag = !this.sortFlag;
-            },
-            sort(index){
-                let _this = this;
-                _this.sortActive = index;
-                _this.sortFlag = false;
-                switch (index) {
-                    case 0:
-                        _this.getUserList('waiting', {'sortType': -6});
-                        _this.getUserList('online', {'sortType': -6});
-                        break;
-                    case 1:
-                        _this.getUserList('waiting', {'sortType': 5});
-                        _this.getUserList('online', {'sortType': 5});
-                        break;
-                    case 2:
-                        _this.getUserList('waiting', {'sortType': 4});
-                        _this.getUserList('online', {'sortType': 4});
-                        break;
-                    case 3:
-                        _this.getUserList('waiting', {'sortType': -5});
-                        _this.getUserList('online', {'sortType': -5});
-                        break;
-                    case 4:
-                        _this.getUserList('waiting', {'sortType': -5});
-                        _this.getUserList('online', {'sortType': -5});
-                        break;
-                    default:
-                        _this.getUserList('waiting', {'sortType': 6});
-                        _this.getUserList('online', {'sortType': 6});
-                }
-            }
+  },
+  components: {
+    record,
+    communication,
+    headerList,
+    footerList,
+    checkHistory
+  },
+  watch: {
+    "message.createTime"() {
+      this.noData = true;
+      this.$router.push({
+        name: "mainSpeak",
+        params: {
+          num: this.data
         }
+      });
+    },
+    "$store.state.patientActiveIndex"() {
+      this.userOnlineActive = 0;
+    },
+    "$store.state.userId"() {
+      this.init();
+    },
+    "$store.state.patientList": {
+      handler: (list, oldValue) => {
+        this.userListOnline = list;
+      },
+      deep: true
+    },
+    "$store.state.waitingList": {
+      handler: (list, oldValue) => {
+        this.userListWaiting = list;
+        this.newWaitingFlag = true;
+      },
+      deep: true
+    },
+    "$store.state.waitingListRefresh"(flag) {
+      if (flag) {
+        this.getUserList("waiting", this.filterMethod);
+        store.commit("waitingListRefreshFlag", false);
+      } else {
+        return;
+      }
+    },
+    "$store.state.onlineListRefresh"(flag) {
+      if (flag) {
+        this.getUserList("online", this.filterMethod);
+        store.commit("onlineListRefresh", false);
+      } else {
+        return;
+      }
+    },
+    "$store.state.newWaiting"(flag) {
+      let _this = this;
+      this.newWaitingFlag = flag;
+    },
+    "$store.state.newOnline"(flag) {
+      let _this = this;
+      _this.$store.commit("setMusicPlay", true);
+      console.log("music2");
+      setTimeout(function() {
+        console.log("music");
+        _this.$store.commit("setMusicPlay", false);
+      }, 2000);
+      this.newPatientFlag = flag;
     }
+  },
+  mounted() {
+    if (this.$store.state.userId) {
+      this.init();
+      store.commit("setUsedReplyShow", false);
+      store.commit("setFastReplyShow", false);
+    }
+  },
+  activated() {},
+  methods: {
+    init() {
+      this.$store.state.searchStatus = true;
+      this.getUserList("waiting");
+      this.getUserList("online");
+    },
+    fixByCurrent(item, index) {
+      let flag = false;
+      if (index === this.userOnlineActive) {
+        if (this.$store.state.currentItem.diagnosisContent) {
+          flag = true;
+        } else {
+          flag = false;
+        }
+      } else {
+        if (item.diagnosisContent) {
+          flag = true;
+        } else {
+          flag = false;
+        }
+      }
+
+      return flag;
+    },
+    //给子组件传值..
+    transformData(items, index, getFlag = false) {
+      store.commit("setUsedReplyShow", false);
+      store.commit("setFastReplyShow", false);
+      this.noData = true;
+      if (this.userListStatus.first) {
+        this.waitingTriage = true;
+        this.userWaitingActive = index;
+        store.commit("setInputReadOnly", true);
+
+        let waitingList = this.$store.state.waitingList;
+        items.messageAlert = "";
+        waitingList[index] = items;
+        this.$store.commit("setWaitingList", waitingList);
+
+        let waitingAlertList = JSON.parse(
+          localStorage.getItem("waitingAlertList")
+        );
+        if (waitingAlertList) {
+          delete waitingAlertList["0_" + items.caseId];
+          localStorage.setItem(
+            "waitingAlertList",
+            JSON.stringify(waitingAlertList)
+          );
+        }
+        if (localStorage.getItem("waitingAlertList") == "{}") {
+          this.newWaitingFlag = false;
+        }
+      } else {
+        this.waitingTriage = false;
+        this.userOnlineActive = index;
+        store.commit("setInputReadOnly", false);
+
+        let patientList = this.$store.state.patientList;
+        items.messageAlert = "";
+        if (getFlag) {
+          patientList.removeByValue(items);
+          patientList.unshift(items);
+          this.$store.commit("setPatientList", patientList);
+        } else {
+          patientList[index] = items;
+          this.$store.commit("setPatientList", patientList);
+        }
+        let patientAlertList = JSON.parse(
+          localStorage.getItem("patientAlertList")
+        );
+        if (patientAlertList) {
+          delete patientAlertList["0_" + items.caseId];
+          localStorage.setItem(
+            "patientAlertList",
+            JSON.stringify(patientAlertList)
+          );
+        }
+        if (localStorage.getItem("patientAlertList") == "{}") {
+          this.newPatientFlag = false;
+        }
+      }
+      this.message = items;
+
+      this.$store.commit("setPatientId", items.patientId);
+      this.$store.commit("setPatientName", items.patientName);
+      this.$store.commit("setCaseId", items.caseId);
+      localStorage.setItem("caseId", items.caseId);
+      this.$store.commit("setConsultationId", items.consultationId);
+
+      this.$store.commit("setCurrentItem", items);
+
+      this.$store.commit("setSBIObject", {});
+
+      let data = JSON.stringify(items);
+      this.data = data;
+      this.targetData.account = "0_" + items.caseId;
+      this.targetData.avatar = items.logoUrl;
+      this.fastRelyStatusParent = false;
+
+      this.$router.push({
+        name: "mainSpeak"
+      });
+    },
+    //三个状态的点击切换（沟通中、已结束、被退回）
+    statusChange(status) {
+      //Tab 切换
+      this.userListStatus.status = status;
+      if (status == 1) {
+        this.userListStatus.first = true;
+        this.userListStatus.second = false;
+        this.message.userController = true;
+      } else if (status == 2) {
+        this.userListStatus.first = false;
+        this.userListStatus.second = true;
+        this.message.userController = false;
+      }
+    },
+    //患者列表
+    //type:online为沟通中，wating待分诊
+    getUserList(type, param, fn) {
+      let _this = this;
+      _this.userListData = "";
+      _this.userListLoading = [];
+      _this.userListEnd = [];
+      _this.userListBack = [];
+      let dataValue = {};
+
+      if (type === "online") {
+        dataValue = Object.assign(
+          {
+            customerId: _this.$store.state.userId,
+            conState: "0",
+            conType: 0,
+            sortType: -6
+          },
+          param
+        );
+      } else {
+        dataValue = Object.assign(
+          {
+            conState: "2,4,5",
+            conType: 0,
+            sortType: -6
+          },
+          param
+        );
+      }
+
+      //        if (type==="online"){
+      //            dataValue=Object.assign(dataValue,{
+      //              conType: 0
+      //            })
+      //        }
+      //        store.commit("startLoading");
+      api.ajax({
+        url:
+          type === "online" ? XHRList.onlineUserList : XHRList.waitingUserList,
+        method: "POST",
+        data: dataValue,
+        done(res) {
+          //            store.commit("stopLoading");
+          if (
+            res.responseObject.responseData &&
+            res.responseObject.responseStatus
+          ) {
+            let dataList = _this.setSelectValue(
+              res.responseObject.responseData.dataList
+            );
+            let waitingAlertList = {};
+            let patientAlertList = {};
+            waitingAlertList = JSON.parse(
+              localStorage.getItem("waitingAlertList")
+            );
+            patientAlertList = JSON.parse(
+              localStorage.getItem("patientAlertList")
+            );
+            if (type === "online") {
+              if (patientAlertList && patientAlertList !== "{}") {
+                for (let key in patientAlertList) {
+                  let flag = true;
+                  dataList.forEach(function(item, index) {
+                    if (typeof item.messageAlert == "undefined") {
+                      item.messageAlert = "";
+                    }
+                    if (key == "0_" + item.caseId) {
+                      item.messageAlert = patientAlertList[key];
+                      _this.newPatientFlag = true;
+                      _this.$store.commit("setMusicPlay", true);
+                      setTimeout(function() {
+                        _this.$store.commit("setMusicPlay", false);
+                      }, 2000);
+                    }
+                  });
+                  if (flag) {
+                    delete patientAlertList[key];
+                  }
+                }
+                localStorage.setItem(
+                  "patientAlertList",
+                  JSON.stringify(patientAlertList)
+                );
+              }
+              _this.$store.commit("setPatientList", dataList);
+              _this.userListOnline = dataList ? dataList : [];
+            } else if (type === "waiting") {
+              if (waitingAlertList && waitingAlertList !== "{}") {
+                for (let key in waitingAlertList) {
+                  let flag = true;
+                  dataList.forEach(function(item, index) {
+                    if (typeof item.messageAlert == "undefined") {
+                      item.messageAlert = "";
+                    }
+                    if (key == "0_" + item.caseId) {
+                      item.messageAlert = waitingAlertList[key];
+                      _this.newWaitingFlag = true;
+                      _this.$store.commit("setMusicPlay", true);
+                      setTimeout(function() {
+                        _this.$store.commit("setMusicPlay", false);
+                      }, 2000);
+                      flag = false;
+                    }
+                  });
+                  if (flag) {
+                    delete waitingAlertList[key];
+                  }
+                }
+                localStorage.setItem(
+                  "waitingAlertList",
+                  JSON.stringify(waitingAlertList)
+                );
+              }
+              _this.$store.commit("setWaitingList", dataList);
+              _this.userListWaiting = dataList ? dataList : [];
+            }
+          }
+          fn && fn();
+        },
+        fail(err) {
+          console.log("请求失败：" + err);
+        }
+      });
+    },
+    setSelectValue(dataList) {
+      let result = [];
+      if (dataList) {
+        dataList.forEach((element, index) => {
+          result.push(
+            Object.assign(element, {
+              triageSelect: false
+            })
+          );
+        });
+      }
+      return result;
+    },
+    filterTemplateList(data) {
+      return (
+        '<li class="custom-selector-item secondListTitle ' +
+        (parseInt(data.treeLevel) === 3 ? "result-item" : "") +
+        '" data-down-role="' +
+        data.regionId +
+        '" data-level="' +
+        data.treeLevel +
+        '"><span>' +
+        data.regionName +
+        "</span></li>"
+      );
+    },
+    //患者搜索...
+    searchPatient(content) {
+      this.filterMethod = Object.assign(this.filterMethod, {
+        selectName: content
+      });
+      store.commit("startLoading");
+      this.getUserList("waiting", this.filterMethod);
+      this.getUserList("online", this.filterMethod);
+      store.commit("stopLoading");
+      //                this.filterFinish = true;
+    },
+    refreshList() {
+      this.getUserList("waiting", this.filterMethod);
+      this.getUserList("online", this.filterMethod);
+    },
+    //选择退回患者
+    selectQuitItem(item) {
+      this.userListOnline.forEach((element, index) => {
+        element.triageSelect = false;
+      });
+      item.triageSelect = true;
+
+      store.commit("setQuitPatientItem", item);
+    },
+    //接诊
+    getTriagePatient(item, index) {
+      store.commit("startLoading");
+      triagePatient(
+        {
+          consultationId: item.consultationId,
+          customerId: this.$store.state.userId
+        },
+        () => {
+          this.getUserList("waiting");
+          store.commit("stopLoading");
+          store.commit("showPopup", {
+            hasImg: false,
+            text: "该患者已被其他分诊医生接诊！"
+          });
+        },
+        c => {
+          this.getUserList("waiting");
+          store.commit("stopLoading");
+          store.commit("showPopup", {
+            hasImg: false,
+            text: `您最多可以接诊${c}个患者！`
+          });
+        }
+      )
+        .then(res => {
+          //患者未被抢单
+
+          this.getUserList("waiting");
+          this.userListStatus.status = 2;
+          this.getUserList("online", {}, () => {
+            this.userListStatus.first = false;
+            this.userListStatus.second = true;
+            let triageItem = this.getBeTriagePatient(item);
+            let getFlag = true;
+            this.transformData(triageItem, index, getFlag);
+            store.commit("setTriagePatientCaseIdFlag", {
+              caseId: item.caseId,
+              flag: true
+            });
+
+            this.userListStatus.status = 2;
+            this.waitingTriage = false;
+            this.userOnlineActive = 0;
+            store.commit("setInputReadOnly", false);
+            store.commit("stopLoading");
+          });
+
+          let waitingAlertList = JSON.parse(
+            localStorage.getItem("waitingAlertList")
+          );
+          if (waitingAlertList) {
+            for (let key in waitingAlertList) {
+              if (key == "0_" + item.caseId) {
+                delete waitingAlertList["0_" + items.caseId];
+              }
+            }
+            localStorage.setItem(
+              "waitingAlertList",
+              JSON.stringify(waitingAlertList)
+            );
+          }
+          if (localStorage.getItem("waitingAlertList") == "{}") {
+            this.newWaitingFlag = false;
+          }
+        })
+        .catch(res => {
+          console.log("网络异常...");
+        });
+    },
+    getBeTriagePatient(item) {
+      let caseId = item.caseId;
+      let result;
+      this.userListOnline.forEach((element, index) => {
+        if (element.caseId === caseId) {
+          result = element;
+        }
+      });
+      return result;
+    },
+    sortShow() {
+      this.sortFlag = !this.sortFlag;
+    },
+    sort(index) {
+      let _this = this;
+      _this.sortActive = index;
+      _this.sortFlag = false;
+      switch (index) {
+        case 0:
+          _this.getUserList("waiting", { sortType: -6 });
+          _this.getUserList("online", { sortType: -6 });
+          break;
+        case 1:
+          _this.getUserList("waiting", { sortType: 5 });
+          _this.getUserList("online", { sortType: 5 });
+          break;
+        case 2:
+          _this.getUserList("waiting", { sortType: 4 });
+          _this.getUserList("online", { sortType: 4 });
+          break;
+        case 3:
+          _this.getUserList("waiting", { sortType: -5 });
+          _this.getUserList("online", { sortType: -5 });
+          break;
+        case 4:
+          _this.getUserList("waiting", { sortType: -5 });
+          _this.getUserList("online", { sortType: -5 });
+          break;
+        default:
+          _this.getUserList("waiting", { sortType: 6 });
+          _this.getUserList("online", { sortType: 6 });
+      }
+    }
+  }
+};
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
-    @import "./scss/base.scss";
+@import "./scss/base.scss";
 
-    .list-left-enter-active, .list-left-leave-active {
-        //   transition: all 0.3s;
-    }
+.list-left-enter-active,
+.list-left-leave-active {
+  //   transition: all 0.3s;
+}
 
-    .list-left-enter, .list-left-leave-to {
-        //  opacity: 0;
-        //  transform: translateX(-100px);
-    }
+.list-left-enter,
+.list-left-leave-to {
+  //  opacity: 0;
+  //  transform: translateX(-100px);
+}
 
-    .list-right-enter-active, .list-right-leave-active {
-        //    transition: all 0.3s;
-    }
+.list-right-enter-active,
+.list-right-leave-active {
+  //    transition: all 0.3s;
+}
 
-    .list-right-enter, .list-right-leave-to {
-        //   opacity: 0;
-        //   transform: translateX(100px);
-    }
+.list-right-enter,
+.list-right-leave-to {
+  //   opacity: 0;
+  //   transform: translateX(100px);
+}
 
-    .userList {
-        width: 100%;
-        height: 100%;
-        .center-inner-userlist {
-            background-color: #fff;
-            color: #fff;
-            width: 385px;
-            float: left;
-            margin-left: -100%;
-            height: 100%;
-            border-right: 1px solid #ededed;
-            box-sizing: border-box;
-            .search-result-tips {
-                display: block;
-                text-align: center;
-                background: #E8F6FD;
-                height: 33px;
-                line-height: 33px;
-                padding: 0 15px;
-                box-sizing: border-box;
-                position: absolute;
-                width: 356px;
-                margin-left: 14px;
-                margin-top: -28px;
-                opacity: 0;
-                visibility: hidden;
-                transition: all 0.2s linear;
-                &.show {
-                    opacity: 1;
-                    visibility: visible;
-                }
-                & > p {
-                    font-size: 13px;
-                    color: #6B748C;
-                    display: inline-block;
-                    a, span {
-                        font-size: 13px;
-                        color: #F23E34;
-                        display: inline;
-                    }
-
-                }
-            }
-        }
-        .userlist-status {
-            background-color: #fff;
-            box-sizing: border-box;
-            padding: 10px 14px;
-            position: relative;
-            &-box {
-                text-align: center;
-                font-size: 0;
-                border: 1px solid #ACB1BE;
-                border-radius: 4px;
-                width: 90%;
-                display: inline-block;
-
-            }
-            &-right {
-                width: 15px;
-                height: 35px;
-                background: #eceff6 url("./assets/img00/common/vedio_play.png") no-repeat center center;
-                background-size: 60% 60%;
-                display: inline-block;
-                vertical-align: middle;
-                padding: 14px;
-                border-radius: 4px;
-                box-sizing: border-box;
-            }
-            &-sortList {
-                position: absolute;
-                top: 12px;
-                right: -220px;
-                width: 220px;
-                z-index: 6;
-                text-indent: 5px;
-                ul {
-                    width: 100%;
-                    border-radius: 4px;
-                    overflow: hidden;
-                    box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-                    li {
-                        width: 100%;
-                        text-align: left;
-                        padding: 5px 0 5px 0;
-                        height: 20px;
-                        line-height: 25px;
-                        color: #808080;
-                        font-size: 14px;
-                        background: #fff;
-                        &:hover {
-                            background: #f6f9fa;
-                        }
-                        &.active {
-                            background: #eceff6;
-                        }
-                    }
-                }
-            }
-            &-item {
-                display: inline-block;
-                font-size: 14px;
-                color: #808080;
-                padding: 12px 0;
-                width: 50%;
-                box-sizing: border-box;
-                border-right: 1px solid #acb1be;
-                cursor: pointer;
-
-                &.new {
-                    position: relative;
-                    &:after {
-                        content: '';
-                        width: 8px;
-                        height: 8px;
-                        border-radius: 50%;
-                        background-color: rgba(242, 62, 51, .9);
-                        box-shadow: 0 1px 1px 0 rgba(45, 17, 14, .15);
-                        position: absolute;
-                        right: 5px;
-                        top: 5px;
-                    }
-
-                }
-                &:nth-last-child(1) {
-                    border-right: none;
-                }
-                &.active {
-                    background-color: #7a8ec1;
-                    color: #fff;
-                }
-            }
-        }
-    }
-
-    .time-title {
+.userList {
+  width: 100%;
+  height: 100%;
+  .center-inner-userlist {
+    background-color: #fff;
+    color: #fff;
+    width: 385px;
+    float: left;
+    margin-left: -100%;
+    height: 100%;
+    border-right: 1px solid #ededed;
+    box-sizing: border-box;
+    .search-result-tips {
+      display: block;
+      text-align: center;
+      background: #e8f6fd;
+      height: 33px;
+      line-height: 33px;
+      padding: 0 15px;
+      box-sizing: border-box;
+      position: absolute;
+      width: 356px;
+      margin-left: 14px;
+      margin-top: -28px;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s linear;
+      &.show {
+        opacity: 1;
+        visibility: visible;
+      }
+      & > p {
         font-size: 13px;
-        color: #909090;
-        margin-bottom: 24px;
-    }
-
-    .userlist-mainList {
-        overflow: auto;
-        height: 85%;
-        &-item {
-            padding: 25px 20px 25px 40px;
-            font-size: 0;
-            background-color: #fff;
-            box-sizing: border-box;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            width: 100%;
-            .get-triage {
-                margin-top: 10px;
-            }
-            &.active {
-                background-color: #f4f6fb;
-                box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
-            }
-            &:hover {
-                background-color: #f4f6fb;
-                box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
-                //&:before {
-                //  content: '';
-                //  display: block;
-                //  position: absolute;
-                //  top: 0;
-                //  left: 0;
-                //  bottom: 0;
-                //  background-color: #4fc8d5;
-                //  width: 5px;
-                //}
-            }
-            .userlist-item-img {
-                display: inline-block;
-                vertical-align: middle;
-                margin-right: 12px;
-                position: relative;
-                & > p {
-                    font-size: 15px;
-                    color: #FFFFFF;
-                    letter-spacing: 0;
-                    line-height: 15px;
-                    background: rgba(242, 62, 51, 0.90);
-                    box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.35);
-                    border-radius: 10px;
-                    padding: 2px 6px 3px;
-                    position: absolute;
-                    top: 0;
-                    right: -10px;
-                }
-                & > img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    vertical-align: top;
-                }
-            }
-            .userlist-item-msg {
-                display: table-cell;
-                width: 100%;
-                vertical-align: top;
-                font-size: 0;
-                padding-left: 10px;
-            }
-            & > .time {
-                font-size: 12px;
-                color: #808080;
-                letter-spacing: 0;
-                line-height: 12px;
-                position: absolute;
-                right: 25px;
-                top: 32px;
-            }
-        }
-    }
-
-    .userlist-item-base-msg {
-        //margin-top: 6px;
+        color: #6b748c;
         display: inline-block;
-        vertical-align: middle;
-        width: 255px;
-        & > h3 {
-            font-size: 16px;
-            color: #222222;
-            display: inline-block;
-            vertical-align: middle;
-            padding-right: 5px;
-
-            .name {
-                font-size: 18px;
-                color: #222222;
-                letter-spacing: 0;
-                line-height: 18px;
-                padding: 0 8px 0 0;
-            }
-
-            .category {
-                font-size: 13px;
-                color: #6b748c;
-                letter-spacing: 0;
-                line-height: 13px;
-                padding-left: 8px;
-                border-left: 1px solid #e1e2e7;
-                font-weight: 400;
-                display: inline-block;
-                vertical-align: middle;
-                max-width: 125px;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                -o-text-overflow: ellipsis;
-                overflow: hidden;
-                &.short {
-                    max-width: 65px;
-                }
-                span {
-                    margin-right: 8px;
-                }
-
-            }
+        a,
+        span {
+          font-size: 13px;
+          color: #f23e34;
+          display: inline;
         }
-        .userlist-item-msg-category {
-            //@include clearfix();
-            display: inline-block;
-            vertical-align: middle;
-            color: #222;
-            border-left: 1px solid #e1e2e7;
-            padding-left: 5px;
-
-            & > span {
-                padding-right: 7px;
-                font-size: 12px;
-            }
-        }
-        & > .time {
-            float: right;
-            font-size: 12px;
-            color: #666;
-        }
-        .text {
-            font-size: 13px;
-            color: #808080;
-            letter-spacing: 0;
-            line-height: 13px;
-            margin-top: 10px;
-            display: inline-block;
-            @include ellipsis();
-            max-width: 250px;
-        }
+      }
     }
-
-    .userlist-item-msg-item {
-        margin-top: 14px;
-        font-size: 0;
-        & > span {
-            font-size: 12px;
-            color: #666;
-        }
-        .sex {
-            margin-right: 10px;
-        }
-        .age {
-            margin-right: 10px;
-        }
+  }
+  .userlist-status {
+    background-color: #fff;
+    box-sizing: border-box;
+    padding: 10px 14px;
+    position: relative;
+    &-box {
+      text-align: center;
+      font-size: 0;
+      border: 1px solid #acb1be;
+      border-radius: 4px;
+      width: 90%;
+      display: inline-block;
     }
-
-    .user-list-footer {
-        background: rgba(255, 255, 255, 0.97);
-        box-shadow: 0 2px 6px 0 rgba(153, 167, 208, 0.62);
+    &-right {
+      width: 15px;
+      height: 35px;
+      background: #eceff6 url("./assets/img00/common/vedio_play.png") no-repeat
+        center center;
+      background-size: 60% 60%;
+      display: inline-block;
+      vertical-align: middle;
+      padding: 14px;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    &-sortList {
+      position: absolute;
+      top: 12px;
+      right: -220px;
+      width: 220px;
+      z-index: 6;
+      text-indent: 5px;
+      ul {
+        width: 100%;
         border-radius: 4px;
-        width: 350px;
-        height: 40px;
-        text-align: center;
-        position: absolute;
-        bottom: 50px;
-        //opacity: .67;
-        left: 20px;
-        &:before {
-            content: '';
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
-        }
-        .refresh-user-list-btn {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .icon-refresh-btn {
-            cursor: pointer;
-            span {
-                font-size: 16px;
-                color: #7A8EC1;
-                vertical-align: middle;
-                padding-left: 4px;
-            }
-        }
-    }
-
-    .userList-inner-content {
         overflow: hidden;
-        height: 100%;
-    }
-
-    .userList-no-data {
-        font-size: 14px;
-        color: #AAAAAA;
-        text-align: center;
-        margin-top: 52px;
-    }
-
-    .tabsInner.medical-record-tabs {
-        text-align: center;
-        border-bottom: 1px solid #E1E2E7;
-        font-size: 0;
-        margin: 0 14px;
-        box-sizing: border-box;
-        & > .tabsItem {
-            display: inline-block;
-            font-size: 15px;
-            color: #808080;
-            padding: 0 2px;
-            margin: 0 2.5px;
-            cursor: pointer;
-            box-sizing: border-box;
-            padding-bottom: 10px;
-            &.active {
-                border-bottom: 4px solid #7a8ec1;
-                color: #323D5E;
-            }
+        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+        li {
+          width: 100%;
+          text-align: left;
+          padding: 5px 0 5px 0;
+          height: 20px;
+          line-height: 25px;
+          color: #808080;
+          font-size: 14px;
+          background: #fff;
+          &:hover {
+            background: #f6f9fa;
+          }
+          &.active {
+            background: #eceff6;
+          }
         }
+      }
     }
+    &-item {
+      display: inline-block;
+      font-size: 14px;
+      color: #808080;
+      padding: 12px 0;
+      width: 50%;
+      box-sizing: border-box;
+      border-right: 1px solid #acb1be;
+      cursor: pointer;
 
-    .quit-triage {
-        margin-top: 10px;
-        .text {
-            vertical-align: middle;
-            margin: 0;
+      &.new {
+        position: relative;
+        &:after {
+          content: "";
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: rgba(242, 62, 51, 0.9);
+          box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.15);
+          position: absolute;
+          right: 5px;
+          top: 5px;
         }
-        .quit-select {
-            width: 24px;
-            height: 24px;
-            display: inline-block;
-            vertical-align: middle;
-            cursor: pointer;
-            margin-left: 5px;
-            &.off {
-                background: url("./assets/img00/common/multiplechoice_off@2x.png") no-repeat;
-                background-size: contain;
-            }
-            &.on {
-                background: url("./assets/img00/common/multiplechoice_on@2x.png") no-repeat;
-                background-size: contain;
-            }
-        }
+      }
+      &:nth-last-child(1) {
+        border-right: none;
+      }
+      &.active {
+        background-color: #7a8ec1;
+        color: #fff;
+      }
+    }
+  }
+}
+
+.time-title {
+  font-size: 13px;
+  color: #909090;
+  margin-bottom: 24px;
+}
+
+.userlist-mainList {
+  overflow: auto;
+  height: 85%;
+  &-item {
+    padding: 25px 20px 25px 40px;
+    font-size: 0;
+    background-color: #fff;
+    box-sizing: border-box;
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    width: 100%;
+    .get-triage {
+      margin-top: 10px;
+    }
+    &.active {
+      background-color: #f4f6fb;
+      box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
+    }
+    &:hover {
+      background-color: #f4f6fb;
+      box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
+      //&:before {
+      //  content: '';
+      //  display: block;
+      //  position: absolute;
+      //  top: 0;
+      //  left: 0;
+      //  bottom: 0;
+      //  background-color: #4fc8d5;
+      //  width: 5px;
+      //}
+    }
+    .userlist-item-img {
+      display: inline-block;
+      vertical-align: middle;
+      margin-right: 12px;
+      position: relative;
+      & > p {
+        font-size: 15px;
+        color: #ffffff;
+        letter-spacing: 0;
+        line-height: 15px;
+        background: rgba(242, 62, 51, 0.9);
+        box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.35);
+        border-radius: 10px;
+        padding: 2px 6px 3px;
+        position: absolute;
+        top: 0;
+        right: -10px;
+      }
+      & > img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        vertical-align: top;
+      }
+    }
+    .userlist-item-msg {
+      display: table-cell;
+      width: 100%;
+      vertical-align: top;
+      font-size: 0;
+      padding-left: 10px;
+    }
+    & > .time {
+      font-size: 12px;
+      color: #808080;
+      letter-spacing: 0;
+      line-height: 12px;
+      position: absolute;
+      right: 25px;
+      top: 32px;
+    }
+  }
+}
+
+.userlist-item-base-msg {
+  //margin-top: 6px;
+  display: inline-block;
+  vertical-align: middle;
+  width: 255px;
+  & > h3 {
+    font-size: 16px;
+    color: #222222;
+    display: inline-block;
+    vertical-align: middle;
+    padding-right: 5px;
+
+    .name {
+      font-size: 18px;
+      color: #222222;
+      letter-spacing: 0;
+      line-height: 18px;
+      padding: 0 8px 0 0;
     }
 
-    .fadeDown-enter-active,
-    .fadeDown-leave-active {
-        transition: all ease-in-out .5s
+    .category {
+      font-size: 13px;
+      color: #6b748c;
+      letter-spacing: 0;
+      line-height: 13px;
+      padding-left: 8px;
+      border-left: 1px solid #e1e2e7;
+      font-weight: 400;
+      display: inline-block;
+      vertical-align: middle;
+      max-width: 125px;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      -o-text-overflow: ellipsis;
+      overflow: hidden;
+      &.short {
+        max-width: 65px;
+      }
+      span {
+        margin-right: 8px;
+      }
     }
+  }
+  .userlist-item-msg-category {
+    //@include clearfix();
+    display: inline-block;
+    vertical-align: middle;
+    color: #222;
+    border-left: 1px solid #e1e2e7;
+    padding-left: 5px;
 
-    .fadeDown-enter,
-    .fadeDown-leave-to
-        /* .fade-leave-active in <2.1.8 */
-    {
-        opacity: 0;
-        transform: translateY(-50%);
+    & > span {
+      padding-right: 7px;
+      font-size: 12px;
     }
+  }
+  & > .time {
+    float: right;
+    font-size: 12px;
+    color: #666;
+  }
+  .text {
+    font-size: 13px;
+    color: #808080;
+    letter-spacing: 0;
+    line-height: 13px;
+    margin-top: 10px;
+    display: inline-block;
+    @include ellipsis();
+    max-width: 250px;
+  }
+}
+
+.userlist-item-msg-item {
+  margin-top: 14px;
+  font-size: 0;
+  & > span {
+    font-size: 12px;
+    color: #666;
+  }
+  .sex {
+    margin-right: 10px;
+  }
+  .age {
+    margin-right: 10px;
+  }
+}
+
+.user-list-footer {
+  background: rgba(255, 255, 255, 0.97);
+  box-shadow: 0 2px 6px 0 rgba(153, 167, 208, 0.62);
+  border-radius: 4px;
+  width: 350px;
+  height: 40px;
+  text-align: center;
+  position: absolute;
+  bottom: 50px;
+  //opacity: .67;
+  left: 20px;
+  &:before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    height: 100%;
+  }
+  .refresh-user-list-btn {
+    display: inline-block;
+    vertical-align: middle;
+  }
+  .icon-refresh-btn {
+    cursor: pointer;
+    span {
+      font-size: 16px;
+      color: #7a8ec1;
+      vertical-align: middle;
+      padding-left: 4px;
+    }
+  }
+}
+
+.userList-inner-content {
+  overflow: hidden;
+  height: 100%;
+}
+
+.userList-no-data {
+  font-size: 14px;
+  color: #aaaaaa;
+  text-align: center;
+  margin-top: 52px;
+}
+
+.tabsInner.medical-record-tabs {
+  text-align: center;
+  border-bottom: 1px solid #e1e2e7;
+  font-size: 0;
+  margin: 0 14px;
+  box-sizing: border-box;
+  & > .tabsItem {
+    display: inline-block;
+    font-size: 15px;
+    color: #808080;
+    padding: 0 2px;
+    margin: 0 2.5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding-bottom: 10px;
+    &.active {
+      border-bottom: 4px solid #7a8ec1;
+      color: #323d5e;
+    }
+  }
+}
+
+.quit-triage {
+  margin-top: 10px;
+  .text {
+    vertical-align: middle;
+    margin: 0;
+  }
+  .quit-select {
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    margin-left: 5px;
+    &.off {
+      background: url("./assets/img00/common/multiplechoice_off@2x.png")
+        no-repeat;
+      background-size: contain;
+    }
+    &.on {
+      background: url("./assets/img00/common/multiplechoice_on@2x.png")
+        no-repeat;
+      background-size: contain;
+    }
+  }
+}
+
+.fadeDown-enter-active,
+.fadeDown-leave-active {
+  transition: all ease-in-out 0.5s;
+}
+
+.fadeDown-enter,
+.fadeDown-leave-to {
+  opacity: 0;
+  transform: translateY(-50%);
+}
 </style>
