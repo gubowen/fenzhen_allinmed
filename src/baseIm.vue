@@ -730,7 +730,7 @@ export default {
 
           localStorage.setItem(
             "patientAlertList",
-            JSON.stringify(Object.assign({},patientAlertList,localStorage.getItem("patientAlertList")))
+            JSON.stringify(Object.assign(patientAlertList,JSON.parse(localStorage.getItem("patientAlertList"))))
           );
           _this.$store.commit("setNewOnline", true);
           _this.$store.commit("setMusicPlay", true);
@@ -758,7 +758,7 @@ export default {
 
           localStorage.setItem(
             "waitingAlertList",
-            JSON.stringify(Object.assign({},waitingAlertList,localStorage.getItem("waitingAlertList")))
+            JSON.stringify(Object.assign(waitingAlertList,JSON.parse(localStorage.getItem("waitingAlertList"))))
           );
           _this.$store.commit("setNewWaiting", true);
           _this.$store.commit("setMusicPlay", true);
