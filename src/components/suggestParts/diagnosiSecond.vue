@@ -1110,7 +1110,6 @@
 
             },
             allCurrent(index){
-                alert("1111")
                 if(this.allCurrentIndex == index){
                     this.allCurrentIndex = -1;
                 }else{

@@ -59,12 +59,16 @@
            if(this.showRecord){
              console.log(document.body.clientWidth)
              if (document.body.clientWidth<1500){
-               document.querySelector(".medical-record-form").style.cssText="height:15%;";
+               document.querySelector(".medical-record-form").style.cssText="height:30%;";
              }else{
                document.querySelector(".medical-record-form").style.cssText="height:45%;";
              }
            }else{
-               document.querySelector(".medical-record-form").style.cssText="height:80%;";
+             if(document.body.clientWidth<1500){
+                 document.querySelector(".medical-record-form").style.cssText="height:65%;";
+             }else{
+                 document.querySelector(".medical-record-form").style.cssText="height:80%;";
+             }
            }
         }
     },
