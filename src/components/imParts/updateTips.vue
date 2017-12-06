@@ -37,9 +37,9 @@
                 let result = "";
                 switch (type) {
                     case "videoTriage":
+                    case "imageTriage":
                         result = "患者已上传视诊资料，";
                         break;
-                    case "imageTriage":
                     case "checkSuggessSendTips":
                         result = "患者已上传检查资料，";
                         break;
