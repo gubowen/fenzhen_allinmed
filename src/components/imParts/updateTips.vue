@@ -9,7 +9,7 @@
                 <span>{{content}}点击至</span>
                 <a href='#' class='link' @click='goToCheck'>"专科检查"</a>
                 <span>查看。</span>
-                <span v-if="showType==='videoTriage'">若视频上传中，请稍候再次点击查看。</span>
+                <span v-if="showType==='videoTriage'||showType==='imageTriage'">若视频上传中，请稍候再次点击查看。</span>
             </figcaption>
         </figure>
     </article>
