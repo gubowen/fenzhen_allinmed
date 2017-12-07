@@ -10,7 +10,7 @@
                 </article>
                 <button class="jump-box-add-term" :class="{'icon-suggestion-preview-gray':isLight,'forbid':isLight,'icon-suggestion-preview':!isLight}" @click="previewSuggest">
                     <span>预览</span></button>
-                <button class="jump-box-add-send" :class="{'forbid':isLight}" @click="sendSuggest"><span>发送</span></button>
+                <button class="jump-box-add-send" :class="{'forbid':isLight}" @click="submitStatus&&sendSuggest()"><span>发送</span></button>
             </header>
             <section class="config-suggestion-inner scrollTop">
                 <nav class="config-suggestion-tabsBox">
@@ -364,6 +364,7 @@
                 isActive: false,
                 viewMore: false,
                 isLight: true,
+                submitStatus:true,
                 cutNum: 0,
                 docCutNum: 0,
                 tagCutNum: 0,
@@ -945,6 +946,7 @@
             },
             sendSuggest(){
                 let that = this;
+                this.submitStatus = false;
                 if (!this.isLight) {
                     let recommendCustomerList = [], recoveryAdviceList = [],docNames = [];
                     //推荐医生

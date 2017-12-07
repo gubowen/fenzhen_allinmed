@@ -4,7 +4,7 @@
     <header class="preview-suggestion-title">
       <button type="button" class="btn-border-small-pvw btn-cancel fl" @click="reviseSuggest" v-if="$store.state.previewType ==1 ">修改</button>
       <span>初诊建议</span>
-      <button type="button" class="btn-primary-small-pvw fr ev-send-suggestion" @click="sendSuggest" v-if="$store.state.previewType ==1">发送</button>
+      <button type="button" class="btn-primary-small-pvw fr ev-send-suggestion" @click="submitStatus&&sendSuggest()" v-if="$store.state.previewType ==1">发送</button>
     </header>
     <section class="preview-suggestion-inner">
       <section class="preview-suggestion-item">
@@ -132,6 +132,7 @@
       data(){
         return {
           nowTime:"",
+          submitStatus:true,
           previewSendData:{
             diagnoseResult:{},
             doctorList:[],
@@ -227,6 +228,7 @@
         },
         sendSuggest(){
           let that = this;
+          this.submitStatus = false;
           let recommendCustomerList = [],recoveryAdviceList = [],docNames = [];
           //推荐医生
           if(this.previewSendData.doctorList.length>0){

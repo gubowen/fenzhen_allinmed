@@ -143,7 +143,7 @@
           </section>
         </section>
         <section class="btn-group clear">
-          <button type="button" class="btn-primary-small fr" @click="sendMessage()">发送</button>
+          <button type="button" class="btn-primary-small fr" @click="submitStatus&&sendMessage()">发送</button>
           <button type="button" class="btn-border-small btn-cancel fr r20" @click="update()">修改</button>
         </section>
       </section>
@@ -166,6 +166,7 @@
         isLight:false,
         tabActive: true,
         nextFlag: true,
+        submitStatus:true,
         showExamineList: [],
         testSuggestList: [],
         saveExamineUrl: "/call/patient/recovery/advice/v1/create/",//保存检查检验
@@ -332,6 +333,7 @@
       },
       saveData(){
         let _this = this;
+        this.submitStatus = false;
 
 
         _this.showExamineList.forEach(function (item, index) {
