@@ -27,6 +27,17 @@
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
+                    <button class="user-controller-check" @click.stop="sendFile">
+                        <i class="icon-finish"></i>
+                        <span>发送视图</span>
+                        <div class="sendList" v-show="sendFlag">
+                            <ul>
+                                <li @click="sendImg">发送图片</li>
+                                <li @click="sendVideo">发送视频</li>
+                                <li @click="sendPDF">发送文件</li>
+                            </ul>
+                        </div>
+                    </button>
                     <!--快捷提问-->
                     <transition name="fade">
                         <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
@@ -40,7 +51,6 @@
                         <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
                                       @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
                     </transition>
-
                 </nav>
                 <article class="user-controller-middle">
                     <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
@@ -53,8 +63,9 @@
                         <img :class="{'send-loading':!$store.state.beingSend}" v-if="!$store.state.beingSend" src="/static/img/img00/common/save_complete.png" alt="loading...">
                     </button>
                 </footer>
-
-
+                <send-img></send-img>
+                <send-video></send-video>
+                <send-File></send-File>
             </section>
         </section>
         <!--编辑常用回复-->
@@ -83,6 +94,8 @@
                 <PreviewSuggestion></PreviewSuggestion>
             </transition>
         </section>
+        <!--文件上传-->
+
     </section>
 </template>
 <script>
@@ -100,6 +113,9 @@ import releasePatient from "@/base/releasePatient";
 import ShowBigImg from "./common/ShowBigImg";
 import ShowVideo from "./common/ShowVideo";
 import store from "@/store/store";
+import sendImg from "@/components/imParts/sendImg";
+import sendVideo from "@/components/imParts/sendVideo";
+import sendFile from "@/components/imParts/sendFile";
 
 export default {
   name: "communication",
@@ -123,7 +139,8 @@ export default {
       fastReplyConfig: false,
       reTriageShow: false,
       reTriageContentTips: "确定结束与该患者的沟通吗？",
-      inputReadOnly: ""
+      inputReadOnly: "",
+      sendFlag:false
     };
   },
   components: {
@@ -137,7 +154,10 @@ export default {
     BaseIm,
     SmallConfirm,
     PreviewSuggestion,
-    UsedReplyConfig
+    UsedReplyConfig,
+    sendImg,
+    sendVideo,
+    sendFile
   },
   props: {
     m: {
@@ -325,6 +345,45 @@ export default {
         .catch(res => {
           console.log("网络异常...");
         });
+    },
+    sendFile(){
+        this.sendFlag = !this.sendFlag;
+    },
+    sendImg(){
+        this.$store.commit("setSendImgShow",true);
+    },
+    sendVideo(){
+        this.$store.commit("setSendVideoShow",true);
+    },
+    sendPDF(){
+        this.$store.commit("setSendFileShow",true);
+    },
+    PreviewImage(imgFile){
+    var filextension=imgFile.value.substring(imgFile.value.lastIndexOf("."),imgFile.value.length);
+    filextension=filextension.toLowerCase();
+    if ((filextension!='.jpg')&&(filextension!='.gif')&&(filextension!='.jpeg')&&(filextension!='.png')&&(filextension!='.bmp'))
+    {
+        alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
+        imgFile.focus();
+    }
+    else
+    {
+        var path;
+        if(document.all)//IE
+        {
+            imgFile.select();
+            path = document.selection.createRange().text;
+
+            document.getElementById("imgPreview").innerHTML="";
+            document.getElementById("imgPreview").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + path + "\")";//使用滤镜效果
+        }
+        else//FF
+        {
+            path = imgFile.files[0].getAsDataURL();
+            document.getElementById("imgPreview").innerHTML = "<img id='img1' width='120px' height='100px' src='"+path+"'/>";
+            // document.getElementById("img1").src = path;
+        }
+    }
     }
   },
   mounted() {
@@ -458,5 +517,43 @@ export default {
       }
     }
   }
+}
+
+.user-controller-check{
+    position: relative;
+    .sendList{
+        position: absolute;
+        width:120px;
+        top:-110px;
+        left:-8px;
+        &:after {
+        content: '';
+        position: absolute;
+        height: 0;
+        width: 0;
+        border-top: 10px solid #fff;
+        border-bottom: 10px solid transparent;
+        border-left: 10px solid transparent;
+        border-right: 10px solid transparent;
+        margin-left: -55px;
+        }
+        ul{
+            width:100%;
+            box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+            border-radius: 4px;
+            overflow: hidden;
+            li{
+                background: #fff;
+                width:100%;
+                box-sizing: border-box;
+                text-align: center;
+                height:30px;
+                line-height: 30px;
+                &:hover{
+                    background: #f6f9fa;
+                }
+            }
+        }
+    }
 }
 </style>
