@@ -101,7 +101,8 @@ export default new Vuex.Store({
         sendVideoShow:false,
         sendFileFlag:{
             flag:false,
-            data:{}
+            data:{},
+            name:''
         },
         sendFileShow:false,
         newSickId:'',                //现病史Id

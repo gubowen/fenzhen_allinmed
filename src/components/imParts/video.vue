@@ -37,7 +37,7 @@
             }
         },
         mounted(){
-            console.log(this.message);
+//            console.log(this.message);
         },
         computed:{
             docName(){

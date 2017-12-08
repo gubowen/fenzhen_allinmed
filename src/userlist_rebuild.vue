@@ -411,6 +411,10 @@ export default {
       this.$router.push({
         name: "mainSpeak"
       });
+      //刷新上传功能
+        this.$store.commit("setSendImgShow",false);
+        this.$store.commit("setSendVideoShow",false);
+        this.$store.commit("setSendFileShow",false);
     },
     //三个状态的点击切换（沟通中、已结束、被退回）
     statusChange(status) {
