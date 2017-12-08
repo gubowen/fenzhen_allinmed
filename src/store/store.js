@@ -89,6 +89,21 @@ export default new Vuex.Store({
             flag: false,
             data: {}
         },
+        sendImgFlag:{
+            flag: false,
+            data: {}
+        },
+        sendImgShow:false,
+        sendVideoFlag:{
+            flag:false,
+            data:{}
+        },
+        sendVideoShow:false,
+        sendFileFlag:{
+            flag:false,
+            data:{}
+        },
+        sendFileShow:false,
         newSickId:'',                //现病史Id
         musicPlay:false,
         beingSend:true,
@@ -271,6 +286,25 @@ export default new Vuex.Store({
         },
         setReleasePatientCaseIdFlag(state,param){
             state.releasePatientCaseIdFlag=param;
+        },
+        setSendImgFlag(state,data){
+            state.sendImgFlag = data;
+        },
+        setSendImgShow(state,data){
+            state.sendImgShow = data;
+        },
+        setSendVideoFlag(state,data){
+            state.sendVideoFlag = data;
+        },
+        setSendVideoShow(state,data){
+            state.sendVideoShow = data;
+        },
+        setSendFileFlag(state,data){
+            state.sendFileFlag = data;
+        },
+        setSendFileShow(state,data){
+            state.sendFileShow = data;
         }
+
     }
 });

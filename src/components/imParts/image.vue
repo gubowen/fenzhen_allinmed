@@ -1,13 +1,20 @@
 <template>
   <figure class="messageList-item-content">
     <!--患者头像-->
-    <figure class="messageList-item-img">
+    <figure class="messageList-item-img" v-if="message.from != '1_doctor00001'">
       <img :src="$store.state.currentItem.logoUrl" alt="" >
     </figure>
     <!--图片-->
     <figcaption class="messageList-item-text" :class="{'make-photo-box':exifFlag}">
       <img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)" ref="imageElement"/>
     </figcaption>
+    <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
+      <div class="messageList-item-nameTop">
+        <p>{{ '【分诊医生】'+docName}}</p>
+      </div>
+      <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
+      <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+    </figure>
   </figure>
 </template>
 <script type="text/ecmascript-6">
@@ -32,6 +39,13 @@
         this.installSBIList();
         this.initImageFn();
     },
+      computed:{
+          docName(){
+              return this.message.custom && JSON.parse(this.message.custom).docName
+                  ? JSON.parse(this.message.custom).docName
+                  : this.$store.state.userName;
+          }
+      },
     methods:{
       showBigImgFunction(message){
           let _this = this;
@@ -66,6 +80,9 @@
                 that.$emit("loadCallback");
             };
 
+        },
+        deleteMsg(){
+            this.$emit("deleteMsg");
         }
     },
     props: {

@@ -23,10 +23,10 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"
-                                      @loadCallback="loadCallback"></ImageElement>
+                        <ImageElement v-if="items.type === 'image'" :message="items" :nim="nim" @loadCallback="loadCallback"></ImageElement>
+                        <!--视频消息-->
+                        <videoElement v-if="items.type === 'video'" :message="items" :nim="nim" @loadCallback="loadCallback"></videoElement>
                         <!--检查检验-->
-
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
                                 :message="items" @deleteMsg="deleteMsg(items)"></CheckSuggestion>
@@ -82,6 +82,8 @@ import Vue from "vue";
 
 import ContentElement from "@/components/imParts/content";
 import ImageElement from "@/components/imParts/image";
+import videoElement from "@/components/imParts/video";
+
 import MedicalReport from "@/components/imParts/medicalReport";
 import PreviewSuggestion from "@/components/imParts/previewSuggestion";
 import VideoTriage from "@/components/imParts/videoTriage";
@@ -166,6 +168,7 @@ export default {
     MedicalReport,
     ContentElement,
     ImageElement,
+    videoElement,
     PreviewSuggestion,
     VideoTriage,
     CheckSuggestion,
@@ -261,6 +264,30 @@ export default {
         return;
       }
     },
+    "$store.state.sendImgFlag"(obj){
+        const _this = this;
+        if (obj.flag) {
+            _this.sendFile(obj.data,'image');
+            store.commit("setSendImgFlag", {
+                flag: false,
+                data: {}
+            });
+        } else {
+            return;
+        }
+    },
+    "$store.state.sendVideoFlag"(obj){
+          const _this = this;
+          if (obj.flag) {
+              _this.sendFile(obj.data,'video');
+              store.commit("setSendVideoFlag", {
+                  flag: false,
+                  data: {}
+              });
+          } else {
+              return;
+          }
+      },
     "$store.state.sendVideoTriageFlag"(obj) {
       console.log(obj);
       if (obj.flag) {
@@ -582,6 +609,45 @@ export default {
         }
       });
     },
+    //发送文件
+    sendFile(data,type ='file'){
+        console.log(type);
+        let that = this;
+        this.nim.previewFile({
+            type: type,
+            dataURL: data,
+            uploadprogress: function(obj) {
+                console.log('文件总大小: ' + obj.total + 'bytes');
+                console.log('已经上传的大小: ' + obj.loaded + 'bytes');
+                console.log('上传进度: ' + obj.percentage);
+                console.log('上传进度文本: ' + obj.percentageText);
+            },
+            done: function(error, file) {
+                console.log('上传'+type + (!error?'成功':'失败'));
+                // show file to the user
+                if (!error) {
+                    let msg = that.nim.sendFile({
+                        scene: 'p2p',
+                        to: that.targetData.account,
+                        custom: JSON.stringify({
+                            cType: "0",
+                            cId: that.$store.state.userId,
+                            mType: "1",
+                            //,
+//                            conId: that.orderSourceIdorderSourceId
+                        }),
+                        file: file,
+                        type: type,
+                        done(error,msg){
+                            that.sendSingleMessage(error, msg);
+                        }
+                    });
+                    console.log('正在发送p2p ' + type + '消息, id=' + msg.idClient);
+//                    pushMsg(msg);
+                }
+            }
+        });
+    },
     //重新发送
     resendMsg(obj) {
       let _this = this;
@@ -701,7 +767,7 @@ export default {
         scene: "p2p",
         to: that.targetData.account,
         done(error, obj) {
-          console.log(error);
+          console.log(obj);
           if (error) {
             nim.getInstance();
           }
@@ -794,7 +860,7 @@ export default {
     },
     //输出历史消息...
     renderHistoryMessage(container, error, obj, from) {
-      console.log(obj);
+//      console.log(obj);
       let that = this;
       if (!error) {
         obj.msgs.reverse();
