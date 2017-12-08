@@ -1,6 +1,6 @@
 <template>
-    <section class="sendImg" v-show="showFlag">
-        <input name="file" type="file" multiple="" @change="onFileChange($event)"/>
+    <section class="sendImg" v-if="showFlag">
+        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendVideo" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
             <span>Video to upload</span>
             <img src="../../assets/img00/controller/home_question_default.png"/>
@@ -37,6 +37,13 @@
         watch: {
             "$store.state.sendVideoShow"(data){
                 this.showFlag = data;
+                if(!data){
+                    this.fileList = [];
+                    this.$store.commit("setSendVideoFlag", {
+                        flag: false,
+                        data: {}
+                    });
+                }
             }
         },
         methods: {
@@ -50,17 +57,20 @@
                 if (!files.length) {
                     return;
                 }else if(files.length >1){
-                    alert("请单发视频！");
+                    document.getElementById("sendVideo").value='';
+                    this.$store.commit("showPopup", { text: "请单发视频" });
                     return;
                 }
 
                 //一次最多上传数量
                 if(this.fileList.length ==this.maxNumber){
-                     alert("请单发视频！");
+                    document.getElementById("sendVideo").value='';
+                    this.$store.commit("showPopup", { text: "请单发视频" });
                         return;
                 }else{
                     if((this.fileList.length +files.length) >this.maxNumber){
-                        alert("请单发视频！");
+                        document.getElementById("sendVideo").value='';
+                        this.$store.commit("showPopup", { text: "请单发视频" });
                         return;
                     }
                 }
@@ -72,7 +82,8 @@
                         this.fileList.push(files[i]);
 
                     }else{
-                            alert("请上传视频文件！");
+                        document.getElementById("sendVideo").value='';
+                        this.$store.commit("showPopup", { text: "请上传视频文件" });
                             return
                     }
                 }
@@ -82,7 +93,8 @@
                 let _this = this;
                 for(let item of this.fileList){
                     if(item.sizeWarning){
-                        alert("请传入小于" + this.maxSize + 'M的图片！');
+                        document.getElementById("sendVideo").value='';
+                        this.$store.commit("showPopup", { text: "请传入小于" + this.maxSize + "M的图片！" });
                         return;
                     }
                 }
@@ -129,10 +141,9 @@
             },
             //删除图片
             removeImg(index,item){
-//                console.log(index);
-//                console.log(this.fileList);
+               document.getElementById("sendVideo").value='';
                this.fileList.removeByValue(item);
-            },
+            }
         },
         mounted(){
             this.init();

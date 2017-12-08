@@ -23,9 +23,11 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'image'" :message="items" :nim="nim" @loadCallback="loadCallback"></ImageElement>
+                        <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))" :message="items" :nim="nim" @loadCallback="loadCallback"></ImageElement>
                         <!--视频消息-->
                         <videoElement v-if="items.type === 'video'" :message="items" :nim="nim" @loadCallback="loadCallback"></videoElement>
+                        <!--文件信息-->
+                        <fileElement v-if="items.type === 'file'&&(!getFileType(items.file))" :message="items" :nim="nim" @loadCallback="loadCallback"></fileElement>
                         <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
@@ -83,6 +85,7 @@ import Vue from "vue";
 import ContentElement from "@/components/imParts/content";
 import ImageElement from "@/components/imParts/image";
 import videoElement from "@/components/imParts/video";
+import fileElement from "@/components/imParts/pdfFile";
 
 import MedicalReport from "@/components/imParts/medicalReport";
 import PreviewSuggestion from "@/components/imParts/previewSuggestion";
@@ -169,6 +172,7 @@ export default {
     ContentElement,
     ImageElement,
     videoElement,
+    fileElement,
     PreviewSuggestion,
     VideoTriage,
     CheckSuggestion,
@@ -267,7 +271,7 @@ export default {
     "$store.state.sendImgFlag"(obj){
         const _this = this;
         if (obj.flag) {
-            _this.sendFile(obj.data,'image');
+            _this.sendFile(obj,'image');
             store.commit("setSendImgFlag", {
                 flag: false,
                 data: {}
@@ -279,10 +283,23 @@ export default {
     "$store.state.sendVideoFlag"(obj){
           const _this = this;
           if (obj.flag) {
-              _this.sendFile(obj.data,'video');
+              _this.sendFile(obj,'video');
               store.commit("setSendVideoFlag", {
                   flag: false,
                   data: {}
+              });
+          } else {
+              return;
+          }
+      },
+    "$store.state.sendFileFlag"(obj){
+          const _this = this;
+          if (obj.flag) {
+              _this.sendFile(obj,'file');
+              store.commit("setSendFileFlag", {
+                  flag: false,
+                  data: {},
+                  name:''
               });
           } else {
               return;
@@ -611,11 +628,11 @@ export default {
     },
     //发送文件
     sendFile(data,type ='file'){
-        console.log(type);
         let that = this;
+        store.commit("startLoading");
         this.nim.previewFile({
             type: type,
-            dataURL: data,
+            dataURL: data.data,
             uploadprogress: function(obj) {
                 console.log('文件总大小: ' + obj.total + 'bytes');
                 console.log('已经上传的大小: ' + obj.loaded + 'bytes');
@@ -623,6 +640,7 @@ export default {
                 console.log('上传进度文本: ' + obj.percentageText);
             },
             done: function(error, file) {
+
                 console.log('上传'+type + (!error?'成功':'失败'));
                 // show file to the user
                 if (!error) {
@@ -633,12 +651,14 @@ export default {
                             cType: "0",
                             cId: that.$store.state.userId,
                             mType: "1",
+                            name:data.name
                             //,
 //                            conId: that.orderSourceIdorderSourceId
                         }),
                         file: file,
                         type: type,
                         done(error,msg){
+                            store.commit("stopLoading");
                             that.sendSingleMessage(error, msg);
                         }
                     });
@@ -1047,6 +1067,14 @@ export default {
           this.FourIndex = index;
         }
       }
+    },
+    //获取文件类型 做旧数据发送图片格式为file的兼容性
+      getFileType(file){
+          if(/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.ext)) {
+              return true;
+          }else{
+              return false;
+          }
     }
   }
 };

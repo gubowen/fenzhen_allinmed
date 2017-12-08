@@ -1,6 +1,6 @@
 <template>
-    <section class="sendImg" v-show="showFlag">
-        <input name="file" type="file" multiple="" @change="onFileChange($event)"/>
+    <section class="sendImg" v-if="showFlag">
+        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendFile" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
             <span>File to upload</span>
             <img src="../../assets/img00/controller/home_question_default.png"/>
@@ -9,7 +9,7 @@
         <div class="imgList" v-show="fileList.length>0">
             <div class="imgInfo" v-for="(item,index) in fileList">
                 <div class="name">{{item.name}}</div>
-                <img src="../../assets/img00/common/videoPlay.jpg"/>
+                <img src="../../assets/img00/common/folder.jpg"/>
                 <div :class="[item.sizeWarning ? 'on': 'no','size']"><span class="num">{{getSize(item,index)}}</span><span></span></div>
                 <div class="remove" ><img @click="removeImg(index,item)" src="../../assets/img00/common/popup_close_activate.png"/></div>
             </div>
@@ -37,6 +37,13 @@
         watch: {
             "$store.state.sendFileShow"(data){
                 this.showFlag = data;
+                if(!data){
+                    this.fileList = [];
+                    this.$store.commit("setSendFileFlag", {
+                        flag: false,
+                        data: {}
+                    });
+                }
             }
         },
         methods: {
@@ -50,29 +57,36 @@
                 if (!files.length) {
                     return;
                 }else if(files.length >1){
-                    alert("请单发视频！");
+                    document.getElementById("sendFile").value='';
+                    this.$store.commit("showPopup", { text: "请单发文件" });
                     return;
                 }
 
                 //一次最多上传数量
                 if(this.fileList.length ==this.maxNumber){
-                     alert("请单发视频！");
+                    document.getElementById("sendFile").value='';
+                    this.$store.commit("showPopup", { text: "请单发文件" });
                         return;
+
                 }else{
                     if((this.fileList.length +files.length) >this.maxNumber){
-                        alert("请单发视频！");
+                        document.getElementById("sendFile").value='';
+                        this.$store.commit("showPopup", { text: "请单发文件" });
                         return;
                     }
                 }
                 files = Object.assign({}, files);
+
                 for(let i in files){
-                    if(/video\/\w+/.test(files[i].type)){
+                    console.log(files[i].type);
+                    if(/.pdf/.test(files[i].type)){
                         files[i].url =  window.URL.createObjectURL(files[i]);
                         files[i].sizeWarning = false;
                         this.fileList.push(files[i]);
 
                     }else{
-                            alert("请上传视频文件！");
+                        document.getElementById("sendFile").value='';
+                        this.$store.commit("showPopup", { text: "请上传pdf格式文件" });
                             return
                     }
                 }
@@ -82,7 +96,8 @@
                 let _this = this;
                 for(let item of this.fileList){
                     if(item.sizeWarning){
-                        alert("请传入小于" + this.maxSize + 'M的图片！');
+                        document.getElementById("sendFile").value='';
+                        this.$store.commit("showPopup", { text: "请传入小于" + this.maxSize + "M的图片！" });
                         return;
                     }
                 }
@@ -91,10 +106,12 @@
                     let reader = new FileReader();
                     reader.readAsDataURL(item);
                     reader.onload=function(e){
+                        console.log(this);
                         console.log("加载完成！");
                         _this.$store.commit("setSendFileFlag",{
                             flag:true,
-                            data: this.result
+                            data: this.result,
+                            name:item.name
                         });
                     };
                 }
@@ -103,7 +120,8 @@
                 _this.$store.commit("setSendFileShow",false);
                 _this.$store.commit("setSendFileFlag", {
                     flag: false,
-                    data: {}
+                    data: {},
+                    name:''
                 });
             },
             //关闭发送
@@ -112,7 +130,8 @@
                 this.fileList = [];
                 this.$store.commit("setSendFileFlag", {
                     flag: false,
-                    data: {}
+                    data: {},
+                    name:''
                 });
             },
             //计算图片大小
@@ -129,8 +148,7 @@
             },
             //删除图片
             removeImg(index,item){
-//                console.log(index);
-//                console.log(this.fileList);
+               document.getElementById("sendFile").value='';
                this.fileList.removeByValue(item);
             },
         },

@@ -1,6 +1,6 @@
 <template>
-    <section class="sendImg" v-show="showFlag">
-        <input name="file" type="file" multiple="" @change="onFileChange($event)"/>
+    <section class="sendImg" v-if="showFlag">
+        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
             <span>Img to upload</span>
             <img src="../../assets/img00/controller/home_question_default.png"/>
@@ -36,6 +36,13 @@
         watch: {
             "$store.state.sendImgShow"(data){
                 this.showFlag = data;
+                if(!data){
+                    this.fileList = [];
+                    this.$store.commit("setSendImgFlag", {
+                        flag: false,
+                        data: {}
+                    });
+                }
             }
         },
         methods: {
@@ -51,26 +58,36 @@
                 }
                 //一次最多上传数量
                 if(this.fileList.length ==this.maxNumber){
-                        alert("一次最多上传"+this.maxNumber+ '张！');
+                    document.getElementById("sendImg").value='';
+                    this.$store.commit("showPopup", { text: "一次最多上传"+this.maxNumber+ '张！' });
                         return;
                 }else{
                     if((this.fileList.length +files.length) >this.maxNumber){
-                        alert("一次最多上传"+this.maxNumber+ '张！');
+                        document.getElementById("sendImg").value='';
+                        this.$store.commit("showPopup", { text: "一次最多上传"+this.maxNumber+ '张！' });
                         return;
                     }
                 }
                 files = Object.assign({}, files);
                 for(let i in files){
-//                    if(/image\/\w+/.test(file.type)){
-//                        if(!this.fileType){
-//                            this.fileType ='img';
-//                        }else{
-//                            this.fileType == 'img'? '':alert("请传入相同类型的文件！");
-//                        }
+                    if(/image\/\w+/.test(files[i].type)){
+                        if(!this.fileType){
+                            this.fileType ='img';
+                        }else{
+                            this.fileType == 'img'? '':
+                                (function(){
+                                    this.$store.commit("showPopup", { text: "请传入相同类型的文件" });
+                                    document.getElementById("sendImg").value='';
+                                }());
+                        }
                         files[i].url =  window.URL.createObjectURL(files[i]);
                         files[i].sizeWarning = false;
                         this.fileList.push(files[i]);
-//                    }else if(/video\/\w+/.test(file.type)){
+                    }else{
+                        this.$store.commit("showPopup", { text: "请传入图片文件" });
+                        document.getElementById("sendImg").value='';
+                    }
+                    //else if(/video\/\w+/.test(file.type)){
 //                        if(!this.fileType){
 //                            this.fileType ='video';
 //                        }else{
@@ -90,7 +107,8 @@
                 let _this = this;
                 for(let item of this.fileList){
                     if(item.sizeWarning){
-                        alert("请传入小于" + this.maxSize + 'M的图片！');
+                        this.$store.commit("showPopup", { text: "请传入小于" + this.maxSize + "M的图片！"});
+                        document.getElementById("sendImg").value='';
                         return;
                     }
                 }
@@ -137,9 +155,8 @@
             },
             //删除图片
             removeImg(index,item){
-//                console.log(index);
-//                console.log(this.fileList);
-               this.fileList.removeByValue(item);
+                document.getElementById("sendImg").value='';
+                this.fileList.removeByValue(item);
             },
         },
         mounted(){
