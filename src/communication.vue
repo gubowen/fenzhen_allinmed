@@ -197,7 +197,8 @@ export default {
       const that = this;
       let baseFn = function() {
         if (that.controllerInput.trim().length === 0) {
-          return;
+            e.preventDefault();
+            return;
         } else {
           if (that.controllerInputStatus == 0) {
             that.$refs.baseImComponent
