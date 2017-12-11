@@ -474,21 +474,14 @@ export default {
         data: dataValue,
         done(res) {
           //            store.commit("stopLoading");
-          if (
-            res.responseObject.responseData &&
-            res.responseObject.responseStatus
-          ) {
+          if (res.responseObject.responseData && res.responseObject.responseStatus) {
             let dataList = _this.setSelectValue(
               res.responseObject.responseData.dataList
             );
             let waitingAlertList = {};
             let patientAlertList = {};
-            waitingAlertList = JSON.parse(
-              localStorage.getItem("waitingAlertList")
-            );
-            patientAlertList = JSON.parse(
-              localStorage.getItem("patientAlertList")
-            );
+            waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+            patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
             if (type === "online") {
               if (patientAlertList && patientAlertList !== "{}") {
                 for (let key in patientAlertList) {
@@ -499,21 +492,20 @@ export default {
                     }
                     if (key == "0_" + item.caseId) {
                       item.messageAlert = patientAlertList[key];
+
                       _this.newPatientFlag = true;
                       _this.$store.commit("setMusicPlay", true);
                       setTimeout(function() {
                         _this.$store.commit("setMusicPlay", false);
                       }, 2000);
+                      flag = false;
                     }
                   });
                   if (flag) {
                     delete patientAlertList[key];
                   }
                 }
-                localStorage.setItem(
-                  "patientAlertList",
-                  JSON.stringify(patientAlertList)
-                );
+                localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
               }
               _this.$store.commit("setPatientList", dataList);
               _this.userListOnline = dataList ? dataList : [];
@@ -539,10 +531,7 @@ export default {
                     delete waitingAlertList[key];
                   }
                 }
-                localStorage.setItem(
-                  "waitingAlertList",
-                  JSON.stringify(waitingAlertList)
-                );
+                localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
               }
               _this.$store.commit("setWaitingList", dataList);
               _this.userListWaiting = dataList ? dataList : [];
