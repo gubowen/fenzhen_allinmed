@@ -106,7 +106,7 @@
     deleteTerm: "/call/customer/quick/question/v1/delete/",
     fixTerm: "/call/customer/quick/question/v1/save/",
     getTerm: "/call/customer/quick/question/v1/getMapList/"
-  }
+  };
   export default{
     name: 'fast-reply-config',
     data(){
@@ -225,6 +225,7 @@
                 parentId: item.questionId,
                 fullPath: item.fullPath,
                 questionType: item.questionType,
+                treeLevel: 2,
               });
             }
 

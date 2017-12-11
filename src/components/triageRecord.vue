@@ -21,7 +21,7 @@
       </section>
       <section class="edit" :class="{'active':showAdd}">
         <textarea placeholder="请填写" maxlength="200" class="J-textArea-remark"  v-model="remarkValue"></textarea>
-        <button class="saveButton" @click="addRemrak">保存</button>
+        <button :class="[{'active':remarkValue.length>0},'saveButton']" @click="addRemark">保存</button>
       </section>
     </section>
   </aside>
@@ -109,9 +109,10 @@
           return time;
         }
       },
-      addRemrak(){
+      addRemark(){
         let that = this;
         if(this.addType == "add"){
+           if(this.remarkValue.length>0){
           ajax({
             url: XHRList.update,
             method: 'POST',
@@ -140,6 +141,7 @@
               }
             }
           })
+           }
         }else if(this.addType == "update"){
           ajax({
             url: XHRList.deleteList,
@@ -185,7 +187,7 @@
     },
     computed:{
       confimContent(){
-        return "确定删除该条备注吗?"
+        return "确定删除该条分诊记录吗?"
       }
     },
     props:{
@@ -344,10 +346,11 @@
 
         .saveButton {
           font-size: 13px;
-          color: #7A8EC1;
+          color: #ccc;
           letter-spacing: 0;
           line-height: 30px;
-          border: 1px solid #7A8EC1;
+          background: #ECEFF6;
+          border: 1px solid #ccc;
           border-radius: 4px;
           width: 70px;
           height: 30px;
@@ -355,6 +358,10 @@
           bottom: 20px;
           right: 20px;
           cursor: pointer;
+          &.active{
+            color: #7A8EC1;
+            border: 1px solid #7A8EC1;
+          }
         }
       }
       .active {
