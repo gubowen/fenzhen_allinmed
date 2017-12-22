@@ -17,6 +17,31 @@
   bottom: 0;
   background-color: #FFFFFF;
   border-top: 1px solid #f4f6fb;
+  .user-controller-get-triage {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 16px;
+  }
+  .modal-confirm {
+    top: -150px;
+    right: 25%;
+    left: auto;
+    @include query(1500px) {
+      right: 35%;
+    }
+    &:after {
+      position: absolute;
+      bottom: -10px;
+      right: 30%;
+      top: auto;
+      transform: rotate(180deg);
+      @include query(1500px) {
+        right: 25%;
+      }
+    }
+  }
   .user-controller-footer {
     width: 100%;
     padding: 10px 0;
@@ -51,7 +76,7 @@
   .user-controller-fastBtn {
     padding: 10px 40px;
     font-size: 0;
-    @include query(1500px){
+    @include query(1366px){
       padding:10px 10px;
     }
     & > button {
@@ -59,11 +84,11 @@
       font-size: 16px;
       color: #808080;
       margin-right: 40px;
-      @include query(1500px){
+      @include query(1366px){
         margin-right: 10px;
       }
       & > i {
-        @include query(1500px){
+        @include query(1366px){
           margin-right: 0;
         }
       }
@@ -98,10 +123,110 @@
     }
     .user-controller-check {
       float: right;
+      position: relative;
+      .sendList{
+        position: absolute;
+        width:120px;
+        top:-110px;
+        left:-8px;
+        &:after {
+          content: '';
+          position: absolute;
+          height: 0;
+          width: 0;
+          border-top: 10px solid #fff;
+          border-bottom: 10px solid transparent;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          margin-left: -55px;
+        }
+        ul{
+          width:100%;
+          box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+          border-radius: 4px;
+          overflow: hidden;
+          li{
+            background: #fff;
+            width:100%;
+            box-sizing: border-box;
+            text-align: center;
+            height:30px;
+            line-height: 30px;
+            &:hover{
+              background: #f6f9fa;
+            }
+          }
+        }
+      }
+      @include  query(1366px){
+          display: none;
+      }
+    }
+
+    .user-controller-end {
+      float: right;
     }
     .user-controller-report {
       float: right;
       margin-right: 0;
+    }
+    .user-controller-min {
+      display: block;
+      float: right;
+      position: relative;
+      min-width: 40px;
+      .sendList{
+        position: absolute;
+        width:120px;
+        top:-80px;
+        right: 0;
+        &:after {
+          content: '';
+          position: absolute;
+          height: 0;
+          width: 0;
+          border-top: 10px solid #fff;
+          border-bottom: 10px solid transparent;
+          border-left: 10px solid transparent;
+          border-right: 10px solid transparent;
+          margin-left: 35px;
+        }
+        ul{
+          width:100%;
+          box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+          border-radius: 4px;
+          overflow: hidden;
+          li{
+            background: #fff;
+            width:100%;
+            box-sizing: border-box;
+            text-align: center;
+            height:30px;
+            line-height: 30px;
+            &.min-1{
+              display: none;
+              @include  query(1366px){
+                display: block;
+              }
+            }
+            &:hover{
+              background: #f6f9fa;
+            }
+          }
+        }
+      }
+    }
+
+  }
+  .user-controller-send-btn {
+    position: relative;
+    .send-loading {
+      display: inline-block;
+      width: 15px;
+      height: 15px;
+      position: absolute;
+      margin-left: -20px;
+      animation: rotate 1s linear forwards infinite;
     }
   }
   .fastReply-on ~ .fast-reply {

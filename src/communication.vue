@@ -15,7 +15,19 @@
                         <i class="icon-userReply"></i>
                         <span>常用回复</span>
                     </button>
-                    <button class="user-controller-report" @click="suggestion()">
+                    <button class="user-controller-min" @click.stop="minBtnShow()">
+                        <i class="icon-userReply"></i>
+                        <span>更多</span>
+                        <div class="sendList" v-show="minBtnFlag">
+                            <ul>
+                                <li class="min-1" @click="examine()">检查检验</li>
+                                <li @click="refuseEvent()">拒绝分诊</li>
+                                <li @click="sendFile()">发送视图</li>
+                            </ul>
+                        </div>
+
+                    </button>
+                    <button class="user-controller-end" @click="suggestion()">
                         <i class="icon-suggestion"></i>
                         <span>初诊建议</span>
                     </button>
@@ -23,21 +35,15 @@
                         <i class="icon-checkout"></i>
                         <span>检查检验</span>
                     </button>
-                    <button class="user-controller-check" @click="reTriageShow=true">
+                    <button class="user-controller-end" @click="reTriageShow=true">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
-                    <button class="user-controller-check" @click.stop="sendFile">
-                        <i class="icon-finish"></i>
-                        <span>发送视图</span>
-                        <div class="sendList" v-show="sendFlag">
-                            <ul>
-                                <li @click="sendImg">发送图片</li>
-                                <li @click="sendVideo">发送视频</li>
-                                <li @click="sendPDF">发送文件</li>
-                            </ul>
-                        </div>
-                    </button>
+                    <!--<button class="user-controller-check" @click.stop="sendFile">-->
+                        <!--<i class="icon-finish"></i>-->
+                        <!--<span>发送视图</span>-->
+                    <!--</button>-->
+
                     <!--快捷提问-->
                     <transition name="fade">
                         <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
@@ -63,9 +69,8 @@
                         <img :class="{'send-loading':!$store.state.beingSend}" v-if="!$store.state.beingSend" src="/static/img/img00/common/save_complete.png" alt="loading...">
                     </button>
                 </footer>
-                <send-img></send-img>
-                <send-video></send-video>
-                <send-File></send-File>
+                <!--文件上传-->
+                <send-file></send-file>
             </section>
         </section>
         <!--编辑常用回复-->
@@ -87,6 +92,7 @@
         <transition name="fade">
             <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
         </transition>
+        <show-video-List  v-if="$store.state.videoListFlag"></show-video-List>
         <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
         <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
                  v-if="$store.state.previewShow">
@@ -94,8 +100,8 @@
                 <PreviewSuggestion></PreviewSuggestion>
             </transition>
         </section>
-        <!--文件上传-->
-
+        <!--拒绝分诊-->
+        <refuse v-if="$store.state.refuseFlag"></refuse>
     </section>
 </template>
 <script>
@@ -112,10 +118,10 @@ import triagePatient from "@/base/triagePatient";
 import releasePatient from "@/base/releasePatient";
 import ShowBigImg from "./common/ShowBigImg";
 import ShowVideo from "./common/ShowVideo";
+import ShowVideoList from "./common/ShowVideoList";
 import store from "@/store/store";
-import sendImg from "@/components/imParts/sendImg";
-import sendVideo from "@/components/imParts/sendVideo";
 import sendFile from "@/components/imParts/sendFile";
+import refuse from "@/components/imParts/refuse";
 
 export default {
   name: "communication",
@@ -140,7 +146,8 @@ export default {
       reTriageShow: false,
       reTriageContentTips: "确定结束与该患者的沟通吗？",
       inputReadOnly: "",
-      sendFlag:false
+      sendFlag:false,
+      minBtnFlag:false
     };
   },
   components: {
@@ -151,13 +158,13 @@ export default {
     ExamineCheck,
     ShowBigImg,
     ShowVideo,
+    ShowVideoList,
     BaseIm,
     SmallConfirm,
     PreviewSuggestion,
     UsedReplyConfig,
-    sendImg,
-    sendVideo,
-    sendFile
+    sendFile,
+    refuse
   },
   props: {
     m: {
@@ -347,17 +354,17 @@ export default {
           console.log("网络异常...");
         });
     },
+    //发送文件
     sendFile(){
         this.sendFlag = !this.sendFlag;
-    },
-    sendImg(){
-        this.$store.commit("setSendImgShow",true);
-    },
-    sendVideo(){
-        this.$store.commit("setSendVideoShow",true);
-    },
-    sendPDF(){
         this.$store.commit("setSendFileShow",true);
+    },
+    minBtnShow(){
+        this.minBtnFlag = !this.minBtnFlag
+    } ,
+    //拒绝分诊
+    refuseEvent(){
+        this.$store.commit("setRefuseFlag",true);
     },
     PreviewImage(imgFile){
     var filextension=imgFile.value.substring(imgFile.value.lastIndexOf("."),imgFile.value.length);
@@ -400,17 +407,7 @@ export default {
 @import "./scss/modules/_masker.scss";
 @import "./scss/modules/_checkSuggestion.scss";
 @import "./scss/modules/_configSuggestion.scss";
-.user-controller-send-btn {
-  position: relative;
-  .send-loading {
-    display: inline-block;
-    width: 15px;
-    height: 15px;
-    position: absolute;
-    margin-left: -20px;
-    animation: rotate 1s linear forwards infinite;
-  }
-}
+
 @keyframes rotate {
   0% {
     -webkit-transform: rotate(0);
@@ -421,7 +418,6 @@ export default {
     transform: rotate(360deg);
   }
 }
-
 @-webkit-keyframes rotate {
   0% {
     -webkit-transform: rotate(0);
@@ -445,41 +441,30 @@ export default {
     height: 100%;
     box-sizing: border-box;
   }
+  .center-inner-wrapper {
+        position: absolute;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        left: 2px;
+        background-color: #fff;
+        z-index: 3;
+        text-align: center;
+        display: none;
+
+        &:before {
+            content: "";
+            display: inline-block;
+            vertical-align: middle;
+            height: 100%;
+        }
+        & > img {
+            width: 170px;
+            height: 170px;
+            vertical-align: middle;
+        }
+    }
 }
-
-.icon-finish {
-  display: inline-block;
-  background: url("./assets/img00/controller/end.png") no-repeat;
-  background-size: 100% 100%;
-  width: 18px;
-  height: 18px;
-  vertical-align: middle;
-}
-
-.center-inner-wrapper {
-  position: absolute;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 2px;
-  background-color: #fff;
-  z-index: 3;
-  text-align: center;
-  display: none;
-
-  &:before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    height: 100%;
-  }
-  & > img {
-    width: 170px;
-    height: 170px;
-    vertical-align: middle;
-  }
-}
-
 .no-content {
   .layout-helper {
     margin-right: 0;
@@ -492,69 +477,4 @@ export default {
   }
 }
 
-.user-controller {
-  .user-controller-get-triage {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: 16px;
-  }
-  .modal-confirm {
-    top: -150px;
-    right: 25%;
-    left: auto;
-    @include query(1500px) {
-      right: 35%;
-    }
-    &:after {
-      position: absolute;
-      bottom: -10px;
-      right: 30%;
-      top: auto;
-      transform: rotate(180deg);
-      @include query(1500px) {
-        right: 25%;
-      }
-    }
-  }
-}
-
-.user-controller-check{
-    position: relative;
-    .sendList{
-        position: absolute;
-        width:120px;
-        top:-110px;
-        left:-8px;
-        &:after {
-        content: '';
-        position: absolute;
-        height: 0;
-        width: 0;
-        border-top: 10px solid #fff;
-        border-bottom: 10px solid transparent;
-        border-left: 10px solid transparent;
-        border-right: 10px solid transparent;
-        margin-left: -55px;
-        }
-        ul{
-            width:100%;
-            box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-            border-radius: 4px;
-            overflow: hidden;
-            li{
-                background: #fff;
-                width:100%;
-                box-sizing: border-box;
-                text-align: center;
-                height:30px;
-                line-height: 30px;
-                &:hover{
-                    background: #f6f9fa;
-                }
-            }
-        }
-    }
-}
 </style>

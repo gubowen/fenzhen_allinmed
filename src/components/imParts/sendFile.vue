@@ -1,17 +1,18 @@
 <template>
     <section class="sendImg" v-if="showFlag">
-        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendFile" title=" "/>
+        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
-            <span>File to upload</span>
+            <span>Img to upload</span>
             <img src="../../assets/img00/controller/home_question_default.png"/>
-            <p>(Only One File)</p>
         </div>
         <div class="imgList" v-show="fileList.length>0">
             <div class="imgInfo" v-for="(item,index) in fileList">
                 <div class="name">{{item.name}}</div>
-                <img src="../../assets/img00/common/folder.jpg"/>
+                <img :src="item.url" v-if="fileType(item.type) == 'image'"/>
+                <img v-if="fileType(item.type) == 'video'" src="../../assets/img00/common/videoPlay.jpg"/>
+                <img v-if="fileType(item.type) == 'file'" src="../../assets/img00/common/folder.jpg"/>
                 <div :class="[item.sizeWarning ? 'on': 'no','size']"><span class="num">{{getSize(item,index)}}</span><span></span></div>
-                <div class="remove" ><img @click="removeImg(index,item)" src="../../assets/img00/common/popup_close_activate.png"/></div>
+                <div class="remove"><img @click="removeImg(index,item)" src="../../assets/img00/common/popup_close_activate.png"/></div>
             </div>
         </div>
         <div class="send-btn" v-show="fileList.length>0">
@@ -27,17 +28,19 @@
         name: '',
         data(){
             return {
-                fileType:'',
                 showFlag: false,
                 fileList: [],
-                maxSize:5,
-                maxNumber:1  //一次发送数量
+                maxImgSize: 5,
+                maxVideoSize: 100,
+                maxFileSize: 100,
+                maxPDFSize: 100,
+                maxNumber: 9
             }
         },
         watch: {
             "$store.state.sendFileShow"(data){
                 this.showFlag = data;
-                if(!data){
+                if (!data) {
                     this.fileList = [];
                     this.$store.commit("setSendFileFlag", {
                         flag: false,
@@ -48,7 +51,7 @@
         },
         methods: {
             init(){
-                this.showFlag = this.$store.state.sendFileShow;
+                this.showFlag = this.$store.state.sendImgShow;
             },
             //上传
             onFileChange(e){
@@ -56,87 +59,97 @@
 
                 if (!files.length) {
                     return;
-                }else if(files.length >1){
-                    document.getElementById("sendFile").value='';
-                    this.$store.commit("showPopup", { text: "请单发文件" });
-                    return;
                 }
-
                 //一次最多上传数量
-                if(this.fileList.length ==this.maxNumber){
-                    document.getElementById("sendFile").value='';
-                    this.$store.commit("showPopup", { text: "请单发文件" });
-                        return;
-
-                }else{
-                    if((this.fileList.length +files.length) >this.maxNumber){
-                        document.getElementById("sendFile").value='';
-                        this.$store.commit("showPopup", { text: "请单发文件" });
+                if (this.fileList.length == this.maxNumber) {
+                    document.getElementById("sendImg").value = '';
+                    this.$store.commit("showPopup", {text: "一次最多上传" + this.maxNumber + '个文件！'});
+                    return;
+                } else {
+                    if ((this.fileList.length + files.length) > this.maxNumber) {
+                        document.getElementById("sendImg").value = '';
+                        this.$store.commit("showPopup", {text: "一次最多上传" + this.maxNumber + '个文件！'});
                         return;
                     }
                 }
                 files = Object.assign({}, files);
-
-                for(let i in files){
-                    console.log(files[i].type);
-                    if(/.pdf/.test(files[i].type)){
-                        files[i].url =  window.URL.createObjectURL(files[i]);
+                for (let i in files) {
+                    if ((/image\/\w+/.test(files[i].type)) || (/.pdf/.test(files[i].type)) || (/video\/\w+/.test(files[i].type))) {
+                        files[i].url = window.URL.createObjectURL(files[i]);
                         files[i].sizeWarning = false;
                         this.fileList.push(files[i]);
-
-                    }else{
-                        document.getElementById("sendFile").value='';
-                        this.$store.commit("showPopup", { text: "请上传pdf格式文件" });
-                            return
+                    } else {
+                        this.$store.commit("showPopup", {text: "请传入规定类型图片！"});
+                        document.getElementById("sendImg").value = '';
                     }
                 }
             },
-            //发送
+            //发送文件
             send(){
                 let _this = this;
-                for(let item of this.fileList){
-                    if(item.sizeWarning){
-                        document.getElementById("sendFile").value='';
-                        this.$store.commit("showPopup", { text: "请传入小于" + this.maxSize + "M的图片！" });
+                for (let item of this.fileList) {
+                    if (item.sizeWarning) {
+                        if (_this.fileType(item.type) == 'image') {
+                            this.$store.commit("showPopup", {text: "请传入小于" + this.maxImgSize + "M的图片！"});
+                        } else if (_this.fileType(item.type) == 'video') {
+                            this.$store.commit("showPopup", {text: "请传入小于" + this.maxVideoSize + "M的视频！"});
+                        } else if (_this.fileType(item.type) == 'file') {
+                            this.$store.commit("showPopup", {text: "请传入小于" + this.maxPDFSize + "M的视频！"});
+                        }
+                        document.getElementById("sendImg").value = '';
                         return;
                     }
                 }
 
-                for(let item of this.fileList){
-                    let reader = new FileReader();
-                    reader.readAsDataURL(item);
-                    reader.onload=function(e){
-                        console.log(this);
-                        console.log("加载完成！");
-                        _this.$store.commit("setSendFileFlag",{
-                            flag:true,
-                            data: this.result,
-                            name:item.name
-                        });
-                    };
+                let promises = [];
+                let fileList = [];
+                for (let item of this.fileList) {
+                    promises.push(
+                        new Promise((resolve, reject) => {
+                            let reader = new FileReader();
+                            reader.readAsDataURL(item);
+                            reader.onload = function (e) {
+                                console.log("加载完成！");
+                                fileList.push({
+                                    data: e.target.result,
+                                    name: item.name,
+                                    type: _this.fileType(item.type)
+                                });
+                                resolve(e);
+                            };
+                        })
+                    )
                 }
-                //上传完后续处理
-                _this.fileList = [];
-                _this.$store.commit("setSendFileShow",false);
-                _this.$store.commit("setSendFileFlag", {
-                    flag: false,
-                    data: {},
-                    name:''
+                Promise.all(promises).then(result => {
+//                    console.log(fileList);
+                    _this.$store.commit("setSendFileFlag", {
+                        flag: true,
+                        data: fileList
+                    });
+
+//                console.log(_this.$store.state.sendFileFlag);
+
+                    //上传完后续处理
+                    _this.fileList = [];
+                    _this.$store.commit("setSendFileShow", false);
+//                    _this.$store.commit("setSendFileFlag", {
+//                        flag: false,
+//                        data: {}
+//                    });
                 });
             },
             //关闭发送
             closeSend(){
-                this.$store.commit("setSendFileShow",false);
+                this.$store.commit("setSendFileShow", false);
                 this.fileList = [];
                 this.$store.commit("setSendFileFlag", {
                     flag: false,
-                    data: {},
-                    name:''
+                    data: {}
                 });
             },
-            //计算图片大小
-            getSize(item,index){
-                if(item.size > this.maxSize*1024*1024){
+            //计算文件大小
+            getSize(item, index){
+                if (item.size > this.maxSize * 1024 * 1024) {
                     item.sizeWarning = true;
                 }
                 let size = item.size;
@@ -146,11 +159,22 @@
                     return (size / 1024 / 1024).toFixed(2) + 'MB';
                 }
             },
-            //删除图片
-            removeImg(index,item){
-               document.getElementById("sendFile").value='';
-               this.fileList.removeByValue(item);
+            //删除文件
+            removeImg(index, item){
+                document.getElementById("sendImg").value = '';
+                this.fileList.removeByValue(item);
             },
+            //判断文件类型
+            fileType(type){
+                if ((/image\/\w+/.test(type))) {
+                    return 'image';
+                } else if (/.pdf/.test(type)) {
+                    return 'file';
+                } else if ((/video\/\w+/.test(type))) {
+                    return 'video';
+                }
+                return 'file';
+            }
         },
         mounted(){
             this.init();
@@ -186,12 +210,6 @@
                 font-size: 24px;
                 line-height: 24px;
             }
-            p{
-                margin-top:20px;
-                color: #cc5116;
-                font-size: 24px;
-                line-height: 24px;
-            }
         }
         .imgList {
             position: absolute;
@@ -206,18 +224,18 @@
                 background: rgba(255, 255, 255, 0.8);
                 position: relative;
                 display: inline-block;
-                margin: 17px;
+                margin: 17px 5px;
                 vertical-align: top;
                 border: 1px solid #acacac;
                 padding: 6px 6px 6px 6px;
                 box-shadow: 1px 1px 4px rgba(0, 0, 0, 0.16);
                 font-size: 14px;
-                &>img {
+                & > img {
                     display: block;
                     width: 100px;
                     height: 100px;
                 }
-                .name{
+                .name {
                     width: 100px;
                     overflow: hidden;
                     text-overflow: ellipsis;
@@ -227,32 +245,32 @@
                     padding-top: 5px;
                     font-size: 14px;
                     line-height: 14px;
-                    &.on{
+                    &.on {
                         color: red;
                     }
                     .num {
                         font-weight: 600;
                     }
                 }
-                .remove{
-                    width:40px;
-                    height:40px;
-                    background: rgba(255,255,255,0.8);
+                .remove {
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(255, 255, 255, 0.8);
                     border-radius: 100%;
                     text-align: center;
                     line-height: 35px;
-                    position:absolute;
+                    position: absolute;
                     right: -10px;
                     top: -10px;
-                    &>img{
-                        width:16px;
-                        height:16px;
+                    & > img {
+                        width: 16px;
+                        height: 16px;
                         padding: 12px;
                     }
                 }
             }
         }
-        .send-btn{
+        .send-btn {
             width: 95px;
             height: 35px;
             background-color: #7a8ec1;
@@ -260,34 +278,34 @@
             cursor: pointer;
             vertical-align: middle;
             position: absolute;
-            right:30px;
-            bottom:21px;
-            z-index:3;
-            a{
+            right: 30px;
+            bottom: 21px;
+            z-index: 3;
+            a {
                 width: 100%;
-                height:100%;
+                height: 100%;
                 text-align: center;
                 line-height: 35px;
                 color: #fff;
                 display: block;
             }
         }
-        .closeSend{
+        .closeSend {
             position: absolute;
-            top:0;
-            right:0;
+            top: 0;
+            right: 0;
             width: 0;
             height: 0;
             border-top: 40px solid #fff;
             border-left: 40px solid transparent;
             z-index: 3;
-            &:after{
+            &:after {
                 content: '';
                 display: block;
                 width: 15px;
                 height: 15px;
                 position: absolute;
-                background: url("../../assets/img00/common/popup_close_activate.png") no-repeat ;
+                background: url("../../assets/img00/common/popup_close_activate.png") no-repeat;
                 top: -36px;
                 right: 4px;
                 cursor: pointer;

@@ -25,23 +25,25 @@
                             v-bind:class="{ 'active': userListStatus.first,'new':newWaitingFlag}"
                         >
                             待分诊
-
-
                         </li>
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
-
-
+                        </li>
+                        <li class="userlist-status-item tabsItem"
+                            data-role="ut-tabs-3"
+                            @click="statusChange(3)"
+                            v-bind:class="{ 'active': userListStatus.third,'new':newPatientFlag}">
+                            重新分诊
                         </li>
                     </ul>
                     <i class="userlist-status-right" @click="sortShow()"></i>
                     <div class="userlist-status-sortList" v-show="sortFlag">
                         <ul>
                             <li @click="sort(0)" :class="{'active':sortActive==0}">患者最近消息发出时间由近到远</li>
-                            <li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>
+                            <!--<li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>-->
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
                             <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间从多到少</li>
@@ -51,7 +53,6 @@
                            style="display: none"></audio> <!--新消息提示音-->
                 </nav>
                 <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}" id="ev-user-inner">
-                    <transition name="list-left" appear>
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
                             <transition-group name="list-left" tag="section">
                                 <article v-show="userListWaiting.length > 0" @click="transformData(items,index)"
@@ -82,10 +83,7 @@
                             </transition-group>
                             <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
                         </section>
-                    </transition>
-                    <transition name="list-right">
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
-                            <transition-group name="list-right" tag="section">
                                 <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
                                          :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
                                          v-for="(items,index) in userListOnline"
@@ -115,10 +113,18 @@
                                     </figcaption>
                                     <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                                 </article>
-                            </transition-group>
                             <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                         </section>
-                    </transition>
+                        <section class="userlist-mainList viewItem" data-role="ut-tabs-3" v-show="userListStatus.status == 3">
+                            <article v-show="resetList.length > 0" @click="transformData(items,index)"
+                                     :class="[{ active : userResetActive == index }, 'userlist-mainList-item']"
+                                     v-for="(items,index) in userListReset"
+                                     :key="index"
+                            >
+
+                            </article>
+                            <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
+                        </section>
                 </section>
                 <footer class="user-list-footer">
                     <button class="refresh-user-list-btn" @click="refreshList()">
@@ -192,7 +198,8 @@ Vue.filter("checkState", function(type, a) {
 });
 const XHRList = {
   onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
-  waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+  waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/",
+  resetUserList:"/call/customer/case/consultation/v1/getMapListForCase/"
 };
 export default {
   name: "userList",
@@ -201,15 +208,18 @@ export default {
       userListData: "",
       userListOnline: [],
       userListWaiting: [],
+      userListReset: [],
       userWaitingActive: -1,
       userOnlineActive: -1,
+      userResetActive:-1,
       questionShow: "",
       userName: "默认",
       message: {},
       userListStatus: {
         status: "1",
         first: true,
-        second: false
+        second: false,
+        third:false
       },
       noData: false,
       data: "",
@@ -225,6 +235,7 @@ export default {
       filterFinish: false,
       newWaitingFlag: false,
       newPatientFlag: false,
+      newResetFlag:false,
       sortFlag: false,
       sortActive: "",
       popupShow: false,
@@ -265,11 +276,18 @@ export default {
     },
     "$store.state.waitingList": {
       handler: (list, oldValue) => {
-        this.userListWaiting = list;
-        this.newWaitingFlag = true;
+        this.userListReset = list;
+        this.newResetFlag = true;
       },
       deep: true
     },
+    "$store.state.resetList":{
+         handler: (list, oldValue) => {
+             this.userListReset = list;
+             this.newResetFlag = true;
+         },
+         deep: true
+     },
     "$store.state.waitingListRefresh"(flag) {
       if (flag) {
         this.getUserList("waiting", this.filterMethod);
@@ -412,23 +430,34 @@ export default {
         name: "mainSpeak"
       });
       //刷新上传功能
-        this.$store.commit("setSendImgShow",false);
-        this.$store.commit("setSendVideoShow",false);
         this.$store.commit("setSendFileShow",false);
     },
     //三个状态的点击切换（沟通中、已结束、被退回）
     statusChange(status) {
       //Tab 切换
       this.userListStatus.status = status;
-      if (status == 1) {
-        this.userListStatus.first = true;
-        this.userListStatus.second = false;
-        this.message.userController = true;
-      } else if (status == 2) {
-        this.userListStatus.first = false;
-        this.userListStatus.second = true;
-        this.message.userController = false;
+      switch (status){
+          case 1 :
+              this.userListStatus.first = true;
+              this.userListStatus.second = false;
+              this.userListStatus.third = false;
+              this.message.userController = true;
+              break;
+          case 2:
+              this.userListStatus.first = false;
+              this.userListStatus.second = true;
+              this.userListStatus.third = false;
+              this.message.userController = false;
+              break;
+          case 3:
+              this.userListStatus.first = false;
+              this.userListStatus.second = false;
+              this.userListStatus.third = true;
+              this.message.userController = false;
+              break;
+
       }
+
     },
     //患者列表
     //type:online为沟通中，wating待分诊
@@ -440,26 +469,66 @@ export default {
       _this.userListBack = [];
       let dataValue = {};
 
-      if (type === "online") {
-        dataValue = Object.assign(
-          {
-            customerId: _this.$store.state.userId,
-            conState: "0",
-            conType: 0,
-            sortType: -6
-          },
-          param
-        );
-      } else {
-        dataValue = Object.assign(
-          {
-            conState: "2,4,5",
-            conType: 0,
-            sortType: -6
-          },
-          param
-        );
+
+
+      let url = '';
+      switch (type){
+          case 'online':
+              dataValue = Object.assign(
+                  {
+                      customerId: _this.$store.state.userId,
+                      conState: "0",
+                      conType: 0,
+                      sortType: -6
+                  },
+                  param
+              );
+              url = XHRList.onlineUserList ;
+              break;
+          case 'waiting':
+              dataValue = Object.assign(
+                  {
+                      conState: "2,4,5",
+                      conType: 0,
+                      sortType: -6
+                  },
+                  param
+              );
+              url =XHRList.waitingUserList ;
+              break;
+          case 'reset':
+              dataValue = Object.assign(
+                  {
+                      conState: "2,4,5",
+                      conType: 0,
+                      sortType: -6
+                  },
+                  param
+              );
+              url =XHRList.resetUserList ;
       }
+
+
+        //      if (type === "online") {
+        //        dataValue = Object.assign(
+        //          {
+        //            customerId: _this.$store.state.userId,
+        //            conState: "0",
+        //            conType: 0,
+        //            sortType: -6
+        //          },
+        //          param
+        //        );
+        //      } else {
+        //        dataValue = Object.assign(
+        //          {
+        //            conState: "2,4,5",
+        //            conType: 0,
+        //            sortType: -6
+        //          },
+        //          param
+        //        );
+        //      }
 
       //        if (type==="online"){
       //            dataValue=Object.assign(dataValue,{
@@ -468,8 +537,7 @@ export default {
       //        }
       //        store.commit("startLoading");
       api.ajax({
-        url:
-          type === "online" ? XHRList.onlineUserList : XHRList.waitingUserList,
+        url:url,
         method: "POST",
         data: dataValue,
         done(res) {
@@ -480,8 +548,10 @@ export default {
             );
             let waitingAlertList = {};
             let patientAlertList = {};
+            let resetAlertList = {};
             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
+              resetAlertList = JSON.parse(localStorage.getItem("resetAlertList"));
             if (type === "online") {
               if (patientAlertList && patientAlertList !== "{}") {
                 for (let key in patientAlertList) {
@@ -535,6 +605,33 @@ export default {
               }
               _this.$store.commit("setWaitingList", dataList);
               _this.userListWaiting = dataList ? dataList : [];
+            } else if (type === 'reset'){
+                if(resetAlertList && resetAlertList !== "{}"){
+                    for (let key in resetAlertList) {
+                        let flag = true;
+                        dataList.forEach(function(item, index) {
+                            if (typeof item.messageAlert == "undefined") {
+                                item.messageAlert = "";
+                            }
+                            if (key == "0_" + item.caseId) {
+                                item.messageAlert = resetAlertList[key];
+                                _this.newResetFlag = true;
+
+                                _this.$store.commit("setMusicPlay", true);
+                                setTimeout(function() {
+                                    _this.$store.commit("setMusicPlay", false);
+                                }, 2000);
+                                flag = false;
+                            }
+                        });
+                        if (flag) {
+                            delete resetAlertList[key];
+                        }
+                    }
+                    localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
+                }
+                _this.$store.commit("setResetList", dataList);
+                _this.userListReset = dataList ? dataList : [];
             }
           }
           fn && fn();
@@ -685,26 +782,32 @@ export default {
         case 0:
           _this.getUserList("waiting", { sortType: -6 });
           _this.getUserList("online", { sortType: -6 });
+          _this.getUserList("reset", { sortType: -6 });
           break;
         case 1:
           _this.getUserList("waiting", { sortType: 5 });
           _this.getUserList("online", { sortType: 5 });
+          _this.getUserList("reset", { sortType: 5 });
           break;
         case 2:
           _this.getUserList("waiting", { sortType: 4 });
           _this.getUserList("online", { sortType: 4 });
+          _this.getUserList("reset", { sortType: 4 });
           break;
         case 3:
           _this.getUserList("waiting", { sortType: -5 });
           _this.getUserList("online", { sortType: -5 });
+          _this.getUserList("reset", { sortType: -5 });
           break;
         case 4:
           _this.getUserList("waiting", { sortType: -5 });
           _this.getUserList("online", { sortType: -5 });
+          _this.getUserList("reset", { sortType: -5 });
           break;
         default:
           _this.getUserList("waiting", { sortType: 6 });
           _this.getUserList("online", { sortType: 6 });
+          _this.getUserList("reset", { sortType: 6 });
       }
     }
   }
@@ -839,7 +942,7 @@ export default {
       font-size: 14px;
       color: #808080;
       padding: 12px 0;
-      width: 50%;
+      width: 33.3%;
       box-sizing: border-box;
       border-right: 1px solid #acb1be;
       cursor: pointer;
