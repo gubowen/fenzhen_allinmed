@@ -279,7 +279,8 @@ export default {
       store.commit("startLoading");
       releasePatient({
         customerId: this.$store.state.userId,
-        consultationId: this.$store.state.currentItem.consultationId
+        consultationId: this.$store.state.currentItem.consultationId,
+        consultationState:5
       }).then(res => {
         store.commit("setReleasePatientCaseIdFlag", {
           caseId: this.$store.state.caseId,
@@ -306,7 +307,7 @@ export default {
             this.$emit("update:n", false);
             return;
           }
-          this.$emit("update:userWatingActive", -1);
+          this.$emit("update:userWaitingActive", -1);
           let items = patientList[parseInt(num)];
 
           this.$store.commit("setPatientId", items ? items.patientId : "");

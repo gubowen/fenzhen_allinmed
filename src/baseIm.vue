@@ -23,7 +23,7 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--拒绝分诊-->
-
+                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))"
                                       :message="items" :nim="nim" @loadCallback="loadCallback" @deleteMsg="deleteMsg(items)"></ImageElement>
@@ -107,6 +107,8 @@ import store from "@/store/store";
 import api from "@/common/js/util";
 
 import nimEnv from "@/base/nimEnv";
+import releasePatient from "@/base/releasePatient";   //改变患者状态
+
 
 Vue.filter("transformMessageTime", function(time) {
   var format = function(num) {
@@ -155,9 +157,9 @@ Vue.filter("transformMessageTime", function(time) {
   return result;
 });
 
-const XHRList = {
-  watingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
-};
+// const XHRList = {
+  // waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+// };
 export default {
   data() {
     return {
@@ -323,7 +325,7 @@ export default {
             this.sendRefusePatient(obj.data);
             store.commit("sendCheckSuggestionFlag", {
                 flag: false,
-                data: {}
+                text: {}
             });
         } else {
             return;
@@ -497,12 +499,12 @@ export default {
       });
     },
     //发生拒绝分诊
-      sendRefusePatient(content){
+    sendRefusePatient(content){
           const that = this;
           if (!that.$store.state.beingSend) {
               return false;
           }
-          return new Promise((resolve, reject) => {
+        const promise =  new Promise((resolve, reject) => {
               that.$store.commit("setSendStatus", false);
               this.nim.sendCustomMsg({
                   scene: "p2p",
@@ -514,13 +516,10 @@ export default {
                       docName: that.$store.state.userName
                   }),
                   content: JSON.stringify({
-                      data: {
-                          content:content,
-                      },
+                      text: content,
                       type: "refusePatient"
                   }),
                   done(error, obj) {
-                      console.log(obj);
                       that.$store.commit("setSendStatus", true);
                       if (!error) {
                           resolve(obj);
@@ -532,6 +531,18 @@ export default {
                   }
               });
           });
+        promise.then(function(){
+                //改变患者状态 -- 6 已结束
+                releasePatient({
+                    customerId: that.$store.state.userId,
+                    consultationId: that.$store.state.currentItem.consultationId,
+                    consultationState:6
+                }).then(res => {
+                    let currentItem = that.$store.state.currentItem;
+                    currentItem.caseType = 1;
+                    that.$store.commit('setCurrentItem',currentItem);
+                })
+        })
       },
     //发送单条数据...
     sendSingleMessage(error, msg) {
@@ -542,7 +553,7 @@ export default {
         patientListArray.unshift(this.$store.state.currentItem);
       }
 
-      //                this.$store.commit("unshift",this.$store.state.currentItem);
+      //this.$store.commit("unshift",this.$store.state.currentItem);
       //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
       //this.$store.state.patientList.unshift(this.$store.state.currentItem);
       this.$store.commit("setPatientList", patientListArray);
@@ -683,7 +694,7 @@ export default {
             )
         });
 
-        Promise.all(promises).then( (element) => {
+       Promise.all(promises).then( (element) => {
             console.log(element);
             element.forEach(function(element,index){
                 let msg = that.nim.sendFile({
@@ -839,6 +850,7 @@ export default {
     // 新消息提示
     newMessageTips(target, element) {
       const _this = this;
+      //沟通中
       let patientList = this.$store.state.patientList;
       patientList.forEach(function(item, index) {
         if ("0_" + item.caseId == element.from) {
@@ -867,7 +879,7 @@ export default {
       });
       this.$store.commit("setPatientList", patientList);
 
-      //等待列表
+      //带分诊
       let waitingList = this.$store.state.waitingList;
       waitingList.forEach(function(item, index) {
         if ("0_" + item.caseId == element.from) {
@@ -894,6 +906,30 @@ export default {
         }
       });
       this.$store.commit("setWaitingList", waitingList);
+
+      //重新分诊
+      let resetList = this.$store.state.resetList;
+      resetList.forEach(function(item, index) {
+            if ("0_" + item.caseId == element.from) {
+                if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
+                    item.messageAlert = "1";
+                } else {
+                    item.messageAlert = parseInt(item.messageAlert) + 1;
+                }
+                let caseIdInfo = "0_" + item.caseId;
+                let resetAlertList = {};
+                resetAlertList[caseIdInfo] = item.messageAlert;
+                waitingList.removeByValue(item);
+                waitingList.unshift(item);
+
+                localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(waitingAlertList,JSON.parse(localStorage.getItem("resetAlertList")))));
+                _this.$store.commit("setNewReset", true);
+                _this.$store.commit("setMusicPlay", true);
+                setTimeout(function() {
+                    _this.$store.commit("setMusicPlay", false);
+                }, 2000);
+            }
+        });
     },
     //接受消息...
     receiveMessage(targetUser, element) {

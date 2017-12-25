@@ -35,7 +35,7 @@
                         <li class="userlist-status-item tabsItem"
                             data-role="ut-tabs-3"
                             @click="statusChange(3)"
-                            v-bind:class="{ 'active': userListStatus.third,'new':newPatientFlag}">
+                            v-bind:class="{ 'active': userListStatus.third,'new':newResetFlag}">
                             重新分诊
                         </li>
                     </ul>
@@ -68,9 +68,8 @@
                                         <h3>
                                             <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                                 class="category short" v-show="items.consultationState==5">重新分诊</span><span class="category short"
-                                                                                                                            v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items.caseType | checkState}}</span>
-                                            <span class="category short"
-                                                  v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
+                                                v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items| checkState}}</span>
+                                            <span class="category short" v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                         </h3>
                                         <article>
                                             <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
@@ -97,7 +96,7 @@
                                         <h3>
                                             <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                                 class="category short"
-                                                v-show="!fixByCurrent(items,index)">{{items.caseType | checkState}}</span>
+                                                v-show="!fixByCurrent(items,index)">{{items | checkState}}</span>
                                             <span class="category short"
                                                   v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
                                         </h3>
@@ -116,12 +115,28 @@
                             <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                         </section>
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-3" v-show="userListStatus.status == 3">
-                            <article v-show="resetList.length > 0" @click="transformData(items,index)"
+                            <article v-show="userListReset.length > 0" @click="transformData(items,index)"
                                      :class="[{ active : userResetActive == index }, 'userlist-mainList-item']"
                                      v-for="(items,index) in userListReset"
                                      :key="index"
                             >
-
+                                <figure class="userlist-item-img">
+                                    <img v-bind:src="items.logoUrl" alt="">
+                                    <p v-show="items.messageAlert">{{items.messageAlert}}</p>
+                                </figure>
+                                <figcaption class="userlist-item-base-msg">
+                                    <h3>
+                                        <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                            class="category short"
+                                            v-show="!fixByCurrent(items,index)">{{items | checkState}}</span>
+                                        <span class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
+                                    </h3>
+                                    <article>
+                                    <span class="text">
+                                        {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
+                                    </article>
+                                    <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
+                                </figcaption>
                             </article>
                             <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
                         </section>
@@ -136,7 +151,6 @@
         </div>
         <footer-list></footer-list>
         <check-history v-if="$store.state.checkHistoryFlag"></check-history>
-
     </div>
 </template>
 <script>
@@ -182,17 +196,28 @@ Vue.filter("timeFormat", function(time, a) {
   return result;
 });
 
-Vue.filter("checkState", function(type, a) {
+Vue.filter("checkState", function(items, a) {
   let result = "";
-  switch (parseInt(type)) {
-    case 0:
-    case 1:
-    case 2:
-      result = "咨询";
-      break;
-    case 3:
-      result = "待检查";
-      break;
+
+  switch (parseInt(items.caseType)) {
+    case -1:
+        if(items.consultationType ===0){
+            result = '待分诊';break;
+        }else{
+            result = '待接诊';break;
+        }
+    case  0: result = '沟通中';break;
+    case  1: result = '已结束';break;
+    case  2: result = "拒绝接诊";break;
+    case  3: result = "超时未接诊";break;
+    case  4: result = "新用户";break;
+    case  5: result = "释放";break;
+    case  6: result = "已上传资料";break;
+    case  7: result = "分诊拒绝";break;
+    case  8: result = "分诊完成";break;
+    case  9: result = "待检查";break;
+    case 10: result = "已推荐";break;
+    case 11: result = "超时未回复";break;
   }
   return result;
 });
@@ -317,7 +342,17 @@ export default {
         _this.$store.commit("setMusicPlay", false);
       }, 2000);
       this.newPatientFlag = flag;
-    }
+    },
+    "$store.state.newReset"(flag) {
+          let _this = this;
+          _this.$store.commit("setMusicPlay", true);
+          console.log("music2");
+          setTimeout(function() {
+              console.log("music");
+              _this.$store.commit("setMusicPlay", false);
+          }, 2000);
+          this.newResetFlag = flag;
+      },
   },
   mounted() {
     if (this.$store.state.userId) {
@@ -332,22 +367,23 @@ export default {
       this.$store.state.searchStatus = true;
       this.getUserList("waiting");
       this.getUserList("online");
+      this.getUserList("reset");
     },
     fixByCurrent(item, index) {
       let flag = false;
-      if (index === this.userOnlineActive) {
-        if (this.$store.state.currentItem.diagnosisContent) {
-          flag = true;
-        } else {
-          flag = false;
-        }
-      } else {
-        if (item.diagnosisContent) {
-          flag = true;
-        } else {
-          flag = false;
-        }
-      }
+//      if (index === this.userOnlineActive) {
+//        if (this.$store.state.currentItem.diagnosisContent) {
+//          flag = true;
+//        } else {
+//          flag = false;
+//        }
+//      } else {
+//        if (item.diagnosisContent) {
+//          flag = true;
+//        } else {
+//          flag = false;
+//        }
+//      }
 
       return flag;
     },
@@ -499,7 +535,7 @@ export default {
           case 'reset':
               dataValue = Object.assign(
                   {
-                      conState: "2,4,5",
+                      conState: "2,3,6,11",  //2-被退回(拒绝接诊) 3-超时接诊退回  6-已上传资料 11-超时未回复
                       conType: 0,
                       sortType: -6
                   },
@@ -508,7 +544,7 @@ export default {
               url =XHRList.resetUserList ;
       }
 
-
+        //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放8-分诊完成9-待检查10-已推荐   7-分诊拒绝    6-已上传资料    11-超时未回复
         //      if (type === "online") {
         //        dataValue = Object.assign(
         //          {
@@ -541,6 +577,7 @@ export default {
         method: "POST",
         data: dataValue,
         done(res) {
+            console.log(res);
           //            store.commit("stopLoading");
           if (res.responseObject.responseData && res.responseObject.responseStatus) {
             let dataList = _this.setSelectValue(
@@ -551,7 +588,7 @@ export default {
             let resetAlertList = {};
             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
-              resetAlertList = JSON.parse(localStorage.getItem("resetAlertList"));
+            resetAlertList = JSON.parse(localStorage.getItem("resetAlertList"));
             if (type === "online") {
               if (patientAlertList && patientAlertList !== "{}") {
                 for (let key in patientAlertList) {
@@ -675,12 +712,14 @@ export default {
       store.commit("startLoading");
       this.getUserList("waiting", this.filterMethod);
       this.getUserList("online", this.filterMethod);
+      this.getUserList("reset", this.filterMethod);
       store.commit("stopLoading");
       //                this.filterFinish = true;
     },
     refreshList() {
       this.getUserList("waiting", this.filterMethod);
       this.getUserList("online", this.filterMethod);
+      this.getUserList("reset", this.filterMethod);
     },
     //选择退回患者
     selectQuitItem(item) {
@@ -718,9 +757,8 @@ export default {
       )
         .then(res => {
           //患者未被抢单
-
           this.getUserList("waiting");
-          this.userListStatus.status = 2;
+          this.statusChange(2);
           this.getUserList("online", {}, () => {
             this.userListStatus.first = false;
             this.userListStatus.second = true;
@@ -732,7 +770,7 @@ export default {
               flag: true
             });
 
-            this.userListStatus.status = 2;
+            this.statusChange(2);
             this.waitingTriage = false;
             this.userOnlineActive = 0;
             store.commit("setInputReadOnly", false);
@@ -748,10 +786,7 @@ export default {
                 delete waitingAlertList["0_" + items.caseId];
               }
             }
-            localStorage.setItem(
-              "waitingAlertList",
-              JSON.stringify(waitingAlertList)
-            );
+            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
           }
           if (localStorage.getItem("waitingAlertList") == "{}") {
             this.newWaitingFlag = false;

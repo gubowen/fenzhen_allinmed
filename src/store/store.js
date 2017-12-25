@@ -15,11 +15,23 @@ export default new Vuex.Store({
     state: {
         userName: "",  // 定义你的数据源
         mobile: '',
+
+
         patientList: '',  //患者列表
         patientActiveIndex:-1,
+        newOnline: false,
+
+
         waitingList: "",   //待分诊列表
+        newWaiting: false,
         waitingListRefresh: false,
-        resetList:[],
+
+
+        resetList:[],     //重新分诊列表
+        newReset:false,
+
+
+
         caseId: '',       //病例Id
         patientId: '',    //患者Id
         patientName: '',  //患者姓名
@@ -33,8 +45,6 @@ export default new Vuex.Store({
             first: true,
             second: false
         },
-        newWaiting: false,
-        newOnline: false,
         EasyWayTempCache: '',
         userLoginName: '',
         key: '',
@@ -316,6 +326,9 @@ export default new Vuex.Store({
         //拒绝理由
         setRefuseReason(state,data){
             state.refuseReason = data;
+        },
+        setNewReset(state,data){
+            state.newReset = data;
         }
     }
 });

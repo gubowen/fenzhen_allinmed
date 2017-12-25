@@ -18,11 +18,12 @@
                 </section>
                 <figure class="refuse-box-update">
                     <input type="text" class="add-input" placeholder="请输入拒绝理由" v-model="refuseReason"  maxlength="50"/>
+                    <i class="icon-Cancel" @click="remove"></i>
                 </figure>
             </section>
             <section class="refuse-box-footer">
 
-                <button type="button" class="btn-primary-small" @click="send">发送</button>
+                <button type="button" :class="[{'active':refuseReason},'btn-primary-small']" @click="send">发送</button>
                 <button type="button" class="btn-border-small " @click="close">取消</button>
             </section>
         </section>
@@ -63,10 +64,18 @@
                 }
             },
             send(){
-                this.$store.commit("setRefuseReason", {
-                    flag: true,
-                    data: this.refuseReason
-                });
+                if(this.refuseReason){
+                    this.$store.commit("setRefuseReason", {
+                        flag: true,
+                        data: this.refuseReason
+                    });
+                    this.$store.commit("setRefuseFlag", false);
+
+                }
+            },
+            remove(){
+                this.refuseReason='';
+                this.nowIndex = -1;
             }
         }
     }
@@ -179,6 +188,7 @@
                     padding: 0 40px;
                     width:100%;
                     box-sizing: border-box;
+                    position: relative;
                     & > input {
                         width: 100%;
                         padding: 8px 14px;
@@ -202,7 +212,22 @@
 
                         }
                     }
-
+                    .icon-Cancel{
+                        position: absolute;
+                        right: 60px;
+                        margin-top: -22px;
+                        display: block;
+                        font-size: 0;
+                        cursor: pointer;
+                        &:before {
+                        content: '';
+                        display: block;
+                        font-size: 0;
+                        width: 8px;
+                        height: 8px;
+                        background: url("../../assets/img00/login/login_cancel.png") no-repeat center;
+                    }
+                    }
                 }
             }
             &-footer {
@@ -211,6 +236,12 @@
                 .btn-primary-small {
                     margin-right: 25px;
                     vertical-align: top;
+                    background: #ECEFF6;
+                    color: #CCC;
+                    &.active{
+                        background-color: #7a8ec1;
+                        color: #fff;
+                    }
                 }
             }
         }
