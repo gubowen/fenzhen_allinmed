@@ -28,6 +28,20 @@
   }
 }
 
+
+.icon-img {
+  &:before {
+    content: '';
+    @include square(14px);
+    display: inline-block;
+    vertical-align: middle;
+    background: url("/static/img/img00/controller/picture@2x.png") no-repeat;
+    background-size: 100% 100%;
+    margin-right: 10px;
+  }
+}
+
+
 .icon-downArrow:after {
   content: '';
   display: inline-block;
@@ -50,6 +64,14 @@
   margin-right: 10px;
 }
 
+.icon-finish {
+  display: inline-block;
+  background: url("/static/img/img00/controller/end.png") no-repeat;
+  background-size: 100% 100%;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
 
 .icon-fastReply {
   display: inline-block;
@@ -328,3 +350,4 @@
   margin-top: -17px;
   cursor: pointer;
 }
+

@@ -11,6 +11,11 @@
         <!--<p class="resendTips" @click="resendMsg" >!</p>-->
         {{message.text}}
       </figcaption>
+      <figcaption class="messageList-item-text" v-if="message.type == 'custom'&& message.content.type === 'refusePatient'">
+        <p class="resendTips" @click="resendMsg" v-if="message.status==='fail'">!</p>
+        {{message.content.text}}
+      </figcaption>
+
       <figcaption class="messageList-item-text" v-if="message.type == 'text'&&message.text==='患者已上传检查资料'">
         {{message.text + "，点击至"}}
         <a href="#" class="link" @click="goToCheck">“专科检查”</a>
@@ -53,7 +58,7 @@
       return {}
     },
     mounted(){
-
+      console.log(this.message);
     },
     computed:{
       docName(){

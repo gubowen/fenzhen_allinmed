@@ -1,6 +1,6 @@
 <template>
   <!--<transition name="fade">-->
-  <section class="show-big-img show-big-img-masker full-screen" v-if="$store.state.SBIFlag">
+  <section class="show-big-img show-big-img-masker full-screen" v-if="$store.state.videoListFlag">
     <div class="background-hidden " >
       <div class="rotate-button"></div>
       <div class="bigger-button"></div>
@@ -9,25 +9,27 @@
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-no-swiping" v-for="item in imgList">
-              <img :src="item.url"/>
+            <div class="swiper-slide swiper-no-swiping" v-for="item in videoList">
+              <video controls="controls" >
+                <source :src="item.url"></source>
+              </video>
             </div>
           </div>
           <div class="swiper-pagination swiper-pagination-white"></div>
         </div>
-        <div class="swiper-left-gray" v-show="imgList.length>1"></div>
-        <div class="swiper-right-gray" v-show="imgList.length>1"></div>
+        <div class="swiper-left-gray" v-show="videoList.length>1"></div>
+        <div class="swiper-right-gray" v-show="videoList.length>1"></div>
       </div>
       <div class="close" @click="close()"></div>
-      <div class="gallery-thumbs" v-show="imgList.length>1">
+      <div class="gallery-thumbs" v-show="videoList.length>1">
         <div class="swiper-container thumbSwiper">
           <div class="swiper-wrapper">
-            <div class="swiper-slide" v-for="item in imgList">
-              <img :src="item.url"/>
+            <div class="swiper-slide" v-for="item in videoList">
+              <video  :src="item.url"></video>
             </div>
           </div>
-          <div class="swiper-button-prev" slot="button-prev" v-show="imgList.length>6"></div>
-          <div class="swiper-button-next" slot="button-next" v-show="imgList.length>6"></div>
+          <div class="swiper-button-prev" slot="button-prev" v-show="videoList.length>6"></div>
+          <div class="swiper-button-next" slot="button-next" v-show="videoList.length>6"></div>
           <div class="swiper-pagination swiper-pagination-white"></div>
         </div>
       </div>
@@ -48,7 +50,7 @@
         name: 'show-big-img',
         data(){
             return {
-                imgList: [
+                videoList: [
 //          {
 //            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
 //          }
@@ -69,26 +71,27 @@
             VueAwesomeSwiper
         },
         props: {
-            showBigImgFlag: {
-                type: Boolean
-            }
         },
         watch: {
-            '$store.state.SBIList'(content){
+            '$store.state.videoListFlag'(content){
                 this.init();
             }
         },
         methods: {
             init(){
-                this.imgList = [];
-                this.imgList = this.$store.state.SBIObject[this.$store.state.SBIType];
                 let that = this;
-                this.imgList.forEach(function (element,value) {
-                    that.imgList[value].url = that.clipImg(element.url);
+                this.videoList = [];
+
+                this.videoList = this.$store.state.videoListObject[this.$store.state.SBIType];
+                this.videoList.forEach(function (element,value) {
+                    that.videoList[value].url = that.clipImg(element.url);
                 })
+
+                console.log(this.videoList);
             },
+
             close(){
-                this.$store.commit("setSBIFlag", false);
+                this.$store.commit("setVideoListFlag", false);
             },
             clipImg(imgUrl){
                 if(imgUrl.indexOf("_c") != -1){
@@ -116,7 +119,7 @@
                     console.log(swiper.activeIndex + "当前索引");
                     console.log("sipwer初始化完成!,回调函数，初始化后执行。");
                     //  setTimeout(function(){
-                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
                     //  },500);
                 },
                 onTap: function (swiper, event) {
@@ -125,7 +128,7 @@
                 onSlideChangeStart(swiper){
                     console.log(swiper.activeIndex + "当前索引");
                     // setTimeout(function(){
-                    $.openPhotoGallery($(".swiper-slide-active").eq(0));
+                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
                     // },500);
 
 
@@ -250,7 +253,6 @@
               height: 100%;
               overflow: hidden;
               img {
-
                 display: block;
                 position: absolute;
                 height: 100%;
@@ -260,6 +262,13 @@
                 user-select:none;
 
               }
+              video{
+                 display: inline-block;
+                 width:100%;
+                 height:96%;
+                 margin:0 auto;
+                 cursor: pointer;
+               }
             }
 
             .swiper-slide-active {
@@ -417,10 +426,13 @@
                 max-height:100%;
                 margin:0 auto;
                 cursor: pointer;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                position: absolute;
+              }
+              video{
+                display: inline-block;
+                max-width:100%;
+                max-height:100%;
+                margin:0 auto;
+                cursor: pointer;
               }
             }
           }

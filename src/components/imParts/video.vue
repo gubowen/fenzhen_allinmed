@@ -5,9 +5,9 @@
             <img :src="$store.state.currentItem.logoUrl" alt="" >
         </figure>
         <!--图片-->
-        <figcaption class="messageList-item-text" :class="{'make-photo-box':exifFlag}">
-
-            <video controls :src="message.file.url" style="width:300px"></video>
+        <figcaption class="messageList-item-text video-list" :class="{'make-photo-box':exifFlag}" @click="showBigImgFunction(message.file.url)">
+            <img src="../../assets/img00/controller/play.png" alt="">
+            <video  :src="message.file.url" style="width:300px"></video>
             <!--<img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)" ref="imageElement"/>-->
         </figcaption>
         <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
@@ -38,6 +38,7 @@
         },
         mounted(){
 //            console.log(this.message);
+            this.installSBIList();
         },
         computed:{
             docName(){
@@ -47,6 +48,31 @@
             }
         },
         methods:{
+            init(){
+
+            },
+            showBigImgFunction(url){
+                let _this = this;
+                this.$store.state.videoListObject.IMVideoList.forEach(function(item,index){
+                    if(url == item.url){
+                        _this.$store.commit("setSBIIndex",index);
+                    }
+                });
+                this.$store.commit("setVideoListFlag",true);
+                this.$store.commit("setSBIType",'IMVideoList');
+            },
+            installSBIList(){
+                let _this =this;
+                let videoListObject = [];
+
+                if(this.$store.state.videoListObject != ''&& this.$store.state.videoListObject.IMVideoList){
+                    this.$store.state.videoListObject.IMVideoList.forEach(function(item,index){
+                        videoListObject.push( {"url":item.url});
+                    })
+                }
+                videoListObject.push( {"url":this.message.file.url});
+                this.$store.commit('videoListObject',{'IMVideoList':videoListObject});
+            },
             //撤回消息
             deleteMsg(){
                 this.$emit("deleteMsg");
@@ -65,5 +91,14 @@
 <style lang="scss" rel="stylesheet/scss">
     .make-photo-box{
         transform:rotate(90deg) translate(12%,12%);
+    }
+    .video-list{
+        position: relative;
+        &>img{
+            position:absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
     }
 </style>
