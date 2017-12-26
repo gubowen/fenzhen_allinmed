@@ -157,6 +157,7 @@
             }
           }
         }
+
       }
       @include  query(1366px){
           display: none;
@@ -213,6 +214,9 @@
               background: #f6f9fa;
             }
           }
+        }
+        &.on{
+          top:-50px;
         }
       }
     }

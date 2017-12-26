@@ -18,10 +18,10 @@
                     <button class="user-controller-min" @click.stop="minBtnShow()">
                         <i class="icon-userReply"></i>
                         <span>更多</span>
-                        <div class="sendList" v-show="minBtnFlag">
+                        <div :class="[{'on':!userListStatus},'sendList']" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>
-                                <li @click="refuseEvent()">拒绝分诊</li>
+                                <li @click="refuseEvent()" v-show="userListStatus">拒绝分诊</li>
                                 <li @click="sendFile()">发送视图</li>
                             </ul>
                         </div>
@@ -152,7 +152,8 @@ export default {
       reTriageContentTips: "确定结束与该患者的沟通吗？",
       inputReadOnly: "",
       sendFlag:false,
-      minBtnFlag:false
+      minBtnFlag:false,
+      userListStatus:false
     };
   },
   components: {
@@ -206,6 +207,7 @@ export default {
   methods: {
     //初始化
     init() {
+        this.userListStatus =this.userListStatus.status == 3 ? true : false ;
     },
     sendMessage(e) {
       const that = this;
@@ -369,33 +371,43 @@ export default {
     //拒绝分诊
     refuseEvent(){
         this.$store.commit("setRefuseFlag",true);
-    },
-    PreviewImage(imgFile){
-    var filextension=imgFile.value.substring(imgFile.value.lastIndexOf("."),imgFile.value.length);
-    filextension=filextension.toLowerCase();
-    if ((filextension!='.jpg')&&(filextension!='.gif')&&(filextension!='.jpeg')&&(filextension!='.png')&&(filextension!='.bmp'))
-    {
-        alert("对不起，系统仅支持标准格式的照片，请您调整格式后重新上传，谢谢 !");
-        imgFile.focus();
-    }
-    else
-    {
-        var path;
-        if(document.all)//IE
-        {
-            imgFile.select();
-            path = document.selection.createRange().text;
+//        this.noData = false;
+//        this.$emit("update:n", false);
+        let waitingList = this.$store.state.waitingList;
+        let patientList = this.$store.state.patientList;
+        store.commit("startLoading");
+        setTimeout(() => {
+            patientList.removeByValue(this.$store.state.currentItem);
+            this.$store.state.currentItem.triageSelect = false;
+            store.commit("waitingListRefreshFlag", true);
+            store.commit("setWaitingList", waitingList);
 
-            document.getElementById("imgPreview").innerHTML="";
-            document.getElementById("imgPreview").style.filter = "progid:DXImageTransform.Microsoft.AlphaImageLoader(enabled='true',sizingMethod='scale',src=\"" + path + "\")";//使用滤镜效果
-        }
-        else//FF
-        {
-            path = imgFile.files[0].getAsDataURL();
-            document.getElementById("imgPreview").innerHTML = "<img id='img1' width='120px' height='100px' src='"+path+"'/>";
-            // document.getElementById("img1").src = path;
-        }
-    }
+            let num = "";
+
+            if (patientList.length > 0) {
+                if (this.userOnlineActive <= patientList.length - 1) {
+                    num = this.userOnlineActive;
+                } else {
+                    num = patientList.length - 1;
+                }
+                this.$emit("update:userOnlineActive", num);
+            } else {
+                this.$emit("update:userOnlineActive", -1);
+                this.$emit("update:n", false);
+                return;
+            }
+            this.$emit("update:userWaitingActive", -1);
+            let items = patientList[parseInt(num)];
+
+            this.$store.commit("setPatientId", items ? items.patientId : "");
+            this.$store.commit("setPatientName", items ? items.patientName : "");
+            this.$store.commit("setCaseId", items ? items.caseId : "");
+            this.$store.commit("setConsultationId", items ? items.consultationId : "");
+            this.$store.commit("setCurrentItem", items ? items : {});
+            this.$store.commit("setSBIObject", "");
+
+            store.commit("stopLoading");
+        }, 1000);
     }
   },
   mounted() {

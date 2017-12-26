@@ -461,7 +461,6 @@ export default {
       }
       return flag;
     },
-
     sendMessage(content) {
       const that = this;
       if (!that.$store.state.beingSend) {
@@ -543,7 +542,7 @@ export default {
                     that.$store.commit('resetListRefreshFlag',true);
 
                     setTimeout(() => {
-                        that.$store.commit("setInputReadOnly", true);
+//                        that.$store.commit("setInputReadOnly", true);
 
 //                        this.$store.state.currentItem.triageSelect = false;
 //                        this.$store.commit("waitingListRefreshFlag", true);

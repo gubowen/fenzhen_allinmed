@@ -2,8 +2,8 @@
     <section class="sendImg" v-if="showFlag">
         <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
-            <span>Img to upload</span>
-            <img src="../../assets/img00/controller/home_question_default.png"/>
+            <span>选 择 文 件</span>
+            <img src="../../assets/img00/controller/home_question_white.png"/>
         </div>
         <div class="imgList" v-show="fileList.length>0">
             <div class="imgInfo" v-for="(item,index) in fileList">
