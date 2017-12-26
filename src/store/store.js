@@ -246,15 +246,7 @@ export default new Vuex.Store({
         setPreviewType(state, data){
             state.previewType = data;
         },
-        waitingListRefreshFlag(state, data){
-            state.waitingListRefresh = data;
-        },
-        onlineListRefresh(state, data){
-            state.onlineListRefresh = data;
-        },
-        resetListRefreshFlag(state,data){
-            state.resetListRefresh = data;
-        },
+
         setNewWaiting(state, flag){
             state.newWaiting = flag;
         },
@@ -313,12 +305,6 @@ export default new Vuex.Store({
         setReleasePatientCaseIdFlag(state,param){
             state.releasePatientCaseIdFlag=param;
         },
-        setSendFileFlag(state,data){
-            state.sendFileFlag = data;
-        },
-        setSendFileShow(state,data){
-            state.sendFileShow = data;
-        },
         //重新分诊列表
         setResetList(state,data){
             state.resetList = data;
@@ -328,16 +314,36 @@ export default new Vuex.Store({
             state.refuseFlag = data;
         },
 
+
+
+        //***********刷新**************
+        waitingListRefreshFlag(state, data){
+            state.waitingListRefresh = data;
+        },
+        onlineListRefresh(state, data){
+            state.onlineListRefresh = data;
+        },
+        resetListRefreshFlag(state,data){
+            state.resetListRefresh = data;
+        },
         //***********拒绝**************
-        //理由
         setRefuseReason(state,data){
             state.refuseReason = data;
         },
-        //列表
         setRefuseList(state,data){
             state.refuseList = data;
         },
+        //*********发送文件************
+        setSendFileFlag(state,data){
+            state.sendFileFlag = data;
+        },
+        setSendFileShow(state,data){
+            state.sendFileShow = data;
+        },
         //*****************************
+
+
+
         setNewReset(state,data){
             state.newReset = data;
         },

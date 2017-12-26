@@ -538,37 +538,40 @@ export default {
 //                    let currentItem = that.$store.state.currentItem;
 //                    currentItem.consultationState = 1;
 //                    that.$store.commit('setCurrentItem',currentItem);
+                    that.$store.commit('waitingListRefreshFlag',true);
                     that.$store.commit('onlineListRefresh',true);
                     that.$store.commit('resetListRefreshFlag',true);
 
                     setTimeout(() => {
-                        this.$store.state.currentItem.triageSelect = false;
-                        this.$store.commit("waitingListRefreshFlag", true);
-                        this.$store.commit("setWaitingList", waitingList);
+                        that.$store.commit("setInputReadOnly", true);
 
-                        let num = "";
-
-                        if (patientList.length > 0) {
-                            if (this.userOnlineActive <= patientList.length - 1) {
-                                num = this.userOnlineActive;
-                            } else {
-                                num = patientList.length - 1;
-                            }
-                            this.$emit("update:userOnlineActive", num);
-                        } else {
-                            this.$emit("update:userOnlineActive", -1);
-                            this.$emit("update:n", false);
-                            return;
-                        }
-                        this.$emit("update:userWaitingActive", -1);
-                        let items = patientList[parseInt(num)];
-
-                        this.$store.commit("setPatientId", items ? items.patientId : "");
-                        this.$store.commit("setPatientName", items ? items.patientName : "");
-                        this.$store.commit("setCaseId", items ? items.caseId : "");
-                        this.$store.commit("setConsultationId", items ? items.consultationId : "");
-                        this.$store.commit("setCurrentItem", items ? items : {});
-                        this.$store.commit("setSBIObject", "");
+//                        this.$store.state.currentItem.triageSelect = false;
+//                        this.$store.commit("waitingListRefreshFlag", true);
+//                        this.$store.commit("setWaitingList", waitingList);
+//
+//                        let num = "";
+//
+//                        if (patientList.length > 0) {
+//                            if (this.userOnlineActive <= patientList.length - 1) {
+//                                num = this.userOnlineActive;
+//                            } else {
+//                                num = patientList.length - 1;
+//                            }
+//                            this.$emit("update:userOnlineActive", num);
+//                        } else {
+//                            this.$emit("update:userOnlineActive", -1);
+//                            this.$emit("update:n", false);
+//                            return;
+//                        }
+//                        this.$emit("update:userWaitingActive", -1);
+//                        let items = patientList[parseInt(num)];
+//
+//                        this.$store.commit("setPatientId", items ? items.patientId : "");
+//                        this.$store.commit("setPatientName", items ? items.patientName : "");
+//                        this.$store.commit("setCaseId", items ? items.caseId : "");
+//                        this.$store.commit("setConsultationId", items ? items.consultationId : "");
+//                        this.$store.commit("setCurrentItem", items ? items : {});
+//                        this.$store.commit("setSBIObject", "");
 
                         store.commit("stopLoading");
                     }, 1000);
