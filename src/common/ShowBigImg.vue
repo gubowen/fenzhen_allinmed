@@ -250,7 +250,6 @@
               height: 100%;
               overflow: hidden;
               img {
-
                 display: block;
                 position: absolute;
                 height: 100%;
@@ -417,10 +416,6 @@
                 max-height:100%;
                 margin:0 auto;
                 cursor: pointer;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-                position: absolute;
               }
             }
           }

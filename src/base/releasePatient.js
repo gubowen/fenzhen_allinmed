@@ -14,7 +14,7 @@ const XHRList = {
 export default function releasePatient(data) {
     let param = {
         consultationIds: data.consultationId,
-        consultationState: data.consultationState,
+        consultationState: "5",
         customerId: data.customerId,
         consultationType: "0"
     }

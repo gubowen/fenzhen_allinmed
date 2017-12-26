@@ -4,7 +4,7 @@
       <i class="icon-close window-close" @click="$store.state.fastReplyConfig = false"></i>
       <header class="jump-box-config-title">
         <article>
-          <h2>编辑快捷提问</h2>
+          <h2>编辑快速提问</h2>
         </article>
         <button class="jump-box-add-term icon-add-term" @click="termShowFlag[-1]=true"><span>添加分组</span></button>
       </header>
@@ -106,7 +106,7 @@
     deleteTerm: "/call/customer/quick/question/v1/delete/",
     fixTerm: "/call/customer/quick/question/v1/save/",
     getTerm: "/call/customer/quick/question/v1/getMapList/"
-  };
+  }
   export default{
     name: 'fast-reply-config',
     data(){
@@ -225,7 +225,6 @@
                 parentId: item.questionId,
                 fullPath: item.fullPath,
                 questionType: item.questionType,
-                treeLevel: 2,
               });
             }
 

@@ -338,7 +338,6 @@
     import teachingDetail from "./teachingDetails";
     import store from "../../store/store";
     import dignosiAddress  from '@/common/dignosiAddress'
-    import releasePatient from "@/base/releasePatient";   //改变患者状态
 
     const XHRList = {
         getTagData: "/call/comm/data/tag/v1/getMapList/",//专业列表
@@ -352,7 +351,6 @@
         saveData: "/call/patient/case/diagnosis/v1/create/",//保存初步诊断
         savePreviewSuggest:"/call/patient/recovery/advice/v1/create/",//保存初诊建议
         saveRecommendDoc:"/call/patient/recommend/v1/create/",//保存初诊医生
-
     };
     export default{
         data(){
@@ -602,16 +600,16 @@
                                     });
                                 }
                             }
-                            that.allDoc.allDocList = that.isChosenTheDoc(dataList);
+                            that.allDoc.allDocList = dataList;
                             that.allDoc.allDocState = false;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
-//                            that.previewDiagnoseSuggest.doctorList = [];
+                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = false;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
                         } else {
                             that.allDoc.allDocList = [];
-//                            that.previewDiagnoseSuggest.doctorList = [];
+                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = true;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
@@ -817,20 +815,6 @@
                         this.allDoc.allDocState = false;
                     }
                 }
-            },
-            //验证是否已选中该医生
-            isChosenTheDoc(docList){
-                let that = this;
-                docList.forEach((value)=>{
-                    let docId = value.customerId;
-                    that.previewDiagnoseSuggest.doctorList.forEach((v)=>{
-                        if(v.customerId == docId){
-                            value.isChecked = true;
-                            return false;
-                        }
-                    })
-                })
-                return docList;
             },
             //四大建议
             showNext(type, index){
@@ -1081,18 +1065,6 @@
                                         })
                                     };
                                 }).then((res)=>{
-
-                                    if (that.previewDiagnoseSuggest.examineList.length > 0||that.previewDiagnoseSuggest.testList.length > 0){
-                                        releasePatient({
-                                            customerId: that.$store.state.userId,
-                                            consultationId: that.$store.state.currentItem.consultationId,
-                                            consultationState:9
-                                        }).then(res => {
-                                            let currentItem = that.$store.state.currentItem;
-                                            currentItem.consultationState = 9;
-                                            that.$store.commit('setCurrentItem',currentItem);
-                                        })
-                                    }
                                     console.log(res);
                                     //发送IM
                                     let  inquiryResult = that.$store.state.currentItem,

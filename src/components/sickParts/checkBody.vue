@@ -165,6 +165,7 @@
           beforeSend(config) {
           },
           done(res) {
+            console.log(res);
             if (res.responseObject.responseData.dataList && res.responseObject.responseStatus == true) {
               let dataList = res.responseObject.responseData.dataList[0];
               _this.id = dataList.id;
