@@ -35,7 +35,9 @@
                         <i class="icon-checkout"></i>
                         <span>检查检验</span>
                     </button>
-                    <button class="user-controller-end" @click="reTriageShow=true">
+
+                    <!--结束沟通-->
+                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userListStatus.status != 3">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -89,11 +91,14 @@
         <transition name="fade">
             <Check-Suggestion v-if="$store.state.checkSuggestionFlag"></Check-Suggestion>
         </transition>
+        <!--显示大图-->
         <transition name="fade">
             <show-big-Img :showBigImgFlag.sync="$store.state.SBIFlag" v-if="$store.state.SBIFlag"></show-big-Img>
         </transition>
+        <!--显示视频-->
         <show-video-List  v-if="$store.state.videoListFlag"></show-video-List>
         <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
+        <!---->
         <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
                  v-if="$store.state.previewShow">
             <transition name="fade">
@@ -193,12 +198,14 @@ export default {
     },
     "$store.state.usedReplyContent"(content) {
       this.controllerInput = content;
+    },
+    "$store.state.minBtnFlag"(content){
+          this.minBtnFlag = this.$store.state.minBtnFlag;
     }
   },
   methods: {
     //初始化
     init() {
-      let that = this;
     },
     sendMessage(e) {
       const that = this;
@@ -313,13 +320,8 @@ export default {
           this.$store.commit("setPatientId", items ? items.patientId : "");
           this.$store.commit("setPatientName", items ? items.patientName : "");
           this.$store.commit("setCaseId", items ? items.caseId : "");
-          this.$store.commit(
-            "setConsultationId",
-            items ? items.consultationId : ""
-          );
-
+          this.$store.commit("setConsultationId", items ? items.consultationId : "");
           this.$store.commit("setCurrentItem", items ? items : {});
-
           this.$store.commit("setSBIObject", "");
 
           store.commit("stopLoading");
@@ -361,7 +363,8 @@ export default {
         this.$store.commit("setSendFileShow",true);
     },
     minBtnShow(){
-        this.minBtnFlag = !this.minBtnFlag
+        this.minBtnFlag = !this.minBtnFlag;
+        this.$store.commit("setMinBtnFlag",this.minBtnFlag);
     } ,
     //拒绝分诊
     refuseEvent(){

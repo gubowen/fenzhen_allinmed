@@ -199,7 +199,7 @@ Vue.filter("timeFormat", function(time, a) {
 Vue.filter("checkState", function(items, a) {
   let result = "";
 
-  switch (parseInt(items.caseType)) {
+  switch (parseInt(items.consultationState)) {
     case -1:
         if(items.consultationType ===0){
             result = '待分诊';break;
@@ -320,7 +320,7 @@ export default {
       } else {
         return;
       }
-    },
+    },  //待分诊-刷新
     "$store.state.onlineListRefresh"(flag) {
       if (flag) {
         this.getUserList("online", this.filterMethod);
@@ -328,7 +328,15 @@ export default {
       } else {
         return;
       }
-    },
+    },   //沟通中-刷新
+    "$store.state.resetListRefresh"(flag) {
+          if (flag) {
+              this.getUserList("reset", this.filterMethod);
+              store.commit("ResetListRefreshFlag", false);
+          } else {
+              return;
+          }
+      },    //重新分诊刷新
     "$store.state.newWaiting"(flag) {
       let _this = this;
       this.newWaitingFlag = flag;
@@ -455,6 +463,9 @@ export default {
       this.$store.commit("setCurrentItem", items);
 
       this.$store.commit("setSBIObject", {});
+
+      this.$store.commit('setMinBtnFlag',false);
+
 
       let data = JSON.stringify(items);
       this.data = data;

@@ -386,10 +386,7 @@ export default {
           onmsg(msg) {
             //自定义消息
 //            console.log(msg);
-            if (
-              msg.from.includes("0_") &&
-              that.targetData.account === msg.from
-            ) {
+            if (msg.from.includes("0_") && that.targetData.account === msg.from) {
               that.$store.state.currentItem.createTime = that.transformMessageTime(
                 msg.time
               );
@@ -402,7 +399,7 @@ export default {
                   localStorage.getItem("waitingAlertList")
                 );
                 if (!waitingAlertList) {
-                  waitingAlertList = {};
+//                  waitingAlertList = {};
                 }
                 waitingAlertList[msg.from] = 1;
                 localStorage.setItem(
@@ -532,15 +529,51 @@ export default {
               });
           });
         promise.then(function(){
-                //改变患者状态 -- 6 已结束
+                //改变患者状态 -- 7-分诊拒绝
                 releasePatient({
                     customerId: that.$store.state.userId,
                     consultationId: that.$store.state.currentItem.consultationId,
-                    consultationState:6
+                    consultationState:7
                 }).then(res => {
-                    let currentItem = that.$store.state.currentItem;
-                    currentItem.caseType = 1;
-                    that.$store.commit('setCurrentItem',currentItem);
+//                    let currentItem = that.$store.state.currentItem;
+//                    currentItem.consultationState = 1;
+//                    that.$store.commit('setCurrentItem',currentItem);
+                    that.$store.commit('onlineListRefresh',true);
+                    that.$store.commit('resetListRefreshFlag',true);
+
+                    setTimeout(() => {
+                        this.$store.state.currentItem.triageSelect = false;
+                        this.$store.commit("waitingListRefreshFlag", true);
+                        this.$store.commit("setWaitingList", waitingList);
+
+                        let num = "";
+
+                        if (patientList.length > 0) {
+                            if (this.userOnlineActive <= patientList.length - 1) {
+                                num = this.userOnlineActive;
+                            } else {
+                                num = patientList.length - 1;
+                            }
+                            this.$emit("update:userOnlineActive", num);
+                        } else {
+                            this.$emit("update:userOnlineActive", -1);
+                            this.$emit("update:n", false);
+                            return;
+                        }
+                        this.$emit("update:userWaitingActive", -1);
+                        let items = patientList[parseInt(num)];
+
+                        this.$store.commit("setPatientId", items ? items.patientId : "");
+                        this.$store.commit("setPatientName", items ? items.patientName : "");
+                        this.$store.commit("setCaseId", items ? items.caseId : "");
+                        this.$store.commit("setConsultationId", items ? items.consultationId : "");
+                        this.$store.commit("setCurrentItem", items ? items : {});
+                        this.$store.commit("setSBIObject", "");
+
+                        store.commit("stopLoading");
+                    }, 1000);
+
+
                 })
         })
       },
@@ -663,14 +696,10 @@ export default {
     },
     //发送文件
     sendFile(data){
-
-//        return;
         let that = this;
         store.commit("startLoading");
         let promises = [];
-        console.log(data);
         Array.from(data.data).forEach(function (element,index) {
-            console.log(element);
             promises.push(
                 new Promise((resolve, reject) => {
                     that.nim.previewFile({
@@ -778,7 +807,7 @@ export default {
               custom: JSON.stringify({
                 cType: "0",
                 cId: _this.$store.state.userId,
-                mType: "36",
+                mType: "37",
                 idClient:msg.idClient
               }),
               content: JSON.stringify({
@@ -936,10 +965,7 @@ export default {
       //获取当前患者消息
       const _this = this;
 
-      if (
-        (element.from.includes("0_") && targetUser === element.from) ||
-        (element.to.includes("0_") && targetUser === element.to)
-      ) {
+      if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
         if (element.type === "custom") {
           element.content = JSON.parse(element.content);
         }

@@ -12,13 +12,13 @@
                 <section class="refuse-box-inner-list">
                     <ul>
                         <li class="refuse-box-inner-list-item" :class="{'active': index == nowIndex}" v-for="(item,index) in refuseList" @click="selectReason">
-                            <h3 @click.stop="selectReason(item,index)" v-if="!fixFlag[index]">{{item.text}}</h3>
+                            <h3 @click.stop="selectReason(item,index)" v-if="!fixFlag[index]">{{item.refuseContent}}</h3>
                         </li>
                     </ul>
                 </section>
                 <figure class="refuse-box-update">
                     <input type="text" class="add-input" placeholder="请输入拒绝理由" v-model="refuseReason"  maxlength="50"/>
-                    <i class="icon-Cancel" @click="remove"></i>
+                    <i class="icon-Cancel" @click="remove" v-show="refuseReason"></i>
                 </figure>
             </section>
             <section class="refuse-box-footer">
@@ -30,6 +30,11 @@
     </section>
 </template>
 <script>
+    import api from "../../common/js/util";
+    const XHRList = {
+        refuseReasonList: "/call/comm/data/refuse/v1/getList/",
+
+    };
     export default{
         name: 'refuse',
         data(){
@@ -43,13 +48,45 @@
             }
         },
         mounted(){
-            this.refuseList = this.$store.state.refuseList;
+            this.init();
         },
         methods: {
+            init(){
+                var _this = this;
+                let dataValue={
+                    refuseType:1,
+                    siteId:18,
+                    isValid:1
+                };
+                api.ajax({
+                    url:XHRList.refuseReasonList,
+                    method: "POST",
+                    data: dataValue,
+                    done(res) {
+                        if(res.responseObject){
+                            let refuseList = [];
+                            res.responseObject.forEach(function(item,index){
+                                refuseList.push(Object.create({
+                                    flag:true,
+                                    refuseContent:item.refuseContent
+                                }))
+
+                            });
+                            _this.$store.commit('setRefuseList',refuseList);
+                        }
+                        _this.refuseList = _this.$store.state.refuseList;
+                    },
+                    fail(err) {
+                        console.log("请求失败：" + err);
+                        _this.refuseList = _this.$store.state.refuseList;
+                    }
+                });
+
+            },
             //选择原因
             selectReason(item, index){
                 this.nowIndex = index;
-                this.refuseReason = item.text;
+                this.refuseReason = item.refuseContent;
             },
             close(){
                 this.$store.commit("setRefuseFlag", false);
@@ -231,8 +268,9 @@
                 }
             }
             &-footer {
+                padding-top:15px;
                 text-align: center;
-                margin-bottom: 30px;
+                margin-bottom: 15px;
                 .btn-primary-small {
                     margin-right: 25px;
                     vertical-align: top;

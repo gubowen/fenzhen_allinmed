@@ -20,7 +20,7 @@ export default new Vuex.Store({
         patientList: '',  //患者列表
         patientActiveIndex:-1,
         newOnline: false,
-
+        onlineListRefresh:false,
 
         waitingList: "",   //待分诊列表
         newWaiting: false,
@@ -125,15 +125,16 @@ export default new Vuex.Store({
         },
         refuseFlag:false,
         refuseList:[
-            {flag:true,text:'您咨询的病情，不属于骨科疾病，请您去医院直接就诊。'},
-            {flag:true,text:'您咨询的病情，非常紧急，不适合使用网络咨询服务，请您尽快去医院就诊。'},
-            {flag:true,text:'唯医骨科互联网只进行骨科疾病的相关咨询，您的情况不属于骨科病请咨询。'},
-            {flag:true,text:'您咨询的问题，触犯相关法律规定，不能在本平台进行咨询。'}
+            {flag:true,refuseContent:'您咨询的病情，不属于骨科疾病，请您去医院直接就诊。'},
+            {flag:true,refuseContent:'您咨询的病情，非常紧急，不适合使用网络咨询服务，请您尽快去医院就诊。'},
+            {flag:true,refuseContent:'唯医骨科互联网只进行骨科疾病的相关咨询，您的情况不属于骨科病请咨询。'},
+            {flag:true,refuseContent:'您咨询的问题，触犯相关法律规定，不能在本平台进行咨询。'}
         ],
         refuseReason:{
             flag:false,
             data:''
-        }
+        },
+        minBtnFlag:false    //更多按钮标志
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -251,6 +252,9 @@ export default new Vuex.Store({
         onlineListRefresh(state, data){
             state.onlineListRefresh = data;
         },
+        resetListRefreshFlag(state,data){
+            state.resetListRefresh = data;
+        },
         setNewWaiting(state, flag){
             state.newWaiting = flag;
         },
@@ -323,12 +327,23 @@ export default new Vuex.Store({
         setRefuseFlag(state,data){
             state.refuseFlag = data;
         },
-        //拒绝理由
+
+        //***********拒绝**************
+        //理由
         setRefuseReason(state,data){
             state.refuseReason = data;
         },
+        //列表
+        setRefuseList(state,data){
+            state.refuseList = data;
+        },
+        //*****************************
         setNewReset(state,data){
             state.newReset = data;
+        },
+        setMinBtnFlag(state,data){
+            state.minBtnFlag = data;
         }
+
     }
 });
