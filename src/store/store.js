@@ -15,10 +15,22 @@ export default new Vuex.Store({
     state: {
         userName: "",  // 定义你的数据源
         mobile: '',
+
+
         patientList: '',  //患者列表
         patientActiveIndex:-1,
+        newOnline: false,
+        onlineListRefresh:false,
+
         waitingList: "",   //待分诊列表
+        newWaiting: false,
         waitingListRefresh: false,
+
+
+        resetList:[],     //重新分诊列表
+        newReset:false,
+
+
         caseId: '',       //病例Id
         patientId: '',    //患者Id
         patientName: '',  //患者姓名
@@ -32,8 +44,6 @@ export default new Vuex.Store({
             first: true,
             second: false
         },
-        newWaiting: false,
-        newOnline: false,
         EasyWayTempCache: '',
         userLoginName: '',
         key: '',
@@ -63,8 +73,10 @@ export default new Vuex.Store({
         SBIObject: {}, //查看大图对象
         SBIIndex:'',   //查看大图索引
         SBIType: '', //查看大图类型
-        videoFlag:false, //查看视频标致位
+        videoFlag:false, //查看视频标志位
         videoObject:'',  //查看视频列表
+        videoListFlag:false,
+        videoListObject:[],
         previewShow: false,
         previewId: "",
         triageContent:[],
@@ -89,6 +101,13 @@ export default new Vuex.Store({
             flag: false,
             data: {}
         },
+        sendFileFlag:{
+            flag:false,
+            data:{},
+            name:'',
+            type:''
+        },
+        sendFileShow:false,
         newSickId:'',                //现病史Id
         musicPlay:false,
         beingSend:true,
@@ -102,7 +121,19 @@ export default new Vuex.Store({
         releasePatientCaseIdFlag:{
             caseId:"",
             flag:false
-        }
+        },
+        refuseFlag:false,
+        refuseList:[
+            {flag:true,refuseContent:'您咨询的病情，不属于骨科疾病，请您去医院直接就诊。'},
+            {flag:true,refuseContent:'您咨询的病情，非常紧急，不适合使用网络咨询服务，请您尽快去医院就诊。'},
+            {flag:true,refuseContent:'唯医骨科互联网只进行骨科疾病的相关咨询，您的情况不属于骨科病请咨询。'},
+            {flag:true,refuseContent:'您咨询的问题，触犯相关法律规定，不能在本平台进行咨询。'}
+        ],
+        refuseReason:{
+            flag:false,
+            data:''
+        },
+        minBtnFlag:false    //更多按钮标志
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -214,12 +245,7 @@ export default new Vuex.Store({
         setPreviewType(state, data){
             state.previewType = data;
         },
-        waitingListRefreshFlag(state, data){
-            state.waitingListRefresh = data;
-        },
-        onlineListRefresh(state, data){
-            state.onlineListRefresh = data;
-        },
+
         setNewWaiting(state, flag){
             state.newWaiting = flag;
         },
@@ -248,6 +274,12 @@ export default new Vuex.Store({
         setVideoObject(state,data){
             state.videoObject=data;
         },
+        setVideoListFlag(state,data){
+            state.videoListFlag = data;
+        },
+        videoListObject(state,data){
+            state.videoListObject =data;
+        },
         setSBIIndex(state,data){
             state.SBIIndex=data;
         },
@@ -271,6 +303,52 @@ export default new Vuex.Store({
         },
         setReleasePatientCaseIdFlag(state,param){
             state.releasePatientCaseIdFlag=param;
+        },
+        //重新分诊列表
+        setResetList(state,data){
+            state.resetList = data;
+        },
+        //拒绝分诊
+        setRefuseFlag(state,data){
+            state.refuseFlag = data;
+        },
+
+
+
+        //***********刷新**************
+        waitingListRefreshFlag(state, data){
+            state.waitingListRefresh = data;
+        },
+        onlineListRefresh(state, data){
+            state.onlineListRefresh = data;
+        },
+        resetListRefreshFlag(state,data){
+            state.resetListRefresh = data;
+        },
+        //***********拒绝**************
+        setRefuseReason(state,data){
+            state.refuseReason = data;
+        },
+        setRefuseList(state,data){
+            state.refuseList = data;
+        },
+        //*********发送文件************
+        setSendFileFlag(state,data){
+            state.sendFileFlag = data;
+        },
+        setSendFileShow(state,data){
+            state.sendFileShow = data;
+        },
+        //*****************************
+
+
+
+        setNewReset(state,data){
+            state.newReset = data;
+        },
+        setMinBtnFlag(state,data){
+            state.minBtnFlag = data;
         }
+
     }
 });
