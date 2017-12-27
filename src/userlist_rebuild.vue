@@ -553,7 +553,7 @@ export default {
               dataValue = Object.assign(
                   {
                       customerId: _this.$store.state.userId,
-                      conState: "0,6,9,10",
+                      conState: "0,9,10",
                       conType: 0,
                       sortType: -6
                   },
