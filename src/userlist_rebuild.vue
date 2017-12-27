@@ -453,9 +453,10 @@ export default {
           this.newPatientFlag = false;
         }
       }else if(this.userListStatus.third){
+          console.log("33");
           this.waitingTriage = true;
           this.userResetActive = index;
-          store.commit("setInputReadOnly", true);
+          store.commit("setInputReadOnly", false);
           let resetList = this.$store.state.resetList;
           items.messageAlert = "";
           if (getFlag) {
