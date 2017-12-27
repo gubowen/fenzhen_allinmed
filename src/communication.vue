@@ -18,10 +18,10 @@
                     <button class="user-controller-min" @click.stop="minBtnShow()">
                         <i class="icon-userReply"></i>
                         <span>更多</span>
-                        <div :class="[{'on':!userListStatus},'sendList']" v-show="minBtnFlag">
+                        <div :class="[{'on':!userCurrnetStatus},'sendList']" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>
-                                <li @click="refuseEvent()" v-show="userListStatus">拒绝分诊</li>
+                                <li @click="refuseEvent()" v-show="userCurrnetStatus">拒绝分诊</li>
                                 <li @click="sendFile()">发送视图</li>
                             </ul>
                         </div>
@@ -37,7 +37,7 @@
                     </button>
 
                     <!--结束沟通-->
-                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userListStatus.status != 3">
+                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrnetStatus">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -153,7 +153,7 @@ export default {
       inputReadOnly: "",
       sendFlag:false,
       minBtnFlag:false,
-      userListStatus:false
+      userCurrnetStatus:false
     };
   },
   components: {
@@ -207,7 +207,7 @@ export default {
   methods: {
     //初始化
     init() {
-        this.userListStatus =this.userListStatus.status == 3 ? true : false ;
+        this.userCurrnetStatus =this.userListStatus.status == 3 ? true : false ;
     },
     sendMessage(e) {
       const that = this;

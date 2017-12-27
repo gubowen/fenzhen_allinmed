@@ -1083,10 +1083,22 @@
                                 }).then((res)=>{
 
                                     if (that.previewDiagnoseSuggest.examineList.length > 0||that.previewDiagnoseSuggest.testList.length > 0){
+                                        console.log("1");
                                         releasePatient({
                                             customerId: that.$store.state.userId,
                                             consultationId: that.$store.state.currentItem.consultationId,
                                             consultationState:9
+                                        }).then(res => {
+                                            let currentItem = that.$store.state.currentItem;
+                                            currentItem.consultationState = 9;
+                                            that.$store.commit('setCurrentItem',currentItem);
+                                        })
+                                    }else{
+                                        console.log("2");
+                                        releasePatient({
+                                            customerId: that.$store.state.userId,
+                                            consultationId: that.$store.state.currentItem.consultationId,
+                                            consultationState:10
                                         }).then(res => {
                                             let currentItem = that.$store.state.currentItem;
                                             currentItem.consultationState = 9;

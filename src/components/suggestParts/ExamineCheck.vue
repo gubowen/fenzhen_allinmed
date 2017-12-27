@@ -439,7 +439,7 @@
                         }).then(res => {
                             let currentItem = _this.$store.state.currentItem;
                                 currentItem.consultationState = 9;
-                            that.$store.commit('setCurrentItem',currentItem);
+                        _this.$store.commit('setCurrentItem',currentItem);
                         })
 
                     },

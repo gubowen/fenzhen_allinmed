@@ -31,7 +31,6 @@ export default new Vuex.Store({
         newReset:false,
 
 
-
         caseId: '',       //病例Id
         patientId: '',    //患者Id
         patientName: '',  //患者姓名

@@ -423,7 +423,8 @@ export default {
         if (localStorage.getItem("waitingAlertList") == "{}") {
           this.newWaitingFlag = false;
         }
-      } else {
+      } else if(this.userListStatus.second){
+
         this.waitingTriage = false;
         this.userOnlineActive = index;
         store.commit("setInputReadOnly", false);
@@ -451,7 +452,35 @@ export default {
         if (localStorage.getItem("patientAlertList") == "{}") {
           this.newPatientFlag = false;
         }
+      }else if(this.userListStatus.third){
+          this.waitingTriage = true;
+          this.userResetActive = index;
+          store.commit("setInputReadOnly", true);
+          let resetList = this.$store.state.resetList;
+          items.messageAlert = "";
+          if (getFlag) {
+              resetList.removeByValue(items);
+              resetList.unshift(items);
+              this.$store.commit("setResetList", resetList);
+          } else {
+              resetList[index] = items;
+              this.$store.commit("setResetList", resetList);
+          }
+          let resetAlertList = JSON.parse(
+              localStorage.getItem("resetAlertList")
+          );
+          if (resetAlertList) {
+              delete resetAlertList["0_" + items.caseId];
+              localStorage.setItem(
+                  "resetAlertList",
+                  JSON.stringify(resetAlertList)
+              );
+          }
+          if (localStorage.getItem("resetAlertList") == "{}") {
+              this.newResetFlag = false;
+          }
       }
+
       this.message = items;
 
       this.$store.commit("setPatientId", items.patientId);
@@ -524,7 +553,7 @@ export default {
               dataValue = Object.assign(
                   {
                       customerId: _this.$store.state.userId,
-                      conState: "0",
+                      conState: "0,6,9,10",
                       conType: 0,
                       sortType: -6
                   },

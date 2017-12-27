@@ -57,10 +57,7 @@
                                 :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
                                 ></UpdateTips>
                         <!--检查检验上传提示-->
-                        <UpdateTips
-                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
-                                :showType="'checkSuggessSendTips'"
-                        ></UpdateTips>
+                        <UpdateTips v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')" :showType="'checkSuggessSendTips'"></UpdateTips>
                         <!--消息撤回-->
                         <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
@@ -387,9 +384,7 @@ export default {
             //自定义消息
 //            console.log(msg);
             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
-              that.$store.state.currentItem.createTime = that.transformMessageTime(
-                msg.time
-              );
+              that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
             }
             if (msg.type.toLowerCase() === "custom") {
               //判断是否为新用户
@@ -410,6 +405,10 @@ export default {
                 store.commit("waitingListRefreshFlag", true);
                 store.commit("setNewWaiting", true);
                 store.commit("setMusicPlay", true);
+              }else if(JSON.parse(msg.content).type == 'triageSendTips'||JSON.parse(msg.content).type == 'checkSuggestSendTips'){
+                  that.$store.commit("waitingListRefreshFlag", true);
+                  that.$store.commit('onlineListRefresh',true);
+                  that.$store.commit('resetListRefreshFlag',true);
               }
             }
             that.receiveMessage(that.targetData.account, msg);
@@ -978,7 +977,6 @@ export default {
         }, 120);
       } else {
         //接诊列表
-
         this.newMessageTips(targetUser, element);
       }
     },
@@ -1179,6 +1177,9 @@ export default {
           }else{
               return false;
           }
+    },
+    changeUserList(){
+        alert("1");
     }
   }
 };
