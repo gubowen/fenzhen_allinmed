@@ -398,6 +398,8 @@ export default {
       localStorage.setItem("caseId", items.caseId);
       this.$store.commit("setConsultationId", items.consultationId);
 
+
+      console.log(items);
       this.$store.commit("setCurrentItem", items);
 
       this.$store.commit("setSBIObject", {});

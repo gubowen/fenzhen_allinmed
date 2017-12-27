@@ -341,9 +341,7 @@ export default {
           onmsg(msg) {
             //自定义消息
             console.log(msg);
-            if (
-              msg.from.includes("0_") &&
-              that.targetData.account === msg.from
+            if (msg.from.includes("0_") && that.targetData.account === msg.from
             ) {
               that.$store.state.currentItem.createTime = that.transformMessageTime(
                 msg.time
