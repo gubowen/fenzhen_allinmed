@@ -554,7 +554,7 @@ export default {
               dataValue = Object.assign(
                   {
                       customerId: _this.$store.state.userId,
-                      conState: "0,9,10",
+                      conState: "0",
                       conType: 0,
                       sortType: -6
                   },
@@ -565,7 +565,7 @@ export default {
           case 'waiting':
               dataValue = Object.assign(
                   {
-                      conState: "2,4,5",
+                      conState: "4,5",
                       conType: 0,
                       sortType: -6
                   },
