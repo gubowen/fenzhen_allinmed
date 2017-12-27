@@ -243,7 +243,7 @@ export default {
             custom: JSON.stringify({
               cType: "0",
               cId: this.$store.state.userId,
-              mType: "37",
+              mType: "42",
               docName: this.$store.state.userName
             }),
             done(error, obj) {
