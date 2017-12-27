@@ -203,7 +203,7 @@
         };
         switch (type) {
           case "addTerm":
-            if (!this.addInputContent) {
+            if (!this.addInputContent.trim()) {
               this.addInputContent = "";
               this.termShowFlag['-1'] = false;
               flag = false;
@@ -215,7 +215,7 @@
             }
             break;
           case "addMember":
-            if (!this.memberFixContent[index][-1]) {
+            if (!this.memberFixContent[index][-1].trim()) {
               this.memberFixContent[index]['-1'] = "";
               this.memberFixFlag[index]['-1'] = false;
               flag = false;
@@ -230,7 +230,7 @@
 
             break;
           case "fixTerm":
-            if (!this.termFixContent[index]) {
+            if (!this.termFixContent[index].trim()) {
               this.termFixFlag[index] = false;
               flag = false;
             } else {
@@ -243,7 +243,7 @@
             }
             break;
           case"fixMember":
-            if (!this.memberFixContent[index][cIndex]) {
+            if (!this.memberFixContent[index][cIndex].trim()) {
               this.memberFixFlag[index][cIndex] = false;
               flag = false;
             } else {
