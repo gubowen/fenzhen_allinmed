@@ -401,6 +401,7 @@
                                     store.commit("setNewWaiting", true);
                                     store.commit("setMusicPlay", true);
                                 }else if(JSON.parse(msg.content).type == 'triageSendTips'||JSON.parse(msg.content).type == 'checkSuggestSendTips'){
+                                    console.log("33333");
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('onlineListRefresh',true);
                                     that.$store.commit('resetListRefreshFlag',true);

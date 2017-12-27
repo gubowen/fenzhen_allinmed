@@ -29,7 +29,7 @@ export default new Vuex.Store({
 
         resetList:[],     //重新分诊列表
         newReset:false,
-
+        resetListRefresh:false,
 
         caseId: '',       //病例Id
         patientId: '',    //患者Id

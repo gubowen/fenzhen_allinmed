@@ -201,12 +201,15 @@ export default {
     },
     "$store.state.minBtnFlag"(content){
           this.minBtnFlag = this.$store.state.minBtnFlag;
+    },
+    "$store.state.patientId"(content){
+          this.userCurrentStatus = this.userListStatus.status == 3 ?  false: true;
     }
   },
   methods: {
     //初始化
     init() {
-        this.userCurrentStatus =this.userListStatus.status == 3 ?  false: true ;
+        this.userCurrentStatus =this.userListStatus.status == 3 ?  false: true;
     },
     sendMessage(e) {
       const that = this;

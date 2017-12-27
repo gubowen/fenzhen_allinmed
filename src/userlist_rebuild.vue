@@ -67,7 +67,7 @@
                                     <figcaption class="userlist-item-base-msg">
                                         <h3>
                                             <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
-                                                class="category short" v-show="items.consultationState==5">重新分诊</span><span class="category short"
+                                                class="category short" v-show="items.consultationState==5">待分诊</span><span class="category short"
                                                 v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items| checkState}}</span>
                                             <span class="category short" v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
                                         </h3>
@@ -210,8 +210,8 @@ Vue.filter("checkState", function(items, a) {
     case  1: result = '已结束';break;
     case  2: result = "拒绝接诊";break;
     case  3: result = "超时未接诊";break;
-    case  4: result = "新用户";break;
-    case  5: result = "释放";break;
+    case  4: result = "待分诊";break;  //新用户
+    case  5: result = "待分诊";break;  //释放
     case  6: result = "已上传资料";break;
     case  7: result = "分诊拒绝";break;
     case  8: result = "分诊完成";break;
@@ -453,7 +453,6 @@ export default {
           this.newPatientFlag = false;
         }
       }else if(this.userListStatus.third){
-          console.log("33");
           this.waitingTriage = true;
           this.userResetActive = index;
           store.commit("setInputReadOnly", false);

@@ -24,8 +24,15 @@
                         </article>
                         <article class="special-message-item-text">
                             <article class="special-message-item-list">
-                                <span class="answer"><p
-                                        class="question">问诊目的：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                                <span class="answer"><p class="question">身高：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                                <span class="answer"><p class="question">体重：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                                <span class="answer"><p class="question">BMI：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                            </article>
+                        </article>
+                        <article class="special-message-item-text">
+
+                            <article class="special-message-item-list">
+                                <span class="answer"><p class="question">想获得的帮助：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
                             </article>
                             <article class="special-message-item-list">
                                 <span class="answer"><p class="question">所在地区：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.provinceName}}&nbsp;&nbsp;{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.cityName}}</span>
@@ -61,7 +68,7 @@
                                 <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VAS}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list" v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
-                                <p class="question">其他症状：</p>
+                                <p class="question">病情描述：</p>
                                 <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseAlong}}</span>
                             </figcaption>
                         </article>
@@ -74,7 +81,7 @@
                             <p class="answer"><span class="question">曾就诊情况：</span>{{medicalReportMsg.patientCasemap.treatmentName}}&nbsp;&nbsp;&nbsp;{{medicalReportMsg.patientCasemap.illnessName}}</p>
                         </article>
                         <article class="special-message-item-list" v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.takeMedicine.length > 0">
-                            <p class="answer"><span class="question">服用药物：</span>{{medicalReportMsg.patientCasemap.takeMedicine}}</p>
+                            <p class="answer"><span class="question">在用药物：</span>{{medicalReportMsg.patientCasemap.takeMedicine}}</p>
                         </article>
                         <article class="special-message-item-list img-box" v-if="medicalReportMsg.patientCasemap&&medicalReportMsg.patientCasemap.attachmentList.length > 0">
                             <figure class="special-message-item-img " v-for="(imgs,index) in medicalReportMsg.patientCasemap.attachmentList">
