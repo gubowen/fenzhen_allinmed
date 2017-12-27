@@ -600,16 +600,16 @@
                                     });
                                 }
                             }
-                            that.allDoc.allDocList = dataList;
+                            that.allDoc.allDocList = that.isChosenTheDoc(dataList);
                             that.allDoc.allDocState = false;
                             that.allDoc.totalCount = data.responseObject.responseData.totalCount;
-                            that.previewDiagnoseSuggest.doctorList = [];
+//                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = false;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
                         } else {
                             that.allDoc.allDocList = [];
-                            that.previewDiagnoseSuggest.doctorList = [];
+//                            that.previewDiagnoseSuggest.doctorList = [];
                             that.noDocData = true;
                             that.matchCurrentIndex = -1;
                             that.allCurrentIndex = -1;
@@ -815,6 +815,20 @@
                         this.allDoc.allDocState = false;
                     }
                 }
+            },
+            //验证是否已选中该医生
+            isChosenTheDoc(docList){
+                let that = this;
+                docList.forEach((value,key)=>{
+                    let docId = value.customerId;
+                    that.previewDiagnoseSuggest.doctorList.forEach((v)=>{
+                        if(v.customerId == docId){
+                            key.isChecked = true;
+                            return false;
+                        }
+                    })
+                })
+                return docList;
             },
             //四大建议
             showNext(type, index){
