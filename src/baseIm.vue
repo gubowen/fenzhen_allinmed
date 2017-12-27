@@ -23,7 +23,7 @@
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'file'" :message="items" :nim="nim"
+                        <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))" :message="items" :nim="nim"
                                       @loadCallback="loadCallback"></ImageElement>
                         <!--检查检验-->
 
@@ -981,6 +981,14 @@ export default {
           this.FourIndex = index;
         }
       }
+    },
+      //获取文件类型 做旧数据发送图片格式为file的兼容性
+    getFileType(file){
+          if(/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.ext)) {
+              return true;
+          }else{
+              return false;
+          }
     }
   }
 };
