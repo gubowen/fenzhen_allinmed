@@ -54,7 +54,7 @@
                 </nav>
                 <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}" id="ev-user-inner">
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-1" v-show="userListStatus.status == 1">
-                            <transition-group name="list-left" tag="section">
+                            <!--<transition-group name="list-left" tag="section">-->
                                 <article v-show="userListWaiting.length > 0" @click="transformData(items,index)"
                                          :class="[{ active : userWaitingActive == index }, 'userlist-mainList-item']"
                                          v-for="(items,index) in userListWaiting"
@@ -79,7 +79,7 @@
 
                                     <span class="time"> {{items.createTime | timeFormat}}</span>
                                 </article>
-                            </transition-group>
+                            <!--</transition-group>-->
                             <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
                         </section>
                         <section class="userlist-mainList viewItem" data-role="ut-tabs-2" v-show="userListStatus.status == 2">
@@ -919,7 +919,7 @@ export default {
   .center-inner-userlist {
     background-color: #fff;
     color: #fff;
-    width: 385px;
+    width: 400px;
     float: left;
     margin-left: -100%;
     height: 100%;
@@ -967,20 +967,18 @@ export default {
       font-size: 0;
       border: 1px solid #acb1be;
       border-radius: 4px;
-      width: 90%;
+      width: 85%;
       display: inline-block;
     }
     &-right {
-      width: 15px;
-      height: 35px;
-      background: #eceff6 url("./assets/img00/common/vedio_play.png") no-repeat
-        center center;
-      background-size: 60% 60%;
+      width: 47px;
+      height: 16px;
+      background: url("./assets/img00/common/sorting@2x.png") no-repeat center center;
       display: inline-block;
       vertical-align: middle;
-      padding: 14px;
       border-radius: 4px;
       box-sizing: border-box;
+      background-size: contain;
     }
     &-sortList {
       position: absolute;

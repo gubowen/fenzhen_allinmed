@@ -450,7 +450,7 @@ export default {
   width: 100%;
   height: 100%;
   & > .layout-helper {
-    margin: 0 385px;
+    margin: 0 385px 0 400px;
     position: relative;
     padding-top: 55px;
     padding-bottom: 40px;
