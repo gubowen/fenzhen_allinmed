@@ -20,8 +20,7 @@
             <section class="jump-box-viewers-item viewItem" :class="{'active': index == nowIndex}"
                      v-for="(items,index) in FastReplyList">
                 <ul class="jump-box-list">
-                    <li class="jump-box-list-item" v-for="item in items.children"><span
-                            @click.stop="clickToSendReply(item)">{{item.questionDesc}}</span></li>
+                    <li class="jump-box-list-item" v-for="item in items.children"><span @click.stop="clickToSendReply(item)">{{item.questionDesc}}</span></li>
                 </ul>
             </section>
         </section>
@@ -203,7 +202,7 @@
             position: absolute;
             line-height: 0;
             left: 0;
-            top: 50%;
+            top: 55%;
             transform: translateY(-50%);
             width: 56px;
             height: 40px;
@@ -213,7 +212,7 @@
             position: absolute;
             right: 0;
             line-height: 0;
-            top: 50%;
+            top: 55%;
             transform: translateY(-50%);
             width: 56px;
             height: 40px;
