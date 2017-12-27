@@ -16,12 +16,11 @@
                         <span>常用回复</span>
                     </button>
                     <button class="user-controller-min" @click.stop="minBtnShow()">
-                        <i class="icon-userReply"></i>
-                        <span>更多</span>
-                        <div :class="[{'on':!userCurrnetStatus},'sendList']" v-show="minBtnFlag">
+                        <i class="icon-userReply"></i><span>更多</span>
+                        <div :class="[{'on':!userCurrentStatus},'sendList']" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>
-                                <li @click="refuseEvent()" v-show="userCurrnetStatus">拒绝分诊</li>
+                                <li @click="refuseEvent()" v-show="userCurrentStatus">拒绝分诊</li>
                                 <li @click="sendFile()">发送视图</li>
                             </ul>
                         </div>
@@ -37,7 +36,7 @@
                     </button>
 
                     <!--结束沟通-->
-                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrnetStatus">
+                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrentStatus">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -153,7 +152,7 @@ export default {
       inputReadOnly: "",
       sendFlag:false,
       minBtnFlag:false,
-      userCurrnetStatus:false
+      userCurrentStatus:false
     };
   },
   components: {
@@ -207,7 +206,7 @@ export default {
   methods: {
     //初始化
     init() {
-        this.userCurrnetStatus =this.userListStatus.status == 3 ? true : false ;
+        this.userCurrentStatus =this.userListStatus.status == 3 ?  false: true ;
     },
     sendMessage(e) {
       const that = this;
