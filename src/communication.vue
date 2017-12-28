@@ -239,9 +239,7 @@
                         return;
                     } else {
                         if (that.controllerInputStatus == 0) {
-                            that.$refs.baseImComponent
-                                .sendMessage(that.controllerInput)
-                                .then(obj => {
+                            that.$refs.baseImComponent.sendMessage(that.controllerInput).then(obj => {
                                     that.controllerInput = "";
                                     store.commit("setFastReply", "");
                                     store.commit("setUesdReply", "");

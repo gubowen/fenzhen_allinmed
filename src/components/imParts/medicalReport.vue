@@ -23,10 +23,10 @@
                             <span>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.age}}岁</span>
                         </article>
                         <article class="special-message-item-text">
-                            <article class="special-message-item-list">
-                                <span class="answer"><p class="question">身高：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
-                                <span class="answer"><p class="question">体重：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
-                                <span class="answer"><p class="question">BMI：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                            <article class="special-message-item-list" v-if="medicalReportMsg.patientCasemap &&(medicalReportMsg.patientCasemap.height ||medicalReportMsg.patientCasemap.weight||medicalReportMsg.patientCasemap.bmi)">
+                                <span class="answer inline-block" v-if="medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.height"><p class="question">身高：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.height+'cm'}}</span>
+                                <span class="answer inline-block" v-if="medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.weight"><p class="question">体重：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.weight+'kg'}}</span>
+                                <span class="answer inline-block" v-if="medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.bmi"><p class="question">BMI：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.bmi}}</span>
                             </article>
                         </article>
                         <article class="special-message-item-text">
@@ -261,5 +261,8 @@
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">
-
+    .special-message-item-list .inline-block{
+        display: inline-block;
+        margin-right:10px;
+}
 </style>
