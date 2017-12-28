@@ -133,6 +133,7 @@ export default new Vuex.Store({
             flag:false,
             data:''
         },
+        refuseUserListFlag:false,
         minBtnFlag:false    //更多按钮标志
     },
     mutations: {
@@ -348,7 +349,9 @@ export default new Vuex.Store({
         },
         setMinBtnFlag(state,data){
             state.minBtnFlag = data;
+        },
+        setRefuseUserListFlag(state,data){
+            state.refuseUserListFlag =data;
         }
-
     }
 });

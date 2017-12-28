@@ -538,6 +538,7 @@
                         consultationId: that.$store.state.currentItem.consultationId,
                         consultationState:7
                     }).then(res => {
+                        console.log("7");
 //                    let currentItem = that.$store.state.currentItem;
 //                    currentItem.consultationState = 1;
 //                    that.$store.commit('setCurrentItem',currentItem);
@@ -545,12 +546,17 @@
                         that.$store.commit('onlineListRefresh',true);
                         that.$store.commit('resetListRefreshFlag',true);
 
-                        setTimeout(() => {
-//                        that.$store.commit("setInputReadOnly", true);
+                        that.$store.commit("setRefuseUserListFlag",true);
 
-//                        this.$store.state.currentItem.triageSelect = false;
-//                        this.$store.commit("waitingListRefreshFlag", true);
-//                        this.$store.commit("setWaitingList", waitingList);
+
+//                        let waitingList = that.$store.state.waitingList;
+//                        let patientList = that.$store.state.patientList;
+//                        setTimeout(() => {
+//                        that.$store.commit("setInputReadOnly", true);
+//
+//                        that.$store.state.currentItem.triageSelect = false;
+//                        that.$store.commit("waitingListRefreshFlag", true);
+//                        that.$store.commit("setWaitingList", waitingList);
 //
 //                        let num = "";
 //
@@ -575,9 +581,9 @@
 //                        this.$store.commit("setConsultationId", items ? items.consultationId : "");
 //                        this.$store.commit("setCurrentItem", items ? items : {});
 //                        this.$store.commit("setSBIObject", "");
-
-                            store.commit("stopLoading");
-                        }, 1000);
+//
+//                            store.commit("stopLoading");
+//                        }, 1000);
 
 
                     })

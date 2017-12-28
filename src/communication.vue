@@ -4,7 +4,7 @@
             <figure class="center-inner-wrapper">
                 <img src="./assets/img00/index/logo_empty bg.png" alt="">
             </figure>
-            <BaseIm ref="baseImComponent" :userCurrentStatus.sync="userCurrentStatus"></BaseIm>
+            <BaseIm ref="baseImComponent" :userCurrentStatus.sync="userCurrentStatus" ></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply">
                     <button class="user-controller-fastReply" @click.stop="fastRely()">
@@ -41,8 +41,8 @@
                         <span>结束沟通</span>
                     </button>
                     <!--<button class="user-controller-check" @click.stop="sendFile">-->
-                        <!--<i class="icon-finish"></i>-->
-                        <!--<span>发送视图</span>-->
+                    <!--<i class="icon-finish"></i>-->
+                    <!--<span>发送视图</span>-->
                     <!--</button>-->
 
                     <!--快捷提问-->
@@ -109,365 +109,376 @@
     </section>
 </template>
 <script>
-import SmallConfirm from "@/common/smallConfirm";
-import fastRely from "./components/fast_reply";
-import usedRely from "./components/used_rely";
-import fastReplyConfig from "./components/fast_reply_config";
-import UsedReplyConfig from "./components/usedReplyConfig";
-import CheckSuggestion from "./components/suggestParts/CheckSuggestion";
-import ExamineCheck from "./components/suggestParts/ExamineCheck";
-import PreviewSuggestion from "./components/suggestParts/previewSuggestion";
-import BaseIm from "./baseIm";
-import triagePatient from "@/base/triagePatient";
-import releasePatient from "@/base/releasePatient";
-import ShowBigImg from "./common/ShowBigImg";
-import ShowVideo from "./common/ShowVideo";
-import ShowVideoList from "./common/ShowVideoList";
-import store from "@/store/store";
-import sendFile from "@/components/imParts/sendFile";
-import refuse from "@/components/imParts/refuse";
+    import SmallConfirm from "@/common/smallConfirm";
+    import fastRely from "./components/fast_reply";
+    import usedRely from "./components/used_rely";
+    import fastReplyConfig from "./components/fast_reply_config";
+    import UsedReplyConfig from "./components/usedReplyConfig";
+    import CheckSuggestion from "./components/suggestParts/CheckSuggestion";
+    import ExamineCheck from "./components/suggestParts/ExamineCheck";
+    import PreviewSuggestion from "./components/suggestParts/previewSuggestion";
+    import BaseIm from "./baseIm";
+    import triagePatient from "@/base/triagePatient";
+    import releasePatient from "@/base/releasePatient";
+    import ShowBigImg from "./common/ShowBigImg";
+    import ShowVideo from "./common/ShowVideo";
+    import ShowVideoList from "./common/ShowVideoList";
+    import store from "@/store/store";
+    import sendFile from "@/components/imParts/sendFile";
+    import refuse from "@/components/imParts/refuse";
 
-export default {
-  name: "communication",
-  data() {
-    return {
-      controllerInput: "",
-      controllerInputStatus: 0,
-      examineSuggest: "",
-      FirstIndex: -1,
-      SecondIndex: -1,
-      ThirdIndex: -1,
-      FourIndex: -1,
-      testSuggest: "",
-      examineFlag: false, //检查检验
-      suggestionFlag: false,
-      checkSuggestionFlag: false, //初诊建议
-      tabActive: true,
-      fastRelyStatus: "", //快捷提问是否能点击
-      SBIFlag: false,
-      usedRelyStatus: false, //常用回复是否能点击
-      fastReplyConfig: false,
-      reTriageShow: false,
-      reTriageContentTips: "确定结束与该患者的沟通吗？",
-      inputReadOnly: "",
-      sendFlag:false,
-      minBtnFlag:false,
-      userCurrentStatus:''
-    };
-  },
-  components: {
-    fastRely,
-    usedRely,
-    fastReplyConfig,
-    CheckSuggestion,
-    ExamineCheck,
-    ShowBigImg,
-    ShowVideo,
-    ShowVideoList,
-    BaseIm,
-    SmallConfirm,
-    PreviewSuggestion,
-    UsedReplyConfig,
-    sendFile,
-    refuse
-  },
-  props: {
-    m: {
-      type: Object
-    },
-    n: {
-      type: Boolean
-    },
+    export default {
+        name: "communication",
+        data() {
+            return {
+                controllerInput: "",
+                controllerInputStatus: 0,
+                examineSuggest: "",
+                FirstIndex: -1,
+                SecondIndex: -1,
+                ThirdIndex: -1,
+                FourIndex: -1,
+                testSuggest: "",
+                examineFlag: false, //检查检验
+                suggestionFlag: false,
+                checkSuggestionFlag: false, //初诊建议
+                tabActive: true,
+                fastRelyStatus: "", //快捷提问是否能点击
+                SBIFlag: false,
+                usedRelyStatus: false, //常用回复是否能点击
+                fastReplyConfig: false,
+                reTriageShow: false,
+                reTriageContentTips: "确定结束与该患者的沟通吗？",
+                inputReadOnly: "",
+                sendFlag:false,
+                minBtnFlag:false,
+                userCurrentStatus:''
+            };
+        },
+        components: {
+            fastRely,
+            usedRely,
+            fastReplyConfig,
+            CheckSuggestion,
+            ExamineCheck,
+            ShowBigImg,
+            ShowVideo,
+            ShowVideoList,
+            BaseIm,
+            SmallConfirm,
+            PreviewSuggestion,
+            UsedReplyConfig,
+            sendFile,
+            refuse
+        },
+        props: {
+            m: {
+                type: Object
+            },
+            n: {
+                type: Boolean
+            },
 
-    waitingTriage: {
-      type: Boolean
-    },
-    userListStatus: {
-      type: Object
-    },
-    userWaitingActive: {
-      type: Number
-    },
-    userOnlineActive: {
-      type: Number
-    }
-  },
-  watch: {
-    "$store.state.fastReplyContent"(content) {
-      this.controllerInput = content;
-    },
-    "$store.state.usedReplyContent"(content) {
-      this.controllerInput = content;
-    },
-    "$store.state.minBtnFlag"(content){
-          this.minBtnFlag = this.$store.state.minBtnFlag;
-    },
-    "$store.state.patientId"(content){
-          this.userCurrentStatus = this.userListStatus.status;
-    },
-    userCurrentStatus(content){
-        console.log(content);
-        if(this.userCurrentStatus == 3){
-        this.$emit("update:userListStatus", {
-            first: false,
-            second: false,
-            third: true,
-            status:3
-        });
-        }
-      }
-  },
-  methods: {
-    //初始化
-    init() {
-        console.log(this.userListStatus.status);
-        this.userCurrentStatus = this.userListStatus.status;
-    },
-    sendMessage(e) {
-      const that = this;
-      let baseFn = function() {
-        if (that.controllerInput.trim().length === 0) {
-            e.preventDefault();
-            return;
-        } else {
-          if (that.controllerInputStatus == 0) {
-            that.$refs.baseImComponent
-              .sendMessage(that.controllerInput)
-              .then(obj => {
-                that.controllerInput = "";
-                store.commit("setFastReply", "");
-                store.commit("setUesdReply", "");
-              });
-          } else {
-            store.commit("videoTriageSender", {
-              flag: true,
-              data: {
-                content: that.controllerInput,
-                type: that.controllerInputStatus
-              }
-            });
-            that.controllerInput = "";
-            that.controllerInputStatus = 0;
-          }
-        }
-      };
-      if (e.keyCode) {
-        if (e.keyCode == 13) {
-          baseFn();
-        }
-      } else {
-        baseFn();
-      }
-    },
-    //出诊建议按钮
-    suggestion() {
-      this.$store.commit(
-        "setCheckSuggestionFlag",
-        !this.$store.state.checkSuggestionFlag
-      );
-    },
-    //检查检验
-    examine() {
-      this.$store.commit("setExamineFlag", !this.$store.state.examineFlag);
-    },
-    //快捷提问按钮
-    fastRely() {
-      let flag = true;
-      if (this.$store.state.fastReplyShow) {
-        flag = false;
-      } else {
-        flag = true;
-        store.commit("setUsedReplyShow", false);
-      }
-      store.commit("setFastReplyShow", flag);
-    },
-    //常用回复
-    usedRely() {
-      let flag = true;
-      if (this.$store.state.usedReplyShow) {
-        flag = false;
-      } else {
-        flag = true;
-        store.commit("setFastReplyShow", false);
-      }
-      store.commit("setUsedReplyShow", flag);
-    },
-
-    //患者转移至其他分诊医生：
-    reTriageComfirm() {
-      let consultationId = [];
-      let waitingList = this.$store.state.waitingList;
-      let patientList = this.$store.state.patientList;
-
-      store.commit("startLoading");
-      releasePatient({
-        customerId: this.$store.state.userId,
-        consultationId: this.$store.state.currentItem.consultationId,
-        consultationState:5
-      }).then(res => {
-        store.commit("setReleasePatientCaseIdFlag", {
-          caseId: this.$store.state.caseId,
-          flag: true
-        });
-        this.reTriageShow = false;
-        setTimeout(() => {
-          patientList.removeByValue(this.$store.state.currentItem);
-          this.$store.state.currentItem.triageSelect = false;
-          store.commit("waitingListRefreshFlag", true);
-          store.commit("setWaitingList", waitingList);
-
-          let num = "";
-
-          if (patientList.length > 0) {
-            if (this.userOnlineActive <= patientList.length - 1) {
-              num = this.userOnlineActive;
-            } else {
-              num = patientList.length - 1;
+            waitingTriage: {
+                type: Boolean
+            },
+            userListStatus: {
+                type: Object
+            },
+            userWaitingActive: {
+                type: Number
+            },
+            userOnlineActive: {
+                type: Number
             }
-            this.$emit("update:userOnlineActive", num);
-          } else {
-            this.$emit("update:userOnlineActive", -1);
-            this.$emit("update:n", false);
-            return;
-          }
-          this.$emit("update:userWaitingActive", -1);
-          let items = patientList[parseInt(num)];
+        },
+        watch: {
+            "$store.state.fastReplyContent"(content) {
+                this.controllerInput = content;
+            },
+            "$store.state.usedReplyContent"(content) {
+                this.controllerInput = content;
+            },
+            "$store.state.minBtnFlag"(content){
+                this.minBtnFlag = this.$store.state.minBtnFlag;
+            },
+            "$store.state.patientId"(content){
+                this.userCurrentStatus = this.userListStatus.status;
+            },
+            userCurrentStatus(content){
+                console.log(content);
+                if(this.userCurrentStatus == 3){
+                    this.$emit("update:userListStatus", {
+                        first: false,
+                        second: false,
+                        third: true,
+                        status:3
+                    });
+                }
+            },
+            "$store.state.refuseUserListFlag"(content){
+                if(content){
+                    this.userListChange();
+                }
 
-          this.$store.commit("setPatientId", items ? items.patientId : "");
-          this.$store.commit("setPatientName", items ? items.patientName : "");
-          this.$store.commit("setCaseId", items ? items.caseId : "");
-          this.$store.commit("setConsultationId", items ? items.consultationId : "");
-          this.$store.commit("setCurrentItem", items ? items : {});
-          this.$store.commit("setSBIObject", "");
 
-          store.commit("stopLoading");
-        }, 1000);
-      });
-    },
+            }
 
-    //患者接诊
-    getPatient() {
-      let currentItem = this.$store.state.currentItem;
-      let waitingList = this.$store.state.waitingList;
-      let patientList = this.$store.state.patientList;
-      triagePatient({
-        consultationId: this.$store.state.consultationId,
-        customerId: this.$store.state.userId
-      })
-        .then(res => {
-          this.$emit("update:waitingTriage", false);
+        },
+        methods: {
+            //初始化
+            init() {
+                console.log(this.userListStatus.status);
+                this.userCurrentStatus = this.userListStatus.status;
+            },
+            sendMessage(e) {
+                const that = this;
+                let baseFn = function() {
+                    if (that.controllerInput.trim().length === 0) {
+                        e.preventDefault();
+                        return;
+                    } else {
+                        if (that.controllerInputStatus == 0) {
+                            that.$refs.baseImComponent
+                                .sendMessage(that.controllerInput)
+                                .then(obj => {
+                                    that.controllerInput = "";
+                                    store.commit("setFastReply", "");
+                                    store.commit("setUesdReply", "");
+                                });
+                        } else {
+                            store.commit("videoTriageSender", {
+                                flag: true,
+                                data: {
+                                    content: that.controllerInput,
+                                    type: that.controllerInputStatus
+                                }
+                            });
+                            that.controllerInput = "";
+                            that.controllerInputStatus = 0;
+                        }
+                    }
+                };
+                if (e.keyCode) {
+                    if (e.keyCode == 13) {
+                        baseFn();
+                    }
+                } else {
+                    baseFn();
+                }
+            },
+            //出诊建议按钮
+            suggestion() {
+                this.$store.commit(
+                    "setCheckSuggestionFlag",
+                    !this.$store.state.checkSuggestionFlag
+                );
+            },
+            //检查检验
+            examine() {
+                this.$store.commit("setExamineFlag", !this.$store.state.examineFlag);
+            },
+            //快捷提问按钮
+            fastRely() {
+                let flag = true;
+                if (this.$store.state.fastReplyShow) {
+                    flag = false;
+                } else {
+                    flag = true;
+                    store.commit("setUsedReplyShow", false);
+                }
+                store.commit("setFastReplyShow", flag);
+            },
+            //常用回复
+            usedRely() {
+                let flag = true;
+                if (this.$store.state.usedReplyShow) {
+                    flag = false;
+                } else {
+                    flag = true;
+                    store.commit("setFastReplyShow", false);
+                }
+                store.commit("setUsedReplyShow", flag);
+            },
 
-          waitingList.removeByValue(currentItem);
-          patientList.unshift(currentItem);
+            //患者转移至其他分诊医生：
+            reTriageComfirm() {
+                store.commit("startLoading");
+                releasePatient({
+                    customerId: this.$store.state.userId,
+                    consultationId: this.$store.state.currentItem.consultationId,
+                    consultationState:5
+                }).then(res => {
+                    store.commit("setReleasePatientCaseIdFlag", {
+                        caseId: this.$store.state.caseId,
+                        flag: true
+                    });
+                    this.reTriageShow = false;
+                    this.userListChange();
+                });
+            },
 
-          store.commit("setPatientList", patientList);
-          store.commit("setWaitingList", waitingList);
-          store.commit("setInputReadOnly", false);
-          this.$emit("update:userListStatus", {
-            first: false,
-            second: true,
-            status: 2
-          });
-        })
-        .catch(res => {
-          console.log("网络异常...");
-        });
-    },
-    //发送文件
-    sendFile(){
-        this.sendFlag = !this.sendFlag;
-        this.$store.commit("setSendFileShow",true);
-    },
-    minBtnShow(){
-        this.minBtnFlag = !this.minBtnFlag;
-        this.$store.commit("setMinBtnFlag",this.minBtnFlag);
-    } ,
-    //拒绝分诊
-    refuseEvent(){
-        this.$store.commit("setRefuseFlag",true);
-    }
-  },
-  mounted() {
-    this.init();
-  }
-};
+            //患者接诊
+            getPatient() {
+                let currentItem = this.$store.state.currentItem;
+                let waitingList = this.$store.state.waitingList;
+                let patientList = this.$store.state.patientList;
+                triagePatient({
+                    consultationId: this.$store.state.consultationId,
+                    customerId: this.$store.state.userId
+                })
+                    .then(res => {
+                        this.$emit("update:waitingTriage", false);
+
+                        waitingList.removeByValue(currentItem);
+                        patientList.unshift(currentItem);
+
+                        store.commit("setPatientList", patientList);
+                        store.commit("setWaitingList", waitingList);
+                        store.commit("setInputReadOnly", false);
+                        this.$emit("update:userListStatus", {
+                            first: false,
+                            second: true,
+                            status: 2
+                        });
+                    })
+                    .catch(res => {
+                        console.log("网络异常...");
+                    });
+            },
+            //发送文件
+            sendFile(){
+                this.sendFlag = !this.sendFlag;
+                this.$store.commit("setSendFileShow",true);
+            },
+            minBtnShow(){
+                this.minBtnFlag = !this.minBtnFlag;
+                this.$store.commit("setMinBtnFlag",this.minBtnFlag);
+            } ,
+            //拒绝分诊
+            refuseEvent(){
+                this.$store.commit("setRefuseFlag",true);
+            },
+            userListChange(){
+
+                let waitingList = this.$store.state.waitingList;
+                let patientList = this.$store.state.patientList;
+                setTimeout(() => {
+                    patientList.removeByValue(this.$store.state.currentItem);
+                    this.$store.state.currentItem.triageSelect = false;
+                    store.commit("waitingListRefreshFlag", true);
+                    store.commit("setWaitingList", waitingList);
+
+                    let num = "";
+
+                    if (patientList.length > 0) {
+                        if (this.userOnlineActive <= patientList.length - 1) {
+                            num = this.userOnlineActive;
+                        } else {
+                            num = patientList.length - 1;
+                        }
+                        this.$emit("update:userOnlineActive", num);
+                    } else {
+                        this.$emit("update:userOnlineActive", -1);
+                        this.$emit("update:n", false);
+                        return;
+                    }
+                    this.$emit("update:userWaitingActive", -1);
+                    let items = patientList[parseInt(num)];
+
+                    this.$store.commit("setPatientId", items ? items.patientId : "");
+                    this.$store.commit("setPatientName", items ? items.patientName : "");
+                    this.$store.commit("setCaseId", items ? items.caseId : "");
+                    this.$store.commit("setConsultationId", items ? items.consultationId : "");
+                    this.$store.commit("setCurrentItem", items ? items : {});
+                    this.$store.commit("setSBIObject", "");
+
+                    store.commit("stopLoading");
+                }, 1000);
+                this.$store.commit("setRefuseUserListFlag",false);
+            }
+        },
+        mounted() {
+            this.init();
+        }
+    };
 </script>
 <style lang="scss" rel="stylesheet/scss">
-@import "./scss/base.scss";
-@import "./scss/modules/_bottomBtns.scss";
-@import "./scss/modules/_middleMessageBox.scss";
-@import "./scss/modules/_ImMedicalRecord.scss";
-@import "./scss/modules/_masker.scss";
-@import "./scss/modules/_checkSuggestion.scss";
-@import "./scss/modules/_configSuggestion.scss";
+    @import "./scss/base.scss";
+    @import "./scss/modules/_bottomBtns.scss";
+    @import "./scss/modules/_middleMessageBox.scss";
+    @import "./scss/modules/_ImMedicalRecord.scss";
+    @import "./scss/modules/_masker.scss";
+    @import "./scss/modules/_checkSuggestion.scss";
+    @import "./scss/modules/_configSuggestion.scss";
 
-@keyframes rotate {
-  0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes rotate {
-  0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0);
-  }
-  100% {
-    -webkit-transform: rotate(360deg);
-    transform: rotate(360deg);
-  }
-}
-
-.center-inner-message {
-  float: left;
-  width: 100%;
-  height: 100%;
-  & > .layout-helper {
-    margin: 0 385px 0 400px;
-    position: relative;
-    padding-top: 55px;
-    padding-bottom: 40px;
-    height: 100%;
-    box-sizing: border-box;
-  }
-  .center-inner-wrapper {
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 2px;
-        background-color: #fff;
-        z-index: 3;
-        text-align: center;
-        display: none;
-
-        &:before {
-            content: "";
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
+    @keyframes rotate {
+        0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
         }
-        & > img {
-            width: 170px;
-            height: 170px;
-            vertical-align: middle;
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
         }
     }
-}
-.no-content {
-  .layout-helper {
-    margin-right: 0;
-  }
-  .medical-record {
-    display: none;
-  }
-  .center-inner-wrapper {
-    display: block;
-  }
-}
+    @-webkit-keyframes rotate {
+        0% {
+            -webkit-transform: rotate(0);
+            transform: rotate(0);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+        }
+    }
+
+    .center-inner-message {
+        float: left;
+        width: 100%;
+        height: 100%;
+        & > .layout-helper {
+            margin: 0 385px 0 400px;
+            position: relative;
+            padding-top: 55px;
+            padding-bottom: 40px;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .center-inner-wrapper {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 2px;
+            background-color: #fff;
+            z-index: 3;
+            text-align: center;
+            display: none;
+
+            &:before {
+                content: "";
+                display: inline-block;
+                vertical-align: middle;
+                height: 100%;
+            }
+            & > img {
+                width: 170px;
+                height: 170px;
+                vertical-align: middle;
+            }
+        }
+    }
+    .no-content {
+        .layout-helper {
+            margin-right: 0;
+        }
+        .medical-record {
+            display: none;
+        }
+        .center-inner-wrapper {
+            display: block;
+        }
+    }
 
 </style>

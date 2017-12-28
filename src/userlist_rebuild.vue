@@ -364,6 +364,8 @@ export default {
           }, 2000);
           this.newResetFlag = flag;
       },
+
+
   },
   mounted() {
     if (this.$store.state.userId) {
