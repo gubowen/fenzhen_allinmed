@@ -58,7 +58,7 @@
           </section>
         </article>
         <footer>
-          <button type="button" class="detail-saveBtn" @click="saveData" v-show="$store.state.currentItem.consultationState == 0">保存</button>
+          <button type="button" class="detail-saveBtn" @click="saveData" v-show="$store.state.currentItem.consultationState == 0||$store.state.currentItem.consultationState == 9||$store.state.currentItem.consultationState == 10">保存</button>
         </footer>
       </section>
     </form>
