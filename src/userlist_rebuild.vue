@@ -293,6 +293,7 @@ export default {
     "$store.state.userId"() {
       this.init();
     },
+     //列表
     "$store.state.patientList": {
       handler: (list, oldValue) => {
         this.userListOnline = list;
@@ -313,6 +314,7 @@ export default {
          },
          deep: true
      },
+     //刷新
     "$store.state.waitingListRefresh"(flag) {
       if (flag) {
         this.getUserList("waiting", this.filterMethod);
@@ -320,7 +322,7 @@ export default {
       } else {
         return;
       }
-    },  //待分诊-刷新
+    },  //待分诊
     "$store.state.onlineListRefresh"(flag) {
       if (flag) {
         this.getUserList("online", this.filterMethod);
@@ -328,7 +330,7 @@ export default {
       } else {
         return;
       }
-    },   //沟通中-刷新
+    },   //沟通中
     "$store.state.resetListRefresh"(flag) {
           if (flag) {
               this.getUserList("reset", this.filterMethod);
@@ -336,7 +338,8 @@ export default {
           } else {
               return;
           }
-      },    //重新分诊刷新
+      },    //重新分诊
+     //红点
     "$store.state.newWaiting"(flag) {
       let _this = this;
       this.newWaitingFlag = flag;
@@ -425,6 +428,7 @@ export default {
         }
       } else if(this.userListStatus.second){
 
+
         this.waitingTriage = false;
         this.userOnlineActive = index;
         store.commit("setInputReadOnly", false);
@@ -439,15 +443,10 @@ export default {
           patientList[index] = items;
           this.$store.commit("setPatientList", patientList);
         }
-        let patientAlertList = JSON.parse(
-          localStorage.getItem("patientAlertList")
-        );
+        let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
         if (patientAlertList) {
           delete patientAlertList["0_" + items.caseId];
-          localStorage.setItem(
-            "patientAlertList",
-            JSON.stringify(patientAlertList)
-          );
+          localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
         }
         if (localStorage.getItem("patientAlertList") == "{}") {
           this.newPatientFlag = false;
@@ -800,30 +799,25 @@ export default {
           this.getUserList("waiting");
           this.statusChange(2);
           this.getUserList("online", {}, () => {
-            this.userListStatus.first = false;
-            this.userListStatus.second = true;
             let triageItem = this.getBeTriagePatient(item);
             let getFlag = true;
             this.transformData(triageItem, index, getFlag);
+
             store.commit("setTriagePatientCaseIdFlag", {
               caseId: item.caseId,
               flag: true
             });
-
-            this.statusChange(2);
             this.waitingTriage = false;
             this.userOnlineActive = 0;
             store.commit("setInputReadOnly", false);
             store.commit("stopLoading");
           });
 
-          let waitingAlertList = JSON.parse(
-            localStorage.getItem("waitingAlertList")
-          );
+          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
           if (waitingAlertList) {
             for (let key in waitingAlertList) {
               if (key == "0_" + item.caseId) {
-                delete waitingAlertList["0_" + items.caseId];
+                delete waitingAlertList["0_" + item.caseId];
               }
             }
             localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));

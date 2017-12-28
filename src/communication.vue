@@ -4,7 +4,7 @@
             <figure class="center-inner-wrapper">
                 <img src="./assets/img00/index/logo_empty bg.png" alt="">
             </figure>
-            <BaseIm ref="baseImComponent"></BaseIm>
+            <BaseIm ref="baseImComponent" :userCurrentStatus.sync="userCurrentStatus"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply">
                     <button class="user-controller-fastReply" @click.stop="fastRely()">
@@ -17,10 +17,10 @@
                     </button>
                     <button class="user-controller-min" @click.stop="minBtnShow()">
                         <i class="icon-userReply"></i><span>更多</span>
-                        <div :class="[{'on':!userCurrentStatus},'sendList']" v-show="minBtnFlag">
+                        <div :class="[{'on':!(userCurrentStatus== 3 ?  false: true)},'sendList']" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>
-                                <li @click="refuseEvent()" v-show="userCurrentStatus">拒绝分诊</li>
+                                <li @click="refuseEvent()" v-show="userCurrentStatus== 3 ?  false: true">拒绝分诊</li>
                                 <li @click="sendFile()">发送视图</li>
                             </ul>
                         </div>
@@ -36,7 +36,7 @@
                     </button>
 
                     <!--结束沟通-->
-                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrentStatus">
+                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrentStatus== 3 ?  false: true">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -152,7 +152,7 @@ export default {
       inputReadOnly: "",
       sendFlag:false,
       minBtnFlag:false,
-      userCurrentStatus:false
+      userCurrentStatus:''
     };
   },
   components: {
@@ -203,13 +203,25 @@ export default {
           this.minBtnFlag = this.$store.state.minBtnFlag;
     },
     "$store.state.patientId"(content){
-          this.userCurrentStatus = this.userListStatus.status == 3 ?  false: true;
-    }
+          this.userCurrentStatus = this.userListStatus.status;
+    },
+    userCurrentStatus(content){
+        console.log(content);
+        if(this.userCurrentStatus == 3){
+        this.$emit("update:userListStatus", {
+            first: false,
+            second: false,
+            third: true,
+            status:3
+        });
+        }
+      }
   },
   methods: {
     //初始化
     init() {
-        this.userCurrentStatus =this.userListStatus.status == 3 ?  false: true;
+        console.log(this.userListStatus.status);
+        this.userCurrentStatus = this.userListStatus.status;
     },
     sendMessage(e) {
       const that = this;
@@ -373,43 +385,6 @@ export default {
     //拒绝分诊
     refuseEvent(){
         this.$store.commit("setRefuseFlag",true);
-//        this.noData = false;
-//        this.$emit("update:n", false);
-        let waitingList = this.$store.state.waitingList;
-        let patientList = this.$store.state.patientList;
-        store.commit("startLoading");
-        setTimeout(() => {
-            patientList.removeByValue(this.$store.state.currentItem);
-            this.$store.state.currentItem.triageSelect = false;
-            store.commit("waitingListRefreshFlag", true);
-            store.commit("setWaitingList", waitingList);
-
-            let num = "";
-
-            if (patientList.length > 0) {
-                if (this.userOnlineActive <= patientList.length - 1) {
-                    num = this.userOnlineActive;
-                } else {
-                    num = patientList.length - 1;
-                }
-                this.$emit("update:userOnlineActive", num);
-            } else {
-                this.$emit("update:userOnlineActive", -1);
-                this.$emit("update:n", false);
-                return;
-            }
-            this.$emit("update:userWaitingActive", -1);
-            let items = patientList[parseInt(num)];
-
-            this.$store.commit("setPatientId", items ? items.patientId : "");
-            this.$store.commit("setPatientName", items ? items.patientName : "");
-            this.$store.commit("setCaseId", items ? items.caseId : "");
-            this.$store.commit("setConsultationId", items ? items.consultationId : "");
-            this.$store.commit("setCurrentItem", items ? items : {});
-            this.$store.commit("setSBIObject", "");
-
-            store.commit("stopLoading");
-        }, 1000);
     }
   },
   mounted() {

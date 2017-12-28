@@ -107,7 +107,6 @@
                         data: this.refuseReason
                     });
                     this.$store.commit("setRefuseFlag", false);
-
                 }
             },
             remove(){
@@ -257,14 +256,14 @@
                         font-size: 0;
                         cursor: pointer;
                         &:before {
-                        content: '';
-                        display: block;
-                        font-size: 0;
-                        width: 8px;
-                        height: 8px;
-                        background-size: contain;
-                        background: url("../../assets/img00/common/popup_close_activate.png") no-repeat center;
-                    }
+                            content: '';
+                            display: block;
+                            font-size: 0;
+                            width: 8px;
+                            height: 8px;
+                            background-size: contain;
+                            background: url("../../assets/img00/common/popup_close_activate.png") no-repeat center;
+                        }
                     }
                 }
             }

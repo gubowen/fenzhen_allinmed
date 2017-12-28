@@ -188,7 +188,11 @@
             CheckSuggestion,
             UpdateTips
         },
-        props: {},
+        props: {
+            userCurrentStatus:{
+                type: Number | String
+                }
+        },
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
                 if (obj.flag) {
@@ -320,7 +324,7 @@
             "$store.state.refuseReason"(obj){
                 if (obj.flag) {
                     this.sendRefusePatient(obj.data);
-                    store.commit("sendCheckSuggestionFlag", {
+                    store.commit("setRefuseReason", {
                         flag: false,
                         text: {}
                     });
@@ -401,10 +405,11 @@
                                     store.commit("setNewWaiting", true);
                                     store.commit("setMusicPlay", true);
                                 }else if(JSON.parse(msg.content).type == 'triageSendTips'||JSON.parse(msg.content).type == 'checkSuggestSendTips'){
-                                    console.log("33333");
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('onlineListRefresh',true);
                                     that.$store.commit('resetListRefreshFlag',true);
+                                    that.$emit("update:userCurrentStatus", 3);
+
                                 }
                             }
                             that.receiveMessage(that.targetData.account, msg);
@@ -491,6 +496,7 @@
             },
             //发生拒绝分诊
             sendRefusePatient(content){
+
                 const that = this;
                 if (!that.$store.state.beingSend) {
                     return false;
@@ -511,6 +517,9 @@
                             type: "refusePatient"
                         }),
                         done(error, obj) {
+                            console.log("*************");
+                            console.log(error);
+                            console.log(obj);
                             that.$store.commit("setSendStatus", true);
                             if (!error) {
                                 resolve(obj);
