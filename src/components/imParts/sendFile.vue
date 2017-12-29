@@ -34,7 +34,10 @@
                 maxVideoSize: 100,
                 maxFileSize: 100,
                 maxPDFSize: 100,
-                maxNumber: 9
+                maxNumber: 9,
+                videoNumber:1,
+                PDFNumber:1
+
             }
         },
         watch: {
@@ -87,7 +90,15 @@
             //发送文件
             send(){
                 let _this = this;
+                let videoNumber = 0;
+                let PDFNumber = 0;
                 for (let item of this.fileList) {
+                   if (_this.fileType(item.type) == 'video') {
+                       videoNumber++;
+                    } else if (_this.fileType(item.type) == 'file') {
+                       PDFNumber++;
+                    }
+
                     if (item.sizeWarning) {
                         if (_this.fileType(item.type) == 'image') {
                             this.$store.commit("showPopup", {text: "请传入小于" + this.maxImgSize + "M的图片！"});
@@ -100,7 +111,15 @@
                         return;
                     }
                 }
-
+                console.log(videoNumber);
+                console.log(PDFNumber);
+                 if(videoNumber>_this.videoNumber){
+                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.videoNumber+ "个视频！"});
+                     return;
+                 }else if(PDFNumber>_this.PDFNumber){
+                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.PDFNumber+ "个PDF文件！"});
+                     return;
+                 }
                 let promises = [];
                 let fileList = [];
                 for (let item of this.fileList) {
