@@ -949,6 +949,7 @@
                 //重新分诊
                 let resetList = this.$store.state.resetList;
                 resetList.forEach(function(item, index) {
+                    debugger;
                     if ("0_" + item.caseId == element.from) {
                         if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
                             item.messageAlert = "1";
@@ -958,10 +959,10 @@
                         let caseIdInfo = "0_" + item.caseId;
                         let resetAlertList = {};
                         resetAlertList[caseIdInfo] = item.messageAlert;
-                        waitingList.removeByValue(item);
-                        waitingList.unshift(item);
+                        resetList.removeByValue(item);
+                        resetList.unshift(item);
 
-                        localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(waitingAlertList,JSON.parse(localStorage.getItem("resetAlertList")))));
+                        localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(resetAlertList,JSON.parse(localStorage.getItem("resetAlertList")))));
                         _this.$store.commit("setNewReset", true);
                         _this.$store.commit("setMusicPlay", true);
                         setTimeout(function() {
