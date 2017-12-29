@@ -3,7 +3,7 @@
         <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
             <img src="../../assets/img00/controller/fileUp.png"/>
-            <span>选 择 文 件</span>
+            <span>选 择 文 件( 图片/视频、文件PDF)</span>
         </div>
         <div class="imgList" v-show="fileList.length>0">
             <div class="imgInfo" v-for="(item,index) in fileList">
@@ -79,7 +79,7 @@
                         files[i].sizeWarning = false;
                         this.fileList.push(files[i]);
                     } else {
-                        this.$store.commit("showPopup", {text: "请传入规定类型图片！"});
+                        this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
                         document.getElementById("sendImg").value = '';
                     }
                 }

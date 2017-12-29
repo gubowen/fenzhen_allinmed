@@ -949,7 +949,6 @@
                 //重新分诊
                 let resetList = this.$store.state.resetList;
                 resetList.forEach(function(item, index) {
-                    debugger;
                     if ("0_" + item.caseId == element.from) {
                         if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
                             item.messageAlert = "1";
