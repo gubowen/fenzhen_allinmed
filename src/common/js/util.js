@@ -12,7 +12,7 @@ import prototype from "./prototype";
 import wxCommon from "./wxCommon";
 import accountValidate from "./accountValidate";
 import net from "./net";
-
+import "babel-polyfill";
 class Api {
   constructor() {
 

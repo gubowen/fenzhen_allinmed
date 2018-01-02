@@ -11,8 +11,10 @@
                 <img :src="item.url" v-if="fileType(item.type) == 'image'"/>
                 <img v-if="fileType(item.type) == 'video'" src="../../assets/img00/common/videoPlay.jpg"/>
                 <img v-if="fileType(item.type) == 'file'" src="../../assets/img00/common/folder.jpg"/>
-                <div :class="[item.sizeWarning ? 'on': 'no','size']"><span class="num">{{getSize(item,index)}}</span><span></span></div>
-                <div class="remove"><img @click="removeImg(index,item)" src="../../assets/img00/common/popup_close_activate.png"/></div>
+                <div :class="[item.sizeWarning ? 'on': 'no','size']"><span
+                        class="num">{{getSize(item,index)}}</span><span></span></div>
+                <div class="remove"><img @click="removeImg(index,item)"
+                                         src="../../assets/img00/common/popup_close_activate.png"/></div>
             </div>
         </div>
         <div class="send-btn" v-show="fileList.length>0">
@@ -24,9 +26,10 @@
 <script>
     import api from "@/common/js/util";
     import Vue from 'vue'
-    export default{
+
+    export default {
         name: '',
-        data(){
+        data() {
             return {
                 showFlag: false,
                 fileList: [],
@@ -35,13 +38,13 @@
                 maxFileSize: 100,
                 maxPDFSize: 100,
                 maxNumber: 9,
-                videoNumber:1,
-                PDFNumber:1
+                videoNumber: 1,
+                PDFNumber: 1
 
             }
         },
         watch: {
-            "$store.state.sendFileShow"(data){
+            "$store.state.sendFileShow"(data) {
                 this.showFlag = data;
                 if (!data) {
                     this.fileList = [];
@@ -53,12 +56,13 @@
             }
         },
         methods: {
-            init(){
+            init() {
                 this.showFlag = this.$store.state.sendImgShow;
             },
             //上传
-            onFileChange(e){
+            onFileChange(e) {
                 let files = e.target.files || e.dataTransfer.files;
+
                 if (!files.length) {
                     return;
                 }
@@ -74,34 +78,32 @@
                         return;
                     }
                 }
-                files = Object.assign({}, files);
-                for (let i in files) {
-                    if ((/image\/\w+/.test(files[i].type)) || (/.pdf/.test(files[i].type)) || (/video\/\w+/.test(files[i].type))) {
 
-                        if (/video\/\w+/.test(files[i].type)&&!(/mp4/.test(files[i].type))){
+                Array.from(files).forEach((element, index) => {
+                    if ((/image\/\w+/.test(element.type)) || (/.pdf/.test(element.type)) || (/video\/\w+/.test(element.type))) {
+                        if (/video\/\w+/.test(element.type) && !(/mp4/.test(element.type))) {
                             this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
-                        }else{
-                            files[i].url = window.URL.createObjectURL(files[i]);
-                            files[i].sizeWarning = false;
-                            this.fileList.push(files[i]);
+                        } else {
+                            element.url = window.URL.createObjectURL(element);
+                            element.sizeWarning = false;
+                            this.fileList.push(element);
                         }
-
                     } else {
                         this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
                         document.getElementById("sendImg").value = '';
                     }
-                }
+                })
             },
             //发送文件
-            send(){
+            send() {
                 let _this = this;
                 let videoNumber = 0;
                 let PDFNumber = 0;
                 for (let item of this.fileList) {
-                   if (_this.fileType(item.type) == 'video') {
-                       videoNumber++;
+                    if (_this.fileType(item.type) == 'video') {
+                        videoNumber++;
                     } else if (_this.fileType(item.type) == 'file') {
-                       PDFNumber++;
+                        PDFNumber++;
                     }
 
                     if (item.sizeWarning) {
@@ -118,13 +120,13 @@
                 }
                 console.log(videoNumber);
                 console.log(PDFNumber);
-                 if(videoNumber>_this.videoNumber){
-                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.videoNumber+ "个视频！"});
-                     return;
-                 }else if(PDFNumber>_this.PDFNumber){
-                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.PDFNumber+ "个PDF文件！"});
-                     return;
-                 }
+                if (videoNumber > _this.videoNumber) {
+                    this.$store.commit("showPopup", {text: "一次最多传入" + _this.videoNumber + "个视频！"});
+                    return;
+                } else if (PDFNumber > _this.PDFNumber) {
+                    this.$store.commit("showPopup", {text: "一次最多传入" + _this.PDFNumber + "个PDF文件！"});
+                    return;
+                }
                 let promises = [];
                 let fileList = [];
                 for (let item of this.fileList) {
@@ -156,7 +158,7 @@
                 });
             },
             //关闭发送
-            closeSend(){
+            closeSend() {
                 this.$store.commit("setSendFileShow", false);
                 this.fileList = [];
                 this.$store.commit("setSendFileFlag", {
@@ -165,7 +167,7 @@
                 });
             },
             //计算文件大小
-            getSize(item, index){
+            getSize(item, index) {
                 if (item.size > this.maxSize * 1024 * 1024) {
                     item.sizeWarning = true;
                 }
@@ -177,12 +179,12 @@
                 }
             },
             //删除文件
-            removeImg(index, item){
+            removeImg(index, item) {
                 document.getElementById("sendImg").value = '';
                 this.fileList.removeByValue(item);
             },
             //判断文件类型
-            fileType(type){
+            fileType(type) {
                 if ((/image\/\w+/.test(type))) {
                     return 'image';
                 } else if (/.pdf/.test(type)) {
@@ -193,7 +195,7 @@
                 return 'file';
             }
         },
-        mounted(){
+        mounted() {
             this.init();
         }
     }
@@ -222,9 +224,9 @@
             transform: translate(-50%, -50%);
             cursor: pointer;
             z-index: 1;
-            img{
+            img {
                 display: block;
-                margin:0 auto;
+                margin: 0 auto;
                 margin-bottom: 5px;
             }
             span {
