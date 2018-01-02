@@ -456,7 +456,7 @@ export default {
       }else if(this.userListStatus.third){
           this.waitingTriage = true;
           this.userResetActive = index;
-          store.commit("setInputReadOnly", false);
+          store.commit("setInputReadOnly", true);
           let resetList = this.$store.state.resetList;
           items.messageAlert = "";
           if (getFlag) {
@@ -531,6 +531,7 @@ export default {
               this.userListStatus.second = false;
               this.userListStatus.third = true;
               this.message.userController = false;
+
               break;
 
       }

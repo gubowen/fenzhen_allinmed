@@ -8,9 +8,11 @@
             <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
-                    {{$store.state.currentItem.createTime.substring(0, $store.state.currentItem.createTime.length - 2)}}</p>
+                    {{$store.state.currentItem.createTime.substring(0, $store.state.currentItem.createTime.length -
+                    2)}}</p>
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
-                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ? $store.state.currentItem.doctorName + '医生' : ''}退回`}}
+                    {{`由于${$store.state.currentItem.returnReason}，该患者被${$store.state.currentItem.doctorName ?
+                    $store.state.currentItem.doctorName + '医生' : ''}退回`}}
                 </p>
                 <transition-group name="fadeDown" tag="article">
                     <article class="messageList-item"
@@ -21,21 +23,26 @@
                            v-if="!(items.type==='custom'&&(items.custom&&(items.custom.mType==='33'||items.custom.mType==='22'||items.custom.mType==='24')))">
                             {{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
-                        <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type==='text'" :message="items"
+                                        @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--拒绝分诊-->
-                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'"
+                                        :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))"
-                                      :message="items" :nim="nim" @loadCallback="loadCallback" @deleteMsg="deleteMsg(items)"></ImageElement>
+                                      :message="items" :nim="nim" @loadCallback="loadCallback"
+                                      @deleteMsg="deleteMsg(items)"></ImageElement>
                         <!--多图片信息-->
                         <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'"
-                                        :message="items"  @deleteMsg="deleteMsg(items)"></multiple-Image>
+                                        :message="items" @deleteMsg="deleteMsg(items)"></multiple-Image>
                         <!--视频消息-->
                         <videoElement v-if="items.type === 'video'"
-                                      :message="items" :nim="nim" @loadCallback="loadCallback" @deleteMsg="deleteMsg(items)"></videoElement>
+                                      :message="items" :nim="nim" @loadCallback="loadCallback"
+                                      @deleteMsg="deleteMsg(items)"></videoElement>
                         <!--文件信息-->
                         <fileElement v-if="items.type === 'file'&&(!getFileType(items.file))"
-                                     :message="items" :nim="nim" @loadCallback="loadCallback" @deleteMsg="deleteMsg(items)"></fileElement>
+                                     :message="items" :nim="nim" @loadCallback="loadCallback"
+                                     @deleteMsg="deleteMsg(items)"></fileElement>
                         <!--检查检验-->
                         <CheckSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
@@ -50,21 +57,25 @@
                         <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
-                                :message="items"  @deleteMsg="deleteMsg(items)"></PreviewSuggestion>
+                                :message="items" @deleteMsg="deleteMsg(items)"></PreviewSuggestion>
                         <!--视诊上传提示-->
                         <UpdateTips
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='triageSendTips')"
                                 :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
                         ></UpdateTips>
                         <!--检查检验上传提示-->
-                        <UpdateTips v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')" :showType="'checkSuggessSendTips'"></UpdateTips>
+                        <UpdateTips
+                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
+                                :showType="'checkSuggessSendTips'"></UpdateTips>
                         <!--消息撤回-->
-                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'"
+                                 class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                         <!-- 医生接诊 -->
-                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'"
+                                 class="deleteMessage">
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
                         </section>
@@ -107,11 +118,11 @@
     import releasePatient from "@/base/releasePatient";   //改变患者状态
 
 
-    Vue.filter("transformMessageTime", function(time) {
-        var format = function(num) {
+    Vue.filter("transformMessageTime", function (time) {
+        var format = function (num) {
             return num > 9 ? num : "0" + num;
         };
-        var normalTime = function(time) {
+        var normalTime = function (time) {
             var d = new Date(time);
             var obj = {
                 y: d.getFullYear(),
@@ -189,9 +200,9 @@
             UpdateTips
         },
         props: {
-            userCurrentStatus:{
+            userCurrentStatus: {
                 type: Number | String
-                }
+            }
         },
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
@@ -255,7 +266,7 @@
 
                     this.nim.sendCustomMsg({
                         scene: "p2p",
-                        to: "0_"+param.caseId,
+                        to: "0_" + param.caseId,
                         content: JSON.stringify({
                             name: this.$store.state.userName,
                             scene: "release",
@@ -282,15 +293,15 @@
                     return;
                 }
             },
-            "$store.state.sendFileFlag"(obj){
+            "$store.state.sendFileFlag"(obj) {
                 const _this = this;
                 if (obj.flag) {
                     _this.sendFile(obj);
                     store.commit("setSendFileFlag", {
                         flag: false,
                         data: {},
-                        name:'',
-                        type:''
+                        name: '',
+                        type: ''
                     });
                 } else {
                     return;
@@ -321,7 +332,7 @@
                     this.getMessageList("history");
                 }
             },
-            "$store.state.refuseReason"(obj){
+            "$store.state.refuseReason"(obj) {
                 if (obj.flag) {
                     this.sendRefusePatient(obj.data);
                     store.commit("setRefuseReason", {
@@ -345,7 +356,7 @@
             "$store.state.resendMsgInfo"(obj) {
                 this.resendMsg(obj);
             },
-            "$store.state.deleteMsgInfo"(obj){
+            "$store.state.deleteMsgInfo"(obj) {
                 this.deleteMsg(obj);
             }
         },
@@ -367,7 +378,8 @@
                             console.log("连接成功");
                             that.connectFlag = true;
                         },
-                        onmyinfo(userData) {},
+                        onmyinfo(userData) {
+                        },
                         onwillreconnect(obj) {
                             console.log(
                                 "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
@@ -404,10 +416,10 @@
                                     store.commit("waitingListRefreshFlag", true);
                                     store.commit("setNewWaiting", true);
                                     store.commit("setMusicPlay", true);
-                                }else if(JSON.parse(msg.content).type == 'triageSendTips'||JSON.parse(msg.content).type == 'checkSuggestSendTips'){
+                                } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     that.$store.commit("waitingListRefreshFlag", true);
-                                    that.$store.commit('onlineListRefresh',true);
-                                    that.$store.commit('resetListRefreshFlag',true);
+                                    that.$store.commit('onlineListRefresh', true);
+                                    that.$store.commit('resetListRefreshFlag', true);
                                     that.$emit("update:userCurrentStatus", 3);
 
                                 }
@@ -449,9 +461,9 @@
                         if (
                             items.content &&
                             (items.content.type === "reTriageTip" ||
-                            items.content.type === "new-health" ||
-                            items.content.type === "notification" ||
-                            items.content.type === "payFinishTips")
+                                items.content.type === "new-health" ||
+                                items.content.type === "notification" ||
+                                items.content.type === "payFinishTips")
                         ) {
                             flag = false;
                         } else {
@@ -495,13 +507,13 @@
                 });
             },
             //发生拒绝分诊
-            sendRefusePatient(content){
+            sendRefusePatient(content) {
 
                 const that = this;
                 if (!that.$store.state.beingSend) {
                     return false;
                 }
-                const promise =  new Promise((resolve, reject) => {
+                const promise = new Promise((resolve, reject) => {
                     that.$store.commit("setSendStatus", false);
                     this.nim.sendCustomMsg({
                         scene: "p2p",
@@ -531,22 +543,22 @@
                         }
                     });
                 });
-                promise.then(function(){
+                promise.then(function () {
                     //改变患者状态 -- 7-分诊拒绝
                     releasePatient({
                         customerId: that.$store.state.userId,
                         consultationId: that.$store.state.currentItem.consultationId,
-                        consultationState:7
+                        consultationState: 7
                     }).then(res => {
                         console.log("7");
 //                    let currentItem = that.$store.state.currentItem;
 //                    currentItem.consultationState = 1;
 //                    that.$store.commit('setCurrentItem',currentItem);
-                        that.$store.commit('waitingListRefreshFlag',true);
-                        that.$store.commit('onlineListRefresh',true);
-                        that.$store.commit('resetListRefreshFlag',true);
+                        that.$store.commit('waitingListRefreshFlag', true);
+                        that.$store.commit('onlineListRefresh', true);
+                        that.$store.commit('resetListRefreshFlag', true);
 
-                        that.$store.commit("setRefuseUserListFlag",true);
+                        that.$store.commit("setRefuseUserListFlag", true);
 
 
 //                        let waitingList = that.$store.state.waitingList;
@@ -591,12 +603,13 @@
             },
             //发送单条数据...
             sendSingleMessage(error, msg) {
+
                 let patientListArray = this.$store.state.patientList;
 
-              //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
-                    patientListArray.removeByValue(this.$store.state.currentItem);
-                    patientListArray.unshift(this.$store.state.currentItem);
-             //   }
+                //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
+                patientListArray.removeByValue(this.$store.state.currentItem);
+                patientListArray.unshift(this.$store.state.currentItem);
+                //   }
 
                 //this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
@@ -705,11 +718,11 @@
                 });
             },
             //发送文件
-            sendFile(data){
+            sendFile(data) {
                 let that = this;
                 store.commit("startLoading");
                 let promises = [];
-                Array.from(data.data).forEach(function (element,index) {
+                Array.from(data.data).forEach(function (element, index) {
                     promises.push(
                         new Promise((resolve, reject) => {
                             that.nim.previewFile({
@@ -722,7 +735,7 @@
                                     console.log('上传进度文本: ' + obj.percentageText);
                                 },
                                 done: function (error, file) {
-                                    console.log('上传'+element.type + (!error?'成功':'失败'));
+                                    console.log('上传' + element.type + (!error ? '成功' : '失败'));
                                     if (!error) {
                                         element.file = file
                                         resolve(element);
@@ -733,9 +746,9 @@
                     )
                 });
 
-                Promise.all(promises).then( (element) => {
+                Promise.all(promises).then((element) => {
                     console.log(element);
-                    element.forEach(function(element,index){
+                    element.forEach(function (element, index) {
                         let msg = that.nim.sendFile({
                             scene: 'p2p',
                             to: that.targetData.account,
@@ -743,13 +756,13 @@
                                 cType: "0",
                                 cId: that.$store.state.userId,
                                 mType: "6",
-                                name:element.name
+                                name: element.name
                                 //,
 //                            conId: that.orderSourceIdorderSourceId
                             }),
                             file: element.file,
                             type: element.type,
-                            done(error,msg){
+                            done(error, msg) {
                                 store.commit("stopLoading");
                                 that.sendSingleMessage(error, msg);
                             }
@@ -788,7 +801,7 @@
                     item.custom &&
                     JSON.parse(item.custom).cId !== _this.$store.state.userId
                 ) {
-                    _this.$store.commit("showPopup", { text: "您无权撤回此消息！" });
+                    _this.$store.commit("showPopup", {text: "您无权撤回此消息！"});
                     return false;
                 }
                 return new Promise((resolve, reject) => {
@@ -818,14 +831,14 @@
                                     cType: "0",
                                     cId: _this.$store.state.userId,
                                     mType: "37",
-                                    idClient:msg.idClient
+                                    idClient: msg.idClient
                                 }),
                                 content: JSON.stringify({
                                     type: "deleteMsgTips",
                                     data: {
                                         from: "分诊医生",
                                         doctorName: _this.$store.state.userName,
-                                        deleteMsg:msg|| {}
+                                        deleteMsg: msg || {}
                                     }
                                 }),
                                 done(error, msg) {
@@ -891,9 +904,9 @@
                 const _this = this;
                 //沟通中
                 let patientList = this.$store.state.patientList;
-                patientList.forEach(function(item, index) {
-                    if ("0_" + item.caseId == element.from) {
-                        if (typeof (item.messageAlert) =='undefined'|| item.messageAlert == "") {
+                patientList.forEach(function (item, index) {
+                    if ("0_" + item.caseId == element.from && this.$store.state.currentItem.consultationState == 0) {
+                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                             item.messageAlert = "1";
                         } else {
                             item.messageAlert = parseInt(item.messageAlert) + 1;
@@ -907,11 +920,11 @@
 
                         localStorage.setItem(
                             "patientAlertList",
-                            JSON.stringify(Object.assign(patientAlertList,JSON.parse(localStorage.getItem("patientAlertList"))))
+                            JSON.stringify(Object.assign(patientAlertList, JSON.parse(localStorage.getItem("patientAlertList"))))
                         );
                         _this.$store.commit("setNewOnline", true);
                         _this.$store.commit("setMusicPlay", true);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             _this.$store.commit("setMusicPlay", false);
                         }, 2000);
                     }
@@ -920,9 +933,9 @@
 
                 //带分诊
                 let waitingList = this.$store.state.waitingList;
-                waitingList.forEach(function(item, index) {
+                waitingList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-                        if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
+                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                             item.messageAlert = "1";
                         } else {
                             item.messageAlert = parseInt(item.messageAlert) + 1;
@@ -935,11 +948,11 @@
 
                         localStorage.setItem(
                             "waitingAlertList",
-                            JSON.stringify(Object.assign(waitingAlertList,JSON.parse(localStorage.getItem("waitingAlertList"))))
+                            JSON.stringify(Object.assign(waitingAlertList, JSON.parse(localStorage.getItem("waitingAlertList"))))
                         );
                         _this.$store.commit("setNewWaiting", true);
                         _this.$store.commit("setMusicPlay", true);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             _this.$store.commit("setMusicPlay", false);
                         }, 2000);
                     }
@@ -948,9 +961,9 @@
 
                 //重新分诊
                 let resetList = this.$store.state.resetList;
-                resetList.forEach(function(item, index) {
+                resetList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-                        if (typeof (item.messageAlert) =='undefined' ||item.messageAlert == "") {
+                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                             item.messageAlert = "1";
                         } else {
                             item.messageAlert = parseInt(item.messageAlert) + 1;
@@ -961,10 +974,10 @@
                         resetList.removeByValue(item);
                         resetList.unshift(item);
 
-                        localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(resetAlertList,JSON.parse(localStorage.getItem("resetAlertList")))));
+                        localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(resetAlertList, JSON.parse(localStorage.getItem("resetAlertList")))));
                         _this.$store.commit("setNewReset", true);
                         _this.$store.commit("setMusicPlay", true);
-                        setTimeout(function() {
+                        setTimeout(function () {
                             _this.$store.commit("setMusicPlay", false);
                         }, 2000);
                     }
@@ -1020,10 +1033,10 @@
                 }
             },
             transformMessageTime(time) {
-                var format = function(num) {
+                var format = function (num) {
                     return num > 9 ? num : "0" + num;
                 };
-                var normalTime = function(time) {
+                var normalTime = function (time) {
                     var d = new Date(time);
                     var obj = {
                         y: d.getFullYear(),
@@ -1075,10 +1088,10 @@
             },
             //消息时间转换...
             transformMessageTime(time) {
-                var format = function(num) {
+                var format = function (num) {
                     return num > 9 ? num : "0" + num;
                 };
-                var normalTime = function(time) {
+                var normalTime = function (time) {
                     var d = new Date(time);
                     var obj = {
                         y: d.getFullYear(),
@@ -1133,7 +1146,7 @@
                 this.$store.commit("setSBIFlag", true);
             },
             //渲染IM
-            mine: function(data) {
+            mine: function (data) {
                 if (data.content) {
                     data.content = JSON.parse(data.content);
                 }
@@ -1180,10 +1193,10 @@
                 }
             },
             //获取文件类型 做旧数据发送图片格式为file的兼容性
-            getFileType(file){
-                if(/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.ext)) {
+            getFileType(file) {
+                if (/(gif|jpg|jpeg|png|GIF|JPG|PNG)$/.test(file.ext)) {
                     return true;
-                }else{
+                } else {
                     return false;
                 }
             }
@@ -1203,6 +1216,9 @@
         margin-left: 1px;
         box-sizing: border-box;
         @include query(1500px) {
+            &.watingBoxStyle {
+                height: 105.5% !important;
+            }
             height: 73% !important;
         }
         &.watingBoxStyle {
