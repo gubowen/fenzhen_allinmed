@@ -59,7 +59,6 @@
             //上传
             onFileChange(e){
                 let files = e.target.files || e.dataTransfer.files;
-
                 if (!files.length) {
                     return;
                 }
@@ -78,9 +77,15 @@
                 files = Object.assign({}, files);
                 for (let i in files) {
                     if ((/image\/\w+/.test(files[i].type)) || (/.pdf/.test(files[i].type)) || (/video\/\w+/.test(files[i].type))) {
-                        files[i].url = window.URL.createObjectURL(files[i]);
-                        files[i].sizeWarning = false;
-                        this.fileList.push(files[i]);
+
+                        if (/video\/\w+/.test(files[i].type)&&!(/mp4/.test(files[i].type))){
+                            this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
+                        }else{
+                            files[i].url = window.URL.createObjectURL(files[i]);
+                            files[i].sizeWarning = false;
+                            this.fileList.push(files[i]);
+                        }
+
                     } else {
                         this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
                         document.getElementById("sendImg").value = '';
@@ -140,21 +145,14 @@
                     )
                 }
                 Promise.all(promises).then(result => {
-//                    console.log(fileList);
                     _this.$store.commit("setSendFileFlag", {
                         flag: true,
                         data: fileList
                     });
 
-//                console.log(_this.$store.state.sendFileFlag);
-
                     //上传完后续处理
                     _this.fileList = [];
                     _this.$store.commit("setSendFileShow", false);
-//                    _this.$store.commit("setSendFileFlag", {
-//                        flag: false,
-//                        data: {}
-//                    });
                 });
             },
             //关闭发送
