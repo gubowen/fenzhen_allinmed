@@ -112,7 +112,7 @@
                     },
                     done(data){
                         if (data.responseObject.responseData) {
-                            store.commit("stopLoading")
+                            store.commit("stopLoading");
                             let dataList = data.responseObject.responseData.dataList;
                             if (dataList && dataList.length !== 0) {
                                 that.replyList = dataList.reverse();

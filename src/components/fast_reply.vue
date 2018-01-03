@@ -31,6 +31,7 @@
 <script>
     import axios from "axios";
     import store from "@/store/store";
+    import ajax from "@/common/js/ajax";
     const XHRList = {
         getTerm: "/call/customer/quick/question/v1/getMapList/",
     }
@@ -83,36 +84,29 @@
             //获取列表...
             getFastReplyList(){
                 let _this = this;
-                let dataValue = {
-                    sessionCustomerId: _this.$store.state.userId,
-                    isValid: "1",
-                    firstResult: "0",
-                    maxResult: "1000",
-                    sortType: "2",
-                    sortPartIdList: ""
-                };
-                axios({
-                    method: "post",
-                    url: XHRList.getTerm,
-                    data: dataValue,
-                    responseType: 'json',
-                    transformRequest: [function (data) {
-                        data = "paramJson=" + JSON.stringify(data);
-                        return data;
-                    }],
-                    before: function () {
-                        common.loading.show();
-                    }
-                }).then(function (res) {
-                    if (res.data.responseObject.responseData) {
-                        let datalist = res.data.responseObject.responseData.dataList;
-                        _this.FastReplyList = datalist;
-                    }
-                    setTimeout(() => {
-                        _this.getTotalSize();
-                    }, 20)
+                ajax({
+                    url:XHRList.getTerm,
+                    method: "POST",
+                    data: {
+                        sessionCustomerId: _this.$store.state.userId,
+                        isValid: "1",
+                        firstResult: "0",
+                        maxResult: "1000",
+                        sortType: "2",
+                        sortPartIdList: ""
+                    },
+                    done(res){
+                        _this.$store.commit("stopLoading");
+                        if (res.responseObject.responseData) {
+                            let datalist = res.responseObject.responseData.dataList;
+                            _this.FastReplyList = datalist;
+                        }
+                        setTimeout(() => {
+                            _this.getTotalSize();
+                        }, 20)
 
-                })
+                    }
+                });
             },
             getTotalSize(){
                 let total = 0, size = this.FastReplyList.length;
@@ -128,7 +122,7 @@
             },
             //点击将一条回复加入输入框...
             clickToSendReply (item) {
-                store.commit("setFastReply", item.questionDesc)
+                store.commit("setFastReply", item.questionDesc);
                 store.commit("setFastReplyShow",false);
                 this.$emit("update:controllerInputStatus", parseInt(item.isUpload));
             }

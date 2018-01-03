@@ -104,7 +104,7 @@
                 if(this.refuseReason){
                     this.$store.commit("setRefuseReason", {
                         flag: true,
-                        data: this.refuseReason
+                        data:  '分诊医生'+this.$store.state.userName+'拒绝分诊，拒绝理由:'+this.refuseReason
                     });
                     this.$store.commit("setRefuseFlag", false);
                 }

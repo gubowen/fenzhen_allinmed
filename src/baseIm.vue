@@ -200,9 +200,6 @@
             UpdateTips
         },
         props: {
-            userCurrentStatus: {
-                type: Number | String
-            }
         },
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
@@ -529,9 +526,6 @@
                             type: "refusePatient"
                         }),
                         done(error, obj) {
-                            console.log("*************");
-                            console.log(error);
-                            console.log(obj);
                             that.$store.commit("setSendStatus", true);
                             if (!error) {
                                 resolve(obj);

@@ -66,7 +66,7 @@
                 this.getBaseMessage();
             //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
-//                this.getDeleteMsg();
+                this.getDeleteMsg();
             },
             searchPatient(e) {
                 let that = this;
@@ -266,7 +266,7 @@
             getDeleteMsg(){
                 let that =this;
                 ajax({
-                        url:"/services/tocure/comm/data/tool/v1/getMapList/",
+                        url:"/call/comm/data/tool/v1/getMapList",
                         method: "POST",
                         data: {
                             deviceType: 'PC',

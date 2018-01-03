@@ -4,7 +4,7 @@
             <figure class="center-inner-wrapper">
                 <img src="./assets/img00/index/logo_empty bg.png" alt="">
             </figure>
-            <BaseIm ref="baseImComponent" :userCurrentStatus.sync="userCurrentStatus" ></BaseIm>
+            <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply">
                     <button class="user-controller-fastReply" @click.stop="fastRely()">
@@ -17,10 +17,10 @@
                     </button>
                     <button class="user-controller-min" @click.stop="minBtnShow()">
                         <i class="icon-userReply"></i><span>更多</span>
-                        <div :class="[{'on':!(userCurrentStatus== 3 ?  false: true)},'sendList']" v-show="minBtnFlag">
+                        <div class="sendList" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>
-                                <li @click="refuseEvent()" v-show="userCurrentStatus== 3 ?  false: true">拒绝分诊</li>
+                                <li @click="refuseEvent()">拒绝分诊</li>
                                 <li @click="sendFile()">发送视图</li>
                             </ul>
                         </div>
@@ -36,7 +36,7 @@
                     </button>
 
                     <!--结束沟通-->
-                    <button class="user-controller-end" @click="reTriageShow=true" v-show="userCurrentStatus== 3 ?  false: true">
+                    <button class="user-controller-end" @click="reTriageShow=true">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -47,8 +47,7 @@
 
                     <!--快捷提问-->
                     <transition name="fade">
-                        <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus"
-                                   :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                        <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     </transition>
                     <!--常用回复-->
                     <transition name="fade">
@@ -152,7 +151,6 @@
                 inputReadOnly: "",
                 sendFlag:false,
                 minBtnFlag:false,
-                userCurrentStatus:''
             };
         },
         components: {
@@ -202,34 +200,16 @@
             "$store.state.minBtnFlag"(content){
                 this.minBtnFlag = this.$store.state.minBtnFlag;
             },
-            "$store.state.patientId"(content){
-                this.userCurrentStatus = this.userListStatus.status;
-            },
-            userCurrentStatus(content){
-//                console.log(content);
-                if(this.userCurrentStatus == 3){
-                    this.$emit("update:userListStatus", {
-                        first: false,
-                        second: false,
-                        third: true,
-                        status:3
-                    });
-                }
-            },
             "$store.state.refuseUserListFlag"(content){
                 if(content){
                     this.userListChange();
                 }
-
-
             }
 
         },
         methods: {
             //初始化
             init() {
-//                console.log(this.userListStatus.status);
-                this.userCurrentStatus = this.userListStatus.status;
             },
             sendMessage(e) {
                 const that = this;
@@ -306,15 +286,12 @@
                     consultationId: this.$store.state.currentItem.consultationId,
                     consultationState:5
                 }).then(res => {
-//                    store.commit("setReleasePatientCaseIdFlag", {
-//                        caseId: this.$store.state.caseId,
-//                        flag: true
-//                });
-                    console.log("22222");
+                    store.commit("setReleasePatientCaseIdFlag", {
+                        caseId: this.$store.state.caseId,
+                        flag: true
+                });
                     this.reTriageShow = false;
-                    //this.$store.commit("startLoading");
-                    console.log(this.$store.state.loadingShow);
-                     // this.userListChange();
+                    this.userListChange();
                 });
 
             },
