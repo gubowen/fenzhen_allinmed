@@ -747,10 +747,11 @@
                 });
 
                 Promise.all(promises).then((element) => {
-                    if (element.type==="file"){
-                        element.file.name= element.name;
-                    }
+
                     element.forEach(function (element, index) {
+                        if (element.type==="file"){
+                            element.file.name = element.name;
+                        }
                         let msg = that.nim.sendFile({
                             scene: 'p2p',
                             to: that.targetData.account,
