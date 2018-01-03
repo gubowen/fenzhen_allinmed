@@ -747,8 +747,7 @@
                 });
 
                 Promise.all(promises).then((element) => {
-                    console.log(element);
-                    if (type==="file"){
+                    if (element.type==="file"){
                         element.file.name= element.name;
                     }
                     element.forEach(function (element, index) {
