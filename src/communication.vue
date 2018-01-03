@@ -286,6 +286,7 @@
                     consultationId: this.$store.state.currentItem.consultationId,
                     consultationState:5
                 }).then(res => {
+                    this.$store.commit("startLoading");
                     store.commit("setReleasePatientCaseIdFlag", {
                         caseId: this.$store.state.caseId,
                         flag: true
