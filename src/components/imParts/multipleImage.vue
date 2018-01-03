@@ -52,9 +52,6 @@
             installSBIList() {
                 let _this = this;
                 let SBIObject = {};
-
-                console.log(_this.message.idClient);
-                console.log(this.message.content.data.list)
                 SBIObject = this.$store.state.SBIObject;
                 SBIObject[_this.message.idClient] = this.message.content.data.list;
 
