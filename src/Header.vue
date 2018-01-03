@@ -65,6 +65,7 @@
                 this.getBaseMessage();
             //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
+              //  this.getDeleteMsg();
             },
             searchPatient(e) {
                 let that = this;
@@ -260,7 +261,18 @@
                         this.$emit('update:globeSortFlag', this.globeSortFlag);
                     }
                 })
-            }
+            },
+            getDeleteMsg(){
+                let that =this;
+                axios({
+                    method: "post",
+                    url: "/services/tocure/comm/data/tool/v1/getMapList/",
+                    responseType: 'json'
+                }).then(function (res) {
+                    console.log("***");
+                    console.log(res);
+            })
+        },
         },
         components: {
             confirm
@@ -268,6 +280,7 @@
         mounted(){
             this.init();
         }
+
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>

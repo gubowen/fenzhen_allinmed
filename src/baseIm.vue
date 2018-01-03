@@ -737,7 +737,7 @@
                                 done: function (error, file) {
                                     console.log('上传' + element.type + (!error ? '成功' : '失败'));
                                     if (!error) {
-                                        element.file = file
+                                        element.file = file;
                                         resolve(element);
                                     }
                                 }
@@ -748,6 +748,9 @@
 
                 Promise.all(promises).then((element) => {
                     console.log(element);
+                    if (type==="file"){
+                        element.file.name= element.name;
+                    }
                     element.forEach(function (element, index) {
                         let msg = that.nim.sendFile({
                             scene: 'p2p',
@@ -804,7 +807,7 @@
                     _this.$store.commit("showPopup", {text: "您无权撤回此消息！"});
                     return false;
                 }
-                return new Promise((resolve, reject) => {
+                return new Promise((resolvese, reject) => {
                     console.log("正在撤回消息", item);
                     this.nim.deleteMsg({
                         msg: item,
