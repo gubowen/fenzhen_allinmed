@@ -120,9 +120,13 @@
 
   .middle-tip-box {
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    /*top: 50%;*/
+    /*left: 50%;*/
+    top: 0;
+    left: 0;
+   // transform: translate(-50%, -50%);
     z-index: 5;
     .middle-tip-box-text {
       width: 50px;

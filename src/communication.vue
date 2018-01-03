@@ -206,7 +206,7 @@
                 this.userCurrentStatus = this.userListStatus.status;
             },
             userCurrentStatus(content){
-                console.log(content);
+//                console.log(content);
                 if(this.userCurrentStatus == 3){
                     this.$emit("update:userListStatus", {
                         first: false,
@@ -228,7 +228,7 @@
         methods: {
             //初始化
             init() {
-                console.log(this.userListStatus.status);
+//                console.log(this.userListStatus.status);
                 this.userCurrentStatus = this.userListStatus.status;
             },
             sendMessage(e) {
@@ -298,24 +298,26 @@
                 }
                 store.commit("setUsedReplyShow", flag);
             },
-
             //患者转移至其他分诊医生：
             reTriageComfirm() {
-                store.commit("startLoading");
+                this.$store.commit("startLoading");
                 releasePatient({
                     customerId: this.$store.state.userId,
                     consultationId: this.$store.state.currentItem.consultationId,
                     consultationState:5
                 }).then(res => {
-                    store.commit("setReleasePatientCaseIdFlag", {
-                        caseId: this.$store.state.caseId,
-                        flag: true
-                    });
+//                    store.commit("setReleasePatientCaseIdFlag", {
+//                        caseId: this.$store.state.caseId,
+//                        flag: true
+//                });
+                    console.log("22222");
                     this.reTriageShow = false;
-                    this.userListChange();
+                    //this.$store.commit("startLoading");
+                    console.log(this.$store.state.loadingShow);
+                     // this.userListChange();
                 });
-            },
 
+            },
             //患者接诊
             getPatient() {
                 let currentItem = this.$store.state.currentItem;
@@ -358,7 +360,7 @@
                 this.$store.commit("setRefuseFlag",true);
             },
             userListChange(){
-
+                store.commit("startLoading");
                 let waitingList = this.$store.state.waitingList;
                 let patientList = this.$store.state.patientList;
                 setTimeout(() => {
@@ -391,7 +393,7 @@
                     this.$store.commit("setCurrentItem", items ? items : {});
                     this.$store.commit("setSBIObject", "");
 
-                    store.commit("stopLoading");
+//                    store.commit("stopLoading");
                 }, 1000);
                 this.$store.commit("setRefuseUserListFlag",false);
             }

@@ -28,21 +28,22 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {                                           // 需要 proxyTable 代理的接口（可跨域）
+
+      '/services': {
+            target: 'http://triage.allinmed.cn/services',
+            changeOrigin: true,
+            pathRewrite:{
+                '^/services': '/'
+            }
+        },
       '/call': {
         target: 'http://triage.allinmed.cn/call',
         changeOrigin: true,
         pathRewrite:{
           '^/call': '/'
-        }
-      },
-      // '/services': {
-      //    target: 'http://triage.allinmed.cn/services',
-      //    changeOrigin: true,
-      //    pathRewrite:{
-      //      '^/services': '/'
-      //       }
-      //   }
+      }
 
+    },
     },
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

@@ -893,7 +893,7 @@
                     scene: "p2p",
                     to: that.targetData.account,
                     done(error, obj) {
-                        console.log(obj);
+                      //  console.log(obj);
                         if (error) {
                             nim.getInstance();
                         }
@@ -1153,7 +1153,7 @@
                 if (data.content) {
                     data.content = JSON.parse(data.content);
                 }
-                console.log(data);
+//                console.log(data);
                 this.communicationList.push(data);
             },
             showNext(type, index) {

@@ -619,7 +619,7 @@ export default {
         method: "POST",
         data: dataValue,
         done(res) {
-            console.log(res);
+//            console.log(res);
           //            store.commit("stopLoading");
           if (res.responseObject.responseData && res.responseObject.responseStatus) {
             let dataList = _this.setSelectValue(

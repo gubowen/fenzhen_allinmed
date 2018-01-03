@@ -141,7 +141,7 @@
                             let dataList = res.responseObject.responseData.dataList;
                             if (dataList && dataList.length) {
                                 that.medicalReportMsg = dataList[0];
-                                console.log(that.medicalReportMsg);
+//                                console.log(that.medicalReportMsg);
                                 that.$emit("loadCallback");
                                 // console.log(that.medicalReportMsg = dataList[0]);
                             }
@@ -198,7 +198,7 @@
                         })
                     }
 
-                    console.log(!Object.is(painItem,{}))
+//                    console.log(!Object.is(painItem,{}))
                     if (painItem){
                         return {
                             VASShow:true,

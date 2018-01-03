@@ -5,7 +5,7 @@
         <!--<router-view></router-view>-->
         <!--</keep-alive>-->
         <router-view></router-view>
-        <Loading v-if="$store.state.loadingShow"></Loading>
+        <Loading v-show="$store.state.loadingShow"></Loading>
         <transition name="fade">
             <Popup v-if="$store.state.popupShow" :obj="$store.state.popupContent"></Popup>
         </transition>

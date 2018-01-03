@@ -37,6 +37,7 @@
 </template>
 <script>
     import axios from "axios";
+    import ajax from "@/common/js/ajax";
     import confirm from "./common/bigConfim";
     export  default{
         name: 'header',
@@ -65,7 +66,7 @@
                 this.getBaseMessage();
             //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
-              //  this.getDeleteMsg();
+//                this.getDeleteMsg();
             },
             searchPatient(e) {
                 let that = this;
@@ -264,15 +265,20 @@
             },
             getDeleteMsg(){
                 let that =this;
-                axios({
-                    method: "post",
-                    url: "/services/tocure/comm/data/tool/v1/getMapList/",
-                    responseType: 'json'
-                }).then(function (res) {
-                    console.log("***");
-                    console.log(res);
-            })
-        },
+                ajax({
+                        url:"/services/tocure/comm/data/tool/v1/getMapList/",
+                        method: "POST",
+                        data: {
+                            deviceType: 'PC',
+                            sortType: 1,
+                            visitSiteId:18
+                        },
+                        done(res){
+                            console.log("***");
+                            console.log(res);
+                        }
+                })
+            },
         },
         components: {
             confirm
