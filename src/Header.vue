@@ -264,9 +264,9 @@
                 })
             },
             getDeleteMsg(){
-                let that =this;
+                let _this =this;
                 ajax({
-                        url:"/call/comm/data/tool/v1/getMapList",
+                        url:"/call/comm/data/tool/v1/getMapList/",
                         method: "POST",
                         data: {
                             deviceType: 'PC',
@@ -274,8 +274,15 @@
                             visitSiteId:18
                         },
                         done(res){
-                            console.log("***");
-                            console.log(res);
+                            if( res.responseObject.responseData){
+                                res.responseObject.responseData.dataList.forEach(function(element,index){
+                                        if(element.toolType == 4){
+                                            _this.$store.commit('setDeleteMsgTime',element.toolConfig);
+                                            console.log( _this.$store.state.deleteMsgTime);
+                                        }
+                                })
+                            }
+
                         }
                 })
             },

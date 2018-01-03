@@ -287,11 +287,13 @@
                     consultationState:5
                 }).then(res => {
                     this.$store.commit("startLoading");
-                    store.commit("setReleasePatientCaseIdFlag", {
+                    document.querySelector(".ev-loading").style.display = "block";
+                    this.$store.commit("setReleasePatientCaseIdFlag", {
                         caseId: this.$store.state.caseId,
                         flag: true
                 });
                     this.reTriageShow = false;
+                    debugger;
                     this.userListChange();
                 });
 
@@ -371,7 +373,7 @@
                     this.$store.commit("setCurrentItem", items ? items : {});
                     this.$store.commit("setSBIObject", "");
 
-//                    store.commit("stopLoading");
+                    store.commit("stopLoading");
                 }, 1000);
                 this.$store.commit("setRefuseUserListFlag",false);
             }

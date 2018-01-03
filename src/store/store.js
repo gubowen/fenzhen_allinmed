@@ -352,6 +352,9 @@ export default new Vuex.Store({
         },
         setRefuseUserListFlag(state,data){
             state.refuseUserListFlag =data;
+        },
+        setDeleteMsgTime(state,data){
+            state.deleteMsgTime =data;
         }
     }
 });
