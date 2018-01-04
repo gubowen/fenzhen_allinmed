@@ -1323,6 +1323,9 @@
                         padding-right: 24px;
                     }
                 }
+                .messageList-item-multiple{
+                    max-width: none !important;
+                }
                 .messageList-item-text {
                     display: inline-block;
                     vertical-align: top;
@@ -1342,9 +1345,7 @@
                         margin: 0 12px;
                     }
                 }
-                .messageList-item-multiple{
-                    max-width: none;
-                }
+
             }
             .deleteMessage {
                 color: #ccc;
