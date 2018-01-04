@@ -82,6 +82,9 @@
                                                 <span class="hospital">{{docList.company ? docList.company : ""}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
                                             </article>
+                                            <article class="administrator-message" v-if="docList.remarksContent">
+                                                管理员备注：<span>{{docList.remarksContent}}</span>
+                                            </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
                                                 擅长：<span :class="{'on':matchCurrentIndex == index}">{{docList.illnessNameList + docList.operationNameList}}</span>
                                             </article>
@@ -117,6 +120,9 @@
                                                 <span class="hos-address">{{docList.province?docList.province:""}}  {{docList.city?docList.city:""}}  {{docList.district?docList.district:""}}</span>
                                                 <span class="hospital">{{docList.company ? docList.company : ''}}</span>
                                                 <span class="medical">{{docList.medicalTitle}}</span>
+                                            </article>
+                                            <article class="administrator-message" v-if="docList.remarksContent">
+                                                管理员备注：<span>{{docList.remarksContent}}</span>
                                             </article>
                                             <article class="doctor-message-goodAt" v-if="docList.illnessNameList.length>0 || docList.operationNameList.length>0">
                                                 擅长：<span v-html="docList.illnessNameList + docList.operationNameList" :class="{'on':allCurrentIndex == index}"></span>
@@ -515,6 +521,7 @@
                         logoUseFlag: 3,
                     },
                     done(data){
+                        console.log(data);
                         if (data.responseObject.responseData && data.responseObject.responseData.dataList) {
                             let dataList = that.setCheckedState(data.responseObject.responseData.dataList);
                             that.matchDoc.matchDocList = dataList;
@@ -1963,6 +1970,23 @@
             }
         }
     }
+    .administrator-message{
+        margin: 16px 0 0 0;
+        color: #000;
+        font-size: 14px;
+        max-width: 500px;
+        line-height: 1.5;
+        font-weight: 600;
+        span{
+            display:inline-block;
+            width:400px;
+            vertical-align: top;
+            &.on{
+                height:auto;
+            }
+        }
+    }
+
 
     .viewMoreBox {
         width:430px;
