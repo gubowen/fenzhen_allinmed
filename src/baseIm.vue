@@ -74,10 +74,25 @@
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                         <!-- 医生接诊 -->
-                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'" class="deleteMessage">
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
+                        </section>
+                        <!--医生超时未接诊-->
+                        <section v-if="items.type==='custom'&&items.content.type==='overtimeTip'" class="deleteMessage">
+                            <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生超时未接诊'}}</span>
+                        </section>
+                        <!--医生超时未回复-->
+                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
+                            <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊后超时未回复'}}</span>
+                        </section>
+                        <!--医生拒绝-->
+                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(msg.content).data.actionType == 3" class="deleteMessage">
+                            <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊后超时未回复'}}</span>
+                        </section>
+                        <!--医生拒绝-->
+                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(msg.content).data.actionType == 4" class="deleteMessage">
+                            <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊'}}</span>
                         </section>
                     </article>
                 </transition-group>
@@ -409,10 +424,11 @@
                                     }
                                     waitingAlertList[msg.from] = 1;
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-
                                     store.commit("waitingListRefreshFlag", true);
                                     store.commit("setNewWaiting", true);
                                     store.commit("setMusicPlay", true);
+
+
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('onlineListRefresh', true);
@@ -458,9 +474,8 @@
                         if (
                             items.content &&
                             (items.content.type === "reTriageTip" ||
-                                items.content.type === "new-health" ||
-                                items.content.type === "notification" ||
-                                items.content.type === "payFinishTips")
+                            items.content.type === "new-health" ||
+                            items.content.type === "payFinishTips")
                         ) {
                             flag = false;
                         } else {
@@ -743,7 +758,7 @@
                 Promise.all(promises).then((element) => {
 
                     element.forEach(function (element, index) {
-                        if (element.type==="file"){
+                        if (element.type==="file"||element.type==="video"){
                             element.file.name = element.name;
                         }
                         let msg = that.nim.sendFile({
@@ -811,7 +826,7 @@
                                 _this.communicationList.removeByValue(item);
                                 resolve(item);
                             } else {
-                              //  _this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
+                                //  _this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
                                 console.log("撤回失败.....");
                                 reject(error, item);
                             }
@@ -887,7 +902,7 @@
                     scene: "p2p",
                     to: that.targetData.account,
                     done(error, obj) {
-                      //  console.log(obj);
+                        //  console.log(obj);
                         if (error) {
                             nim.getInstance();
                         }

@@ -7,11 +7,11 @@
         <figcaption class="messageList-item-text">
             <section class="multiple" v-if="multipleList.content">
                 <header>
-                    <i class="icon-img"></i><span>图片</span><span>{{'('+multipleList.content.data.list.length+')'}}</span>
+                    <i class="icon-img"></i><span>图片</span><span>{{'('+message.content.data.list.length+')'}}</span>
                 </header>
                 <section class="imgList" v-if="multipleList.content.data.list.length>0">
                     <ul>
-                        <li v-for="(item,index) in multipleList.content.data.list" @click="showBigImgFunction(index)">
+                        <li v-for="(item,index) in multipleList.content.data.list" @click="showBigImgFunction(index)" v-show="index<3">
                             <img :src="item.url"/>
                         </li>
                     </ul>
@@ -41,8 +41,8 @@
         },
         mounted() {
             this.multipleList = this.message;
-            if (this.multipleList.content.data.list.length > 5) {
-                this.multipleList.content.data.list.splice(10, this.multipleList.content.data.list.length - 1);
+            if (this.multipleList.content.data.list.length > 3) {
+               // this.multipleList.content.data.list.splice(3, this.multipleList.content.data.list.length - 1);
                 this.multipleList = Object.assign({}, this.multipleList);
             }
             this.installSBIList();
@@ -60,8 +60,6 @@
             showBigImgFunction(message) {
                 let _this = this;
                 this.$store.state.SBIObject[_this.message.idClient].forEach(function (item, index) {
-                    console.log(message);
-                    console.log(index);
                     if (message == index) {
                         _this.$store.commit("setSBIIndex", index);
                     }

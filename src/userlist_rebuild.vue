@@ -335,7 +335,7 @@ export default {
     "$store.state.resetListRefresh"(flag) {
           if (flag) {
               this.getUserList("reset", this.filterMethod);
-              store.commit("ResetListRefreshFlag", false);
+              store.commit("resetListRefreshFlag", false);
           } else {
               return;
           }
