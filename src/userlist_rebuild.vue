@@ -416,9 +416,7 @@ export default {
         waitingList[index] = items;
         this.$store.commit("setWaitingList", waitingList);
 
-        let waitingAlertList = JSON.parse(
-          localStorage.getItem("waitingAlertList")
-        );
+        let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
         if (waitingAlertList) {
           delete waitingAlertList["0_" + items.caseId];
           localStorage.setItem(

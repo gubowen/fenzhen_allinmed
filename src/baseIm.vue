@@ -419,7 +419,7 @@
                                     //消息提醒
                                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                                     if (!waitingAlertList) {
-//                                      waitingAlertList = {};
+                                       waitingAlertList = {};
                                     }
                                     waitingAlertList[msg.from] = 1;
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
