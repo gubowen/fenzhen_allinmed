@@ -432,7 +432,7 @@
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('onlineListRefresh', true);
                                     that.$store.commit('resetListRefreshFlag', true);
-                                    that.$emit("update:userCurrentStatus", 3);
+                                   // that.$emit("update:userCurrentStatus", 3);
 
                                 }
                             }
@@ -757,8 +757,17 @@
                 Promise.all(promises).then((element) => {
 
                     element.forEach(function (element, index) {
-                        if (element.type==="file"||element.type==="video"){
+
+                        let mType = 0;
+
+                        if (element.type==="file"){
                             element.file.name = element.name;
+                            mType = 6
+                        }else if(element.type==="video"){
+                            element.file.name = element.name;
+                            mType = 3
+                        }else{
+                            mType = 1
                         }
                         let msg = that.nim.sendFile({
                             scene: 'p2p',
@@ -766,7 +775,7 @@
                             custom: JSON.stringify({
                                 cType: "0",
                                 cId: that.$store.state.userId,
-                                mType: "6",
+                                mType: mType,
                                 name: element.name
                                 //,
 //                            conId: that.orderSourceIdorderSourceId
