@@ -901,7 +901,7 @@
                     scene: "p2p",
                     to: that.targetData.account,
                     done(error, obj) {
-                        //  console.log(obj);
+                          console.log(obj);
                         if (error) {
                             nim.getInstance();
                         }
