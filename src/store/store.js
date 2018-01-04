@@ -220,7 +220,7 @@ export default new Vuex.Store({
 
         },
         setSBIObject(state, data){
-            state.SBIObject = Object.assign(state.SBIObject,data);
+            state.SBIObject = data;
         },
         setSBIType(state, data){
             state.SBIType = data;

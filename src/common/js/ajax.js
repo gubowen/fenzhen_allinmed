@@ -11,7 +11,6 @@ import axios from "axios";
 export default function ajax(param) {
   axios.interceptors.request.use(function (config) { //在请求发出之前进行一些操作
     if (document.querySelector(".ev-loading")) {
-      console.log("222");
       document.querySelector(".ev-loading").style.display = "block";
 
     }
@@ -34,7 +33,6 @@ export default function ajax(param) {
   }).then((res) => {
     param.done(res.data);
     if (document.querySelector(".ev-loading")) {
-        console.log("333");
       document.querySelector(".ev-loading").style.display = "none";
     }
   }, (err) => {

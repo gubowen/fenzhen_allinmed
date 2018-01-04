@@ -431,7 +431,6 @@ export default {
         }
       } else if(this.userListStatus.second){
 
-
         this.waitingTriage = false;
         this.userOnlineActive = index;
         store.commit("setInputReadOnly", false);

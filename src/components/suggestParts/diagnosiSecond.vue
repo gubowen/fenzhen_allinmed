@@ -1094,10 +1094,10 @@
                                         releasePatient({
                                             customerId: that.$store.state.userId,
                                             consultationId: that.$store.state.currentItem.consultationId,
-                                            consultationState:9
+                                            consultationState:10
                                         }).then(res => {
                                             let currentItem = that.$store.state.currentItem;
-                                            currentItem.consultationState = 9;
+                                            currentItem.consultationState = 10;
                                             that.$store.commit('setCurrentItem',currentItem);
                                         })
                                     }else{
