@@ -87,11 +87,11 @@
                             <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
-                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(msg.content).data.actionType == 3" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">
                             <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
-                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(msg.content).data.actionType == 4" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 4" class="deleteMessage">
                             <span>{{items.content.data.doctorName?items.content.data.doctorName:'某某'+'医生接诊'}}</span>
                         </section>
                     </article>
