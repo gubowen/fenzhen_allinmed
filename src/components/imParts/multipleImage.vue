@@ -4,7 +4,7 @@
         <figure class="messageList-item-img" v-if="message.from != '1_doctor00001'">
             <img :src="$store.state.currentItem.logoUrl" alt="">
         </figure>
-        <figcaption class="messageList-item-text">
+        <figcaption class="messageList-item-text  messageList-item-multiple">
             <section class="multiple" v-if="multipleList.content">
                 <header>
                     <i class="icon-img"></i><span>图片</span><span>{{'('+message.content.data.list.length+')'}}</span>

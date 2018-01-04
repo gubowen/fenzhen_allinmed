@@ -1342,6 +1342,9 @@
                         margin: 0 12px;
                     }
                 }
+                .messageList-item-multiple{
+                    max-width: none;
+                }
             }
             .deleteMessage {
                 color: #ccc;
