@@ -239,21 +239,17 @@
                 this.confirmShow = false;
             },
             exitLogin(){
-                let that =this;
-                axios({
-                    method: "post",
-                    url: "/call/tocure/web/user/logout/",
-                    responseType: 'json'
-                }).then(function (res) {
-//                    that.$router.push({
-//                        name: "login"
-//                    })
-                    window.location.reload();
-                    that.confirmShow = false;
-                })
+                let _this =this;
+                ajax({
+                    url:"/call/tocure/web/user/logout/",
+                    method: "POST",
+                    done(res){
+                        window.location.reload();
+                        _this.confirmShow = false;
+                    }
+                });
                 localStorage.removeItem('patientAlertList');
                 localStorage.removeItem('waitingAlertList');
-
             },
             globeClick(){
                 document.addEventListener('click', (e) => {
@@ -285,7 +281,7 @@
 
                         }
                 })
-            },
+            }
         },
         components: {
             confirm

@@ -801,7 +801,7 @@
                     _this.$store.commit("showPopup", {text: "您无权撤回此消息！"});
                     return false;
                 }
-                return new Promise((resolvese, reject) => {
+                return new Promise((resolve, reject) => {
                     console.log("正在撤回消息", item);
                     this.nim.deleteMsg({
                         msg: item,
@@ -811,7 +811,7 @@
                                 _this.communicationList.removeByValue(item);
                                 resolve(item);
                             } else {
-                                //_this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
+                              //  _this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
                                 console.log("撤回失败.....");
                                 reject(error, item);
                             }

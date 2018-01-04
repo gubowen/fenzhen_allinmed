@@ -5,7 +5,7 @@
       <div class="rotate-button"></div>
       <div class="bigger-button"></div>
       <div class="smaller-button"></div>
-      <div class="download-button" v-show="$store.state.SBIType != 'checkImage'&& $store.state.SBIType != 'medicalReport'&&$store.state.SBIType != 'diagnoseListImage'" ></div>
+      <div class="download-button" v-show="$store.state.userListStatus.status == 2 &&$store.state.SBIType != 'checkImage'&& $store.state.SBIType != 'medicalReport'&&$store.state.SBIType != 'diagnoseListImage'" ></div>
       <div class="gallery-top">
         <div class="swiper-container topSwiper">
           <div class="swiper-wrapper">

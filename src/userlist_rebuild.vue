@@ -137,6 +137,7 @@
                                     </article>
                                     <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
                                 </figcaption>
+                                <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                             </article>
                             <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
                         </section>
@@ -519,19 +520,39 @@ export default {
               this.userListStatus.second = false;
               this.userListStatus.third = false;
               this.message.userController = true;
+                console.log("1111");
+              this.$store.commit("setUserListStatus",{
+                  status: "1",
+                  first: true,
+                  second: false,
+                  third:false
+              });
               break;
           case 2:
               this.userListStatus.first = false;
               this.userListStatus.second = true;
               this.userListStatus.third = false;
               this.message.userController = false;
+              console.log("222");
+              this.$store.commit("setUserListStatus",{
+                  status: "2",
+                  first: false,
+                  second: true,
+                  third:false
+              });
               break;
           case 3:
               this.userListStatus.first = false;
               this.userListStatus.second = false;
               this.userListStatus.third = true;
               this.message.userController = false;
-
+              console.log("333");
+              this.$store.commit("setUserListStatus",{
+                  status: "3",
+                  first: false,
+                  second: false,
+                  third:true
+              });
               break;
 
       }
