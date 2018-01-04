@@ -402,7 +402,7 @@ export default {
       return flag;
     },
     //给子组件传值..
-    transformData(items, index, getFlag = false) {
+    transformData(items, index, getFlag = false,imRefresh = true) {
       store.commit("setUsedReplyShow", false);
       store.commit("setFastReplyShow", false);
       this.noData = true;
@@ -491,9 +491,9 @@ export default {
       this.$store.commit("setConsultationId", items.consultationId);
 
       this.$store.commit("setCurrentItem", items);
-
-      this.$store.commit("setSBIObject", {});
-
+      if(imRefresh){
+          this.$store.commit("setSBIObject", {});
+      }
       this.$store.commit('setMinBtnFlag',false);
 
 
@@ -824,7 +824,7 @@ export default {
           this.getUserList("online", {}, () => {
             let triageItem = this.getBeTriagePatient(item);
             let getFlag = true;
-            this.transformData(triageItem, index, getFlag);
+            this.transformData(triageItem, index, getFlag,false);
 
             store.commit("setTriagePatientCaseIdFlag", {
               caseId: item.caseId,
