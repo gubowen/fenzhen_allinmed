@@ -80,19 +80,19 @@
                         </section>
                         <!--医生超时未接诊-->
                         <section v-if="items.type==='custom'&&items.content.type==='overtimeTip'" class="deleteMessage">
-                            <span>{{items.custom.docName?JSON.parse(items.custom).docName:'某某'+'医生超时未接诊'}}</span>
+                            <span>{{items.custom?JSON.parse(items.custom).docName:'某某'+'医生超时未接诊'}}</span>
                         </section>
                         <!--医生超时未回复-->
                         <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
-                            <span>{{items.custom.docName?JSON.parse(items.custom).docName:'某某'+'医生接诊后超时未回复'}}</span>
+                            <span>{{items.custom?JSON.parse(items.custom).docName:'某某'+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
                         <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">
-                            <span>{{items.custom.docName?JSON.parse(items.custom).docName:'某某'+'医生接诊后超时未回复'}}</span>
+                            <span>{{items.custom?JSON.parse(items.custom).docName:'某某'+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
                         <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 4" class="deleteMessage">
-                            <span>{{items.custom.docName?JSON.parse(items.custom).docName:'某某'+'医生接诊'}}</span>
+                            <span>{{items.custom?JSON.parse(items.custom).docName:'某某'+'医生接诊'}}</span>
                         </section>
                     </article>
                 </transition-group>
