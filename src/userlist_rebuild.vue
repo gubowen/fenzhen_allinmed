@@ -517,7 +517,6 @@ export default {
               this.userListStatus.second = false;
               this.userListStatus.third = false;
               this.message.userController = true;
-                console.log("1111");
               this.$store.commit("setUserListStatus",{
                   status: "1",
                   first: true,
@@ -530,7 +529,6 @@ export default {
               this.userListStatus.second = true;
               this.userListStatus.third = false;
               this.message.userController = false;
-              console.log("222");
               this.$store.commit("setUserListStatus",{
                   status: "2",
                   first: false,
@@ -543,7 +541,6 @@ export default {
               this.userListStatus.second = false;
               this.userListStatus.third = true;
               this.message.userController = false;
-              console.log("333");
               this.$store.commit("setUserListStatus",{
                   status: "3",
                   first: false,
