@@ -15,17 +15,13 @@
                     $store.state.currentItem.doctorName + '医生' : ''}退回`}}
                 </p>
                 <transition-group name="fadeDown" tag="article">
-                    <article class="messageList-item"
-                             :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
-                             v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+                    <article class="messageList-item" :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']" v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
                         <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
-                        <ContentElement v-if="items.type==='text'" :message="items"
-                                        @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--拒绝分诊-->
-                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'"
-                                        :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))"
                                       :message="items" :nim="nim" @loadCallback="loadCallback"
@@ -77,22 +73,22 @@
                         </section>
                         <!--医生超时未接诊-->
                         <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">
-                            <span>JSON.parse(items.custom)</span>
+                            <span>{{JSON.parse(items.custom)}}</span>
                             <!--<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>-->
                         </section>
                         <!--医生超时未回复-->
                         <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
-                            <span>JSON.parse(items.custom)</span>
+                            <span>{{JSON.parse(items.custom)}}</span>
                             <!--<span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>-->
                         </section>
                         <!--医生拒绝-->
                         <section v-if="items.type==='custom'&& items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">
-                            <span>JSON.parse(items.custom)</span>
+                            <span>{{JSON.parse(items.custom)}}</span>
                             <!--<span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>-->
                         </section>
                         <!--医生接诊-->
-                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 5" class="deleteMessage">
-                            <span>JSON.parse(items.custom)</span>
+                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 5" class="deleteMessage">
+                            <span>{{JSON.parse(items.custom)}}</span>
                             <!--<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>-->
                         </section>
                     </article>
