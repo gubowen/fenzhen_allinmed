@@ -426,7 +426,7 @@
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('onlineListRefresh', true);
                                     that.$store.commit('resetListRefreshFlag', true);
-                                    that.$store.commit("setRefuseUserListFlag",false);
+                                    that.$store.commit("setRefuseUserListFlag",true);
                                    // that.$emit("update:userCurrentStatus", 3);
 
                                 }
