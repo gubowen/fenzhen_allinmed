@@ -142,7 +142,7 @@
                                                 </figure>
                                                 <!--医生拒绝-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='3'">
-                                                    <span>{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName +'医生退回'}}</span>
+                                                    <span>{{'由于'+JSON.parse(ele.ext.substring(1,ele.body.length-1)).reason +'，该患者被'+ JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName +'医生退回'}}</span>
                                                 </figure>
                                                 <!--医生接诊-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='5'">
