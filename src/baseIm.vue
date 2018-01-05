@@ -19,9 +19,7 @@
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
                              v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
-                        <p class="time-stamp"
-                           v-if="!(items.type==='custom'&&(items.custom&&(items.custom.mType==='33'||items.custom.mType==='22'||items.custom.mType==='24')))">
-                            {{items.time | transformMessageTime}}</p>
+                        <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">{{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
                         <ContentElement v-if="items.type==='text'" :message="items"
                                         @deleteMsg="deleteMsg(items)"></ContentElement>
@@ -68,8 +66,7 @@
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
                                 :showType="'checkSuggessSendTips'"></UpdateTips>
                         <!--消息撤回-->
-                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
@@ -79,20 +76,24 @@
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
                         </section>
                         <!--医生超时未接诊-->
-                        <section v-if="items.type==='custom'&&items.content.type==='overtimeTip'" class="deleteMessage">
-                            <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生超时未接诊'}}</span>
+                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">
+                            <span>JSON.parse(items.custom)</span>
+                            <!--<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>-->
                         </section>
                         <!--医生超时未回复-->
                         <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
-                            <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>
+                            <span>JSON.parse(items.custom)</span>
+                            <!--<span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>-->
                         </section>
                         <!--医生拒绝-->
-                        <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">
-                            <span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>
+                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">
+                            <span>JSON.parse(items.custom)</span>
+                            <!--<span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>-->
                         </section>
                         <!--医生接诊-->
                         <section v-if="items.type==='custom'&&items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 5" class="deleteMessage">
-                            <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>
+                            <span>JSON.parse(items.custom)</span>
+                            <!--<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>-->
                         </section>
                     </article>
                 </transition-group>
