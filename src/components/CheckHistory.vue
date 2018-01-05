@@ -88,6 +88,11 @@
                                                         <img :src="ele.attUrl" class="img-show"/>
                                                     </figcaption>
                                                 </figure>
+
+                                                <!--视频-->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='file'" >
+                                                    <!--<video  :src="message.file.url"  style="width:300px"></video>-->
+                                                </figure>
                                                 <!--撤销消息-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type ==='deleteMsgTips'">
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from ==='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName?JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName:'您'}}撤回了一条消息！</span>
@@ -129,19 +134,19 @@
 
                                                 <!--医生超时未接诊-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='overtimeTip'">
-                                                    <span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生超时未接诊'}}</span>
+                                                    <span>{{JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName+'医生超时未接诊'}}</span>
                                                 </figure>
                                                 <!--医生超时未回复-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='chatOvertimeTip'">
-                                                    <span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生接诊后超时未回复'}}</span>
+                                                    <span>{{JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName+'医生接诊后超时未回复'}}</span>
                                                 </figure>
                                                 <!--医生拒绝-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='3'">
-                                                    <span>{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生退回'}}</span>
+                                                    <span>{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName +'医生退回'}}</span>
                                                 </figure>
                                                 <!--医生接诊-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='5'">
-                                                    <span>{{(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生接诊'}}</span>
+                                                    <span>{{(JSON.parse(ele.ext.substring(1,ele.body.length-1)).docName)+'医生接诊'}}</span>
                                                 </figure>
                                             </article>
                                         </li>

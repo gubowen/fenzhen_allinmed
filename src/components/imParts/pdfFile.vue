@@ -118,7 +118,6 @@
         padding-left:5px;
     }
     .fileName{
-        white-space: nowrap;
     }
     .fileSize{
         margin-top:10px;

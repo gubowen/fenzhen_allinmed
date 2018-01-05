@@ -1,5 +1,6 @@
 <template>
-  <aside class="medical-record-remark" :class="{on:showRecord}" v-show="$store.state.currentItem.consultationState == 0">
+  <aside class="medical-record-remark" :class="{on:showRecord}"
+         v-show="$store.state.currentItem.consultationType == -1||$store.state.currentItem.consultationType ==0||$store.state.currentItem.consultationType ==9||$store.state.currentItem.consultationType ==10">
     <header class="medical-record-remark-header">
       <section class="remark-add">
         <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
@@ -130,7 +131,7 @@
                   d = D.getDate(),
                   h = D.getHours(),
                   mm = D.getMinutes(),
-                  time = (y + "").substring(2) + "/" + m + "/" + d + " " + h + ":" + mm;
+                  time = (y + "").substring(2) + "/" + (m===0?1:m) + "/" + d + " " + h + ":" + (mm.length==1?'0'+mm:mm);
                 that.showAdd = !that.showAdd;
                 that.remarkList.unshift({
                   remarkContent: that.remarkValue,
