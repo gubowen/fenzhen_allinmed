@@ -234,6 +234,8 @@
                 color: #fff;
                 font-size: 20px;
                 line-height: 20px;
+                display: block;
+                text-align: center;
             }
         }
         .imgList {
