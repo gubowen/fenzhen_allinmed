@@ -129,19 +129,19 @@
 
                                                 <!--医生超时未接诊-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='overtimeTip'">
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生超时未接诊'}}</span>
+                                                    <span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生超时未接诊'}}</span>
                                                 </figure>
                                                 <!--医生超时未回复-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='chatOvertimeTip'">
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生接诊后超时未回复'}}</span>
+                                                    <span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生接诊后超时未回复'}}</span>
                                                 </figure>
                                                 <!--医生拒绝-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='3'">
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生退回'}}</span>
+                                                    <span>{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生退回'}}</span>
                                                 </figure>
                                                 <!--医生接诊-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='5'">
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生接诊'}}</span>
+                                                    <span>{{(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生接诊'}}</span>
                                                 </figure>
                                             </article>
                                         </li>
