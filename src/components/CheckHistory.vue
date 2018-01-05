@@ -83,16 +83,35 @@
                                                         <span>立即咨询></span>
                                                     </figcaption>
                                                 </figure>
-                                                <figure v-if="ele.msgType.toLowerCase() === 'file'">
+
+
+                                                <!--PDF-->
+                                                <figure v-if="ele.messageType.toLowerCase() === '6'">
+                                                    <figcaption class="messageList-item-text file">
+                                                        <section  @click="showPDF(ele.attUrl)">
+                                                            <figure class="fileImg">
+                                                                <img src="../assets/img00/common/folder.jpg" alt=""/>
+                                                            </figure>
+                                                            <figure class="fileInfo">
+                                                                <p class="fileName">{{JSON.parse(ele.ext.substring(1,ele.ext.length-1)).name}}</p>
+                                                            </figure>
+                                                        </section>
+                                                    </figcaption>
+                                                </figure>
+
+                                                <!--图片-->
+                                                <figure v-if="ele.messageType.toLowerCase() === '1'">
                                                     <figcaption class="messageList-item-text">
                                                         <img :src="ele.attUrl" class="img-show"/>
                                                     </figcaption>
                                                 </figure>
 
                                                 <!--视频-->
-                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='file'" >
-                                                    <!--<video  :src="message.file.url"  style="width:300px"></video>-->
+                                                <figure v-if="ele.messageType==='3'" >
+                                                    <video :src="ele.attUrl" style="width:300px"></video>
                                                 </figure>
+
+
                                                 <!--撤销消息-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type ==='deleteMsgTips'">
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from ==='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName?JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName:'您'}}撤回了一条消息！</span>
@@ -382,7 +401,12 @@
                 }else if(ele.msgType.toLowerCase() === 'text'){
                     return true ;
                 }
-            }
+            },
+            //打开PDF
+            showPDF(item){
+                window.open(item);
+            },
+
         },
         mounted(){
             this.init();
@@ -429,6 +453,42 @@
                 background: #3d84c6;
                 color: #fff;
             }
+        }
+    }
+    //pdf
+    .file{
+        background-color: rgba(255, 255, 255, 0.8) !important;
+        -webkit-box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.16);
+        box-shadow: 1px 2px 4px rgba(0, 0, 0, 0.16);
+        padding: 6px 6px 6px 6px;
+        margin-bottom: 4px !important;
+        cursor: pointer;
+        .fileImg{
+            display: table-cell;
+            vertical-align: middle;
+            width: 45px;
+            height: 100%;
+            text-align: center;
+            img{
+                width:45px;
+                height:45px;
+            }
+        }
+        .fileInfo{
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            display: table-cell;
+            vertical-align: middle;
+            max-width: 245px;
+            line-height: 1.3;
+            padding-left:5px;
+        }
+        .fileName{
+        }
+        .fileSize{
+            margin-top:10px;
+            text-align: right;
+            color:#aaa;
         }
     }
 
