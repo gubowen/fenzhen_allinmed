@@ -108,7 +108,7 @@
 
                                                 <!--视频-->
                                                 <figure v-if="ele.messageType==3" >
-                                                    <video :src="ele.attUrl" style="width:300px"></video>
+                                                    <video :src="ele.attUrl" style="width:300px" controls="controls"></video>
                                                 </figure>
 
 
@@ -379,24 +379,18 @@
                 console.log(that.pageArr)
             },
             filterInfo(ele){
-               // console.log(ele);
-                if (ele.msgType.toLowerCase() === 'file') {
-                    return true;
-                } else if (ele.msgType.toLowerCase() === 'custom') {
+                 if (ele.msgType.toLowerCase() === 'custom') {
                     let bodyInfo = JSON.parse(ele.body.substring(1, ele.body.length - 1));
                     switch (bodyInfo.type) {
                         case 'new-health':
                         case 'medicalReport':
                             return false;
                             break;
-                        case 'notification':
-                            return true;
-                            break;
                         default : return true ;
                     }
-                }else if(ele.msgType.toLowerCase() === 'text'){
-                    return true ;
-                }
+                }else{
+                    return true;
+                 }
             },
             //打开PDF
             showPDF(item){
