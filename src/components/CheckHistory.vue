@@ -88,21 +88,14 @@
                                                         <img :src="ele.attUrl" class="img-show"/>
                                                     </figcaption>
                                                 </figure>
+                                                <!--撤销消息-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type ==='deleteMsgTips'">
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from ==='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName?JSON.parse(ele.body.substring(1,ele.body.length-1)).data.doctorName:'您'}}撤回了一条消息！</span>
                                                     <span v-show="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.deleteMsg.from !=='1_doctor00001'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.from}}撤回了一条消息！</span>
                                                 </figure>
-                                                <section v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='triagePatientTips'" class="deleteMessage">
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='triage'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”接诊</span>
-                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”退诊</span>
-                                                </section>
 
                                                 <!--提示信息-->
-                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">
-                                                    <figcaption class="messageList-item-text">
-                                                        上一位服务该患者的分诊医生已下班，如有需要请继续沟通
-                                                    </figcaption>
-                                                </figure>
+                                                <!--视诊上传提示-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='triageSendTips'">
                                                     <figcaption class="messageList-item-text" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType =='image'">
                                                         上传图片：患者已上传检查资料，点击至“专科检查”查看。
@@ -111,12 +104,45 @@
                                                         上传视频：患者已上传视诊资料，点击至“专科检查”查看。若视频上传中，请稍后再次点击查看。
                                                     </figcaption>
                                                 </figure>
+                                                <!--检查检验上传提示-->
                                                 <figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='checkSuggestSendTips'">
                                                     <figcaption class="messageList-item-text" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType =='checkSuggest'">
                                                         患者已上传检查资料，点击至 "专科检查" 查看。
                                                     </figcaption>
                                                 </figure>
+                                                <!-- 分诊医生接诊 -->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='triagePatientTips'">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='triage'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”接诊</span>
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">分诊医生“{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name}}”退诊</span>
+                                                </figure>
+                                                <!-- 分诊医生拒绝 -->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='refusePatient'">
+                                                    {{ele.body }}
+                                                </figure>
 
+                                                <!--分诊医生下班-->
+                                                <!--<figure v-if="ele.msgType.toLowerCase()==='custom'&& JSON.parse(ele.body.substring(1,ele.body.length-1)).type =='reTriageTip'">-->
+                                                <!--<figcaption class="messageList-item-text">-->
+                                                <!--上一位服务该患者的分诊医生已下班，如有需要请继续沟通-->
+                                                <!--</figcaption>-->
+                                                <!--</figure>-->
+
+                                                <!--医生超时未接诊-->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='overtimeTip'">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生超时未接诊'}}</span>
+                                                </figure>
+                                                <!--医生超时未回复-->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='chatOvertimeTip'">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{JSON.parse(ele.body.substring(1,ele.body.length-1)).name+'医生接诊后超时未回复'}}</span>
+                                                </figure>
+                                                <!--医生拒绝-->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='3'">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{'由于'+JSON.parse(ele.body.substring(1,ele.body.length-1)).reason+'，该患者被'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生退回'}}</span>
+                                                </figure>
+                                                <!--医生接诊-->
+                                                <figure v-if="ele.msgType.toLowerCase()==='custom'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).type==='notification'&&JSON.parse(ele.body.substring(1,ele.body.length-1)).data.actionType==='5'">
+                                                    <span v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).scene==='release'">{{(JSON.parse(items.custom).reason?JSON.parse(items.custom).name:'某某')+'医生接诊'}}</span>
+                                                </figure>
                                             </article>
                                         </li>
                                     </ul>
@@ -197,7 +223,6 @@
                 this.diagnoseHistory();
             },
             updateShow(ele){
-                console.log(ele);
                 document.querySelector(".mask-background").style.display = "none";
                 this.$store.commit("setPreviewType",2);
                 this.$store.commit("setPreviewId",JSON.parse(ele.body.substring(1,ele.body.length-1)).data[0].diagnosisId);
@@ -215,6 +240,7 @@
                     beforeSend(config) {
                     },
                     done(res) {
+                        console.log(res.responseObject.responseData.dataList);
                         _this.diagnoseHistoryList = res.responseObject.responseData.dataList;
                     }
                 })

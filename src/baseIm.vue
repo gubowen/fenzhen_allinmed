@@ -66,7 +66,7 @@
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
-                        <!-- 医生接诊 -->
+                        <!-- 分诊医生接诊 -->
                         <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'" class="deleteMessage">
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
@@ -461,14 +461,9 @@
                     if (items.type === "text") {
                         flag = true;
                     } else {
-                        if (
-                            items.content &&
-                            (items.content.type === "reTriageTip" ||
-                            items.content.type === "new-health" ||
-                            items.content.type === "payFinishTips")
-                        ) {
+                        if(items.content && (items.content.type === "reTriageTip" || items.content.type === "new-health" || items.content.type === "payFinishTips")) {
                             flag = false;
-                        } else {
+                        }else {
                             flag = true;
                         }
                     }
