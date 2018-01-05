@@ -86,7 +86,7 @@
 
 
                                                 <!--PDF-->
-                                                <figure v-if="ele.messageType.toLowerCase() === '6'">
+                                                <figure v-if="ele.messageType== 6">
                                                     <figcaption class="messageList-item-text file">
                                                         <section  @click="showPDF(ele.attUrl)">
                                                             <figure class="fileImg">
@@ -100,14 +100,14 @@
                                                 </figure>
 
                                                 <!--图片-->
-                                                <figure v-if="ele.messageType.toLowerCase() === '1'">
+                                                <figure v-if="ele.messageType== 1">
                                                     <figcaption class="messageList-item-text">
                                                         <img :src="ele.attUrl" class="img-show"/>
                                                     </figcaption>
                                                 </figure>
 
                                                 <!--视频-->
-                                                <figure v-if="ele.messageType==='3'" >
+                                                <figure v-if="ele.messageType==3" >
                                                     <video :src="ele.attUrl" style="width:300px"></video>
                                                 </figure>
 
@@ -390,11 +390,7 @@
                             return false;
                             break;
                         case 'notification':
-                            if(bodyInfo.data.actionType === 5){
-                                return false ;
-                            }else{
-                                return true ;
-                            }
+                            return true;
                             break;
                         default : return true ;
                     }
