@@ -3,7 +3,8 @@
         <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
         <div class="btn-click" v-show="fileList.length === 0">
             <img src="../../assets/img00/controller/fileUp.png"/>
-            <span>选 择 文 件( JPEG、PNG、BMP、GIF 、JPG、PNG、MP4、PDF)</span>
+            <span>选 择 文 件</span>
+            <span>( JPEG、PNG、BMP、GIF 、JPG、PNG、MP4、PDF)</span>
         </div>
         <div class="imgList" v-show="fileList.length>0">
             <div class="imgInfo" v-for="(item,index) in fileList">
