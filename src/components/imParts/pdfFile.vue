@@ -97,6 +97,7 @@
         padding: 6px 6px 6px 6px;
         margin-bottom: 4px !important;
         cursor: pointer;
+        border-radius: 5px;
     .fileImg{
         display: table-cell;
         vertical-align: middle;

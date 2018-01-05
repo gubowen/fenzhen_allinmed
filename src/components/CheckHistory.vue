@@ -453,6 +453,7 @@
         padding: 6px 6px 6px 6px;
         margin-bottom: 4px !important;
         cursor: pointer;
+        display: inline-block;
         .fileImg{
             display: table-cell;
             vertical-align: middle;
