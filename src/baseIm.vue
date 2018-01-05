@@ -71,26 +71,23 @@
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
                         </section>
-                        <!--&lt;!&ndash;医生超时未接诊&ndash;&gt;-->
-                        <!--<section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">-->
-                            <!--<span>{{JSON.parse(items.custom)}}</span>-->
-                            <!--&lt;!&ndash;<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>&ndash;&gt;-->
-                        <!--</section>-->
-                        <!--&lt;!&ndash;医生超时未回复&ndash;&gt;-->
-                        <!--<section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">-->
-                            <!--<span>{{JSON.parse(items.custom)}}</span>-->
-                            <!--&lt;!&ndash;<span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>&ndash;&gt;-->
-                        <!--</section>-->
-                        <!--&lt;!&ndash;医生拒绝&ndash;&gt;-->
-                        <!--<section v-if="items.type==='custom'&& items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 3" class="deleteMessage">-->
-                            <!--<span>{{JSON.parse(items.custom)}}</span>-->
-                            <!--&lt;!&ndash;<span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>&ndash;&gt;-->
-                        <!--</section>-->
-                        <!--&lt;!&ndash;医生接诊&ndash;&gt;-->
-                        <!--<section v-if="items.type==='custom'&& items.content.type==='notification'&& JSON.parse(items.content).data.actionType == 5" class="deleteMessage">-->
-                            <!--<span>{{JSON.parse(items.custom)}}</span>-->
-                            <!--&lt;!&ndash;<span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>&ndash;&gt;-->
-                        <!--</section>-->
+                        <!--医生超时未接诊-->
+                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">
+                            <span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>
+                        </section>
+                        <!--医生超时未回复-->
+                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
+                            <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>
+                        </section>
+                        <!--医生拒绝-->
+                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 3" class="deleteMessage">
+                            <span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>
+                        </section>
+
+                        <!--医生接诊-->
+                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 5" class="deleteMessage">
+                            <span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>
+                        </section>
                     </article>
                 </transition-group>
             </article>
