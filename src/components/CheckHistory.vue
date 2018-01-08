@@ -109,8 +109,8 @@
                                                 <!--图集-->
                                                 <figure v-if="ele.messageType== 38">
                                                     <section class="multiple">
-                                                        <header>
-                                                            <i class="icon-img"></i><span>图片</span><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length}}</span>
+                                                        <header class="multiple-header">
+                                                            <i class="icon-img"></i><span>图片</span><span>{{(JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length)}}</span>
                                                         </header>
                                                         <section class="imgList" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length>0">
                                                             <ul>
@@ -498,12 +498,12 @@
         }
     }
     .multiple {
-        header {
+        .multiple-header {
             font-size: 14px;
             line-height: 14px;
             color: #222;
         }
-    .imgList {
+        .imgList {
         & > ul {
             & > li {
                 /*border: 1px solid #D4EFF3;*/
