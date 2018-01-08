@@ -2,23 +2,8 @@
   <!--<transition name="fade">-->
   <section class="show-big-img show-big-img-masker full-screen" v-if="$store.state.videoListFlag">
     <div class="background-hidden " >
-      <div class="rotate-button"></div>
-      <div class="bigger-button"></div>
-      <div class="smaller-button"></div>
-      <div class="download-button" v-show="$store.state.SBIType == 'IMImage'"></div>
       <div class="gallery-top">
-        <div class="swiper-container topSwiper">
-          <div class="swiper-wrapper">
-            <div class="swiper-slide swiper-no-swiping" v-for="item in videoList">
-              <video controls="controls" >
-                <source :src="item.url"></source>
-              </video>
-            </div>
-          </div>
-          <div class="swiper-pagination swiper-pagination-white"></div>
-        </div>
-        <div class="swiper-left-gray" v-show="videoList.length>1"></div>
-        <div class="swiper-right-gray" v-show="videoList.length>1"></div>
+              <video controls="controls" :src="currentVideo.url" ></video>
       </div>
       <div class="close" @click="close()"></div>
       <div class="gallery-thumbs" v-show="videoList.length>1">
@@ -64,7 +49,8 @@
 //          {
 //            url: "https://nos.netease.com/nim/NDI3MzI1NQ==/bmltYV85NTkwMjczOTBfMTUwODQwNDY5OTg2Nl81OThiYjE4ZC1hZTNjLTRjMDYtYjE0ZS05MDk0ZmVkMzdhZjM="
 //          }
-                ]
+                ],
+                currentVideo:""
             }
         },
         components: {
@@ -85,8 +71,8 @@
                 this.videoList = this.$store.state.videoListObject[this.$store.state.SBIType];
                 this.videoList.forEach(function (element,value) {
                     that.videoList[value].url = that.clipImg(element.url);
-                })
-
+                });
+                that.currentVideo =this.videoList[0];
                 console.log(this.videoList);
             },
 
@@ -107,33 +93,33 @@
             this.init();
         },
         updated(){
-
+            let _this  = this;
             let index = this.$store.state.SBIIndex?this.$store.state.SBIIndex : 0 ;
-            let topSwiper = new Swiper('.topSwiper', {
-                direction: 'horizontal',
-                zoom: true,
-                initialSlide: index,
-                prevButton: '.swiper-left-gray',
-                nextButton: '.swiper-right-gray',//前进按钮的css选择器或HTML元素。
-                onInit: function (swiper) {
-                    console.log(swiper.activeIndex + "当前索引");
-                    console.log("sipwer初始化完成!,回调函数，初始化后执行。");
-                    //  setTimeout(function(){
-                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
-                    //  },500);
-                },
-                onTap: function (swiper, event) {
-                    console.log(swiper.activeIndex); //swiper当前的活动块的索引
-                },
-                onSlideChangeStart(swiper){
-                    console.log(swiper.activeIndex + "当前索引");
-                    // setTimeout(function(){
-                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
-                    // },500);
-
-
-                }
-            });
+//            let topSwiper = new Swiper('.topSwiper', {
+//                direction: 'horizontal',
+//                zoom: true,
+//                initialSlide: index,
+//                prevButton: '.swiper-left-gray',
+//                nextButton: '.swiper-right-gray',//前进按钮的css选择器或HTML元素。
+//                onInit: function (swiper) {
+//                    console.log(swiper.activeIndex + "当前索引");
+//                    console.log("sipwer初始化完成!,回调函数，初始化后执行。");
+//                    //  setTimeout(function(){
+//                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
+//                    //  },500);
+//                },
+//                onTap: function (swiper, event) {
+//                    console.log(swiper.activeIndex); //swiper当前的活动块的索引
+//                },
+//                onSlideChangeStart(swiper){
+//                    console.log(swiper.activeIndex + "当前索引");
+//                    // setTimeout(function(){
+//                  //  $.openPhotoGallery($(".swiper-slide-active").eq(0));
+//                    // },500);
+//
+//
+//                }
+//            });
 
             let thumbSwiper = new Swiper('.thumbSwiper', {
                 initialSlide: index,
@@ -148,17 +134,23 @@
                 nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
                 loopedSlides: 5,
                 paginationType: '',
-                imgElementCallBack: function () {
+                imgElementCallBack: function (index) {
                     console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+
                 },
                 onTap:function (swiper,event) {
-                    swiper.slideTo(swiper.activeIndex)
+                    swiper.slideTo(swiper.activeIndex);
+                },
+                onSlideChangeStart: function (swiper){
+                    console.log()
+                    _this.currentVideo = _this.videoList[swiper.activeIndex];
+                    console.log(swiper.activeIndex + "当前索引");
                 }
 
 
             });
-            topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
-            thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
+//            topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
+//            thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
         }
     }
 </script>
@@ -239,6 +231,11 @@
       .gallery-top {
         width: 100%;
         height: 100%;
+        text-align: center;
+        &>video{
+          height:96%;
+          width: 100%;
+        }
         .swiper-container {
           margin-left: auto;
           margin-right: auto;
