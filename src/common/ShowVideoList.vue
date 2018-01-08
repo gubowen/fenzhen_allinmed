@@ -142,7 +142,6 @@
                     swiper.slideTo(swiper.activeIndex);
                 },
                 onSlideChangeStart: function (swiper){
-                    console.log()
                     _this.currentVideo = _this.videoList[swiper.activeIndex];
                     console.log(swiper.activeIndex + "当前索引");
                 }
