@@ -108,7 +108,7 @@
 
                                                 <!--图集-->
                                                 <figure v-if="ele.messageType== 38">
-                                                    <section class="multiple" v-if="multipleList.content">
+                                                    <section class="multiple">
                                                         <header>
                                                             <i class="icon-img"></i><span>图片</span><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.length}}</span>
                                                         </header>
