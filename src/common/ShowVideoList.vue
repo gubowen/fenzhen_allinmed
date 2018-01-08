@@ -73,7 +73,7 @@
                     that.videoList[value].url = that.clipImg(element.url);
                 });
                 that.currentVideo =this.videoList[0];
-                console.log(this.videoList);
+                that.updated();
             },
 
             close(){
@@ -87,14 +87,11 @@
                 }else{
                     return imgUrl;
                 }
-            }
-        },
-        mounted(){
-            this.init();
-        },
-        updated(){
-            let _this  = this;
-            let index = this.$store.state.SBIIndex?this.$store.state.SBIIndex : 0 ;
+            },
+            updated(){
+                let _this  = this;
+                let index = this.$store.state.SBIIndex?this.$store.state.SBIIndex : 0 ;
+                console.log("999");
 //            let topSwiper = new Swiper('.topSwiper', {
 //                direction: 'horizontal',
 //                zoom: true,
@@ -121,36 +118,41 @@
 //                }
 //            });
 
-            let thumbSwiper = new Swiper('.thumbSwiper', {
-                initialSlide: index,
-                spaceBetween: 10,
-                direction: 'horizontal',
-                centeredSlides: true,
-                slidesPerView: 'auto',
-                touchRatio: 1,
-                slideToClickedSlide: true,
-                observer: true,
-                prevButton: '.swiper-button-prev',
-                nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
-                loopedSlides: 5,
-                paginationType: '',
-                imgElementCallBack: function (index) {
-                    console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
+                let thumbSwiper = new Swiper('.thumbSwiper', {
+                    initialSlide: index,
+                    spaceBetween: 10,
+                    direction: 'horizontal',
+                    centeredSlides: true,
+                    slidesPerView: 'auto',
+                    touchRatio: 1,
+                    slideToClickedSlide: true,
+                    observer: true,
+                    prevButton: '.swiper-button-prev',
+                    nextButton: '.swiper-button-next',//前进按钮的css选择器或HTML元素。
+                    loopedSlides: 5,
+                    paginationType: '',
+                    imgElementCallBack: function (index) {
+                        console.log("为每个指定的图片（会触发大图）单击事件绑定回调函数");
 
-                },
-                onTap:function (swiper,event) {
-                    swiper.slideTo(swiper.activeIndex);
-                },
-                onSlideChangeStart: function (swiper){
-                    _this.currentVideo = _this.videoList[swiper.activeIndex];
-                    console.log(swiper.activeIndex + "当前索引");
-                }
+                    },
+                    onTap:function (swiper,event) {
+                        swiper.slideTo(swiper.activeIndex);
+                    },
+                    onSlideChangeStart: function (swiper){
+                        _this.currentVideo = _this.videoList[swiper.activeIndex];
+                        console.log(swiper.activeIndex + "当前索引");
+                    }
 
 
-            });
+                });
 //            topSwiper.params.control = thumbSwiper;//需要在Swiper2初始化后，Swiper1控制Swiper2
 //            thumbSwiper.params.control = topSwiper;//需要在Swiper1初始化后，Swiper2控制Swiper1
-        }
+            }
+        },
+        mounted(){
+            this.init();
+        },
+
     }
 </script>
 <style lang="scss" rel="stylesheet/scss">

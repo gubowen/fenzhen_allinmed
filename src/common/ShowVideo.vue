@@ -47,7 +47,6 @@
       init(){
         this.videoList = '';
         this.videoList = this.$store.state.videoObject;
-        console.log(this.$store.state.videoObject)
       },
       close(){
          this.$store.commit("setVideoFlag",false);
