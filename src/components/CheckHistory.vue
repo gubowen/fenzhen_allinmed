@@ -110,11 +110,11 @@
                                                 <figure v-if="ele.messageType== 38">
                                                     <section class="multiple">
                                                         <header>
-                                                            <i class="icon-img"></i><span>图片</span><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.length}}</span>
+                                                            <i class="icon-img"></i><span>图片</span><span>{{JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length}}</span>
                                                         </header>
-                                                        <section class="imgList" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.length>0">
+                                                        <section class="imgList" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length>0">
                                                             <ul>
-                                                                <li v-for="(item,index) in JSON.parse(ele.body.substring(1,ele.body.length-1)).data">
+                                                                <li v-for="(item,index) in JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list">
                                                                     <img :src="item.url"/>
                                                                 </li>
                                                             </ul>
