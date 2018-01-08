@@ -109,9 +109,9 @@
                                                 <!--图集-->
                                                 <figure v-if="ele.messageType== 38">
                                                     <section class="multiple">
-                                                        <header class="multiple-header">
-                                                            <i class="icon-img"></i><span>图片</span><span>{{(JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length)}}</span>
-                                                        </header>
+                                                        <div class="multiple-header">
+                                                            <i class="icon-img"></i><span>图片</span><span>{{"("+JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length+")"}}</span>
+                                                        </div>
                                                         <section class="imgList" v-if="JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list.length>0">
                                                             <ul>
                                                                 <li v-for="(item,index) in JSON.parse(ele.body.substring(1,ele.body.length-1)).data.list">
