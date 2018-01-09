@@ -908,15 +908,32 @@
             },
             // 新消息提示
             newMessageTips(target, element) {
+                console.log(element);
                 const _this = this;
                 //沟通中
                 let patientList = this.$store.state.patientList;
                 patientList.forEach(function (item, index) {
-                    if ("0_" + item.caseId == element.from && this.$store.state.currentItem.consultationState == 0) {
-                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
-                            item.messageAlert = "1";
-                        } else {
-                            item.messageAlert = parseInt(item.messageAlert) + 1;
+                    if ("0_" + item.caseId == element.from) {
+//                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+//                            item.messageAlert = "1";
+//                        } else {
+//                            item.messageAlert = parseInt(item.messageAlert) + 1;
+//                        }
+                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "0";
+                            } else {
+                                if(parseInt(item.messageAlert)>0){
+                                    item.messageAlert = parseInt(item.messageAlert) - 1;
+                                }
+                            }
+                        }else {
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "1";
+                            } else {
+                                item.messageAlert = parseInt(item.messageAlert) + 1;
+                            }
                         }
 
                         let caseIdInfo = "0_" + item.caseId;
@@ -925,10 +942,7 @@
                         patientList.removeByValue(item);
                         patientList.unshift(item);
 
-                        localStorage.setItem(
-                            "patientAlertList",
-                            JSON.stringify(Object.assign(patientAlertList, JSON.parse(localStorage.getItem("patientAlertList"))))
-                        );
+                        localStorage.setItem("patientAlertList", JSON.stringify(Object.assign(patientAlertList, JSON.parse(localStorage.getItem("patientAlertList")))));
                         _this.$store.commit("setNewOnline", true);
                         _this.$store.commit("setMusicPlay", true);
                         setTimeout(function () {
@@ -942,11 +956,30 @@
                 let waitingList = this.$store.state.waitingList;
                 waitingList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
-                            item.messageAlert = "1";
-                        } else {
-                            item.messageAlert = parseInt(item.messageAlert) + 1;
+//                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+//                            item.messageAlert = "1";
+//                        } else {
+//                            item.messageAlert = parseInt(item.messageAlert) + 1;
+//                        }
+
+                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "";
+                            } else {
+                                if(parseInt(item.messageAlert)>0){
+                                    item.messageAlert = parseInt(item.messageAlert) - 1;
+                                }
+                            }
+                        }else {
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "1";
+                            } else {
+                                item.messageAlert = parseInt(item.messageAlert) + 1;
+                            }
                         }
+
+
+
                         let caseIdInfo = "0_" + item.caseId;
                         let waitingAlertList = {};
                         waitingAlertList[caseIdInfo] = item.messageAlert;
@@ -970,10 +1003,26 @@
                 let resetList = this.$store.state.resetList;
                 resetList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
-                            item.messageAlert = "1";
-                        } else {
-                            item.messageAlert = parseInt(item.messageAlert) + 1;
+//                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+//                            item.messageAlert = "1";
+//                        } else {
+//                            item.messageAlert = parseInt(item.messageAlert) + 1;
+//                        }
+
+                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "";
+                            } else {
+                                if(parseInt(item.messageAlert)>0){
+                                    item.messageAlert = parseInt(item.messageAlert) - 1;
+                                }
+                            }
+                        }else {
+                            if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
+                                item.messageAlert = "1";
+                            } else {
+                                item.messageAlert = parseInt(item.messageAlert) + 1;
+                            }
                         }
                         let caseIdInfo = "0_" + item.caseId;
                         let resetAlertList = {};

@@ -82,7 +82,7 @@
 
                 Array.from(files).forEach((element, index) => {
                     if ((/image\/\w+/.test(element.type)) || (/.pdf/.test(element.type)) || (/video\/\w+/.test(element.type))) {
-                        if (/video\/\w+/.test(element.type) && !(/mp4/.test(element.type))) {
+                        if (/video\/\w+/.test(element.type) && !((/mp4/.test(element.type))||(/quicktime/.test(element.type)))) {
                             this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
                         } else {
                             element.url = window.URL.createObjectURL(element);
