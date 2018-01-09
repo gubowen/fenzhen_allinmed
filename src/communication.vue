@@ -16,7 +16,8 @@
                         <span>常用回复</span>
                     </button>
                     <button class="user-controller-min" @click.stop="minBtnShow()">
-                        <i class="icon-userReply"></i><span>更多</span>
+                        <i class="icon-userReply"></i>
+                        <span>更多</span>
                         <div class="sendList" v-show="minBtnFlag">
                             <ul>
                                 <li class="min-1" @click="examine()">检查检验</li>

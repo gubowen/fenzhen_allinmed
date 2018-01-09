@@ -183,6 +183,10 @@
         width:85px;
         top:-120px;
         right: -24px;
+        @include  query(1366px){
+          top:-170px;
+          right: 5px;
+        }
         &:after {
           content: '';
           position: absolute;

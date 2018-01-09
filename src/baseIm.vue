@@ -1264,7 +1264,7 @@
             &.watingBoxStyle {
                 height: 105.5% !important;
             }
-            height: 73% !important;
+            height: 81% !important;
         }
         &.watingBoxStyle {
             height: 105.5%;

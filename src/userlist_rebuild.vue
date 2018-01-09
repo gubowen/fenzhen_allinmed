@@ -488,6 +488,7 @@ export default {
       this.$store.commit("setConsultationId", items.consultationId);
 
       this.$store.commit("setCurrentItem", items);
+      console.log(imRefresh);
       if(imRefresh){
           this.$store.commit("setSBIObject", {});
           this.$store.commit("videoListObject", {});
