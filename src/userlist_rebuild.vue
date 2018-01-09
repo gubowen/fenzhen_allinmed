@@ -343,15 +343,17 @@ export default {
      //红点
     "$store.state.newWaiting"(flag) {
       let _this = this;
+      _this.$store.commit("setMusicPlay", true);
+      setTimeout(function() {
+          _this.$store.commit("setMusicPlay", false);
+      }, 2000);
       this.newWaitingFlag = flag;
     },
     "$store.state.newOnline"(flag) {
       let _this = this;
       _this.$store.commit("setMusicPlay", true);
-      console.log("music2");
       setTimeout(function() {
-        console.log("music");
-        _this.$store.commit("setMusicPlay", false);
+          _this.$store.commit("setMusicPlay", false);
       }, 2000);
       this.newPatientFlag = flag;
     },
@@ -419,10 +421,7 @@ export default {
         let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
         if (waitingAlertList) {
           delete waitingAlertList["0_" + items.caseId];
-          localStorage.setItem(
-            "waitingAlertList",
-            JSON.stringify(waitingAlertList)
-          );
+          localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
         }
         if (localStorage.getItem("waitingAlertList") == "{}") {
           this.newWaitingFlag = false;
@@ -491,6 +490,7 @@ export default {
       this.$store.commit("setCurrentItem", items);
       if(imRefresh){
           this.$store.commit("setSBIObject", {});
+          this.$store.commit("videoListObject", {});
       }
       this.$store.commit('setMinBtnFlag',false);
 
@@ -637,9 +637,7 @@ export default {
 //            console.log(res);
           //            store.commit("stopLoading");
           if (res.responseObject.responseData && res.responseObject.responseStatus) {
-            let dataList = _this.setSelectValue(
-              res.responseObject.responseData.dataList
-            );
+            let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
             let waitingAlertList = {};
             let patientAlertList = {};
             let resetAlertList = {};
