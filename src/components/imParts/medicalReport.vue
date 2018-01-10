@@ -30,9 +30,12 @@
                             </article>
                         </article>
                         <article class="special-message-item-text">
-                            <article class="special-message-item-list">
-                                <span class="answer"><p class="question">病情描述：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.descriptionDisease}}</span>
-                            </article>
+                        <article class="special-message-item-list">
+                            <span class="answer"><p class="question">病情描述：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.descriptionDisease}}</span>
+                        </article>
+                        </article>
+                        <article class="special-message-item-text">
+
                             <article class="special-message-item-list">
                                 <span class="answer"><p class="question">想获得的帮助：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.needHelp}}</span>
                             </article>
