@@ -958,7 +958,7 @@
 //                        } else {
 //                            item.messageAlert = parseInt(item.messageAlert) + 1;
 //                        }
-
+                        let waitingAlertList = {};
                         if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
@@ -968,7 +968,7 @@
                                 }
                             }
                             let caseIdInfo = "0_" + item.caseId;
-                            let waitingAlertList = {};
+
 
                         }else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -977,7 +977,6 @@
                                 item.messageAlert = parseInt(item.messageAlert) + 1;
                             }
                             let caseIdInfo = "0_" + item.caseId;
-                            let waitingAlertList = {};
                             waitingAlertList[caseIdInfo] = item.messageAlert;
                             waitingList.removeByValue(item);
                             waitingList.unshift(item);
@@ -999,7 +998,7 @@
 //                        } else {
 //                            item.messageAlert = parseInt(item.messageAlert) + 1;
 //                        }
-
+                        let resetAlertList = {};
                         if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
@@ -1009,7 +1008,7 @@
                                 }
                             }
                             let caseIdInfo = "0_" + item.caseId;
-                            let resetAlertList = {};
+
                             resetAlertList[caseIdInfo] = item.messageAlert;
                         }else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1018,7 +1017,6 @@
                                 item.messageAlert = parseInt(item.messageAlert) + 1;
                             }
                             let caseIdInfo = "0_" + item.caseId;
-                            let resetAlertList = {};
                             resetAlertList[caseIdInfo] = item.messageAlert;
                             resetList.removeByValue(item);
                             resetList.unshift(item);
