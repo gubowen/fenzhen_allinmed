@@ -160,6 +160,9 @@
         }
 
       }
+      @include  query(1480px){
+        display: none;
+      }
       @include  query(1366px){
         display: none;
       }
