@@ -375,7 +375,7 @@
                     this.$store.commit("setSBIObject", "");
 
                     store.commit("stopLoading");
-                }, 1000);
+                }, 1500);
                 this.$store.commit("setRefuseUserListFlag",false);
             }
         },
