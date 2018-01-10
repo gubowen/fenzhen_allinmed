@@ -920,6 +920,7 @@
 //                            item.messageAlert = parseInt(item.messageAlert) + 1;
 //                        }
                         let patientAlertList = {};
+                        let caseIdInfo = "0_" + item.caseId;
                         if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
 
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -929,7 +930,7 @@
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
-                            let caseIdInfo = "0_" + item.caseId;
+
                             patientAlertList[caseIdInfo] = item.messageAlert;
                         }else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -937,13 +938,16 @@
                             } else {
                                 item.messageAlert = parseInt(item.messageAlert) + 1;
                             }
-                            let caseIdInfo = "0_" + item.caseId;
                             patientAlertList[caseIdInfo] = item.messageAlert;
                             patientList.removeByValue(item);
                             patientList.unshift(item);
 
                         }
-                        localStorage.setItem("patientAlertList", JSON.stringify(Object.assign(patientAlertList, JSON.parse(localStorage.getItem("patientAlertList")))));
+                        if(!localStorage.getItem("patientAlertList")){
+                            localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+                        }else{
+                            localStorage.setItem("patientAlertList", JSON.stringify(Object.assign( JSON.parse(localStorage.getItem("patientAlertList")),patientAlertList)));
+                        }
                         _this.$store.commit("setNewOnline", true);
                     }
                 });
@@ -951,14 +955,12 @@
 
                 //带分诊
                 let waitingList = this.$store.state.waitingList;
+
                 waitingList.forEach(function (item, index) {
+                    let waitingAlertList = {};
+                    let caseIdInfo = "0_" + item.caseId;
                     if ("0_" + item.caseId == element.from) {
-//                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
-//                            item.messageAlert = "1";
-//                        } else {
-//                            item.messageAlert = parseInt(item.messageAlert) + 1;
-//                        }
-                        let waitingAlertList = {};
+
                         if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
@@ -967,24 +969,25 @@
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
-                            let caseIdInfo = "0_" + item.caseId;
-
-
+                            waitingAlertList[caseIdInfo] = item.messageAlert;
                         }else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "1";
                             } else {
                                 item.messageAlert = parseInt(item.messageAlert) + 1;
                             }
-                            let caseIdInfo = "0_" + item.caseId;
                             waitingAlertList[caseIdInfo] = item.messageAlert;
                             waitingList.removeByValue(item);
                             waitingList.unshift(item);
 
                         }
-                        waitingAlertList[caseIdInfo] = item.messageAlert;
-                        localStorage.setItem("waitingAlertList", JSON.stringify(Object.assign(waitingAlertList, JSON.parse(localStorage.getItem("waitingAlertList")))));
+                        if(!localStorage.getItem("waitingAlertList")){
+                            localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+                        }else{
+                            localStorage.setItem("waitingAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("waitingAlertList")),waitingAlertList)));
+                        }
 
+                        _this.$store.commit("setNewWaiting", true);
                     }
                 });
                 this.$store.commit("setWaitingList", waitingList);
@@ -999,6 +1002,7 @@
 //                            item.messageAlert = parseInt(item.messageAlert) + 1;
 //                        }
                         let resetAlertList = {};
+                        let caseIdInfo = "0_" + item.caseId;
                         if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
@@ -1007,8 +1011,6 @@
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
-                            let caseIdInfo = "0_" + item.caseId;
-
                             resetAlertList[caseIdInfo] = item.messageAlert;
                         }else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1016,12 +1018,17 @@
                             } else {
                                 item.messageAlert = parseInt(item.messageAlert) + 1;
                             }
-                            let caseIdInfo = "0_" + item.caseId;
                             resetAlertList[caseIdInfo] = item.messageAlert;
                             resetList.removeByValue(item);
                             resetList.unshift(item);
                         }
-                        localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(resetAlertList, JSON.parse(localStorage.getItem("resetAlertList")))));
+                        if(!localStorage.getItem("resetAlertList")){
+                            localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
+                        }else{
+                            localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("resetAlertList")),resetAlertList)));
+                        }
+
+
                         _this.$store.commit("setNewReset", true);
                     }
                 });
