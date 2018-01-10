@@ -158,7 +158,7 @@
         customerId: '',
 
         successfulSecond: 3, //自动跳转秒数
-        loadingShow: false,//loading是否显示
+        loadingShow: false   //loading是否显示
       }
     },
     methods: {
@@ -377,8 +377,6 @@
             _this.loadingShow = false;
             console.log("失败:" + error);
           })
-
-
         }
       },
       newPasswordBlur(){
@@ -448,7 +446,7 @@
             path: "/"
           })
         });
-      },
+      }
     },
     mounted(){
     },

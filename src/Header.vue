@@ -177,6 +177,15 @@
             getBaseMessage(){
                 //检测登录状态 获取基本信息
                 let _this = this;
+//                ajax({
+//                    url:"/call/tocure/web/user/getWebUser/",
+//                    method: "POST",
+//                    done(res){
+//                        window.location.reload();
+//                        _this.confirmShow = false;
+//                    }
+//                });
+
                 axios({
                     method: "post",
                     url: "/call/tocure/web/user/getWebUser/",
@@ -189,6 +198,7 @@
                         // common.loading.show();
                     }
                 }).then(function (res) {
+                    document.querySelector(".ev-loading").style.display = "none";
                     if (res.data.responseObject.responseStatus) {
                         if (res.data.responseObject.responseMessage) {
                             let dataList = res.data.responseObject.responseMessage;
@@ -247,6 +257,7 @@
                 });
                 localStorage.removeItem('patientAlertList');
                 localStorage.removeItem('waitingAlertList');
+                localStorage.removeItem('resetAlertList');
             },
             globeClick(){
                 document.addEventListener('click', (e) => {
