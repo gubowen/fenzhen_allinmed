@@ -810,10 +810,10 @@ export default {
             text: `您最多可以接诊${c}个患者！`
           });
         }
-      )
-        .then(res => {
+      ).then(res => {
           //患者未被抢单
           this.getUserList("waiting");
+          this.getUserList("reset");
           this.statusChange(2);
           this.getUserList("online", {}, () => {
             let triageItem = this.getBeTriagePatient(item);

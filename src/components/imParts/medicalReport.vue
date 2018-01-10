@@ -30,9 +30,11 @@
                             </article>
                         </article>
                         <article class="special-message-item-text">
-
                             <article class="special-message-item-list">
-                                <span class="answer"><p class="question">想获得的帮助：</p>{{medicalReportMsg.patientCasemap && getMRTitle(medicalReportMsg.patientCasemap.caseType)}}</span>
+                                <span class="answer"><p class="question">病情描述：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.descriptionDisease}}</span>
+                            </article>
+                            <article class="special-message-item-list">
+                                <span class="answer"><p class="question">想获得的帮助：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.needHelp}}</span>
                             </article>
                             <article class="special-message-item-list">
                                 <span class="answer"><p class="question">所在地区：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.provinceName}}&nbsp;&nbsp;{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.cityName}}</span>
@@ -141,7 +143,8 @@
                             let dataList = res.responseObject.responseData.dataList;
                             if (dataList && dataList.length) {
                                 that.medicalReportMsg = dataList[0];
-//                                console.log(that.medicalReportMsg);
+                                console.log("11111");
+                                console.log(that.medicalReportMsg);
                                 that.$emit("loadCallback");
                                 // console.log(that.medicalReportMsg = dataList[0]);
                             }
