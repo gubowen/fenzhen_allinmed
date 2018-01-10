@@ -273,7 +273,7 @@
                             if( res.responseObject.responseData){
                                 res.responseObject.responseData.dataList.forEach(function(element,index){
                                         if(element.toolType == 4){
-                                            _this.$store.commit('setDeleteMsgTime',element.toolConfig);
+                                            _this.$store.commit('setDeleteMsgTime',element.toolConfig/100);
                                             console.log( _this.$store.state.deleteMsgTime);
                                         }
                                 })
