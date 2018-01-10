@@ -30,11 +30,6 @@
                             </article>
                         </article>
                         <article class="special-message-item-text">
-                        <article class="special-message-item-list">
-                            <span class="answer"><p class="question">病情描述：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.descriptionDisease}}</span>
-                        </article>
-                        </article>
-                        <article class="special-message-item-text">
 
                             <article class="special-message-item-list">
                                 <span class="answer"><p class="question">想获得的帮助：</p>{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.needHelp}}</span>
@@ -58,8 +53,7 @@
                             <figcaption class="special-message-item-list"
                                         v-if="medicalReportMsg.patientCasemap.caseMain.caseMain.length > 0">
                                 <p class="question">主要症状：</p>
-                                <span class="answer"
-                                      style="display:inline-block;max-width:78%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseMain}}</span>
+                                <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseMain}}</span>
                             </figcaption>
                             <figcaption class="special-message-item-list"
                                         v-if="getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).typeShow">
@@ -72,9 +66,9 @@
                                 <p class="question">VAS评分：</p>
                                 <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{getPainMessage(medicalReportMsg.resultMainList[0].symptomOptions).VAS}}</span>
                             </figcaption>
-                            <figcaption class="special-message-item-list" v-if="medicalReportMsg.patientCasemap.caseMain.caseAlong.length > 0">
+                            <figcaption class="special-message-item-list">
                                 <p class="question">病情描述：</p>
-                                <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{medicalReportMsg.patientCasemap.caseMain.caseAlong}}</span>
+                                <span class="answer" style="display:inline-block;max-width:78%;vertical-align:top">{{medicalReportMsg.patientCasemap && medicalReportMsg.patientCasemap.descriptionDisease}}</span>
                             </figcaption>
                         </article>
                     </article>
