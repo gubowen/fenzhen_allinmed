@@ -294,7 +294,7 @@
                         flag: true
                 });
                     this.reTriageShow = false;
-                    debugger;
+                    store.commit("resetListRefreshFlag", true);
                     this.userListChange();
                 });
 
