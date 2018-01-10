@@ -76,7 +76,7 @@
   .user-controller-fastBtn {
     padding: 10px 40px;
     font-size: 0;
-    @include query(1366px){
+    @include query(1440px){
       padding:10px 10px;
     }
     & > button {
@@ -84,11 +84,11 @@
       font-size: 16px;
       color: #808080;
       margin-right: 40px;
-      @include query(1366px){
+      @include query(1440px){
         margin-right: 10px;
       }
       & > i {
-        @include query(1366px){
+        @include query(1440px){
           margin-right: 0;
         }
       }
@@ -160,10 +160,7 @@
         }
 
       }
-      @include  query(1480px){
-        display: none;
-      }
-      @include  query(1366px){
+      @include  query(1440px){
         display: none;
       }
     }
@@ -186,7 +183,7 @@
         width:85px;
         top:-120px;
         right: -24px;
-        @include  query(1366px){
+        @include  query(1440px){
           top:-170px;
           right: 5px;
         }
@@ -215,7 +212,7 @@
             line-height: 50px;
             &.min-1{
               display: none;
-              @include  query(1366px){
+              @include  query(1440px){
                 display: block;
               }
             }
