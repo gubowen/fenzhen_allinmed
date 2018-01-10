@@ -15,9 +15,6 @@
                 <article class="main-header-base-msg">
                     <article class="main-header-tips">
                         您好，<span>{{$store.state.userName}}</span>医生
-
-
-
                     </article>
                     <ul class="main-header-config">
                         <li class="main-header-config-item">
@@ -289,7 +286,6 @@
         mounted(){
             this.init();
         }
-
     }
 </script>
 <style lang="scss" rel="stylesheet/scss" scoped>
