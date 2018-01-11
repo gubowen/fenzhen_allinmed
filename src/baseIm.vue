@@ -413,7 +413,7 @@
                                     //消息提醒
                                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                                     if (!waitingAlertList) {
-                                       waitingAlertList = {};
+                                        waitingAlertList = {};
                                     }
                                     waitingAlertList[msg.from] = 1;
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
@@ -429,7 +429,7 @@
                                     let flag = true;
                                     that.$store.state.patientList.forEach(function(item, index){
                                         if (msg.from == "0_" + item.caseId) {
-                                              flag = false ;
+                                            flag = false ;
                                         }
                                     });
                                     that.$store.commit('onlineListRefresh', flag);
@@ -437,7 +437,7 @@
 
 
                                     that.$store.commit("setRefuseUserListFlag",true);
-                                   // that.$emit("update:userCurrentStatus", 3);
+                                    // that.$emit("update:userCurrentStatus", 3);
 
                                 }
                             }
@@ -773,7 +773,8 @@
                                 cType: "0",
                                 cId: that.$store.state.userId,
                                 mType: mType,
-                                name: element.name
+                                name: element.name,
+                                docName:that.$store.state.userName
                                 //,
 //                            conId: that.orderSourceIdorderSourceId
                             }),
@@ -907,7 +908,7 @@
                     scene: "p2p",
                     to: that.targetData.account,
                     done(error, obj) {
-                          console.log(obj);
+                        console.log(obj);
                         if (error) {
                             nim.getInstance();
                         }
