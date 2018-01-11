@@ -40,6 +40,7 @@
             }
         },
         mounted() {
+            console.log(this.message);
             this.multipleList = this.message;
             if (this.multipleList.content.data.list.length > 3) {
                // this.multipleList.content.data.list.splice(3, this.multipleList.content.data.list.length - 1);
