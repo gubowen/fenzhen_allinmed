@@ -431,12 +431,12 @@
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('resetListRefreshFlag', true);
 
-                                    let flag = true;
-                                    console.log(msg.from)；
+                                    let flag = false;
+                                    console.log(msg.from);
                                     that.$store.state.patientList.forEach(function(item, index){
                                         console.log(("0_" + item.caseId));
                                         if (msg.from == ("0_" + item.caseId)) {
-                                            flag = false ;
+                                            flag = true;
                                         }
                                     });
                                     that.$store.commit('onlineListRefresh', flag);
