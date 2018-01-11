@@ -60,6 +60,7 @@
             },
             showBigImgFunction(message) {
                 let _this = this;
+                console.log(_this.message.idClient);
                 this.$store.state.SBIObject[_this.message.idClient].forEach(function (item, index) {
                     if (message == index) {
                         _this.$store.commit("setSBIIndex", index);
