@@ -65,13 +65,29 @@
             },
             installSBIList(){
                 let ImageList = [];
+                let SBIObject = [];
+                SBIObject  = this.$store.state.SBIObject;
                 if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
-                    this.$store.state.SBIObject.IMImage.forEach(function(item,index){
+                    SBIObject.IMImage.forEach(function(item,index){
                         ImageList.push( {"url":item.url});
-                    })
+                    });
+                    ImageList.push( {"url":this.message.file.url});
+                    SBIObject.IMImage =ImageList;
+                }else{
+                    SBIObject.IMImage =[{"url":this.message.file.url}];
                 }
-                ImageList.push( {"url":this.message.file.url});
-                this.$store.commit('setSBIObject',{'IMImage':ImageList});
+                this.$store.commit('setSBIObject',SBIObject);
+
+
+//                if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
+//                    this.$store.state.SBIObject.IMImage.forEach(function(item,index){
+//                        ImageList.push( {"url":item.url});
+//                    })
+//                }
+//                ImageList.push( {"url":this.message.file.url});
+//                this.$store.commit('setSBIObject',{'IMImage':ImageList});
+
+
             },
             initImageFn(){
                 const that=this;
