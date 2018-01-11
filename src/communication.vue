@@ -345,6 +345,7 @@
                 setTimeout(() => {
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
+
                     store.commit("waitingListRefreshFlag", true);
                     store.commit("setWaitingList", waitingList);
 
@@ -360,6 +361,12 @@
                     } else {
                         this.$emit("update:userOnlineActive", -1);
                         this.$emit("update:n", false);
+                        store.commit("setCurrentItem",'');
+                        store.commit("setCaseId",'');
+                        store.commit("setPatientId",'');
+                        store.commit("setPatientName",'');
+
+
                         return;
                     }
                     this.$emit("update:userWaitingActive", -1);

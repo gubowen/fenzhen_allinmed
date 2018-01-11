@@ -329,6 +329,9 @@
             },
             "$store.state.caseId"(id) {
                 if (!id) {
+                    this.targetData = {
+                        account: "0_" + id
+                    };
                     return;
                 } else {
                     this.targetData = {
@@ -404,6 +407,8 @@
                         onmsg(msg) {
                             //自定义消息
 //                            console.log(msg);
+                            console.log(that.targetData.account);
+                            console.log(msg.from);
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
@@ -427,8 +432,10 @@
                                     that.$store.commit('resetListRefreshFlag', true);
 
                                     let flag = true;
+                                    console.log(msg.from)；
                                     that.$store.state.patientList.forEach(function(item, index){
-                                        if (msg.from == "0_" + item.caseId) {
+                                        console.log(("0_" + item.caseId));
+                                        if (msg.from == ("0_" + item.caseId)) {
                                             flag = false ;
                                         }
                                     });
