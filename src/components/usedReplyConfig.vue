@@ -184,15 +184,16 @@
                     done(data){
                         if (data.responseObject.responseStatus) {
                             store.commit("stopLoading")
-                            let param = {
-                                replyContent: content,
-                                id: data.responseObject.responsePk,
-                                customerId: that.$store.state.userId,
-                            };
+
                             if (index == -1) {
-                                that.replyList.unshift(param);
+                                that.replyList.unshift({
+                                    replyContent: content,
+                                    id: data.responseObject.responsePk,
+                                    customerId: that.$store.state.userId,
+                                    sortId:data.responseObject.responseData.dataList.sortId
+                                });
                             } else {
-                                that.replyList[index] = param;
+                                that.replyList[index].replyContent = content;
                             }
                             that.fixFlagList[index] = false;
                             that.fixContentList[index] = "";
