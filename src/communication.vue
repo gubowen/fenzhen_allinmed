@@ -11,7 +11,7 @@
                         <i class="icon-fastReply"></i>
                         <span>快捷提问</span>
                     </button>
-                    <button class="user-controller-result" @click.stop="usedRely()">
+                    <button class="user-controller-result" @click.stop="usedRely()" v-show="$store.state.isTalk">
                         <i class="icon-userReply"></i>
                         <span>常用回复</span>
                     </button>
@@ -51,7 +51,7 @@
                         <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     </transition>
                     <!--常用回复-->
-                    <transition name="fade"><used-Rely v-if="$store.state.isTalk && $store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    <transition name="fade"><used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     </transition>
                     <transition name="fade">
                         <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
