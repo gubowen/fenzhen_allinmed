@@ -74,7 +74,8 @@
                     ImageList.push( {"url":this.message.file.url});
                     SBIObject.IMImage =ImageList;
                 }else{
-                    SBIObject.IMImage =[{"url":this.message.file.url}];
+                    SBIObject.IMImage = [];
+                    SBIObject.IMImage = [{"url":this.message.file.url}];
                 }
                 this.$store.commit('setSBIObject',SBIObject);
 

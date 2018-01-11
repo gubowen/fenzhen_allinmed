@@ -788,6 +788,7 @@ export default {
     },
     //接诊
     getTriagePatient(item, index) {
+
       store.commit("startLoading");
       triagePatient(
         {
@@ -817,7 +818,11 @@ export default {
           this.statusChange(2);
           this.getUserList("online", {}, () => {
             let triageItem = this.getBeTriagePatient(item);
+            if(typeof (triageItem) =='undefined'){
+                return ;
+            }
             let getFlag = true;
+
             this.transformData(triageItem, index, getFlag,false);
 
             store.commit("setTriagePatientCaseIdFlag", {
