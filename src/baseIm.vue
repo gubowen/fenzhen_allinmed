@@ -424,8 +424,18 @@
 
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     that.$store.commit("waitingListRefreshFlag", true);
-                                    that.$store.commit('onlineListRefresh', true);
                                     that.$store.commit('resetListRefreshFlag', true);
+
+                                    let flag = true;
+                                    that.$store.state.patientList.forEach(function(item, index){
+                                        if (msg.from == "0_" + item.caseId) {
+                                              flag = false ;
+                                        }
+                                    });
+                                    that.$store.commit('onlineListRefresh', flag);
+
+
+
                                     that.$store.commit("setRefuseUserListFlag",true);
                                    // that.$emit("update:userCurrentStatus", 3);
 
