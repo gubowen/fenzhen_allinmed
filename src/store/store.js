@@ -370,7 +370,7 @@ export default new Vuex.Store({
                 done(res){
                     if( res.responseObject.responseData){
                         res.responseObject.responseData.dataList.forEach(function(element,index){
-                            switch(element.toolType ){
+                            switch(parseInt(element.toolType) ){
                                 case 1: //图片
                                     if(!element.state){
                                         state.isImage = false;
