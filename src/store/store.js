@@ -372,35 +372,45 @@ export default new Vuex.Store({
                         res.responseObject.responseData.dataList.forEach(function(element,index){
                             switch(parseInt(element.toolType) ){
                                 case 1: //图片
-                                    if(element.state){
+                                    if(parseInt(element.state) == 1){
+                                        state.isImage = true;
+                                    }else{
                                         state.isImage = false;
                                     }
                                     break;
                                 case 2://门诊邀约
-                                    if(!element.state){
+                                    if(parseInt(element.state) ==1){
+                                        state.isOrder = true;
+                                    }else{
                                         state.isOrder = false;
                                     }
                                     break;
                                 case 3: //常用语
-                                    if(!element.state){
+                                    if(parseInt(element.state) == 1){
+                                        state.isTalk = true;
+                                    }else{
                                         state.isTalk = false;
                                     }
                                     break;
                                 case 4://撤销
-                                    if(!element.state){
-                                        state.isDeleteMsg = false;
-                                    }else{
+                                    if(parseInt(element.state) == 1){
                                         state.isDeleteMsg = true;
                                         state.deleteMsgTime = element.toolConfig/100;break;
+                                    }else{
+                                        state.isDeleteMsg = false;
                                     }
                                     break;
                                 case 5://视频
-                                    if(!element.state){
+                                    if(parseInt(element.state) == 1){
+                                        state.isVideo = true;
+                                    }else{
                                         state.isVideo = false;
                                     }
                                     break;
                                 case 6://文件
-                                    if(!element.state){
+                                    if(parseInt(element.state) == 1){
+                                        state.isFile = true;
+                                    }else{
                                         state.isFile = false;
                                     }
                                     break;
