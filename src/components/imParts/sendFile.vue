@@ -212,6 +212,8 @@
                    return 'video/*'
                }else if(this.$store.state.isFile){
                     return 'application/pdf'
+               }else{
+                   return 'application/vnd.ms-excel'
                }
             }
         },

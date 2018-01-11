@@ -372,7 +372,7 @@ export default new Vuex.Store({
                         res.responseObject.responseData.dataList.forEach(function(element,index){
                             switch(parseInt(element.toolType) ){
                                 case 1: //图片
-                                    if(!element.state){
+                                    if(element.state){
                                         state.isImage = false;
                                     }
                                     break;
@@ -396,12 +396,12 @@ export default new Vuex.Store({
                                     break;
                                 case 5://视频
                                     if(!element.state){
-                                        state.isVideo = true;
+                                        state.isVideo = false;
                                     }
                                     break;
-                                case 6://视频
+                                case 6://文件
                                     if(!element.state){
-                                        state.isFile = true;
+                                        state.isFile = false;
                                     }
                                     break;
                             }
