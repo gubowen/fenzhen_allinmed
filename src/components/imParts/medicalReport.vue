@@ -40,7 +40,7 @@
                         </article>
                         <article class="special-message-item-text">
                             <article class="special-message-item-list">
-                                <p class="answer"><span class="question">患者是问诊人的：</span>{{medicalReportMsg.patientCasemap?getPatientrelation(medicalReportMsg.patientCasemap.patientRelationId):''}}</p>
+                                <p class="answer"><span class="question">患者是问诊人的：</span>{{medicalReportMsg.patientCasemap?getPatientRelation(medicalReportMsg.patientCasemap.patientRelationId):''}}</p>
                             </article>
                         </article>
                     </article>
@@ -113,7 +113,7 @@
 
     const XHRList = {
         getMapList: "/call/customer/patient/case/v1/getMapById/"
-    }
+    };
     export default{
         data(){
             return {
@@ -149,7 +149,7 @@
                     }
                 })
             },
-            getPatientrelation(type){
+            getPatientRelation(type){
                 let result = "";
                 switch(parseInt(type)){
                     case 0:
@@ -251,7 +251,6 @@
 
                 _this.$store.commit("setSBIFlag", true);
             }
-
         },
         props: {
             message: {

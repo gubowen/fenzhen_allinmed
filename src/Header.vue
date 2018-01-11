@@ -63,7 +63,7 @@
                 this.getBaseMessage();
             //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
-                this.getDeleteMsg();
+                this.getStateSetting();
             },
             searchPatient(e) {
                 let that = this;
@@ -267,28 +267,8 @@
                     }
                 })
             },
-            getDeleteMsg(){
-                let _this =this;
-                ajax({
-                        url:"/call/comm/data/tool/v1/getMapList/",
-                        method: "POST",
-                        data: {
-                            deviceType: 'PC',
-                            sortType: 1,
-                            visitSiteId:18
-                        },
-                        done(res){
-                            if( res.responseObject.responseData){
-                                res.responseObject.responseData.dataList.forEach(function(element,index){
-                                        if(element.toolType == 4){
-                                            _this.$store.commit('setDeleteMsgTime',element.toolConfig/100);
-                                            console.log( _this.$store.state.deleteMsgTime);
-                                        }
-                                })
-                            }
-
-                        }
-                })
+            getStateSetting(){
+                this.$store.commit("setStateSetting",true);
             }
         },
         components: {

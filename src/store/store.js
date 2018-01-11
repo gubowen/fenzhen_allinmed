@@ -8,7 +8,7 @@
  */
 import Vue from "vue";
 import Vuex from "vuex";
-
+import ajax from "@/common/js/ajax";
 Vue.use(Vuex);
 
 export default new Vuex.Store({
@@ -113,7 +113,6 @@ export default new Vuex.Store({
         beingSend:true,
         resendMsgInfo:{},
         deleteMsgInfo:{},
-        deleteMsgTime:'2',   //消息撤回时间
         triagePatientCaseIdFlag:{
             caseId:"",
             flag:false
@@ -134,7 +133,15 @@ export default new Vuex.Store({
             data:''
         },
         refuseUserListFlag:false,
-        minBtnFlag:false    //更多按钮标志
+        minBtnFlag:false,    //更多按钮标志
+        //********开关控制*******
+        isImage:true,
+        isOrder:true,
+        isTalk:true,
+        isDeleteMsg:true,
+        isVideo:true,
+        isFile:true,
+        deleteMsgTime:'2',   //消息撤回时间
     },
     mutations: {
         setPatientActiveIndex(state,index){
@@ -313,9 +320,6 @@ export default new Vuex.Store({
         setRefuseFlag(state,data){
             state.refuseFlag = data;
         },
-
-
-
         //***********刷新**************
         waitingListRefreshFlag(state, data){
             state.waitingListRefresh = data;
@@ -353,7 +357,60 @@ export default new Vuex.Store({
         setRefuseUserListFlag(state,data){
             state.refuseUserListFlag =data;
         },
-        setDeleteMsgTime(state,data){
+        setStateSetting(state,data){
+
+            ajax({
+                url:"/call/comm/data/tool/v1/getMapList/",
+                method: "POST",
+                data: {
+                    deviceType: 'PC',
+                    sortType: 1,
+                    visitSiteId:18
+                },
+                done(res){
+                    if( res.responseObject.responseData){
+                        res.responseObject.responseData.dataList.forEach(function(element,index){
+                            switch(element.toolType ){
+                                case 1: //图片
+                                    if(!element.state){
+                                        state.isImage = false;
+                                    }
+                                    break;
+                                case 2://门诊邀约
+                                    if(!element.state){
+                                        state.isOrder = false;
+                                    }
+                                    break;
+                                case 3: //常用语
+                                    if(!element.state){
+                                        state.isTalk = false;
+                                    }
+                                    break;
+                                case 4://撤销
+                                    if(!element.state){
+                                        state.isDeleteMsg = false;
+                                    }else{
+                                        state.isDeleteMsg = true;
+                                        state.deleteMsgTime = element.toolConfig/100;break;
+                                    }
+                                    break;
+                                case 5://视频
+                                    if(!element.state){
+                                        state.isVideo = true;
+                                    }
+                                    break;
+                                case 6://视频
+                                    if(!element.state){
+                                        state.isFile = true;
+                                    }
+                                    break;
+                            }
+                        })
+                    }
+
+                }
+            });
+
             state.deleteMsgTime =data;
         }
     }

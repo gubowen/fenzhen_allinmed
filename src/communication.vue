@@ -51,8 +51,7 @@
                         <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     </transition>
                     <!--常用回复-->
-                    <transition name="fade">
-                        <used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    <transition name="fade"><used-Rely v-if="$store.state.isTalk && $store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     </transition>
                     <transition name="fade">
                         <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
@@ -98,8 +97,7 @@
         <show-video-List  v-if="$store.state.videoListFlag"></show-video-List>
         <show-video :showBigImgFlag.sync="$store.state.videoFlag" v-if="$store.state.videoFlag"></show-video>
         <!---->
-        <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}"
-                 v-if="$store.state.previewShow">
+        <section :class="{on:$store.state.previewType == 2,'main-masker':$store.state.previewType == 2}" v-if="$store.state.previewShow">
             <transition name="fade">
                 <PreviewSuggestion></PreviewSuggestion>
             </transition>
@@ -405,8 +403,8 @@
     }
     @-webkit-keyframes rotate {
         0% {
-            -webkit-transform: rotate(0);
-            transform: rotate(0);
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
         }
         100% {
             -webkit-transform: rotate(360deg);

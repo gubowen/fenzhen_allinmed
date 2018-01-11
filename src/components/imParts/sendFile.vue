@@ -1,6 +1,9 @@
 <template>
     <section class="sendImg" v-if="showFlag">
-        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg" title=" "/>
+        <input name="file" type="file" multiple="" @change="onFileChange($event)" id="sendImg"  :accept="getState()"/>
+
+
+
         <div class="btn-click" v-show="fileList.length === 0">
             <img src="../../assets/img00/controller/fileUp.png"/>
             <span>选 择 文 件</span>
@@ -195,6 +198,21 @@
                     return 'video';
                 }
                 return 'file';
+            },
+            getState(){
+               if (this.$store.state.isImage &&  this.$store.state.isVideo && this.$store.state.isFile){
+                   return 'image/*,video/*,application/pdf'
+               }else if(this.$store.state.isImage &&  this.$store.state.isVideo){
+                   return 'image/*,video/*'
+               }else if(this.$store.state.isVideo && this.$store.state.isFile){
+                   return 'video/*,application/pdf'
+               }else if (this.$store.state.isImage){
+                   return 'image/*'
+               }else if(this.$store.state.isVideo){
+                   return 'video/*'
+               }else if(this.$store.state.isFile){
+                    return 'application/pdf'
+               }
             }
         },
         mounted() {
