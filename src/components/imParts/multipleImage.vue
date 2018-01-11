@@ -90,6 +90,12 @@
                     vertical-align: middle;
                     cursor: pointer;
                     margin-right: 10px;
+
+                    @include query(1440px){
+                        width: 90px;
+                        height: 90px;
+                    }
+
                     & > img {
                         width: 100%;
                         height: 100%;
