@@ -1,6 +1,6 @@
 <template>
   <aside class="medical-record-remark" :class="{on:showRecord}"
-         v-show="$store.state.userListStatus.second && ($store.state.currentItem.consultationState == -1||$store.state.currentItem.consultationState ==0||$store.state.currentItem.consultationState ==9||$store.state.currentItem.consultationState ==10)">
+         v-show="$store.state.userListStatus.second && ($store.state.currentItem.consultationState == 6||$store.state.currentItem.consultationState == -1||$store.state.currentItem.consultationState ==0||$store.state.currentItem.consultationState ==9||$store.state.currentItem.consultationState ==10)">
     <header class="medical-record-remark-header">
       <section class="remark-add">
         <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
