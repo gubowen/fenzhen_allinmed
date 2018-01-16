@@ -54,7 +54,7 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         },
-        // include:resolve('/static/'),
+        include:resolve('/static/'),
         exclude:resolve('/node_modules/')
       },
       {
@@ -64,7 +64,7 @@ module.exports = {
           limit: 10000,
           name: utils.assetsPath('media/[name].[hash:7].[ext]')
         },
-          // include:resolve('/static/'),
+          include:resolve('/static/'),
           exclude:resolve('/node_modules/')
       },
       {
