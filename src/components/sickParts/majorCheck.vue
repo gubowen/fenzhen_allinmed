@@ -68,7 +68,7 @@
   </section>
 </template>
 <script>
-    import api from '@/common/js/util';
+    import api from '@/common/js/util/util';
     import axios from "axios";
     import addressSelector from '@/common/addressSelector'
     import popup from  '@/common/popup';

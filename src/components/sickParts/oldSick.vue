@@ -33,8 +33,8 @@
 </template>
 <script>
   import  autosize  from  "autosize";
-  import {common, modules} from "../../../js/common";
-  import api from '@/common/js/util';
+  import {common, modules} from "@/common/js/common";
+  import api from '@/common/js/util/util';
   import popup from  '@/common/popup';
 
   const XHRList ={

@@ -6,7 +6,7 @@
  *
  * Created by Qiangkailiang on 17/11/7.
  */
-import ajax from "@/common/js/ajax";
+import ajax from "@/common/js/util/ajax";
 
 export default function nimEnv() {
     const host = window.location.host;

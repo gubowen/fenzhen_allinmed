@@ -2,7 +2,7 @@
     <section class="center-inner-message" id="communication">
         <section class="layout-helper">
             <figure class="center-inner-wrapper">
-                <img src="./assets/img00/index/logo_empty bg.png" alt="">
+                <img src="/static/image/img00/index/logo_empty bg.png" alt="">
             </figure>
             <BaseIm ref="baseImComponent"></BaseIm>
             <section class="user-controller" v-show="!$store.state.inputReadOnly">
@@ -66,7 +66,7 @@
                     <span class="user-send-message">按下Enter发送</span>
                     <button class="btn-primary user-controller-send-btn" @click="sendMessage">
                         <span>发送</span>
-                        <img :class="{'send-loading':!$store.state.beingSend}" v-if="!$store.state.beingSend" src="/static/img/img00/common/save_complete.png" alt="loading...">
+                        <img :class="{'send-loading':!$store.state.beingSend}" v-if="!$store.state.beingSend" src="/static/image/img00/common/save_complete.png" alt="loading...">
                     </button>
                 </footer>
                 <!--文件上传-->
@@ -108,20 +108,19 @@
 </template>
 <script>
     import SmallConfirm from "@/common/smallConfirm";
-    import fastRely from "./components/fast_reply";
-    import usedRely from "./components/used_rely";
-    import fastReplyConfig from "./components/fast_reply_config";
-    import UsedReplyConfig from "./components/usedReplyConfig";
-    import CheckSuggestion from "./components/suggestParts/CheckSuggestion";
-    import ExamineCheck from "./components/suggestParts/ExamineCheck";
-    import PreviewSuggestion from "./components/suggestParts/previewSuggestion";
-    import BaseIm from "./baseIm";
+    import fastRely from "@/components/fast_reply";
+    import usedRely from "@/components/used_rely";
+    import fastReplyConfig from "@/components/fast_reply_config";
+    import UsedReplyConfig from "@/components/usedReplyConfig";
+    import CheckSuggestion from "@/components/suggestParts/CheckSuggestion";
+    import ExamineCheck from "@/components/suggestParts/ExamineCheck";
+    import PreviewSuggestion from "@/components/suggestParts/previewSuggestion";
+    import BaseIm from "@/baseIm";
     import triagePatient from "@/base/triagePatient";
     import releasePatient from "@/base/releasePatient";
-    import ShowBigImg from "./common/ShowBigImg";
-    import ShowVideo from "./common/ShowVideo";
-    import ShowVideoList from "./common/ShowVideoList";
-    import store from "@/store/store";
+    import ShowBigImg from "@/common/ShowBigImg";
+    import ShowVideo from "@/common/ShowVideo";
+    import ShowVideoList from "@/common/ShowVideoList";
     import sendFile from "@/components/imParts/sendFile";
     import refuse from "@/components/imParts/refuse";
 
@@ -220,11 +219,11 @@
                         if (that.controllerInputStatus == 0) {
                             that.$refs.baseImComponent.sendMessage(that.controllerInput).then(obj => {
                                     that.controllerInput = "";
-                                    store.commit("setFastReply", "");
-                                    store.commit("setUesdReply", "");
+                                    that.$store.commit("setFastReply", "");
+                                    that.$store.commit("setUesdReply", "");
                                 });
                         } else {
-                            store.commit("videoTriageSender", {
+                            that.$store.commit("videoTriageSender", {
                                 flag: true,
                                 data: {
                                     content: that.controllerInput,
@@ -262,9 +261,9 @@
                     flag = false;
                 } else {
                     flag = true;
-                    store.commit("setUsedReplyShow", false);
+                    this.$store.commit("setUsedReplyShow", false);
                 }
-                store.commit("setFastReplyShow", flag);
+                this.$store.commit("setFastReplyShow", flag);
             },
             //常用回复
             usedRely() {
@@ -273,9 +272,9 @@
                     flag = false;
                 } else {
                     flag = true;
-                    store.commit("setFastReplyShow", false);
+                    this.$store.commit("setFastReplyShow", false);
                 }
-                store.commit("setUsedReplyShow", flag);
+                this.$store.commit("setUsedReplyShow", flag);
             },
             //患者转移至其他分诊医生：
             reTriageComfirm() {
@@ -292,7 +291,7 @@
                         flag: true
                 });
                     this.reTriageShow = false;
-                    store.commit("resetListRefreshFlag", true);
+                    this.$store.commit("resetListRefreshFlag", true);
                     this.userListChange();
                 });
 
@@ -312,9 +311,9 @@
                         waitingList.removeByValue(currentItem);
                         patientList.unshift(currentItem);
 
-                        store.commit("setPatientList", patientList);
-                        store.commit("setWaitingList", waitingList);
-                        store.commit("setInputReadOnly", false);
+                        this.$store.commit("setPatientList", patientList);
+                        this.$store.commit("setWaitingList", waitingList);
+                        this.$store.commit("setInputReadOnly", false);
                         this.$emit("update:userListStatus", {
                             first: false,
                             second: true,
@@ -339,15 +338,15 @@
                 this.$store.commit("setRefuseFlag",true);
             },
             userListChange(){
-                store.commit("startLoading");
+                this.$store.commit("startLoading");
                 let waitingList = this.$store.state.waitingList;
                 let patientList = this.$store.state.patientList;
                 setTimeout(() => {
                     patientList.removeByValue(this.$store.state.currentItem);
                     this.$store.state.currentItem.triageSelect = false;
 
-                    store.commit("waitingListRefreshFlag", true);
-                    store.commit("setWaitingList", waitingList);
+                    this.$store.commit("waitingListRefreshFlag", true);
+                    this.$store.commit("setWaitingList", waitingList);
 
                     let num = "";
 
@@ -361,10 +360,10 @@
                     } else {
                         this.$emit("update:userOnlineActive", -1);
                         this.$emit("update:n", false);
-                        store.commit("setCurrentItem",'');
-                        store.commit("setCaseId",'');
-                        store.commit("setPatientId",'');
-                        store.commit("setPatientName",'');
+                        this.$store.commit("setCurrentItem",'');
+                        this.$store.commit("setCaseId",'');
+                        this.$store.commit("setPatientId",'');
+                        this.$store.commit("setPatientName",'');
 
 
                         return;
@@ -379,7 +378,7 @@
                     this.$store.commit("setCurrentItem", items ? items : {});
                     this.$store.commit("setSBIObject", "");
 
-                    store.commit("stopLoading");
+                    this.$store.commit("stopLoading");
                 }, 1500);
                 this.$store.commit("setRefuseUserListFlag",false);
             }
@@ -400,8 +399,8 @@
 
     @keyframes rotate {
         0% {
-            -webkit-transform: rotate(0);
-            transform: rotate(0);
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
         }
         100% {
             -webkit-transform: rotate(360deg);

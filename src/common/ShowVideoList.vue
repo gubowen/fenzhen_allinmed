@@ -25,12 +25,12 @@
 <script>
     //  import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import Vue from 'vue'
-    import VueAwesomeSwiper from 'vue-awesome-swiper'
+//    import VueAwesomeSwiper from 'vue-awesome-swiper'
     import Swiper from 'swiper';
-    import 'swiper/dist/css/swiper.css';
+    import '@/scss/swiper/swiper.css';
     import showBigImg  from '../common/js/showBigImg';
 
-    Vue.use(VueAwesomeSwiper);
+//    Vue.use(VueAwesomeSwiper);
     export default{
         name: 'show-big-img',
         data(){
@@ -53,9 +53,9 @@
                 currentVideo:""
             }
         },
-        components: {
-            VueAwesomeSwiper
-        },
+//        components: {
+//            VueAwesomeSwiper
+//        },
         props: {
         },
         watch: {

@@ -143,6 +143,9 @@
     </section>
 </template>
 <script type="text/ecmascript-6">
+    import ajax from "@/common/js/util/ajax";
+    import store from "@/store/store";
+
     const XHRList = {
         getPreviewSuggest: "/call/patient/case/diagnosis/v1/getMapById/",//预览初诊建议
         getRecommendDoctor: "/call/patient/recommend/v1/getMapList/",//预览推荐医生
@@ -150,8 +153,6 @@
         savePreviewSuggest: "/call/patient/recovery/advice/v1/create/",//保存初诊建议
         saveRecommendDoc: "/call/patient/recommend/v1/create/",//保存初诊医生
     }
-    import ajax from "../../common/js/ajax";
-    import store from "@/store/store";
 
     export default {
         data() {
@@ -653,12 +654,12 @@
                 vertical-align: middle;
                 width: 14px;
                 height: 14px;
-                background: url("/image/img00/login/1_choose_sel_small.png");
+                background: url("/static/image/img00/login/1_choose_sel_small.png");
                 background-size: 100% 100%;
             }
             &.active {
                 &:before {
-                    background: url("/image/img00/login/1_choose_nor_small.png");
+                    background: url("/static/image/img00/login/1_choose_nor_small.png");
                 }
             }
         }
@@ -751,7 +752,7 @@
         //}
         &.active {
             &:before {
-                background: url(../../assets/img00/check/choose_nor_small.png) no-repeat;
+                background: url("/static/image/img00/check/choose_nor_small.png") no-repeat;
             }
         }
     }

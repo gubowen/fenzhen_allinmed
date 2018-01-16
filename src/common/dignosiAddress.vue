@@ -45,7 +45,7 @@
     </nav>
 </template>
 <script>
-    import api from '@/common/js/util';
+    import api from '@/common/js/util/util';
     export default{
         name: 'address-selector',
         data(){

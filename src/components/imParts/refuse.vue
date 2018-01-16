@@ -30,7 +30,7 @@
     </section>
 </template>
 <script>
-    import api from "../../common/js/util";
+    import api from "../../common/js/util/util";
     const XHRList = {
         refuseReasonList: "/call/comm/data/refuse/v1/getList/",
 
@@ -262,7 +262,7 @@
                             width: 8px;
                             height: 8px;
                             background-size: contain;
-                            background: url("../../assets/img00/common/popup_close_activate.png") no-repeat center;
+                            background: url("/static/image/img00/common/popup_close_activate.png") no-repeat center;
                         }
                     }
                 }

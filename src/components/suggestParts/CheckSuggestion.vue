@@ -42,7 +42,7 @@
     </section>
 </template>
 <script>
-  import api from '../../common/js/util';
+  import api from '../../common/js/util/util';
   import downSelect from  '../../common/downSelector.vue';
   import diagnosiSecond from './diagnosiSecond.vue';
 
@@ -486,7 +486,7 @@
             position: absolute;
             right: 9px;
             top: 13px;
-            background: url("/image/img00/common/arrow_enter.png") no-repeat;
+            background: url("/static/image/img00/common/arrow_enter.png") no-repeat;
           }
 
         }

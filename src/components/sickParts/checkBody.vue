@@ -64,7 +64,7 @@
 </template>
 <script>
   import  autosize  from  "autosize";
-  import api from '@/common/js/util';
+  import api from '@/common/js/util/util';
   import popup from  '@/common/popup';
 
   export default{

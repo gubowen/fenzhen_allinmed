@@ -8,7 +8,7 @@
  */
 import Vue from "vue";
 import Vuex from "vuex";
-import ajax from "@/common/js/ajax";
+import ajax from "@/common/js/util/ajax";
 Vue.use(Vuex);
 
 export default new Vuex.Store({

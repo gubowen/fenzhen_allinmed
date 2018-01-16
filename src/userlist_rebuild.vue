@@ -167,7 +167,7 @@
 </template>
 <script>
     import {common, modules} from "common";
-    import api from "./common/js/util";
+    import api from "./common/js/util/util";
     import TabsViewChange from "tabView";
     import downSelector from "downSelector";
     import ymd from "ymd";
@@ -1029,7 +1029,7 @@
             &-right {
                 width: 47px;
                 height: 16px;
-                background: url("./assets/img00/common/sorting@2x.png") no-repeat center center;
+                background: url("/static/image/img00/common/sorting@2x.png") no-repeat center center;
                 display: inline-block;
                 vertical-align: middle;
                 border-radius: 4px;
@@ -1352,11 +1352,11 @@
             cursor: pointer;
             margin-left: 5px;
             &.off {
-                background: url("./assets/img00/common/multiplechoice_off@2x.png") no-repeat;
+                background: url("/static/image/img00/common/multiplechoice_off@2x.png") no-repeat;
                 background-size: contain;
             }
             &.on {
-                background: url("./assets/img00/common/multiplechoice_on@2x.png") no-repeat;
+                background: url("/static/image/img00/common/multiplechoice_on@2x.png") no-repeat;
                 background-size: contain;
             }
         }

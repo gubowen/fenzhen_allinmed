@@ -16,8 +16,8 @@
     </section>
 </template>
 <script type="text/ecmascript-6">
-  import ajax from "../../common/js/ajax";
-  import store from "../../store/store";
+  import ajax from "@/common/js/util/ajax";
+
    const XHRList = {
      getTeachingDetail:"/call/comm/data/knowledge/content/v1/getMapById/"
    }
@@ -32,8 +32,9 @@
         },
         methods:{
           getTeachingDetail(){
-            store.commit("startLoading");
-            let that = this;
+            let that= this;
+              that.$store.commit("startLoading");
+
             ajax({
               url: XHRList.getTeachingDetail,
               method: 'POST',
@@ -47,7 +48,7 @@
                 if (data.responseObject.responseData.dataList) {
                   that.teachingDetail = data.responseObject.responseData.dataList[0];
                 }
-                store.commit("stopLoading");
+                  that.$store.commit("stopLoading");
               }
             })
           },
@@ -96,7 +97,7 @@
         cursor: pointer;
         .icon-leftArrow{
           display: inline-block;
-          background: url(../../assets/img00/check/qustion_arrow_left.png) no-repeat;
+          background: url("/static/image/img00/check/qustion_arrow_left.png") no-repeat;
           background-size: 100% 100%;
           width: 16px;
           height: 16px;

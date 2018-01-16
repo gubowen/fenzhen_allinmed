@@ -8,7 +8,7 @@
         <figcaption class="messageList-item-text file" :class="{'make-photo-box':exifFlag}">
             <section  @click="showPDF(message.file.url)">
                 <figure class="fileImg">
-                    <img src="../../assets/img00/common/folder.jpg" alt=""/>
+                    <img src="/static/image/img00/common/folder.jpg" alt=""/>
                 </figure>
                 <figure class="fileInfo">
                     <p class="fileName">{{JSON.parse(message.custom).name}}</p>
@@ -23,7 +23,8 @@
                 <p>{{ '【分诊医生】'+docName}}</p>
             </div>
             <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
-            <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+            <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
+            <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
         </figure>
     </figure>
 </template>

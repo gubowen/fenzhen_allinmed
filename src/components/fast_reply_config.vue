@@ -100,8 +100,8 @@
    * Created by qiangkailiang on 2017/10/19
    */
 
-  import ajax from "@/common/js/ajax";
-  import api from "@/common/js/util";
+  import ajax from "@/common/js/util/ajax";
+  import api from "@/common/js/util/util";
   const XHRList = {
     deleteTerm: "/call/customer/quick/question/v1/delete/",
     fixTerm: "/call/customer/quick/question/v1/save/",

@@ -19,7 +19,7 @@
   </section>
 </template>
 <script>
-  import ajax from "@/common/js/ajax";
+  import ajax from "@/common/js/util/ajax";
   import store from "@/store/store";
   const XHRList = {
     usedList: "/call/customer/comm/reply/v1/getMapList/",

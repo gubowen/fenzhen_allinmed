@@ -120,7 +120,7 @@
     import UpdateTips from "@/components/imParts/updateTips";
 
     import store from "@/store/store";
-    import api from "@/common/js/util";
+    import api from "@/common/js/util/util";
 
     import nimEnv from "@/base/nimEnv";
     import releasePatient from "@/base/releasePatient";   //改变患者状态

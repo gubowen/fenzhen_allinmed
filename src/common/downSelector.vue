@@ -33,7 +33,7 @@
   </section>
 </template>
 <script>
-    import api from './js/util';
+    import api from './js/util/util';
     import Vue from "vue";
 
     Vue.filter('messageFilter', function (data) {

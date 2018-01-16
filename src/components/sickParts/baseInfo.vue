@@ -166,7 +166,7 @@
 </template>
 <script>
   import Vue from 'vue'
-  import api from '@/common/js/util';
+  import api from '@/common/js/util/util';
   import addressSelector from '@/common/addressSelector'
   import popup from  '@/common/popup';
 

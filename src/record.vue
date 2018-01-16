@@ -60,7 +60,7 @@
     </aside>
 </template>
 <script type="text/javascript">
-    import remarkRecord from "./components/triageRecord";
+    import remarkRecord from "@/components/triageRecord";
     import triagePatient from "@/base/triagePatient";
     import store from "@/store/store";
     export default{
@@ -354,7 +354,7 @@
                 width: 25px;
                 height: 25px;
                 position: absolute;
-                background: url("./assets/img00/employee/dot.png") no-repeat;
+                background: url("/static/image/img00/employee/dot.png") no-repeat;
                 background-size: 100% 100%;
             }
 

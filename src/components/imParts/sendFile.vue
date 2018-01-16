@@ -5,7 +5,8 @@
 
 
         <div class="btn-click" v-show="fileList.length === 0">
-            <img src="../../assets/img00/controller/fileUp.png"/>
+            <!--<img src="../../assets/img00/controller/fileUp.png"/>-->
+            <img src="/static/image/img00/controller/fileUp.png"/>
             <span>选 择 文 件</span>
             <span>( JPEG、PNG、BMP、GIF 、JPG、PNG、MP4、PDF)</span>
         </div>
@@ -13,12 +14,11 @@
             <div class="imgInfo" v-for="(item,index) in fileList">
                 <div class="name">{{item.name}}</div>
                 <img :src="item.url" v-if="fileType(item.type) == 'image'"/>
-                <img v-if="fileType(item.type) == 'video'" src="../../assets/img00/common/videoPlay.jpg"/>
-                <img v-if="fileType(item.type) == 'file'" src="../../assets/img00/common/folder.jpg"/>
+                <img v-if="fileType(item.type) == 'video'" src="/static/image/img00/common/videoPlay.jpg"/>
+                <img v-if="fileType(item.type) == 'file'" src="/static/image/img00/common/folder.jpg"/>
                 <div :class="[item.sizeWarning ? 'on': 'no','size']"><span
                         class="num">{{getSize(item,index)}}</span><span></span></div>
-                <div class="remove"><img @click="removeImg(index,item)"
-                                         src="../../assets/img00/common/popup_close_activate.png"/></div>
+                <div class="remove"><img @click="removeImg(index,item)" src="/static/image/img00/common/popup_close_activate.png"/></div>
             </div>
         </div>
         <div class="send-btn" v-show="fileList.length>0">
@@ -28,7 +28,7 @@
     </section>
 </template>
 <script>
-    import api from "@/common/js/util";
+    import api from "@/common/js/util/util";
     import Vue from 'vue'
 
     export default {
@@ -353,7 +353,8 @@
                 width: 15px;
                 height: 15px;
                 position: absolute;
-                background: url("../../assets/img00/common/popup_close_activate.png") no-repeat;
+                /*background: url("../../assets/img00/common/popup_close_activate.png") no-repeat;*/
+                background: url("/static/image/img00/common/popup_close_activate.png") no-repeat;
                 top: -36px;
                 right: 4px;
                 cursor: pointer;

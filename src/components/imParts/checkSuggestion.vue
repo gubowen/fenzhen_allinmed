@@ -11,7 +11,8 @@
           <p>{{ '【分诊医生】'+docName}}</p>
         </div>
         <!--<div class="deleteMessage" @click.stop="deleteMsg">撤回</div>-->
-        <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+        <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
+        <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
       </figure>
     </figure>
 
@@ -36,7 +37,8 @@
           <p>{{ '【分诊医生】'+docName}}</p>
         </div>
         <!--<div class="deleteMessage" @click.stop="deleteMsg">撤回</div>-->
-        <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+        <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
+        <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
       </figure>
     </figure>
 

@@ -28,7 +28,7 @@
   </aside>
 </template>
 <script type="text/ecmascript-6">
-  import ajax from "../common/js/ajax";
+  import ajax from "../common/js/util/ajax";
   import confirm from "../common/smallConfirm"
   const XHRList = {
     update: "/call/customer/patient/case/remark/v1/create/",
@@ -227,7 +227,7 @@
           line-height: 40px;
           cursor: pointer;
           i {
-            background: url("../assets/img00/employee/home_note_default.png") no-repeat;
+            background: url("/static/image/img00/employee/home_note_default.png") no-repeat;
             width: 18px;
             height: 18px;
             display: inline-block;
@@ -253,7 +253,7 @@
           line-height: 40px;
           cursor: pointer;
           i {
-            background: url("../assets/img00/employee/home_note_add.png") no-repeat;
+            background: url("/static/image/img00/employee/home_note_add.png") no-repeat;
             width: 12px;
             height: 12px;
             display: inline-block;
@@ -266,7 +266,7 @@
 
         .remark-new {
           i {
-            background: url("../assets/img00/employee/home_note_return.png") no-repeat;
+            background: url("/static/image/img00/employee/home_note_return.png") no-repeat;
           }
         }
         .remark-back {
@@ -281,7 +281,7 @@
             display: block;
           }
           i {
-            background: url("../assets/img00/employee/home_note_return.png") no-repeat;
+            background: url("/static/image/img00/employee/home_note_return.png") no-repeat;
             width: 12px;
             height: 12px;
             display: inline-block;
@@ -300,7 +300,7 @@
           line-height: 40px;
           cursor: pointer;
           i {
-            background: url("../assets/img00/employee/arrow_pack_down.png") no-repeat;
+            background: url("/static/image/img00/employee/arrow_pack_down.png") no-repeat;
             width: 12px;
             height: 12px;
             display: inline-block;
@@ -406,7 +406,7 @@
     }
     &:hover {
       .delete {
-        background: url("../assets/img00/index/home_note_delete.png") no-repeat;
+        background: url("/static/image/img00/index/home_note_delete.png") no-repeat;
         width: 18px;
         height: 18px;
         display: inline-block;

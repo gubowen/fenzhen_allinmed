@@ -34,7 +34,7 @@
                                                         <header class="check-suggestion-message-title">初诊建议</header>
                                                         <section class="preview-suggestion-content">
                                                             <p class="preview-suggestion-img">
-                                                                <img src="/static/img/img00/index/dialog_report.png" alt="">
+                                                                <img src="/static/image/img00/index/dialog_report.png" alt="">
                                                             </p>
                                                             <template v-if="Array.isArray(JSON.parse(ele.body.substring(1,ele.body.length-1)).data)">
                                                                 <section class="preview-suggestion-content-text"
@@ -90,7 +90,7 @@
                                                     <figcaption class="messageList-item-text file">
                                                         <section  @click="showPDF(ele.attUrl)">
                                                             <figure class="fileImg">
-                                                                <img src="../assets/img00/common/folder.jpg" alt=""/>
+                                                                <img src="/static/image/img00/common/folder.jpg" alt=""/>
                                                             </figure>
                                                             <figure class="fileInfo">
                                                                 <p class="fileName">{{JSON.parse(ele.ext.substring(1,ele.ext.length-1)).name}}</p>
@@ -218,7 +218,7 @@
     </section>
 </template>
 <script>
-    import api from '../common/js/util';
+    import api from '../common/js/util/util';
     import Vue from "vue";
     import loading from  '../common/loading';
     import popup from  '../common/popup';

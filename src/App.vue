@@ -13,8 +13,8 @@
 </template>
 
 <script>
-    import userList from "./userlist_rebuild";
-    import router from "./router";
+    import userList from "@/userlist_rebuild";
+    import router from "@/router";
     import Loading from "@/common/loading";
     import Popup from '@/common/popup';
     export default {

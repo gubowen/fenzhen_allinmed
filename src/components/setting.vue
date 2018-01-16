@@ -370,12 +370,12 @@
         vertical-align: middle;
         width: 14px;
         height: 14px;
-        background: url("/static/img/img00/login/1_choose_sel_small.png");
+        background: url("/static/image/img00/login/1_choose_sel_small.png");
         background-size: 100% 100%;
       }
       &.active {
         &:before {
-          background: url("/static/img/img00/login/1_choose_nor_small.png");
+          background: url("/static/image/img00/login/1_choose_nor_small.png");
         }
       }
     }
@@ -410,7 +410,7 @@
       @include square(10px);
       display: inline-block;
       vertical-align: middle;
-      background: url("/static/img/img00/login/setting_ prompt.png") no-repeat;
+      background: url("/static/image/img00/login/setting_ prompt.png") no-repeat;
       background-size: 100% 100%;
       margin: 0 10px 0 10px;
     }

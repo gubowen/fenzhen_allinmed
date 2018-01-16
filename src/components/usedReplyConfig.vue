@@ -64,8 +64,8 @@
      *
      * Created by Qiangkailiang on 17/10/20.
      */
-    import ajax from "@/common/js/ajax";
-    import api from "@/common/js/util";
+    import ajax from "@/common/js/util/ajax";
+    import api from "@/common/js/util/util";
     import store from "@/store/store";
     const XHRList = {
         usedList: "/call/customer/comm/reply/v1/getMapList/",

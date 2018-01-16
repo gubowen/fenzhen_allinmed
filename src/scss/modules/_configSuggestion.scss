@@ -111,7 +111,7 @@
   }
   &.active {
     &.icon-select-small:before {
-      background: url("/image/img00/check/1_choose_nor_small.png") no-repeat;
+      background: url("/static/image/img00/check/1_choose_nor_small.png") no-repeat;
     }
   }
 }
@@ -218,7 +218,7 @@
       }
       &.active  {
         & > .icon-select-big:before {
-          background: url(/image/img00/check/1_choose_nor_small.png) no-repeat;
+          background: url("/static/image/img00/check/1_choose_nor_small.png") no-repeat;
         }
 
         .select-element{

@@ -19,7 +19,7 @@
 </template>
 <script>
     import axios from 'axios'
-    import api from '../../common/js/util';
+    import api from '../../common/js/util/util';
     const XHRList ={
         MedicalReport: '/call/customer/patient/case/v1/getMapById/', //问诊单接口-（提供主诉数据）
     };
@@ -168,7 +168,7 @@
             width: 25px;
             height: 25px;
             position: absolute;
-            background: url("../../assets/img00/employee/dot.png") no-repeat;
+            background: url("/static/image/img00/employee/dot.png") no-repeat;
             background-size: 100% 100%;
         }
         .sick-info {

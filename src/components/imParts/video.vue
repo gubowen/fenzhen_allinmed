@@ -6,7 +6,8 @@
         </figure>
         <!--图片-->
         <figcaption class="messageList-item-text video-list" :class="{'make-photo-box':exifFlag}" @click="showBigImgFunction(message.file.url)">
-            <img src="../../assets/img00/controller/play.png" alt="">
+            <img src="/static/image/img00/controller/play.png" alt="">
+            <!--<img src="../../assets/img00/controller/play.png" alt="">-->
             <video  :src="message.file.url" style="width:300px"></video>
             <!--<img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)" ref="imageElement"/>-->
         </figcaption>
@@ -15,7 +16,8 @@
                 <p>{{ '【分诊医生】'+docName}}</p>
             </div>
             <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
-            <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+            <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
+            <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
         </figure>
     </figure>
 </template>

@@ -784,14 +784,14 @@ common.bigConfirm = function (obj) {
             }
         }
         $(".big-confirm-input").on("input propertychange",function () {
-           if ($(this).val().length===0){
-               $(".btn-primary.ensure").addClass("disabled");
-           } else if ($(this).val().length>obj.max){
-               $(".btn-primary.ensure").addClass("disabled");
-               $(this).val($(this).val().substring(0,obj.max))
-           } else{
-               $(".btn-primary.ensure").removeClass("disabled");
-           }
+            if ($(this).val().length===0){
+                $(".btn-primary.ensure").addClass("disabled");
+            } else if ($(this).val().length>obj.max){
+                $(".btn-primary.ensure").addClass("disabled");
+                $(this).val($(this).val().substring(0,obj.max))
+            } else{
+                $(".btn-primary.ensure").removeClass("disabled");
+            }
         });
         $(".big-confirm-title .window-close").on("click", function () {
             $(".big-confirm").removeClass("show");
@@ -1160,17 +1160,17 @@ common.recognizeAppShareLink = function (callAppOptions) {
 };
 //Ajax请求方法
 /*
-* options
-*       url 请求地址
-*       type 请求方式
-*       data 请求参数
-*       hasDataCallback 有数据的回调
-*       noDataCallback 无数据的回调
-*       successCallback 请求成功的回调
-*       failCallback 请求失败回调
-*
-*       tips：以上回调均是可传可不传的
-* */
+ * options
+ *       url 请求地址
+ *       type 请求方式
+ *       data 请求参数
+ *       hasDataCallback 有数据的回调
+ *       noDataCallback 无数据的回调
+ *       successCallback 请求成功的回调
+ *       failCallback 请求失败回调
+ *
+ *       tips：以上回调均是可传可不传的
+ * */
 
 common.ajax = function (options) {
     $.ajax({
@@ -1604,7 +1604,7 @@ common.ymd=function(opt) {
 
         }
 
-        for (var d = ((opt.month.val() == 05 && opt.startDay) ? opt.startDay : 1); d <= ((opt.month.val() == 10 && opt.endDay) ? 30 : parseInt(daysInMonth)); d++) {
+        for (var d = ((opt.month.val() == 5 && opt.startDay) ? opt.startDay : 1); d <= ((opt.month.val() == 10 && opt.endDay) ? 30 : parseInt(daysInMonth)); d++) {
 
             if (d == (n ? n : (opt.order ? 1 : dDate.getDate()))) {
                 str = "<option value=" + (d < 10 ? "0" + d : d) + " selected=true>" + (d < 10 ? "0" + d : d) + "</option>";
@@ -1653,7 +1653,7 @@ function getEnTime(opt) {
         } else {
             monthEn = monthArr[month - 1];
         }
-        day = opt.date.length > 7 ? opt.date.substring(8, 10) : 01;
+        day = opt.date.length > 7 ? opt.date.substring(8, 10) : 1;
 
     }
     return {
@@ -1693,17 +1693,17 @@ common.gbw.confirmBox = function (options, role) {
         var template = '<section class="maskers confirmBox-tips">' +
             '<section class="confirmBox-inner">' +
             '<article class="confirmBox-content">' +
-                '<article>' +
-                (options.title ? '<h2>' + (options.title || '') + '</h2>' : '<h2></h2>') +
-                '<p>' + (options.content || '') + '</p>' +
-                '</article>' +
-                '</article>' +
-                '<footer class="confirmBox-btns">' +
-                '<button class="confirmBox-cancelBtn">' + (options.cancel || '') + '</button>' +
-                '<button class="confirmBox-ensureBtn">' + (options.ensure || '') + '</button>' +
-                '</footer>' +
-                '</section>' +
-                '<section class="mask-close"></section>'+
+            '<article>' +
+            (options.title ? '<h2>' + (options.title || '') + '</h2>' : '<h2></h2>') +
+            '<p>' + (options.content || '') + '</p>' +
+            '</article>' +
+            '</article>' +
+            '<footer class="confirmBox-btns">' +
+            '<button class="confirmBox-cancelBtn">' + (options.cancel || '') + '</button>' +
+            '<button class="confirmBox-ensureBtn">' + (options.ensure || '') + '</button>' +
+            '</footer>' +
+            '</section>' +
+            '<section class="mask-close"></section>'+
             '</section>'+
             '<section class="mask-background"></section>';
 

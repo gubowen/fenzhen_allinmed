@@ -6,7 +6,8 @@
       <header class="check-suggestion-message-title previewSuggestion">初诊建议</header>
       <section class="preview-suggestion-content" data-id="1503473276490">
         <figure class="preview-suggestion-img">
-          <img src="../../assets/img00/index/dialog_report.png" alt=""></figure>
+          <img src="/static/image/img00/index/dialog_report.png" alt=""></figure>
+          <!--<img src="../../assets/img00/index/dialog_report.png" alt=""></figure>-->
         <figcaption class="preview-suggestion-content-text" v-for="suggestions in message.content.data" v-if="message.content.data.length">
           <header class="preview-suggestion-title"> {{suggestions.patientName + suggestions.createTime}}</header>
           <p class="preview-suggestion-result">
@@ -42,7 +43,8 @@
         <p>{{ '【分诊医生】'+docName}}</p>
       </div>
       <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
-      <img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">
+      <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
+      <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
     </figure>
   </article>
 

@@ -185,7 +185,7 @@
 </template>
 <script>
   import {common, modules} from "common";
-  import api from './common/js/util';
+  import api from './common/js/util/util';
   import axios from "axios";
   import TabsViewChange from "tabView";
   import downSelector from "downSelector";
@@ -1483,7 +1483,7 @@
         width: 25px;
         height: 25px;
         position: absolute;
-        background: url("./assets/img00/employee/dot.png") no-repeat;
+        background: url("/static/image/img00/employee/dot.png") no-repeat;
         background-size: 100% 100%;
       }
 

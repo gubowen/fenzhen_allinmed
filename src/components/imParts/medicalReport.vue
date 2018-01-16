@@ -109,7 +109,7 @@
      *
      * Created by Qiangkailiang on 17/10/23.
      */
-    import ajax from "@/common/js/ajax";
+    import ajax from "@/common/js/util/ajax";
 
     const XHRList = {
         getMapList: "/call/customer/patient/case/v1/getMapById/"

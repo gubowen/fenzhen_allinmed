@@ -94,7 +94,7 @@
   }
   &.active {
     &.icon-select-small:before {
-      background: url("/image/img00/check/1_choose_nor_small.png") no-repeat;
+      background: url("/static/image/img00/check/1_choose_nor_small.png") no-repeat;
     }
   }
 }
@@ -341,7 +341,7 @@
             position: absolute;
             right:9px;
             top:13px;
-            background: url("/image/img00/common/arrow_enter.png") no-repeat;
+            background: url("/static/image/img00/common/arrow_enter.png") no-repeat;
           }
 
       }

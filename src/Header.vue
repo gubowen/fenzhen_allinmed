@@ -34,8 +34,8 @@
 </template>
 <script>
     import axios from "axios";
-    import ajax from "@/common/js/ajax";
-    import confirm from "./common/bigConfim";
+    import ajax from "@/common/js/util/ajax";
+    import confirm from "@/common/bigConfim";
     export  default{
         name: 'header',
         data(){
@@ -449,7 +449,7 @@
 
     .icon-logo {
         display: inline-block;
-        background: url("./assets/img00/header/logo_top.png") no-repeat;
+        background: url("/static/image/img00/header/logo_top.png") no-repeat;
         background-size: 100% 100%;
         width: 30px;
         height: 30px;

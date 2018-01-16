@@ -95,25 +95,25 @@
       &.reply-on {
         color: #6B748C;
         .icon-fastReply {
-          background: url("/image/img00/controller/home_question_activate.png") no-repeat;
+          background: url("/static/image/img00/controller/home_question_activate.png") no-repeat;
         }
       }
       &.result-on {
         color: #6B748C;
         .icon-userReply {
-          background: url("/image/img00/controller/more.png") no-repeat;
+          background: url("/static/image/img00/controller/more.png") no-repeat;
         }
       }
       &.report-on {
         color: #6B748C;
         .icon-suggestion {
-          background: url("/image/img00/controller/home_suggestion_activate.png") no-repeat;
+          background: url("/static/image/img00/controller/home_suggestion_activate.png") no-repeat;
         }
       }
       &.check-on {
         color: #6B748C;
         .icon-checkout {
-          background: url("/image/img00/controller/home_test_activate.png") no-repeat;
+          background: url("/static/image/img00/controller/home_test_activate.png") no-repeat;
         }
       }
       & > span {

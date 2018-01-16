@@ -89,7 +89,7 @@
         <!--密码修改成功自动登录盒子-->
         <section class="login-content" id="ev-fix-finish" v-show="finishFlag">
           <figure class="login-fix-success-img">
-            <img src="./assets/img00/login/login_ modify_finish.png" alt="">
+            <img src="/static/image/img00/login/login_ modify_finish.png" alt="">
           </figure>
           <figcaption class="login-fix-success-content">
             <h4>
@@ -106,10 +106,10 @@
 </template>
 <script>
   import axios from  "axios";
-  import api from '@/common/js/util.js'
+  import api from '@/common/js/util/util'
   import qs  from "QS"
   import loading from "@/common/loading";
-  import store from "./store/store";
+  import store from "@/store/store";
 
   const XHRList = {
     userLoginUrl: "/call/passport/securitycheck",//用户登录
@@ -459,7 +459,7 @@
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style type="text/css" lang="scss" rel="stylesheet/scss" scoped>
   @import "./scss/base.scss";
-  @import "scss/library/_common-modules";
+  @import "./scss/library/_common-modules";
 
   .main-inner {
     width: 100%;
@@ -576,12 +576,12 @@
       vertical-align: middle;
       width: 14px;
       height: 14px;
-      background: url("assets/img00/login/1_choose_sel_small.png");
+      background: url("/static/image/img00/login/1_choose_sel_small.png");
       background-size: 100% 100%;
     }
     &.active {
       &:before {
-        background: url("assets/img00/login/1_choose_nor_small.png");
+        background: url("/static/image/img00/login/1_choose_nor_small.png");
       }
     }
   }
@@ -814,7 +814,7 @@
       font-size: 13px;
       width: 8px;
       height: 8px;
-      background: url("./assets/img00/login/login_cancel.png") no-repeat center;
+      background: url("/static/image/img00/login/login_cancel.png") no-repeat center;
     }
   }
 

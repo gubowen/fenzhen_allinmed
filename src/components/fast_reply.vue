@@ -31,7 +31,7 @@
 <script>
     import axios from "axios";
     import store from "@/store/store";
-    import ajax from "@/common/js/ajax";
+    import ajax from "@/common/js/util/ajax";
     const XHRList = {
         getTerm: "/call/customer/quick/question/v1/getMapList/",
     }

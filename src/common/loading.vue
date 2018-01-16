@@ -2,7 +2,7 @@
   <section class="middle-tip-box ev-loading">
     <section class="middle-tip-modal">
       <figure class="middle-tip-box-text">
-        <img src="/static/img/img00/common/save_complete.png" alt="loading...">
+        <img src="/static/image/img00/common/save_complete.png" alt="loading...">
       </figure>
     </section>
   </section>
@@ -58,16 +58,16 @@
 
 @keyframes rotate {
   0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0); }
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
 
 @-webkit-keyframes rotate {
   0% {
-    -webkit-transform: rotate(0);
-    transform: rotate(0); }
+    -webkit-transform: rotate(0deg);
+    transform: rotate(0deg); }
   100% {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg); } }
