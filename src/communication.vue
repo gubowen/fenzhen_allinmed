@@ -54,6 +54,7 @@
                     <!--常用回复-->
                     <transition name="fade"><used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     </transition>
+                    <!--结束沟通-->
                     <transition name="fade">
                         <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
                                       @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
@@ -418,8 +419,6 @@
             transform: rotate(360deg);
         }
     }
-
-
 
     .center-inner-message {
         float: left;

@@ -40,7 +40,7 @@
     }
   }
 </script>
-<style lang="scss" rel="stylesheet/scss">
+<style lang="scss" rel="stylesheet/scss" >
   @import "../scss/base";
   .scale-enter-active,.scale-leave-active {
     transition: all 0.5s linear;
@@ -49,20 +49,51 @@
     opacity: 0;
     transform: scale(0);
   }
+  @keyframes rotate {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg)
+    }
+  }
+
   .modal-confirm {
     position: absolute;
     width: 250px;
-    top: 50%;
-    left: 50%;
     background: #FFFFFF;
-    box-shadow: 0px 0px 20px 0px rgba(153, 167, 208, 0.35);
+    box-shadow: 0 0 20px 0 rgba(153, 167, 208, 0.35);
     border-radius: 4px;
     padding: 40px 20px;
     padding-bottom: 20px;
     min-height: 155px;
     box-sizing: border-box;
     z-index: 5;
+    top: -156px;
+    right: 32.5%;
 
+    @include query(1440px) {
+      right: 18.5%;
+    }
+    @include query(1280px) {
+      right: 23.5%;
+    }
+    &:after {
+        position: absolute;
+        bottom: -10px;
+        right: 30%;
+        top: auto;
+        transform: rotate(180deg);
+        content: '';
+        display: block;
+        @include triangle(10px, #fff, up);
+        // position: absolute;
+        // top: -10px;
+        // right: 10px;
+        @include query(1500px) {
+          right: 25%;
+        }
+      }
     &.upShow {
       bottom: 60px;
       top: auto;
@@ -71,16 +102,6 @@
       top:auto;
       bottom: -10px;
       @include triangle(10px, #fff, down);
-    }
-
-    &:after {
-      content: '';
-      display: block;
-      @include triangle(10px, #fff, up);
-      position: absolute;
-      top: -10px;
-      right: 10px;
-
     }
     &-content {
       p {
@@ -96,7 +117,6 @@
       bottom: 20px;
       left: 0;
       right: 0;
-      text-align: center;
       & > button {
         margin: 0 10px;
         width: 58px;
@@ -145,15 +165,6 @@
       }
     }
 
-  }
-
-  @keyframes rotate {
-    0% {
-      transform: rotate(0);
-    }
-    100% {
-      transform: rotate(360deg)
-    }
   }
 
   .middle-tip-modal {
