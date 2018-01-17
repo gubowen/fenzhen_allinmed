@@ -282,12 +282,8 @@
 <style lang="scss" rel="stylesheet/scss" scoped>
     @import "./scss/base.scss";
 
-    .fade-enter-active, .fade-leave-active {
-        transition: all 0.5s linear;
-    }
-
-    .fade-enter, .fade-leave-to {
-    }
+    .fade-enter-active, .fade-leave-active {transition: all 0.5s linear;}
+    .fade-enter, .fade-leave-to {}
 
     /**
      * @name: 主头部
@@ -328,13 +324,18 @@
         height: 70px;
         & > .main-search {
             background-color: #eceff6;
-            width: 372px;
+            width: 100%;
+            box-sizing: border-box;
             height: 32px;
             line-height: 32px;
             padding-left: 14px;
             & > input {
                 border-radius: 4px;
             }
+        }
+
+        @include query(1440px) {
+            width: 300px;
         }
 
     }

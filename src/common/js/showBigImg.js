@@ -402,7 +402,7 @@ $.fn.extend({
         caseCategoryId = 12;
         caseAttSource = 6;
       }
-      $(".centerTip").remove();
+      $(".background-stopClick").remove();
       $.ajax({
         url: "/call/customer/patient/case/attachment/create/",
         type: 'POST',
@@ -426,7 +426,7 @@ $.fn.extend({
 
 
             var htmlResult = '<div class="tip-save-result">' +
-              '<div ><img src="/image/img00/employee/picture_success.png"/></div>' +
+              '<div ><img src="/static/image/img00/employee/picture_success.png"/></div>' +
               '<div class="text">保存成功</div>' +
               '</div>';
             $("body").append(htmlResult);
@@ -459,19 +459,19 @@ $.fn.extend({
 
     function centerTip(obj) {
       if ($('.centerTip').length > 0) {
-        $('.centerTip').remove();
+        $('.background-stopClick').remove();
       }
-      var Tip = "<div class='centerTip'>" +
+      var Tip = "<div class='background-stopClick'><div class='centerTip'>" +
         "<div class='tip-head'>" + obj.header + "</div>" +
         "<div class='tip-content'>" + obj.content + "</div>" +
         "<div class='tip-close'></div>" +
-        "</div>";
+        "</div></div>";
       $('.show-big-img').append(Tip);
       if (typeof  obj.callback != "undefined") {
         obj.callback();
       }
       $(".tip-close").on("click", function () {
-        $('.centerTip').remove();
+        $('.background-stopClick').remove();
       })
     }
 

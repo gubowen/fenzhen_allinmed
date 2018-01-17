@@ -221,7 +221,7 @@
         cursor: pointer;
       }
       .download-button {
-        background: url("/static/img/img00/employee/picture_down.png") 50% 50% no-repeat;
+        background: url("/static/image/img00/employee/picture_down.png") 50% 50% no-repeat;
         background-color: rgba(255, 255, 255, .3);
         border-radius: 4px;
         width: 34px;
@@ -489,7 +489,12 @@
     right: -36px;
     cursor: pointer;
   }
-
+.background-stopClick{
+  width: 100%;
+  height:100%;
+  background: rgba(63, 63, 63, .1);
+  z-index: 5;
+  position: relative;
   .centerTip {
     width: 320px;
     height: 240px;
@@ -543,6 +548,7 @@
       cursor: pointer;
     }
   }
+}
 
   .tip-save-result {
     width: 120px;

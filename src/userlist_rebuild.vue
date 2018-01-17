@@ -12,74 +12,68 @@
                     :userOnlineActive.sync="userOnlineActive"
                     :userWaitingActive.sync="userWaitingActive"
             ></communication>
-            <aside class="center-inner-userlist">
+            <aside class="center-inner-userList">
                 <article class="search-result-tips" v-if="filterFinish">
                     <p>点击<a href="javascript:void(0)" @click.stop="filterFinish=false">返回全部</a>，为您找到<span>0</span>条信息
                     </p>
                 </article>
-                <nav class="userlist-status">
-                    <ul class="userlist-status-box tabsInner" id="ev-user-tabs">
-                        <li class="userlist-status-item tabsItem"
+                <nav class="userList-status">
+                    <ul class="userList-status-box tabsInner" id="ev-user-tabs">
+                        <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-1"
-                            @click="statusChange(1)"
+                            @click.stop="statusChange(1)"
                             v-bind:class="{ 'active': userListStatus.first,'new':newWaitingFlag}"
                         >
                             待分诊
                         </li>
-                        <li class="userlist-status-item tabsItem"
+                        <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-2"
-                            @click="statusChange(2)"
+                            @click.stop="statusChange(2)"
                             v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
                         >沟通中
                         </li>
-                        <li class="userlist-status-item tabsItem"
+                        <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-3"
-                            @click="statusChange(3)"
+                            @click.stop="statusChange(3)"
                             v-bind:class="{ 'active': userListStatus.third,'new':newResetFlag}">
                             重新分诊
                         </li>
                     </ul>
-                    <i class="userlist-status-right" @click="sortShow()"></i>
-                    <div class="userlist-status-sortList" v-show="sortFlag">
+                    <i class="userList-status-right" @click.stop="sortShow"></i>
+                    <div class="userList-status-sortList" v-show="sortFlag">
                         <ul>
-                            <li @click="sort(0)" :class="{'active':sortActive==0}">患者最近消息发出时间由近到远</li>
+                            <li @click.stop="sort(0)" :class="{'active':sortActive==0}">患者最近消息发出时间由近到远</li>
                             <!--<li @click="sort(1)" :class="{'active':sortActive==1}">患者剩余免费沟通时间从少到多</li>-->
                             <!--<li @click="sort(2)" :class="{'active':sortActive==2}">剩余时间从:多-少</li>-->
                             <!--<li @click="sort(3)" :class="{'active':sortActive==3}">等待时间从:少-多</li>-->
-                            <li @click="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间从多到少</li>
+                            <li @click.stop="sort(4)" :class="{'active':sortActive==4}">患者等待沟通时间从多到少</li>
                         </ul>
                     </div>
-                    <audio v-if="$store.state.musicPlay" autoplay src="/static/img/audio/warningTone.mp3"
-                           style="display: none"></audio> <!--新消息提示音-->
+                    <audio v-if="$store.state.musicPlay" autoplay src="/static/image/audio/warningTone.mp3" style="display: none"></audio> <!--新消息提示音-->
                 </nav>
-                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}"
-                         id="ev-user-inner">
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-1"
+                <section class="userList-inner-content viewInner" :class="{'search-result':filterFinish}" id="ev-user-inner">
+                    <section class="userList-mainList viewItem" data-role="ut-tabs-1"
                              v-show="userListStatus.status == 1">
                         <!--<transition-group name="list-left" tag="section">-->
                         <article v-show="userListWaiting.length > 0" @click="transformData(items,index)"
-                                 :class="[{ active : userWaitingActive == index }, 'userlist-mainList-item']"
+                                 :class="[{ active : userWaitingActive == index }, 'userList-mainList-item']"
                                  v-for="(items,index) in userListWaiting"
                                  :key="index"
                         >
-                            <figure class="userlist-item-img">
+                            <figure class="userList-item-img">
                                 <img v-bind:src="items.logoUrl" alt="">
                                 <p v-show="items.messageAlert">{{items.messageAlert}}</p>
                             </figure>
-                            <figcaption class="userlist-item-base-msg">
+                            <figcaption class="userList-item-base-msg">
                                 <h3>
                                     <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                         class="category short" v-show="items.consultationState==5">待分诊</span><span
                                         class="category short"
-                                        v-show="items.diagnosisContent == ''&& items.consultationState!=5">{{items| checkState}}</span>
-                                    <span class="category short"
-                                          v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>
+                                        v-show="items.consultationState!=5">{{items| checkState}}</span>
+                                    <!--<span class="category short" v-show="items.diagnosisContent != ''&& items.consultationState!=5">{{items.diagnosisContent}}</span>-->
                                 </h3>
-                                <article>
-                                    <span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
-                                </article>
-                                <button class="get-triage btn-primary-small"
-                                        @click.stop="getTriagePatient(items,index)">接诊
+                                <article><span class="text">{{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : (items.patientSex == 1 ? '男' : '女')}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span></article>
+                                <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊
                                 </button>
                             </figcaption>
 
@@ -88,24 +82,22 @@
                         <!--</transition-group>-->
                         <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
                     </section>
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-2"
+                    <section class="userList-mainList viewItem" data-role="ut-tabs-2"
                              v-show="userListStatus.status == 2">
                         <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
-                                 :class="[{ active : userOnlineActive == index }, 'userlist-mainList-item']"
+                                 :class="[{ active : userOnlineActive == index }, 'userList-mainList-item']"
                                  v-for="(items,index) in userListOnline"
                                  :key="index"
                         >
-                            <figure class="userlist-item-img">
+                            <figure class="userList-item-img">
                                 <img v-bind:src="items.logoUrl" alt="">
                                 <p v-show="items.messageAlert">{{items.messageAlert}}</p>
                             </figure>
-                            <figcaption class="userlist-item-base-msg">
+                            <figcaption class="userList-item-base-msg">
                                 <h3>
                                     <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
-                                        class="category short"
-                                        v-show="!fixByCurrent(items,index)">{{items | checkState}}</span>
-                                    <span class="category short"
-                                          v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
+                                        class="category short" v-show="!fixByCurrent(items,index)">{{items | checkState}}</span><span
+                                        class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
                                 </h3>
                                 <article>
                                     <span class="text">
@@ -121,18 +113,17 @@
                         </article>
                         <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                     </section>
-                    <section class="userlist-mainList viewItem" data-role="ut-tabs-3"
-                             v-show="userListStatus.status == 3">
+                    <section class="userList-mainList viewItem" data-role="ut-tabs-3" v-show="userListStatus.status == 3">
                         <article v-show="userListReset.length > 0" @click="transformData(items,index)"
-                                 :class="[{ active : userResetActive == index }, 'userlist-mainList-item']"
+                                 :class="[{ active : userResetActive == index }, 'userList-mainList-item']"
                                  v-for="(items,index) in userListReset"
                                  :key="index"
                         >
-                            <figure class="userlist-item-img">
+                            <figure class="userList-item-img">
                                 <img v-bind:src="items.logoUrl" alt="">
                                 <p v-show="items.messageAlert">{{items.messageAlert}}</p>
                             </figure>
-                            <figcaption class="userlist-item-base-msg">
+                            <figcaption class="userList-item-base-msg">
                                 <h3>
                                     <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                         class="category short"
@@ -158,8 +149,7 @@
                     </button>
                 </footer>
             </aside>
-            <record :recodrdData="message" v-if="noData" :waitingTriage.sync="waitingTriage"
-                    :userListStatus.sync="userListStatus"></record>
+            <record :recodrdData="message" v-if="noData" :waitingTriage.sync="waitingTriage" :userListStatus.sync="userListStatus"></record>
         </div>
         <footer-list></footer-list>
         <check-history v-if="$store.state.checkHistoryFlag"></check-history>
@@ -203,7 +193,12 @@
         ) {
             result = "星期" + common.numToChinese(week);
         } else {
-            result = time.substring(0, 16);
+            let windowWidth = $(window).width();
+            if(windowWidth <= 1440){
+                result = time.substring(5, 16);
+            }else{
+                result = time.substring(0, 16);
+            }
         }
         return result;
     });
@@ -260,9 +255,9 @@
         return result;
     });
     const XHRList = {
-        onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
-        waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/",
-        resetUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+        onlineuserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
+        waitinguserList: "/call/customer/case/consultation/v1/getMapListForCase/",
+        resetuserList: "/call/customer/case/consultation/v1/getMapListForCase/"
     };
     export default {
         name: "userList",
@@ -355,7 +350,7 @@
             //刷新
             "$store.state.waitingListRefresh"(flag) {
                 if (flag) {
-                    this.getUserList("waiting", this.filterMethod);
+                    this.getuserList("waiting", this.filterMethod);
                     store.commit("waitingListRefreshFlag", false);
                 } else {
                     return;
@@ -363,7 +358,7 @@
             },  //待分诊
             "$store.state.onlineListRefresh"(flag) {
                 if (flag) {
-                    this.getUserList("online", this.filterMethod);
+                    this.getuserList("online", this.filterMethod);
                     store.commit("onlineListRefresh", false);
                 } else {
                     return;
@@ -371,7 +366,7 @@
             },   //沟通中
             "$store.state.resetListRefresh"(flag) {
                 if (flag) {
-                    this.getUserList("reset", this.filterMethod);
+                    this.getuserList("reset", this.filterMethod);
                     store.commit("resetListRefreshFlag", false);
                 } else {
                     return;
@@ -419,9 +414,9 @@
         methods: {
             init() {
                 this.$store.state.searchStatus = true;
-                this.getUserList("waiting");
-                this.getUserList("online");
-                this.getUserList("reset");
+                this.getuserList("waiting");
+                this.getuserList("online");
+                this.getuserList("reset");
             },
             fixByCurrent(item, index) {
                 let flag = false;
@@ -549,6 +544,7 @@
             //三个状态的点击切换（沟通中、已结束、被退回）
             statusChange(status) {
                 //Tab 切换
+
                 this.userListStatus.status = status;
                 switch (status) {
                     case 1 :
@@ -564,6 +560,7 @@
                         });
                         break;
                     case 2:
+
                         this.userListStatus.first = false;
                         this.userListStatus.second = true;
                         this.userListStatus.third = false;
@@ -593,7 +590,7 @@
             },
             //患者列表
             //type:online为沟通中，wating待分诊
-            getUserList(type, param, fn) {
+            getuserList(type, param, fn) {
                 let _this = this;
                 _this.userListData = "";
                 _this.userListLoading = [];
@@ -615,7 +612,7 @@
                             },
                             param
                         );
-                        url = XHRList.onlineUserList;
+                        url = XHRList.onlineuserList;
                         break;
                     case 'waiting':
                         dataValue = Object.assign(
@@ -627,7 +624,7 @@
                             },
                             param
                         );
-                        url = XHRList.waitingUserList;
+                        url = XHRList.waitinguserList;
                         break;
                     case 'reset':
                         dataValue = Object.assign(
@@ -639,7 +636,7 @@
                             },
                             param
                         );
-                        url = XHRList.resetUserList;
+                        url = XHRList.resetuserList;
                 }
 
                 //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放8-分诊完成9-待检查10-已推荐   7-分诊拒绝    6-已上传资料    11-超时未回复
@@ -806,16 +803,16 @@
                     selectName: content
                 });
                 store.commit("startLoading");
-                this.getUserList("waiting", this.filterMethod);
-                this.getUserList("online", this.filterMethod);
-                this.getUserList("reset", this.filterMethod);
+                this.getuserList("waiting", this.filterMethod);
+                this.getuserList("online", this.filterMethod);
+                this.getuserList("reset", this.filterMethod);
                 store.commit("stopLoading");
                 //                this.filterFinish = true;
             },
             refreshList() {
-                this.getUserList("waiting", this.filterMethod);
-                this.getUserList("online", this.filterMethod);
-                this.getUserList("reset", this.filterMethod);
+                this.getuserList("waiting", this.filterMethod);
+                this.getuserList("online", this.filterMethod);
+                this.getuserList("reset", this.filterMethod);
             },
             //选择退回患者
             selectQuitItem(item) {
@@ -836,7 +833,7 @@
                         customerId: this.$store.state.userId
                     },
                     () => {
-                        this.getUserList("waiting");
+                        this.getuserList("waiting");
                         store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
@@ -844,7 +841,7 @@
                         });
                     },
                     c => {
-                        this.getUserList("waiting");
+                        this.getuserList("waiting");
                         store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
@@ -853,10 +850,10 @@
                     }
                 ).then(res => {
                     //患者未被抢单
-                    this.getUserList("waiting");
-                    this.getUserList("reset");
+                    this.getuserList("waiting");
+                    this.getuserList("reset");
                     this.statusChange(2);
-                    this.getUserList("online", {}, () => {
+                    this.getuserList("online", {}, () => {
                         let triageItem = this.getBeTriagePatient(item);
                         if (typeof (triageItem) == 'undefined') {
                             return;
@@ -904,6 +901,7 @@
             },
             sortShow() {
                 this.sortFlag = !this.sortFlag;
+                console.log(this.sortFlag);
             },
             sort(index) {
                 let _this = this;
@@ -911,34 +909,34 @@
                 _this.sortFlag = false;
                 switch (index) {
                     case 0:
-                        _this.getUserList("waiting", {sortType: -6});
-                        _this.getUserList("online", {sortType: -6});
-                        _this.getUserList("reset", {sortType: -6});
+                        _this.getuserList("waiting", {sortType: -6});
+                        _this.getuserList("online", {sortType: -6});
+                        _this.getuserList("reset", {sortType: -6});
                         break;
                     case 1:
-                        _this.getUserList("waiting", {sortType: 5});
-                        _this.getUserList("online", {sortType: 5});
-                        _this.getUserList("reset", {sortType: 5});
+                        _this.getuserList("waiting", {sortType: 5});
+                        _this.getuserList("online", {sortType: 5});
+                        _this.getuserList("reset", {sortType: 5});
                         break;
                     case 2:
-                        _this.getUserList("waiting", {sortType: 4});
-                        _this.getUserList("online", {sortType: 4});
-                        _this.getUserList("reset", {sortType: 4});
+                        _this.getuserList("waiting", {sortType: 4});
+                        _this.getuserList("online", {sortType: 4});
+                        _this.getuserList("reset", {sortType: 4});
                         break;
                     case 3:
-                        _this.getUserList("waiting", {sortType: -5});
-                        _this.getUserList("online", {sortType: -5});
-                        _this.getUserList("reset", {sortType: -5});
+                        _this.getuserList("waiting", {sortType: -5});
+                        _this.getuserList("online", {sortType: -5});
+                        _this.getuserList("reset", {sortType: -5});
                         break;
                     case 4:
-                        _this.getUserList("waiting", {sortType: -5});
-                        _this.getUserList("online", {sortType: -5});
-                        _this.getUserList("reset", {sortType: -5});
+                        _this.getuserList("waiting", {sortType: -5});
+                        _this.getuserList("online", {sortType: -5});
+                        _this.getuserList("reset", {sortType: -5});
                         break;
                     default:
-                        _this.getUserList("waiting", {sortType: 6});
-                        _this.getUserList("online", {sortType: 6});
-                        _this.getUserList("reset", {sortType: 6});
+                        _this.getuserList("waiting", {sortType: 6});
+                        _this.getuserList("online", {sortType: 6});
+                        _this.getuserList("reset", {sortType: 6});
                 }
             }
         }
@@ -969,10 +967,21 @@
         //   transform: translateX(100px);
     }
 
+    .fadeDown-enter-active,
+    .fadeDown-leave-active {
+        transition: all ease-in-out 0.5s;
+    }
+
+    .fadeDown-enter,
+    .fadeDown-leave-to {
+        opacity: 0;
+        transform: translateY(-50%);
+    }
+
     .userList {
         width: 100%;
         height: 100%;
-        .center-inner-userlist {
+        .center-inner-userList {
             background-color: #fff;
             color: #fff;
             width: 400px;
@@ -981,6 +990,7 @@
             height: 100%;
             border-right: 1px solid #ededed;
             box-sizing: border-box;
+
             .search-result-tips {
                 display: block;
                 text-align: center;
@@ -1012,308 +1022,320 @@
                     }
                 }
             }
-        }
-        .userlist-status {
-            background-color: #fff;
-            box-sizing: border-box;
-            padding: 10px 14px;
-            position: relative;
-            &-box {
-                text-align: center;
-                font-size: 0;
-                border: 1px solid #acb1be;
-                border-radius: 4px;
-                width: 85%;
-                display: inline-block;
-            }
-            &-right {
-                width: 47px;
-                height: 16px;
-                background: url("/static/image/img00/common/sorting@2x.png") no-repeat center center;
-                display: inline-block;
-                vertical-align: middle;
-                border-radius: 4px;
+            .userList-status {
+                background-color: #fff;
                 box-sizing: border-box;
-                background-size: contain;
-            }
-            &-sortList {
-                position: absolute;
-                top: 12px;
-                right: -220px;
-                width: 220px;
-                z-index: 6;
-                text-indent: 5px;
-                ul {
-                    width: 100%;
+                padding: 10px 14px;
+                position: relative;
+                &-box {
+                    text-align: center;
+                    font-size: 0;
+                    border: 1px solid #acb1be;
                     border-radius: 4px;
-                    overflow: hidden;
-                    box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
-                    li {
+                    width: 85%;
+                    display: inline-block;
+                }
+                &-right {
+                    width: 47px;
+                    height: 16px;
+                    background: url("/static/image/img00/common/sorting@2x.png") no-repeat center center;
+                    display: inline-block;
+                    vertical-align: middle;
+                    border-radius: 4px;
+                    box-sizing: border-box;
+                    background-size: contain;
+                    cursor: pointer;
+                }
+                &-sortList {
+                    position: absolute;
+                    top: 12px;
+                    right: -220px;
+                    width: 220px;
+                    z-index: 6;
+                    text-indent: 5px;
+                    ul {
                         width: 100%;
-                        text-align: left;
-                        padding: 5px 0 5px 0;
-                        height: 20px;
-                        line-height: 25px;
-                        color: #808080;
-                        font-size: 14px;
-                        background: #fff;
-                        &:hover {
-                            background: #f6f9fa;
+                        border-radius: 4px;
+                        overflow: hidden;
+                        box-shadow: 0 0 8px 0 rgba(153, 167, 208, 0.35);
+                        li {
+                            width: 100%;
+                            text-align: left;
+                            padding: 5px 0 5px 0;
+                            height: 20px;
+                            line-height: 25px;
+                            color: #808080;
+                            font-size: 14px;
+                            background: #fff;
+                            &:hover {
+                                background: #f6f9fa;
+                            }
+                            &.active {
+                                background: #eceff6;
+                            }
+                        }
+                    }
+                }
+                &-item {
+                    display: inline-block;
+                    font-size: 14px;
+                    color: #808080;
+                    padding: 12px 0;
+                    width: 33.3%;
+                    box-sizing: border-box;
+                    border-right: 1px solid #acb1be;
+                    cursor: pointer;
+
+                    &.new {
+                        position: relative;
+                        &:after {
+                            content: "";
+                            width: 8px;
+                            height: 8px;
+                            border-radius: 50%;
+                            background-color: rgba(242, 62, 51, 0.9);
+                            box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.15);
+                            position: absolute;
+                            right: 5px;
+                            top: 5px;
+                        }
+                    }
+                    &:nth-last-child(1) {
+                        border-right: none;
+                    }
+                    &.active {
+                        background-color: #7a8ec1;
+                        color: #fff;
+                    }
+                }
+            }
+            .userList-inner-content {
+                overflow: hidden;
+                height: 100%;
+                .userList-mainList {
+                    overflow: auto;
+                    height: 85%;
+                    &-item {
+                        padding: 25px 20px 25px 40px;
+                        font-size: 0;
+                        background-color: #fff;
+                        box-sizing: border-box;
+                        cursor: pointer;
+                        position: relative;
+                        display: flex;
+                        width: 100%;
+                        .get-triage {
+                            margin-top: 10px;
                         }
                         &.active {
-                            background: #eceff6;
+                            background-color: #f4f6fb;
+                            box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
+                        }
+                        &:hover {
+                            background-color: #f4f6fb;
+                            box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
+                            //&:before {
+                            //  content: '';
+                            //  display: block;
+                            //  position: absolute;
+                            //  top: 0;
+                            //  left: 0;
+                            //  bottom: 0;
+                            //  background-color: #4fc8d5;
+                            //  width: 5px;
+                            //}
+                        }
+                        .userList-item-img {
+                            /*display: inline-block;*/
+                            /*vertical-align: middle;*/
+                            margin-right: 12px;
+                            position: relative;
+                            display: table-cell;
+                            /*width: 100%;*/
+                            vertical-align: top;
+                            font-size: 0;
+                            padding-left: 10px;
+                            & > p {
+                                font-size: 15px;
+                                color: #ffffff;
+                                letter-spacing: 0;
+                                line-height: 15px;
+                                background: rgba(242, 62, 51, 0.9);
+                                box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.35);
+                                border-radius: 10px;
+                                padding: 2px 6px 3px;
+                                position: absolute;
+                                top: 0;
+                                right: -10px;
+                            }
+                            & > img {
+                                width: 50px;
+                                height: 50px;
+                                border-radius: 50%;
+                                vertical-align: top;
+                            }
+                        }
+                        .userList-item-msg {
+                            display: table-cell;
+                            width: 100%;
+                            vertical-align: top;
+                            font-size: 0;
+                            padding-left: 10px;
+                        }
+                        & > .time {
+                            font-size: 12px;
+                            color: #808080;
+                            letter-spacing: 0;
+                            line-height: 12px;
+                            position: absolute;
+                            right: 25px;
+                            top: 32px;
+                        }
+                        .userList-item-base-msg {
+                            //margin-top: 6px;
+                            display: inline-block;
+                            vertical-align: middle;
+                            width: 255px;
+                            & > h3 {
+                                font-size: 16px;
+                                color: #222222;
+                                display: inline-block;
+                                vertical-align: middle;
+                                padding-right: 5px;
+
+                                .name {
+                                    font-size: 18px;
+                                    color: #222222;
+                                    letter-spacing: 0;
+                                    line-height: 18px;
+                                    padding: 0 8px 0 0;
+                                }
+
+                                .category {
+                                    font-size: 13px;
+                                    color: #6b748c;
+                                    letter-spacing: 0;
+                                    line-height: 13px;
+                                    padding-left: 8px;
+                                    border-left: 1px solid #e1e2e7;
+                                    font-weight: 400;
+                                    display: inline-block;
+                                    vertical-align: middle;
+                                    max-width: 125px;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    -o-text-overflow: ellipsis;
+                                    overflow: hidden;
+                                    &.short {
+                                        max-width: 65px;
+                                    }
+                                    span {
+                                        margin-right: 8px;
+                                    }
+                                }
+                            }
+                            .userList-item-msg-category {
+                                //@include clearfix();
+                                display: inline-block;
+                                vertical-align: middle;
+                                color: #222;
+                                border-left: 1px solid #e1e2e7;
+                                padding-left: 5px;
+
+                                & > span {
+                                    padding-right: 7px;
+                                    font-size: 12px;
+                                }
+                            }
+                            & > .time {
+                                float: right;
+                                font-size: 12px;
+                                color: #666;
+                            }
+                            .text {
+                                font-size: 13px;
+                                color: #808080;
+                                letter-spacing: 0;
+                                line-height: 13px;
+                                margin-top: 10px;
+                                display: inline-block;
+                                @include ellipsis();
+                                max-width: 250px;
+                            }
                         }
                     }
                 }
+                .userList-no-data {
+                    font-size: 14px;
+                    color: #aaaaaa;
+                    text-align: center;
+                    margin-top: 52px;
+                }
             }
-            &-item {
-                display: inline-block;
-                font-size: 14px;
-                color: #808080;
-                padding: 12px 0;
-                width: 33.3%;
-                box-sizing: border-box;
-                border-right: 1px solid #acb1be;
-                cursor: pointer;
-
-                &.new {
-                    position: relative;
-                    &:after {
-                        content: "";
-                        width: 8px;
-                        height: 8px;
-                        border-radius: 50%;
-                        background-color: rgba(242, 62, 51, 0.9);
-                        box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.15);
-                        position: absolute;
-                        right: 5px;
-                        top: 5px;
+            .user-list-footer {
+                background: rgba(255, 255, 255, 0.97);
+                box-shadow: 0 2px 6px 0 rgba(153, 167, 208, 0.62);
+                border-radius: 4px;
+                width: 350px;
+                height: 40px;
+                text-align: center;
+                position: absolute;
+                bottom: 50px;
+                //opacity: .67;
+                left: 20px;
+                &:before {
+                    content: "";
+                    display: inline-block;
+                    vertical-align: middle;
+                    height: 100%;
+                }
+                .refresh-user-list-btn {
+                    display: inline-block;
+                    vertical-align: middle;
+                }
+                .icon-refresh-btn {
+                    cursor: pointer;
+                    span {
+                        font-size: 16px;
+                        color: #7a8ec1;
+                        vertical-align: middle;
+                        padding-left: 4px;
                     }
                 }
-                &:nth-last-child(1) {
-                    border-right: none;
-                }
-                &.active {
-                    background-color: #7a8ec1;
-                    color: #fff;
-                }
-            }
-        }
-    }
-
-    .time-title {
-        font-size: 13px;
-        color: #909090;
-        margin-bottom: 24px;
-    }
-
-    .userlist-mainList {
-        overflow: auto;
-        height: 85%;
-        &-item {
-            padding: 25px 20px 25px 40px;
-            font-size: 0;
-            background-color: #fff;
-            box-sizing: border-box;
-            cursor: pointer;
-            position: relative;
-            display: flex;
-            width: 100%;
-            .get-triage {
-                margin-top: 10px;
-            }
-            &.active {
-                background-color: #f4f6fb;
-                box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
-            }
-            &:hover {
-                background-color: #f4f6fb;
-                box-shadow: 0 0 8px 0 rgba(179, 205, 199, 0.45);
-                //&:before {
-                //  content: '';
-                //  display: block;
-                //  position: absolute;
-                //  top: 0;
-                //  left: 0;
-                //  bottom: 0;
-                //  background-color: #4fc8d5;
-                //  width: 5px;
-                //}
-            }
-            .userlist-item-img {
-                display: inline-block;
-                vertical-align: middle;
-                margin-right: 12px;
-                position: relative;
-                & > p {
-                    font-size: 15px;
-                    color: #ffffff;
-                    letter-spacing: 0;
-                    line-height: 15px;
-                    background: rgba(242, 62, 51, 0.9);
-                    box-shadow: 0 1px 1px 0 rgba(45, 17, 14, 0.35);
-                    border-radius: 10px;
-                    padding: 2px 6px 3px;
-                    position: absolute;
-                    top: 0;
-                    right: -10px;
-                }
-                & > img {
-                    width: 50px;
-                    height: 50px;
-                    border-radius: 50%;
-                    vertical-align: top;
-                }
-            }
-            .userlist-item-msg {
-                display: table-cell;
-                width: 100%;
-                vertical-align: top;
-                font-size: 0;
-                padding-left: 10px;
-            }
-            & > .time {
-                font-size: 12px;
-                color: #808080;
-                letter-spacing: 0;
-                line-height: 12px;
-                position: absolute;
-                right: 25px;
-                top: 32px;
-            }
-        }
-    }
-
-    .userlist-item-base-msg {
-        //margin-top: 6px;
-        display: inline-block;
-        vertical-align: middle;
-        width: 255px;
-        & > h3 {
-            font-size: 16px;
-            color: #222222;
-            display: inline-block;
-            vertical-align: middle;
-            padding-right: 5px;
-
-            .name {
-                font-size: 18px;
-                color: #222222;
-                letter-spacing: 0;
-                line-height: 18px;
-                padding: 0 8px 0 0;
             }
 
-            .category {
-                font-size: 13px;
-                color: #6b748c;
-                letter-spacing: 0;
-                line-height: 13px;
-                padding-left: 8px;
-                border-left: 1px solid #e1e2e7;
-                font-weight: 400;
-                display: inline-block;
-                vertical-align: middle;
-                max-width: 125px;
-                white-space: nowrap;
-                text-overflow: ellipsis;
-                -o-text-overflow: ellipsis;
-                overflow: hidden;
-                &.short {
-                    max-width: 65px;
+
+            @include query(1440px) {
+                width: 315px;
+                .userList-status{
+                    &-box{
+                        width:80%
+                    }
                 }
-                span {
-                    margin-right: 8px;
+                .userList-inner-content{
+                    .userList-mainList{
+                        &-item {
+                            padding: 25px 0 25px 0;
+                            .userList-item-img{
+                                margin-right: 5px;
+                            }
+                            & > .time {
+                                right: 10px;
+                            }
+                            .userList-item-base-msg {
+                                .text {
+                                    max-width: 230px;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                .user-list-footer {
+                    width: 275px;
                 }
             }
         }
-        .userlist-item-msg-category {
-            //@include clearfix();
-            display: inline-block;
-            vertical-align: middle;
-            color: #222;
-            border-left: 1px solid #e1e2e7;
-            padding-left: 5px;
-
-            & > span {
-                padding-right: 7px;
-                font-size: 12px;
-            }
-        }
-        & > .time {
-            float: right;
-            font-size: 12px;
-            color: #666;
-        }
-        .text {
-            font-size: 13px;
-            color: #808080;
-            letter-spacing: 0;
-            line-height: 13px;
-            margin-top: 10px;
-            display: inline-block;
-            @include ellipsis();
-            max-width: 250px;
-        }
-    }
-
-    .userlist-item-msg-item {
-        margin-top: 14px;
-        font-size: 0;
-        & > span {
-            font-size: 12px;
-            color: #666;
-        }
-        .sex {
-            margin-right: 10px;
-        }
-        .age {
-            margin-right: 10px;
-        }
-    }
-
-    .user-list-footer {
-        background: rgba(255, 255, 255, 0.97);
-        box-shadow: 0 2px 6px 0 rgba(153, 167, 208, 0.62);
-        border-radius: 4px;
-        width: 350px;
-        height: 40px;
-        text-align: center;
-        position: absolute;
-        bottom: 50px;
-        //opacity: .67;
-        left: 20px;
-        &:before {
-            content: "";
-            display: inline-block;
-            vertical-align: middle;
-            height: 100%;
-        }
-        .refresh-user-list-btn {
-            display: inline-block;
-            vertical-align: middle;
-        }
-        .icon-refresh-btn {
-            cursor: pointer;
-            span {
-                font-size: 16px;
-                color: #7a8ec1;
-                vertical-align: middle;
-                padding-left: 4px;
-            }
-        }
-    }
-
-    .userList-inner-content {
-        overflow: hidden;
-        height: 100%;
-    }
-
-    .userList-no-data {
-        font-size: 14px;
-        color: #aaaaaa;
-        text-align: center;
-        margin-top: 52px;
     }
 
     .tabsInner.medical-record-tabs {
@@ -1337,7 +1359,6 @@
             }
         }
     }
-
     .quit-triage {
         margin-top: 10px;
         .text {
@@ -1362,14 +1383,24 @@
         }
     }
 
-    .fadeDown-enter-active,
-    .fadeDown-leave-active {
-        transition: all ease-in-out 0.5s;
-    }
+    /*.time-title {*/
+    /*font-size: 13px;*/
+    /*color: #909090;*/
+    /*margin-bottom: 24px;*/
+    /*}*/
 
-    .fadeDown-enter,
-    .fadeDown-leave-to {
-        opacity: 0;
-        transform: translateY(-50%);
-    }
+    /*.userList-item-msg-item {*/
+        /*margin-top: 14px;*/
+        /*font-size: 0;*/
+        /*& > span {*/
+            /*font-size: 12px;*/
+            /*color: #666;*/
+        /*}*/
+        /*.sex {*/
+            /*margin-right: 10px;*/
+        /*}*/
+        /*.age {*/
+            /*margin-right: 10px;*/
+        /*}*/
+    /*}*/
 </style>

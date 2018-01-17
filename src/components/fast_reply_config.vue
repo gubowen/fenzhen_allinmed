@@ -4,7 +4,7 @@
       <i class="icon-close window-close" @click="$store.state.fastReplyConfig = false"></i>
       <header class="jump-box-config-title">
         <article>
-          <h2>编辑快速提问</h2>
+          <h2>编辑快捷提问</h2>
         </article>
         <button class="jump-box-add-term icon-add-term" @click="termShowFlag[-1]=true"><span>添加分组</span></button>
       </header>
@@ -102,6 +102,7 @@
 
   import ajax from "@/common/js/util/ajax";
   import api from "@/common/js/util/util";
+
   const XHRList = {
     deleteTerm: "/call/customer/quick/question/v1/delete/",
     fixTerm: "/call/customer/quick/question/v1/save/",
@@ -143,7 +144,7 @@
             firstResult: "0",
             maxResult: "1000",
             sortType: "2",
-            sortPartIdList: "",
+            sortPartIdList: ""
 
           },
           done(res){
@@ -169,12 +170,8 @@
           this.$set(this.deleteTermShowFlag, index, false);
 
 
-          this.$set(this.memberFixFlag, index, {
-            "-1": false
-          });
-          this.$set(this.memberFixContent, index, {
-            "-1": ""
-          });
+          this.$set(this.memberFixFlag, index, {"-1": false});
+          this.$set(this.memberFixContent, index, {"-1": ""});
           this.$set(this.deleteMemberShowFlag, index, {});
           if (element.children) {
             element.children.forEach((eElement, eIndex) => {
@@ -199,7 +196,7 @@
         let params = {
           customerId: this.$store.state.userId,
           treeLevel: 1,
-          isValid: "1",
+          isValid: "1"
         };
         switch (type) {
           case "addTerm":
@@ -210,7 +207,7 @@
             } else {
               params = Object.assign(params, {
                 questionDesc: this.addInputContent,
-                questionType: "2",
+                questionType: "2"
               });
             }
             break;
@@ -221,6 +218,7 @@
               flag = false;
             } else {
               params = Object.assign(params, {
+                treeLevel: 2,
                 questionDesc: this.memberFixContent[index][-1],
                 parentId: item.questionId,
                 fullPath: item.fullPath,

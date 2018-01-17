@@ -248,8 +248,10 @@
           beforeSend(config) {
           },
           done(res) {
-            _this.operationList.dataList = res.responseObject.responseData.dataList;
-            _this.operationList.placeholderText = '手术建议';
+              if(res.responseObject.responseData){
+                _this.operationList.dataList = res.responseObject.responseData.dataList;
+                _this.operationList.placeholderText = '手术建议';
+              }
               store.commit("stopLoading");
           },
           fail(error){

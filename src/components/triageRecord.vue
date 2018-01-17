@@ -3,7 +3,7 @@
          v-show="$store.state.userListStatus.second && ($store.state.currentItem.consultationState == 6||$store.state.currentItem.consultationState == -1||$store.state.currentItem.consultationState ==0||$store.state.currentItem.consultationState ==9||$store.state.currentItem.consultationState ==10)">
     <header class="medical-record-remark-header">
       <section class="remark-add">
-        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfim=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
+        <p class="remark-build" :class="{'remark-new':showAdd}" v-show="showRecord" @click.stop="remarkValue='';showAdd=!showAdd;addType='add';showConfirm=false;"><i></i><span>{{showAdd?"返回":"添加"}}</span></p>
         <h3 class="remark-name" v-show="!showRecord" @click.stop="showRecord=true"><i></i><span>展开添加分诊记录</span></h3>
         <p class="remark-toggle" v-show="showRecord" @click.stop="showRecord=false"><i></i><span>收起分诊记录</span></p>
       </section>
@@ -12,24 +12,25 @@
     <section class="medical-record-remark-content">
       <section class="date" :class="{'active':!showAdd}">
         <article class="remark-content-item" v-for="(item,index) in remarkList">
-          <p class="text" @click="remarkValue = item.remarkContent;remarkId=item.id;showAdd=!showAdd;addType='update';showConfim=false;">{{item.remarkContent}}</p>
+          <p class="text" @click="remarkValue = item.remarkContent;remarkId=item.id;showAdd=!showAdd;addType='update';showConfirm=false;">{{item.remarkContent}}</p>
           <p class="time">{{getTime(item)}}</p>
-          <i class="delete" @click="showConfim=!showConfim;showConfimIndex=index"></i>
+          <i class="delete" @click="showConfirm=!showConfirm;showConfirmIndex=index"></i>
           <transition name="scale">
-            <confirm :comfirmContent="confimContent" v-if="showConfim&&showConfimIndex==index" @ensureCallback="deleteRemrak(item)" @cancelCallback="showConfim=!showConfim"></confirm>
+            <confirm :comfirmContent="ConfirmContent" v-if="showConfirm&&showConfirmIndex==index" @ensureCallback="deleteRemark(item)" @cancelCallback="showConfirm=!showConfirm"></confirm>
           </transition>
         </article>
       </section>
       <section class="edit" :class="{'active':showAdd}">
         <textarea placeholder="请填写" maxlength="200" class="J-textArea-remark"  v-model="remarkValue"></textarea>
-        <button class="saveButton" @click="addRemrak">保存</button>
+        <button :class="[{'active':remarkValue},'saveButton']" @click="addRemark">保存</button>
+        <!--<button class="saveButton" @click="addRemrak">保存</button>-->
       </section>
     </section>
   </aside>
 </template>
 <script type="text/ecmascript-6">
-  import ajax from "../common/js/util/ajax";
-  import confirm from "../common/smallConfirm"
+  import ajax from "@/common/js/util/ajax";
+  import confirm from "@/common/smallConfirm"
   const XHRList = {
     update: "/call/customer/patient/case/remark/v1/create/",
     list: "/call/customer/patient/case/remark/v1/getMapList/",
@@ -40,8 +41,8 @@
         return {
           showRecord:false,
           showAdd:false,
-          showConfim:false,
-          showConfimIndex:"",
+          showConfirm:false,
+          showConfirmIndex:"",
           addType:"add",
           remarkValue:"",
           remarkId:"",
@@ -110,55 +111,59 @@
           return time;
         }
       },
-      addRemrak(){
+      addRemark(){
         let that = this;
-        if(this.addType == "add"){
-          ajax({
-            url: XHRList.update,
-            method: 'POST',
-            data: {
-              patientId: that.$store.state.patientId,
-              caseId: that.$store.state.caseId,
-              operatorId: that.$store.state.userId,
-              operatorType: "1",
-              remarkContent: that.remarkValue
-            },
-            done(data){
-              if (data.responseObject.responseStatus) {
-                let D = new Date(),
-                  y = D.getFullYear(),
-                  m = D.getMonth(),
-                  d = D.getDate(),
-                  h = D.getHours(),
-                  mm = D.getMinutes(),
-                  time = (y + "").substring(2) + "/" + (m===0?1:m) + "/" + d + " " + h + ":" + (mm.length==1?'0'+mm:mm);
-                that.showAdd = !that.showAdd;
-                that.remarkList.unshift({
-                  remarkContent: that.remarkValue,
-                  time: time,
-                  id: data.responseObject.responsePk
+        if(that.remarkValue){
+            if(this.addType == "add"){
+                ajax({
+                    url: XHRList.update,
+                    method: 'POST',
+                    data: {
+                        patientId: that.$store.state.patientId,
+                        caseId: that.$store.state.caseId,
+                        operatorId: that.$store.state.userId,
+                        operatorType: "1",
+                        remarkContent: that.remarkValue
+                    },
+                    done(data){
+                        if (data.responseObject.responseStatus) {
+                            let D = new Date(),
+                                y = D.getFullYear(),
+                                m = D.getMonth(),
+                                d = D.getDate(),
+                                h = D.getHours(),
+                                mm = D.getMinutes(),
+                                time = (y + "").substring(2) + "/" + (m===0?1:m) + "/" + d + " " + h + ":" + (mm.length==1?'0'+mm:mm);
+                            that.showAdd = !that.showAdd;
+                            that.remarkList.unshift({
+                                remarkContent: that.remarkValue,
+                                time: time,
+                                id: data.responseObject.responsePk
+                            })
+                        }
+                    }
                 })
-              }
+            }else if(this.addType == "update"){
+                ajax({
+                    url: XHRList.deleteList,
+                    method: 'POST',
+                    data: {
+                        id: that.remarkId,
+                        remarkContent: that.remarkValue
+                    },
+                    done(data){
+                        if (data.responseObject.responseStatus) {
+                            that.getRemarkList();
+                            that.showAdd = !that.showAdd;
+                        }
+                    }
+                })
             }
-          })
-        }else if(this.addType == "update"){
-          ajax({
-            url: XHRList.deleteList,
-            method: 'POST',
-            data: {
-              id: that.remarkId,
-              remarkContent: that.remarkValue
-            },
-            done(data){
-              if (data.responseObject.responseStatus) {
-                that.getRemarkList();
-                that.showAdd = !that.showAdd;
-              }
-            }
-          })
+        }else{
+            return;
         }
       },
-      deleteRemrak(opt){
+      deleteRemark(opt){
         let that = this;
         ajax({
           url: XHRList.deleteList,
@@ -169,7 +174,7 @@
           },
           done(data){
             if (data.responseObject.responseStatus) {
-              that.showConfim=!that.showConfim;
+              that.showConfirm=!that.showConfirm;
               that.remarkList.forEach(function (element,index) {
                 if(opt.id==element.id){
                   that.remarkList.splice(index,1);
@@ -185,8 +190,8 @@
       confirm
     },
     computed:{
-      confimContent(){
-        return "确定删除该条备注吗?"
+      ConfirmContent(){
+        return "确定删除该条分诊记录吗?"
       }
     },
     props:{
@@ -345,10 +350,9 @@
 
         .saveButton {
           font-size: 13px;
-          color: #7A8EC1;
           letter-spacing: 0;
           line-height: 30px;
-          border: 1px solid #7A8EC1;
+          border: 1px solid transparent;
           border-radius: 4px;
           width: 70px;
           height: 30px;
@@ -356,7 +360,16 @@
           bottom: 20px;
           right: 20px;
           cursor: pointer;
+          background: #ECEFF6;
+          color: #CCC;
+          &.active{
+            color: #7A8EC1;
+            background: transparent;
+            border: 1px solid #7A8EC1;
+          }
         }
+
+
       }
       .active {
         display: block;

@@ -1,4 +1,5 @@
 <template>
+
     <section class="center-inner-message" id="communication">
         <section class="layout-helper">
             <figure class="center-inner-wrapper">
@@ -418,6 +419,8 @@
         }
     }
 
+
+
     .center-inner-message {
         float: left;
         width: 100%;
@@ -453,7 +456,15 @@
                 vertical-align: middle;
             }
         }
+
+        @include query(1440px) {
+                & > .layout-helper{
+                    margin: 0 385px 0 315px;
+                }
+        }
+
     }
+
     .no-content {
         .layout-helper {
             margin-right: 0;
