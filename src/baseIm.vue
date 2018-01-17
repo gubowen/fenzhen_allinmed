@@ -28,7 +28,7 @@
                                       @deleteMsg="deleteMsg(items)"></ImageElement>
                         <!--多图片信息-->
                         <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'"
-                                        :message="items" @deleteMsg="deleteMsg(items)"></multiple-Image>
+                                      :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
                         <!--视频消息-->
                         <videoElement v-if="items.type === 'video'"
                                       :message="items" :nim="nim" @loadCallback="loadCallback"

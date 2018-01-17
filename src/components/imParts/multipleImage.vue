@@ -12,7 +12,7 @@
                 <section class="imgList" v-if="multipleList.content.data.list.length>0">
                     <ul>
                         <li v-for="(item,index) in multipleList.content.data.list" @click="showBigImgFunction(index)" v-show="index<3">
-                            <img :src="item.url"/>
+                            <img :src="removeBaseImageMsg(item.url)"/>
                         </li>
                     </ul>
                 </section>
@@ -24,11 +24,12 @@
             </div>
             <div class="deleteMessage" @click.stop="deleteMsg">撤回</div>
             <img src="/static/image/img00/index/chatting_portrait_system@2x.png" alt="">
-            <!--<img src="../../assets/img00/index/chatting_portrait_system@2x.png" alt="">-->
         </figure>
     </figure>
 </template>
 <script>
+    import EXIF from "exif-js";
+    import imageEXIF from "@/base/imageRotate";
     export default {
         data() {
             return {
@@ -38,10 +39,16 @@
         props: {
             message: {
                 type: Object
+            },
+            nim:{
+                type:Object
             }
         },
         mounted() {
+
+            console.log("图集");
             console.log(this.message);
+
             this.multipleList = this.message;
             if (this.multipleList.content.data.list.length > 3) {
                // this.multipleList.content.data.list.splice(3, this.multipleList.content.data.list.length - 1);
@@ -68,7 +75,14 @@
                 });
                 this.$store.commit("setSBIFlag", true);
                 this.$store.commit("setSBIType", _this.message.idClient);
-            }
+            },
+            removeBaseImageMsg(url){
+                var _this = this;
+                return _this.nim.viewImageStripMeta({
+                    url: url,
+                    strip: true
+                });
+            },
         }
     }
 </script>
