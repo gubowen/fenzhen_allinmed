@@ -12,7 +12,7 @@
         <section class="jump-box-term-add" v-if="termShowFlag[-1]">
           <input type="text" class="add-input" placeholder="请输入疾病部位名称" v-model="addInputContent" @input="contentLimit('term','-1')"/>
           <figure class="term-add-button">
-            <button class="btn-primary" @click.stop="configCallback('addTerm')">保存</button>
+            <button :class="addInputContent?'btn-primary':'btn-border'" @click.stop="configCallback('addTerm')">保存</button>
             <p class="term-add-cancel" @click.stop="termShowFlag[-1]=false">取消</p>
           </figure>
         </section>
@@ -37,9 +37,9 @@
                 </transition>
             </figure>
             <section class="jump-box-term-add" v-if="termFixFlag[index]" @click.stop="">
-              <input type="text" class="add-input" placeholder="请输入分组名称" v-model="termFixContent[index]" @input="contentLimit('term',index)"/>
+              <input type="text" class="add-input"  placeholder="请输入分组名称" v-model="termFixContent[index]" @input="contentLimit('term',index)"/>
               <figure class="term-add-button">
-                <button class="btn-primary term-add-save" @click.stop="configCallback('fixTerm',item,index)">保存</button>
+                <button class="term-add-save" :class="termFixContent[index]?'btn-primary':'btn-border'"    @click.stop="configCallback('fixTerm',item,index)">保存</button>
                 <p class="term-add-cancel" @click.stop="termFixFlag[index]=false">取消</p>
               </figure>
             </section>
@@ -55,7 +55,7 @@
             <section class="jump-box-member-config" v-if="memberFixFlag[index]['-1']">
               <input type="text" class="jump-box-member-input" placeholder="请输入疾病部位名称" v-model="memberFixContent[index]['-1']" @input="contentLimit('member',index,'-1')"/>
               <figure class="member-add-button">
-                <button class="btn-primary member-add-save" @click.stop="configCallback('addMember',item,index)">保存</button>
+                <button class="member-add-save" :class="memberFixContent[index]['-1']?'btn-primary':'btn-border'"  @click.stop="configCallback('addMember',item,index)">保存</button>
                 <i class="icon-member-add-cancel" @click.stop="memberFixFlag[index]['-1']=false"></i>
               </figure>
             </section>
@@ -78,7 +78,7 @@
               <section class="jump-box-member-config" v-if="memberFixFlag[index][cIndex]">
                 <input type="text" class="jump-box-member-input" placeholder="请输入快捷提问" v-model="memberFixContent[index][cIndex]" @input="contentLimit('member',index,cIndex)"/>
                 <figure class="member-add-button">
-                  <button class="btn-primary member-add-save" @click.stop="configCallback('fixMember',item,index,cItem,cIndex)">保存</button>
+                  <button class="member-add-save" :class="memberFixContent[index][cIndex]?'btn-primary':'btn-border'" @click.stop="configCallback('fixMember',item,index,cItem,cIndex)">保存</button>
                   <p class="term-add-cancel icon-member-add-cancel" @click.stop="memberFixFlag[index][cIndex]=false"></p>
                 </figure>
               </section>
@@ -148,7 +148,7 @@
 
           },
           done(res){
-            console.log(res)
+            console.log(res);
             if (res.responseObject.responseData) {
               let dataList = res.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {
@@ -175,8 +175,8 @@
           this.$set(this.deleteMemberShowFlag, index, {});
           if (element.children) {
             element.children.forEach((eElement, eIndex) => {
-              this.$set(this.memberFixFlag[index], eIndex, false)
-              this.$set(this.memberFixContent[index], eIndex, "")
+              this.$set(this.memberFixFlag[index], eIndex, false);
+              this.$set(this.memberFixContent[index], eIndex, "");
               this.$set(this.deleteMemberShowFlag[index], eIndex, false);
             });
           } else {
@@ -202,7 +202,8 @@
           case "addTerm":
             if (!this.addInputContent.trim()) {
               this.addInputContent = "";
-              this.termShowFlag['-1'] = false;
+
+//              this.termShowFlag['-1'] = false;
               flag = false;
             } else {
               params = Object.assign(params, {
@@ -214,7 +215,7 @@
           case "addMember":
             if (!this.memberFixContent[index][-1].trim()) {
               this.memberFixContent[index]['-1'] = "";
-              this.memberFixFlag[index]['-1'] = false;
+//              this.memberFixFlag[index]['-1'] = false;
               flag = false;
             } else {
               params = Object.assign(params, {
@@ -229,7 +230,7 @@
             break;
           case "fixTerm":
             if (!this.termFixContent[index].trim()) {
-              this.termFixFlag[index] = false;
+//              this.termFixFlag[index] = false;
               flag = false;
             } else {
               params = Object.assign(params, {
@@ -242,7 +243,7 @@
             break;
           case"fixMember":
             if (!this.memberFixContent[index][cIndex].trim()) {
-              this.memberFixFlag[index][cIndex] = false;
+//              this.memberFixFlag[index][cIndex] = false;
               flag = false;
             } else {
               params = Object.assign(params, {
@@ -383,4 +384,11 @@
       opacity: 0;
       transform: translateY(-50%);
   }
+
+  .btn-primary {
+    &.on{
+
+    }
+  }
+
 </style>

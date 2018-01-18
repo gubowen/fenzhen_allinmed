@@ -17,8 +17,7 @@
             </button>
         </nav>
         <section class="jump-box-viewers viewInner" id="ev-show-inners">
-            <section class="jump-box-viewers-item viewItem" :class="{'active': index == nowIndex}"
-                     v-for="(items,index) in FastReplyList">
+            <section class="jump-box-viewers-item viewItem" :class="{'active': index == nowIndex}" v-for="(items,index) in FastReplyList">
                 <ul class="jump-box-list">
                     <li class="jump-box-list-item" v-for="item in items.children"><span @click.stop="clickToSendReply(item)">{{item.questionDesc}}</span></li>
                 </ul>
@@ -67,6 +66,7 @@
             transformBtn (dir) {
                 const total = this.total;
                 const size = this.size;
+                console.log(this.transformIndex.i);
                 if (dir === "prev") {
                     if (Math.abs(this.transformIndex.i) > 0) {
                         this.transformIndex.i++;
