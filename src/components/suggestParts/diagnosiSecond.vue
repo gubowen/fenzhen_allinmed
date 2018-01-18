@@ -64,7 +64,7 @@
                                 <template v-if="matchDoc.matchDocList.length>0">
                                     <section class='doctor-message-item icon-select-big' :class="{'active':docList.isChecked}" v-for="(docList,index) in matchDoc.matchDocList"
                                              @click.stop="changeCheckedState(docList,index,'match')">
-                                        <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
+                                        <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/image/img00/common/default_logo.png'"></figure>
                                         <figcaption class="doctor-message-content">
                                             <header class="doctor-message-content-head">
                                                 <h4>{{docList.fullName}}</h4>
@@ -102,7 +102,7 @@
                                 <section class="doctor-message-page-box">
                                     <section class='doctor-message-item icon-select-big' :class="{'active':docList.isChecked}" v-for="(docList,index) in allDoc.allDocList"
                                              @click="changeCheckedState(docList,index,'all')">
-                                        <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/img/img00/common/default_logo.png'"></figure>
+                                        <figure class="doctor-message-img"><img :src="docList.logoUrl?docList.logoUrl:'/static/image/img00/common/default_logo.png'"></figure>
                                         <figcaption class="doctor-message-content">
                                             <header class="doctor-message-content-head">
                                                 <h4>{{docList.fullName}}</h4>

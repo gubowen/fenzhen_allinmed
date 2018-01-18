@@ -10,7 +10,7 @@
   <section class="search-sortType-item">
     <ul class="search-selector">
       <input class="custom-selector-title firstListTitle" value="" :placeholder="dataListInfo.placeholderText" :readonly="dataListInfo.placeholderText != '疾病'" @click.stop="showData()" @keyup="dataListInfo.placeholderText == '疾病'&& searchIllness($event)" v-model="resultData" :disabled="dataListInfo.disabledFlag"/>
-      <i :class="iconFlag ? 'icon-upArrow' : 'icon-downArrow'" @click.stop="showData()"></i>
+      <i :class="iconFlagDown ? 'icon-upArrow' : 'icon-downArrow'" @click.stop="showData()"></i>
       <section class="search-selector-second-box" v-show="conIndex===currentIndexNow">
         <div class="custom-selector-second firstList" v-show="dataShow">
           <li class="custom-selector-item result-item" v-show="dataListInfo.placeholderText == '疾病'" @click.stop="selectData()">{{noData}}</li>
@@ -50,7 +50,7 @@
         data(){
             return {
                 dataShow: false,
-                iconFlag: false,
+                iconFlagDownDown: false,
                 resultData: '',
                 noData:"暂不确定",
                 currentIndex: -1,
@@ -70,7 +70,7 @@
                 type:Number||String,
                 default:-1
             },
-            iconFlag:{
+            iconFlagDown:{
                 type:Boolean||String
 //                default:false
             }
@@ -78,7 +78,6 @@
         },
         methods: {
             init(){
-               // setTimeout(()=>{
                     if(this.dataListInfo.placeholderText == '疾病'){
                         this.resultData = '暂不确定';
                         this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
@@ -87,12 +86,12 @@
                         this.$emit('update:dataBack', {'progressId':'','progressName':'暂不需手术'});
 
                     }
-             //   },1000);
+               this.iconFlagDownDown =this.iconFlag
             },
             showData(){
                 this.$emit("update:currentIndexNow",this.conIndex);
                 this.dataShow = !this.dataShow;
-                this.iconFlag = !this.iconFlag;
+                this.iconFlagDown = !this.iconFlagDown;
             },
             selectData(item = '', index = ''){
                 let _this = this;
@@ -102,29 +101,29 @@
                     this.resultData = item.tagName;
                     _this.$emit('update:dataBack', item);
                     this.dataShow = !this.dataShow;
-                    this.iconFlag = !this.iconFlag;
+                    this.iconFlagDown = !this.iconFlagDown;
                 } else if (item.illnessName) {
                     this.resultData = item.illnessName;
                     _this.$emit('update:dataBack', item);
                     this.dataShow = !this.dataShow;
-                    this.iconFlag = !this.iconFlag;
+                    this.iconFlagDown = !this.iconFlagDown;
                 } else if (item.progressName) {
                     this.resultData = item.progressName;
                     _this.$emit('update:dataBack', item);
                     this.dataShow = !this.dataShow;
-                    this.iconFlag = !this.iconFlag;
+                    this.iconFlagDown = !this.iconFlagDown;
                 } else if (item.operationName) {
                     if (item.children.length > 0) {
                     } else {
                         _this.resultData = item.operationName;
                         _this.$emit('update:dataBack', item);
                         this.dataShow = !this.dataShow;
-                        this.iconFlag = !this.iconFlag;
+                        this.iconFlagDown = !this.iconFlagDown;
                     }
                 }else{
                     _this.resultData = '暂不确定';
                     this.dataShow = !this.dataShow;
-                    this.iconFlag = !this.iconFlag;
+                    this.iconFlagDown = !this.iconFlagDown;
                     _this.$emit('update:dataBack', {'illnessId':'','illnessName':'暂不确定'});
                 }
             },
@@ -134,7 +133,7 @@
                 this.resultData = item.operationName;
                 this.currentIndexChildren = index;
                 this.dataShow = !this.dataShow;
-                this.iconFlag = !this.iconFlag;
+                this.iconFlagDown = !this.iconFlagDown;
                 this.$emit('update:dataBack',item);
             },
             searchIllness(ev){
@@ -320,7 +319,7 @@
             position: absolute;
             right: 9px;
             top: 13px;
-            background: url("/image/img00/common/arrow_enter.png") no-repeat;
+            background: url("/static/image/img00/common/arrow_enter.png") no-repeat;
           }
 
         }
