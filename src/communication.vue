@@ -56,7 +56,7 @@
                     </transition>
                     <!--结束沟通-->
                     <transition name="fade">
-                        <SmallConfirm @ensureCallback="reTriageComfirm" :comfirmContent="reTriageContentTips"
+                        <SmallConfirm @ensureCallback="reTriageConfirm" :comfirmContent="reTriageContentTips"
                                       @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
                     </transition>
                 </nav>
@@ -279,22 +279,24 @@
                 this.$store.commit("setUsedReplyShow", flag);
             },
             //患者转移至其他分诊医生：
-            reTriageComfirm() {
-                this.$store.commit("startLoading");
+            reTriageConfirm() {
                 releasePatient({
                     customerId: this.$store.state.userId,
                     consultationId: this.$store.state.currentItem.consultationId,
                     consultationState:5
                 }).then(res => {
                     this.$store.commit("startLoading");
-                    document.querySelector(".ev-loading").style.display = "block";
+
+                    this.reTriageShow = false;
                     this.$store.commit("setReleasePatientCaseIdFlag", {
                         caseId: this.$store.state.caseId,
                         flag: true
-                });
-                    this.reTriageShow = false;
-                    this.$store.commit("resetListRefreshFlag", true);
+                    });
+
                     this.userListChange();
+
+                    this.$store.commit("resetListRefreshFlag", true);
+
                 });
 
             },
@@ -341,17 +343,16 @@
             },
             userListChange(){
                 this.$store.commit("startLoading");
-                let waitingList = this.$store.state.waitingList;
-                let patientList = this.$store.state.patientList;
                 setTimeout(() => {
+                    this.$store.commit("startLoading");
+                    let patientList = this.$store.state.patientList;
                     patientList.removeByValue(this.$store.state.currentItem);
+                    this.$store.commit("setPatientList",patientList);
+//                    let waitingList = this.$store.state.waitingList;
+//                    this.$store.commit("setWaitingList", waitingList);
                     this.$store.state.currentItem.triageSelect = false;
-
                     this.$store.commit("waitingListRefreshFlag", true);
-                    this.$store.commit("setWaitingList", waitingList);
-
                     let num = "";
-
                     if (patientList.length > 0) {
                         if (this.userOnlineActive <= patientList.length - 1) {
                             num = this.userOnlineActive;
@@ -366,8 +367,6 @@
                         this.$store.commit("setCaseId",'');
                         this.$store.commit("setPatientId",'');
                         this.$store.commit("setPatientName",'');
-
-
                         return;
                     }
                     this.$emit("update:userWaitingActive", -1);
@@ -381,8 +380,9 @@
                     this.$store.commit("setSBIObject", "");
 
                     this.$store.commit("stopLoading");
+                    this.$store.commit("setRefuseUserListFlag",false);
                 }, 1500);
-                this.$store.commit("setRefuseUserListFlag",false);
+
             }
         },
         mounted() {

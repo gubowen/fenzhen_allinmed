@@ -235,6 +235,7 @@
             "$store.state.triagePatientCaseIdFlag"(param) {
                 const that = this;
                 if (param.flag) {
+                    this.$store.commit("startLoading");
                     setTimeout(() => {
                         this.nim.sendCustomMsg({
                             scene: "p2p",
@@ -268,7 +269,6 @@
             "$store.state.releasePatientCaseIdFlag"(param) {
                 const that = this;
                 if (param.flag) {
-
                     this.nim.sendCustomMsg({
                         scene: "p2p",
                         to: "0_" + param.caseId,
@@ -284,6 +284,7 @@
                             docName: this.$store.state.userName
                         }),
                         done(error, obj) {
+                            that.$store.commit("startLoading");
                             if (!error) {
                                 that.sendSingleMessage(error, obj);
                             }
@@ -610,14 +611,13 @@
             },
             //发送单条数据...
             sendSingleMessage(error, msg) {
-
+                this.$store.commit("startLoading");
                 let patientListArray = this.$store.state.patientList;
 
                 //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
                 patientListArray.removeByValue(this.$store.state.currentItem);
                 patientListArray.unshift(this.$store.state.currentItem);
                 //   }
-
                 //this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
@@ -634,6 +634,7 @@
                         this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
                     }, 120);
                 }
+                this.$store.commit("stopLoading");
             },
             //发送检查检验...
             sendCheckSuggestion(data) {

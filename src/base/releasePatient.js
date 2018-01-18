@@ -7,6 +7,7 @@
  * Created by Qiangkailiang on 17/10/23.
  */
 import ajax from "@/common/js/util/ajax";
+import store from "@/store/store";
 const XHRList = {
     triage: "/call/customer/case/consultation/v1/update/"
 };
@@ -25,6 +26,7 @@ export default function releasePatient(data) {
             method: "POST",
             data: param,
             done(res) {
+                store.commit("startLoading");
                 if (res.responseObject.responseStatus) {
                     resolve(res)
                 } else {

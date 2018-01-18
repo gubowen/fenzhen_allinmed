@@ -350,7 +350,7 @@
             //刷新
             "$store.state.waitingListRefresh"(flag) {
                 if (flag) {
-                    this.getuserList("waiting", this.filterMethod);
+                    this.getUserList("waiting", this.filterMethod);
                     store.commit("waitingListRefreshFlag", false);
                 } else {
                     return;
@@ -358,7 +358,7 @@
             },  //待分诊
             "$store.state.onlineListRefresh"(flag) {
                 if (flag) {
-                    this.getuserList("online", this.filterMethod);
+                    this.getUserList("online", this.filterMethod);
                     store.commit("onlineListRefresh", false);
                 } else {
                     return;
@@ -366,7 +366,7 @@
             },   //沟通中
             "$store.state.resetListRefresh"(flag) {
                 if (flag) {
-                    this.getuserList("reset", this.filterMethod);
+                    this.getUserList("reset", this.filterMethod);
                     store.commit("resetListRefreshFlag", false);
                 } else {
                     return;
@@ -414,9 +414,9 @@
         methods: {
             init() {
                 this.$store.state.searchStatus = true;
-                this.getuserList("waiting");
-                this.getuserList("online");
-                this.getuserList("reset");
+                this.getUserList("waiting");
+                this.getUserList("online");
+                this.getUserList("reset");
             },
             fixByCurrent(item, index) {
                 let flag = false;
@@ -590,16 +590,16 @@
             },
             //患者列表
             //type:online为沟通中，wating待分诊
-            getuserList(type, param, fn) {
+            getUserList(type, param, fn) {
+                this.$store.commit("startLoading");
                 let _this = this;
                 _this.userListData = "";
                 _this.userListLoading = [];
                 _this.userListEnd = [];
                 _this.userListBack = [];
                 let dataValue = {};
-
-
                 let url = '';
+                //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放8-分诊完成9-待检查10-已推荐   7-分诊拒绝    6-已上传资料    11-超时未回复
                 switch (type) {
                     case 'online':
                         dataValue = Object.assign(
@@ -638,42 +638,12 @@
                         );
                         url = XHRList.resetuserList;
                 }
-
-                //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放8-分诊完成9-待检查10-已推荐   7-分诊拒绝    6-已上传资料    11-超时未回复
-                //      if (type === "online") {
-                //        dataValue = Object.assign(
-                //          {
-                //            customerId: _this.$store.state.userId,
-                //            conState: "0",
-                //            conType: 0,
-                //            sortType: -6
-                //          },
-                //          param
-                //        );
-                //      } else {
-                //        dataValue = Object.assign(
-                //          {
-                //            conState: "2,4,5",
-                //            conType: 0,
-                //            sortType: -6
-                //          },
-                //          param
-                //        );
-                //      }
-
-                //        if (type==="online"){
-                //            dataValue=Object.assign(dataValue,{
-                //              conType: 0
-                //            })
-                //        }
-                //        store.commit("startLoading");
                 api.ajax({
                     url: url,
                     method: "POST",
                     data: dataValue,
                     done(res) {
-//            console.log(res);
-                        //            store.commit("stopLoading");
+                        _this.$store.commit("startLoading");
                         if (res.responseObject.responseData && res.responseObject.responseStatus) {
                             let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
                             let waitingAlertList = {};
@@ -803,16 +773,16 @@
                     selectName: content
                 });
                 store.commit("startLoading");
-                this.getuserList("waiting", this.filterMethod);
-                this.getuserList("online", this.filterMethod);
-                this.getuserList("reset", this.filterMethod);
+                this.getUserList("waiting", this.filterMethod);
+                this.getUserList("online", this.filterMethod);
+                this.getUserList("reset", this.filterMethod);
                 store.commit("stopLoading");
                 //                this.filterFinish = true;
             },
             refreshList() {
-                this.getuserList("waiting", this.filterMethod);
-                this.getuserList("online", this.filterMethod);
-                this.getuserList("reset", this.filterMethod);
+                this.getUserList("waiting", this.filterMethod);
+                this.getUserList("online", this.filterMethod);
+                this.getUserList("reset", this.filterMethod);
             },
             //选择退回患者
             selectQuitItem(item) {
@@ -833,7 +803,7 @@
                         customerId: this.$store.state.userId
                     },
                     () => {
-                        this.getuserList("waiting");
+                        this.getUserList("waiting");
                         store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
@@ -841,7 +811,7 @@
                         });
                     },
                     c => {
-                        this.getuserList("waiting");
+                        this.getUserList("waiting");
                         store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
@@ -850,10 +820,10 @@
                     }
                 ).then(res => {
                     //患者未被抢单
-                    this.getuserList("waiting");
-                    this.getuserList("reset");
+                    this.getUserList("waiting");
+                    this.getUserList("reset");
                     this.statusChange(2);
-                    this.getuserList("online", {}, () => {
+                    this.getUserList("online", {}, () => {
                         let triageItem = this.getBeTriagePatient(item);
                         if (typeof (triageItem) == 'undefined') {
                             return;
@@ -909,34 +879,34 @@
                 _this.sortFlag = false;
                 switch (index) {
                     case 0:
-                        _this.getuserList("waiting", {sortType: -6});
-                        _this.getuserList("online", {sortType: -6});
-                        _this.getuserList("reset", {sortType: -6});
+                        _this.getUserList("waiting", {sortType: -6});
+                        _this.getUserList("online", {sortType: -6});
+                        _this.getUserList("reset", {sortType: -6});
                         break;
                     case 1:
-                        _this.getuserList("waiting", {sortType: 5});
-                        _this.getuserList("online", {sortType: 5});
-                        _this.getuserList("reset", {sortType: 5});
+                        _this.getUserList("waiting", {sortType: 5});
+                        _this.getUserList("online", {sortType: 5});
+                        _this.getUserList("reset", {sortType: 5});
                         break;
                     case 2:
-                        _this.getuserList("waiting", {sortType: 4});
-                        _this.getuserList("online", {sortType: 4});
-                        _this.getuserList("reset", {sortType: 4});
+                        _this.getUserList("waiting", {sortType: 4});
+                        _this.getUserList("online", {sortType: 4});
+                        _this.getUserList("reset", {sortType: 4});
                         break;
                     case 3:
-                        _this.getuserList("waiting", {sortType: -5});
-                        _this.getuserList("online", {sortType: -5});
-                        _this.getuserList("reset", {sortType: -5});
+                        _this.getUserList("waiting", {sortType: -5});
+                        _this.getUserList("online", {sortType: -5});
+                        _this.getUserList("reset", {sortType: -5});
                         break;
                     case 4:
-                        _this.getuserList("waiting", {sortType: -5});
-                        _this.getuserList("online", {sortType: -5});
-                        _this.getuserList("reset", {sortType: -5});
+                        _this.getUserList("waiting", {sortType: -5});
+                        _this.getUserList("online", {sortType: -5});
+                        _this.getUserList("reset", {sortType: -5});
                         break;
                     default:
-                        _this.getuserList("waiting", {sortType: 6});
-                        _this.getuserList("online", {sortType: 6});
-                        _this.getuserList("reset", {sortType: 6});
+                        _this.getUserList("waiting", {sortType: 6});
+                        _this.getUserList("online", {sortType: 6});
+                        _this.getUserList("reset", {sortType: 6});
                 }
             }
         }
