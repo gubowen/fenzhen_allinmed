@@ -9,10 +9,10 @@
 
 import Vue from "vue";
 import siteEnv from "./dev.env";
-import fundebug from "fundebug-javascript";
 
 export default function () {
     if (siteEnv() === "production") {
+        const fundebug=require("fundebug-javascript")
         fundebug.apikey = "978f7359e7dcd8be4e2ebe3ef02e08e687330b823086432c3ca5d348946eb60b";
 
         Vue.config.errorHandler = function (err, vm, info) {

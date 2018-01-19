@@ -15,20 +15,26 @@
                     $store.state.currentItem.doctorName + '医生' : ''}退回`}}
                 </p>
                 <transition-group name="fadeDown" tag="article">
-                    <article class="messageList-item" :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']" v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
+                    <article class="messageList-item"
+                             :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
+                             v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
-                        <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">{{items.time | transformMessageTime}}</p>
+                        <p class="time-stamp"
+                           v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">
+                            {{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
-                        <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type==='text'" :message="items"
+                                        @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--拒绝分诊-->
-                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'"
+                                        :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))"
                                       :message="items" :nim="nim" @loadCallback="loadCallback"
                                       @deleteMsg="deleteMsg(items)"></ImageElement>
                         <!--多图片信息-->
                         <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'"
-                                      :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
+                                        :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
                         <!--视频消息-->
                         <videoElement v-if="items.type === 'video'"
                                       :message="items" :nim="nim" @loadCallback="loadCallback"
@@ -62,30 +68,38 @@
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
                                 :showType="'checkSuggessSendTips'"></UpdateTips>
                         <!--消息撤回-->
-                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'"
+                                 class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                         <!-- 分诊医生接诊 -->
-                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'"
+                                 class="deleteMessage">
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
                         </section>
                         <!--医生超时未接诊-->
-                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'"
+                                 class="deleteMessage">
                             <span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>
                         </section>
                         <!--医生超时未回复-->
-                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'"
+                                 class="deleteMessage">
                             <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
-                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 3" class="deleteMessage">
+                        <section
+                                v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 3"
+                                class="deleteMessage">
                             <span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>
                         </section>
 
                         <!--医生接诊-->
-                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 5" class="deleteMessage">
+                        <section
+                                v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 5"
+                                class="deleteMessage">
                             <span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName:'某某')+'医生接诊'}}</span>
                         </section>
                     </article>
@@ -188,6 +202,7 @@
                 targetData: {
                     account: ""
                 },
+                historyBeginTime: 0,
                 medicalReportImgList: [],
                 ShowBigImgList: [],
                 diagnosisId: "",
@@ -207,8 +222,7 @@
             CheckSuggestion,
             UpdateTips
         },
-        props: {
-        },
+        props: {},
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
                 if (obj.flag) {
@@ -340,6 +354,7 @@
                     };
                     this.getMessageList("history");
                 }
+                this.historyBeginTime = 0;
             },
             "$store.state.refuseReason"(obj) {
                 if (obj.flag) {
@@ -433,13 +448,13 @@
                                     that.$store.commit('resetListRefreshFlag', true);
 
                                     let flag = false;
-                                    that.$store.state.patientList.forEach(function(item, index){
+                                    that.$store.state.patientList.forEach(function (item, index) {
                                         if (msg.from == ("0_" + item.caseId)) {
                                             flag = true;
                                         }
                                     });
                                     that.$store.commit('onlineListRefresh', flag);
-                                    that.$store.commit("setRefuseUserListFlag",flag);
+                                    that.$store.commit("setRefuseUserListFlag", flag);
                                     // that.$emit("update:userCurrentStatus", 3);
 
                                 }
@@ -448,6 +463,7 @@
                         }
                     });
                 });
+                this.initScroll();
             },
             loadCallback() {
                 setTimeout(() => {
@@ -475,9 +491,9 @@
                     if (items.type === "text") {
                         flag = true;
                     } else {
-                        if(items.content && (items.content.type === "reTriageTip" || items.content.type === "new-health" || items.content.type === "payFinishTips")) {
+                        if (items.content && (items.content.type === "reTriageTip" || items.content.type === "new-health" || items.content.type === "payFinishTips")) {
                             flag = false;
-                        }else {
+                        } else {
                             flag = true;
                         }
                     }
@@ -760,13 +776,13 @@
 
                         let mType = 0;
 
-                        if (element.type==="file"){
+                        if (element.type === "file") {
                             element.file.name = element.name;
                             mType = 6
-                        }else if(element.type==="video"){
+                        } else if (element.type === "video") {
                             element.file.name = element.name;
                             mType = 3
-                        }else{
+                        } else {
                             mType = 1
                         }
                         let msg = that.nim.sendFile({
@@ -777,7 +793,7 @@
                                 cId: that.$store.state.userId,
                                 mType: mType,
                                 name: element.name,
-                                docName:that.$store.state.userName
+                                docName: that.$store.state.userName
                                 //,
 //                            conId: that.orderSourceIdorderSourceId
                             }),
@@ -903,21 +919,44 @@
                 }
                 return flag;
             },
+            initScroll() {
+                let _OldY = this.$refs.messageBox.scrollTop;
+                this.$refs.messageBox.addEventListener("scroll", event => {
+                    clearTimeout(this._scrollTimeout);
+                    let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
+                    _OldY = this.$refs.messageBox.scrollTop;
+                    this._scrollTimeout = setTimeout(() => {
+
+                        if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
+                            this.getMessageList("scrollInit");
+                        }
+                    }, 20)
+                })
+            },
             //获取历史消息……
             getMessageList(from) {
                 let that = this;
-                that.communicationList = [];
+                if (from === "history") {
+                    that.communicationList = [];
+                }
+
                 this.nim.getHistoryMsgs({
                     scene: "p2p",
                     to: that.targetData.account,
+                    beginTime: 0,
+                    endTime: that.historyBeginTime,
                     done(error, obj) {
                         console.log(obj);
+                        if (obj.msgs.length === 0) {
+
+                        }
                         if (error) {
                             nim.getInstance();
                         }
+                        console.log(from)
                         that.renderHistoryMessage(that.targetData.account, error, obj, from);
                     },
-                    limit: 100
+                    limit: 20
                 });
             },
             // 新消息提示
@@ -935,18 +974,18 @@
 //                        }
                         let patientAlertList = {};
                         let caseIdInfo = "0_" + item.caseId;
-                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+                        if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
 
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
                             } else {
-                                if(parseInt(item.messageAlert)>0){
+                                if (parseInt(item.messageAlert) > 0) {
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
 
                             patientAlertList[caseIdInfo] = item.messageAlert;
-                        }else {
+                        } else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "1";
                             } else {
@@ -957,10 +996,10 @@
                             patientList.unshift(item);
 
                         }
-                        if(!localStorage.getItem("patientAlertList")){
+                        if (!localStorage.getItem("patientAlertList")) {
                             localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
-                        }else{
-                            localStorage.setItem("patientAlertList", JSON.stringify(Object.assign( JSON.parse(localStorage.getItem("patientAlertList")),patientAlertList)));
+                        } else {
+                            localStorage.setItem("patientAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("patientAlertList")), patientAlertList)));
                         }
                         _this.$store.commit("setNewOnline", true);
                     }
@@ -975,16 +1014,16 @@
                     let caseIdInfo = "0_" + item.caseId;
                     if ("0_" + item.caseId == element.from) {
 
-                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+                        if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
                             } else {
-                                if(parseInt(item.messageAlert)>0){
+                                if (parseInt(item.messageAlert) > 0) {
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
                             waitingAlertList[caseIdInfo] = item.messageAlert;
-                        }else {
+                        } else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "1";
                             } else {
@@ -995,10 +1034,10 @@
                             waitingList.unshift(item);
 
                         }
-                        if(!localStorage.getItem("waitingAlertList")){
+                        if (!localStorage.getItem("waitingAlertList")) {
                             localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                        }else{
-                            localStorage.setItem("waitingAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("waitingAlertList")),waitingAlertList)));
+                        } else {
+                            localStorage.setItem("waitingAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("waitingAlertList")), waitingAlertList)));
                         }
 
                         _this.$store.commit("setNewWaiting", true);
@@ -1017,16 +1056,16 @@
 //                        }
                         let resetAlertList = {};
                         let caseIdInfo = "0_" + item.caseId;
-                        if(element.type == 'custom'&& JSON.parse(element.content).type=='deleteMsgTips'){
+                        if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
                             } else {
-                                if(parseInt(item.messageAlert)>0){
+                                if (parseInt(item.messageAlert) > 0) {
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
                             resetAlertList[caseIdInfo] = item.messageAlert;
-                        }else {
+                        } else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "1";
                             } else {
@@ -1036,10 +1075,10 @@
                             resetList.removeByValue(item);
                             resetList.unshift(item);
                         }
-                        if(!localStorage.getItem("resetAlertList")){
+                        if (!localStorage.getItem("resetAlertList")) {
                             localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
-                        }else{
-                            localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("resetAlertList")),resetAlertList)));
+                        } else {
+                            localStorage.setItem("resetAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("resetAlertList")), resetAlertList)));
                         }
 
 
@@ -1048,7 +1087,7 @@
                 });
             },
             //接受消息...
-            receiveMessage(targetUser, element) {
+            receiveMessage(targetUser, element, from) {
                 //获取当前患者消息
                 const _this = this;
 
@@ -1057,10 +1096,13 @@
                         element.content = JSON.parse(element.content);
                     }
 
-                    this.communicationList.push(element);
-                    setTimeout(() => {
-                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                    }, 120);
+                    this.communicationList.unshift(element);
+                    if (from === "history") {
+                        setTimeout(() => {
+                            this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                        }, 120);
+                    }
+
                 } else {
                     //接诊列表
                     this.newMessageTips(targetUser, element);
@@ -1068,10 +1110,9 @@
             },
             //输出历史消息...
             renderHistoryMessage(container, error, obj, from) {
-//      console.log(obj);
                 let that = this;
                 if (!error) {
-                    obj.msgs.reverse();
+                    // obj.msgs.reverse();
 
                     let timeFlag = false;
                     let prvObj = {};
@@ -1079,6 +1120,9 @@
                         let data = {
                             dataList: []
                         };
+                        if (i == obj.msgs.length - 1) {
+                            that.historyBeginTime = obj.msgs[i].time
+                        }
                         obj.msgs[i].data = data;
                         obj.msgs[i].timeFlag = timeFlag;
 
@@ -1375,7 +1419,7 @@
                         padding-right: 24px;
                     }
                 }
-                .messageList-item-multiple{
+                .messageList-item-multiple {
                     max-width: none !important;
                 }
                 .messageList-item-text {
