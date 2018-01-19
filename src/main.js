@@ -4,7 +4,7 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import './validate'
-
+import errorWatch from "@/common/js/util/errorWatch"
 import store from "./store/store";
 
 import "babel-polyfill";
@@ -21,3 +21,4 @@ new Vue({
   components: {App}
 });
 
+errorWatch();
