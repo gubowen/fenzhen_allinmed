@@ -692,7 +692,7 @@ common.popup = function (obj) {
         $("body").append('<section class="middle-tip-modal popup">' +
 
             '<figure class="middle-tip-box-text">' +
-            (obj.hasImg ? '<img src="/image/img00/login/save_loading.png" alt="">' : '') +
+            (obj.hasImg ? '<img src="/static/image/img00/login/save_loading.png" alt="">' : '') +
             '<p class="popup-text">' + obj.text + '</p> ' +
 
             '</figure>' +
@@ -723,7 +723,7 @@ common.popupRight = function (obj) {
         $("body").append('<section class="middle-tip-modal popup right">' +
 
             '<figure class="middle-tip-box-text">' +
-            (obj.hasImg ? '<img src="image/img00/login/save_loading.png" alt="">' : '') +
+            (obj.hasImg ? '<img src="/static/image/img00/login/save_loading.png" alt="">' : '') +
             '<p class="popup-text">' + obj.text + '</p> ' +
 
             '</figure>' +

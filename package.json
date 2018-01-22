@@ -10,6 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "fundebug-javascript": "^0.3.4",
     "jquery": "^3.2.1",
     "vee-validate": "^2.0.0-rc.14",
     "vue": "^2.3.3",

@@ -1,7 +1,7 @@
 <template>
   <section class="middle-tip-modal popup">
     <figure class="middle-tip-box-text">
-      <img v-show="obj.hasImg" src="/static/img/img00/login/save_loading.png">
+      <img v-show="obj.hasImg" src="/static/image/img00/login/save_loading.png">
       <p class="popup-text">{{obj.text}}</p>
     </figure>
   </section>

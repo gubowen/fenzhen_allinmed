@@ -920,44 +920,48 @@
                 return flag;
             },
             initScroll() {
-                let _OldY = this.$refs.messageBox.scrollTop;
-                this.$refs.messageBox.addEventListener("scroll", event => {
-                    clearTimeout(this._scrollTimeout);
-                    let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
-                    _OldY = this.$refs.messageBox.scrollTop;
-                    this._scrollTimeout = setTimeout(() => {
 
-                        if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
-                            this.getMessageList("scrollInit");
-                        }
-                    }, 20)
-                })
+
+                    let _OldY = this.$refs.messageBox.scrollTop;
+                    this.$refs.messageBox.addEventListener("scroll", event => {
+                        clearTimeout(this._scrollTimeout);
+                        let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
+                        _OldY = this.$refs.messageBox.scrollTop;
+                        this._scrollTimeout = setTimeout(() => {
+
+                            if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
+                                this.getMessageList("scrollInit");
+                            }
+                        }, 20)
+                    })
             },
             //获取历史消息……
             getMessageList(from) {
+
                 let that = this;
                 if (from === "history") {
                     that.communicationList = [];
                 }
-
-                this.nim.getHistoryMsgs({
+                if(this.targetData.account !="0_"){
+                     this.nim.getHistoryMsgs({
                     scene: "p2p",
                     to: that.targetData.account,
                     beginTime: 0,
                     endTime: that.historyBeginTime,
                     done(error, obj) {
-                        console.log(obj);
+//                        console.log(obj);
                         if (obj.msgs.length === 0) {
-
+                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
                         }
                         if (error) {
                             nim.getInstance();
                         }
-                        console.log(from)
+//                        console.log(from);
                         that.renderHistoryMessage(that.targetData.account, error, obj, from);
                     },
                     limit: 20
                 });
+                }
             },
             // 新消息提示
             newMessageTips(target, element) {
@@ -1098,6 +1102,7 @@
 
                     this.communicationList.unshift(element);
                     if (from === "history") {
+                        console.log("滚了");
                         setTimeout(() => {
                             this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
                         }, 120);
