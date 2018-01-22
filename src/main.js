@@ -20,5 +20,5 @@ new Vue({
   router,
   components: {App}
 });
-
+window.version="1.1.5";
 errorWatch();
