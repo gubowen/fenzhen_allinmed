@@ -952,12 +952,15 @@
 //                        console.log(obj);
                         if (obj.msgs.length === 0) {
                             that.$store.commit("showPopup", {text: "无聊天记录了！"});
+                        }else{
+                            that.renderHistoryMessage(that.targetData.account, error, obj, from);
                         }
+
                         if (error) {
                             nim.getInstance();
                         }
 //                        console.log(from);
-                        that.renderHistoryMessage(that.targetData.account, error, obj, from);
+
                     },
                     limit: 20
                 });
@@ -1101,12 +1104,7 @@
                     }
 
                     this.communicationList.unshift(element);
-                    if (from === "history") {
-                        console.log("滚了");
-                        setTimeout(() => {
-                            this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                        }, 120);
-                    }
+
 
                 } else {
                     //接诊列表
@@ -1143,6 +1141,24 @@
                         }
                         that.receiveMessage(container, obj.msgs[i], from);
                     }
+                    if (from === "history") {
+                        setTimeout(() => {
+                            this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                        }, 120);
+                    }else if(from === "scrollInit"){
+                        setTimeout(() => {
+                            let allHeight = 0;
+                            $(".messageList-item-content").each(function(index,item){
+
+                                if(index<obj.msgs.length+1){
+                                    allHeight+=item.offsetHeight
+                                }
+                            });
+                            this.$refs.messageBox.scrollTop = allHeight;
+                        }, 120);
+                    }
+
+
                 }
             },
             transformMessageTime(time) {
