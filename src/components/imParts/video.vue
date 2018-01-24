@@ -8,7 +8,7 @@
         <figcaption class="messageList-item-text video-list" :class="{'make-photo-box':exifFlag}" @click="showBigImgFunction(message.file.url)">
             <img src="/static/image/img00/controller/play.png" alt="">
             <!--<img src="../../assets/img00/controller/play.png" alt="">-->
-            <video  :src="message.file.url" style="width:300px"></video>
+            <video  :src="message.file.url" style="width:300px" ref="videoElement"></video>
             <!--<img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)" ref="imageElement"/>-->
         </figcaption>
         <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
@@ -40,7 +40,7 @@
         },
         mounted(){
 //            console.log(this.message);
-            this.installSBIList();
+        this.init();
         },
         computed:{
             docName(){
@@ -51,7 +51,8 @@
         },
         methods:{
             init(){
-
+                this.installSBIList();
+                this.initVideoFn();
             },
             showBigImgFunction(url){
                 let _this = this;
@@ -78,6 +79,12 @@
             //撤回消息
             deleteMsg(){
                 this.$emit("deleteMsg");
+            },
+            initVideoFn(){
+                const that=this;
+                this.$refs.videoElement.addEventListener('canplaythrough',function (){
+                    that.$emit("loadCallback");
+                });
             }
         },
         props: {

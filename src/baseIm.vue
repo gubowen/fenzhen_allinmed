@@ -19,41 +19,26 @@
                              :class="[ items.from == '1_doctor00001' ? 'my-message' : 'others-message']"
                              v-for="(items,index) in communicationList" v-if="messageFilter(items)" :key="index">
                         <!--时间戳-->
-                        <p class="time-stamp"
-                           v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">
+                        <p class="time-stamp" v-if="!(items.type==='custom'&&(items.custom &&(items.custom.mType==='33'||items.custom.mType==='22')))">
                             {{items.time | transformMessageTime}}</p>
                         <!--文本消息-->
-                        <ContentElement v-if="items.type==='text'" :message="items"
-                                        @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type==='text'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--拒绝分诊-->
-                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'"
-                                        :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
+                        <ContentElement v-if="items.type === 'custom'&& items.content.type === 'refusePatient'" :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
-                        <ImageElement v-if="items.type === 'image'||(items.type === 'file'&& getFileType(items.file))"
-                                      :message="items" :nim="nim" @loadCallback="loadCallback"
-                                      @deleteMsg="deleteMsg(items)"></ImageElement>
+                        <ImageElement v-if="(items.type === 'image'||(items.type === 'file'&& getFileType(items.file)))" :message="items" :nim="nim" @deleteMsg="deleteMsg(items)" ></ImageElement>
                         <!--多图片信息-->
-                        <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'"
-                                        :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
+                        <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'" :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
                         <!--视频消息-->
-                        <videoElement v-if="items.type === 'video'"
-                                      :message="items" :nim="nim" @loadCallback="loadCallback"
-                                      @deleteMsg="deleteMsg(items)"></videoElement>
+                        <videoElement v-if="items.type === 'video'" :message="items" :nim="nim"  @deleteMsg="deleteMsg(items)" ></videoElement>
                         <!--文件信息-->
-                        <fileElement v-if="items.type === 'file'&&(!getFileType(items.file))"
-                                     :message="items" :nim="nim" @loadCallback="loadCallback"
-                                     @deleteMsg="deleteMsg(items)"></fileElement>
+                        <fileElement v-if="items.type === 'file'&&(!getFileType(items.file))" :message="items" :nim="nim"  @deleteMsg="deleteMsg(items)"></fileElement>
                         <!--检查检验-->
-                        <CheckSuggestion
-                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')"
-                                :message="items" @deleteMsg="deleteMsg(items)"></CheckSuggestion>
+                        <CheckSuggestion v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestion')" :message="items" @deleteMsg="deleteMsg(items)"></CheckSuggestion>
                         <!--问诊单-->
-                        <MedicalReport v-if="medicalReport(items)"
-                                       :message="items" ref="medicalReport"
-                                       @loadCallback="loadCallback"></MedicalReport>
+                        <MedicalReport v-if="medicalReport(items)" :message="items" ref="medicalReport"></MedicalReport>
                         <!--视诊-->
-                        <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')"
-                                     :message="items" @deleteMsg="deleteMsg(items)"></VideoTriage>
+                        <VideoTriage v-if="items.type==='custom'&&(items.content&&items.content.type==='videoTriage')" :message="items" @deleteMsg="deleteMsg(items)" ></VideoTriage>
                         <!--初诊建议-->
                         <PreviewSuggestion
                                 v-if="items.type==='custom'&&(items.content&&items.content.type==='previewSuggestion')"
@@ -64,38 +49,30 @@
                                 :showType="items.content.data.actionType==='image'?'imageTriage':'videoTriage'"
                         ></UpdateTips>
                         <!--检查检验上传提示-->
-                        <UpdateTips
-                                v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
-                                :showType="'checkSuggessSendTips'"></UpdateTips>
+                        <UpdateTips v-if="items.type==='custom'&&(items.content&&items.content.type==='checkSuggestSendTips')"
+                                :showType="'checkSuggestSendTips'"></UpdateTips>
                         <!--消息撤回-->
-                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='deleteMsgTips'" class="deleteMessage">
                             <span v-show="items.content.data.deleteMsg.from ==='1_doctor00001'">{{items.content.data.doctorName?items.content.data.doctorName:'您'}}撤回了一条消息！</span>
                             <span v-show="ShowFlagDeleteTips(items)">{{items.content.data.from}}撤回了一条消息！</span>
                         </section>
                         <!-- 分诊医生接诊 -->
-                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='triagePatientTips'" class="deleteMessage">
                             <span v-if="items.content.scene==='triage'">分诊医生“{{items.content.name}}”接诊</span>
                             <span v-if="items.content.scene==='release'">分诊医生“{{items.content.name}}”退诊</span>
                         </section>
                         <!--医生超时未接诊-->
-                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&& items.content.type==='overtimeTip'" class="deleteMessage">
                             <span>{{(JSON.parse(items.custom).docName ? JSON.parse(items.custom).docName : '某某')+'医生超时未接诊'}}</span>
                         </section>
                         <!--医生超时未回复-->
-                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'"
-                                 class="deleteMessage">
+                        <section v-if="items.type==='custom'&&items.content.type==='chatOvertimeTip'" class="deleteMessage">
                             <span>{{(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生接诊后超时未回复'}}</span>
                         </section>
                         <!--医生拒绝-->
-                        <section
-                                v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 3"
-                                class="deleteMessage">
+                        <section v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 3" class="deleteMessage">
                             <span>{{'由于'+(JSON.parse(items.custom).reason?JSON.parse(items.custom).reason:'XX')+'，该患者被'+(JSON.parse(items.custom).docName?JSON.parse(items.custom).docName:'某某')+'医生退回'}}</span>
                         </section>
-
                         <!--医生接诊-->
                         <section
                                 v-if="items.type==='custom'&& items.content.type==='notification'&& items.content.data.actionType == 5"
@@ -352,6 +329,7 @@
                     this.targetData = {
                         account: "0_" + id
                     };
+//                    console.log("history_1");
                     this.getMessageList("history");
                 }
                 this.historyBeginTime = 0;
@@ -374,6 +352,7 @@
                     this.targetData = {
                         account: "0_" + this.$store.state.caseId
                     };
+//                    console.log("history_2");
                     this.getMessageList("history");
                 }
             },
@@ -423,8 +402,8 @@
                         onmsg(msg) {
                             //自定义消息
 //                            console.log(msg);
-                            console.log(that.targetData.account);
-                            console.log(msg.from);
+//                            console.log(that.targetData.account);
+//                            console.log(msg.from);
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
@@ -443,7 +422,8 @@
                                     store.commit("setMusicPlay", true);
 
 
-                                } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
+                                }
+                                else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('resetListRefreshFlag', true);
 
@@ -465,10 +445,28 @@
                 });
                 this.initScroll();
             },
-            loadCallback() {
-                setTimeout(() => {
-                    this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                }, 120);
+            loadCallback(items) {
+//                console.log(items);
+               if(items.scrollFlag){
+                   console.log(4)
+               }else{
+                   if(items){
+                       if(items.scrollFlag){
+//                           console.log(1);
+                       }else{
+//                           console.log(2);
+                           setTimeout(() => {
+                               this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                           }, 120);
+                       }
+                   }else{
+//                       console.log(3);
+                       setTimeout(() => {
+                           this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+                       }, 120);
+                   }
+                   Object.assign(items,{'scrollFlag':true});
+               }
             },
             medicalReport(items) {
                 let flag = true;
@@ -646,9 +644,10 @@
                 if (!error) {
                     that.controllerInput = "";
                     that.mine(msg);
-                    setTimeout(() => {
-                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                    }, 120);
+                    that.loadCallback(msg);
+//                    setTimeout(() => {
+//                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
+//                    }, 120);
                 }
                 this.$store.commit("stopLoading");
             },
@@ -919,17 +918,16 @@
                 }
                 return flag;
             },
+            //上滑加载
             initScroll() {
-
-
                     let _OldY = this.$refs.messageBox.scrollTop;
                     this.$refs.messageBox.addEventListener("scroll", event => {
                         clearTimeout(this._scrollTimeout);
                         let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
                         _OldY = this.$refs.messageBox.scrollTop;
                         this._scrollTimeout = setTimeout(() => {
-
                             if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
+//                                console.log("history_3");
                                 this.getMessageList("scrollInit");
                             }
                         }, 20)
@@ -937,7 +935,6 @@
             },
             //获取历史消息……
             getMessageList(from) {
-
                 let that = this;
                 if (from === "history") {
                     that.communicationList = [];
@@ -1099,11 +1096,16 @@
                 const _this = this;
 
                 if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
+//                    console.log(element);
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
-
-                    this.communicationList.unshift(element);
+                    if (from === "scrollInit") {
+                        this.loadCallback(element);
+                        this.communicationList.unshift(element);
+                    }else{
+                        this.communicationList.push(element);
+                    }
 
 
                 } else {
@@ -1141,21 +1143,19 @@
                         }
                         that.receiveMessage(container, obj.msgs[i], from);
                     }
-                    if (from === "history") {
-                        setTimeout(() => {
-                            this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-                        }, 120);
-                    }else if(from === "scrollInit"){
+//                    console.log(obj.msgs.length);
+                    if(from === "scrollInit"){
+                        that.$store.commit("startLoading");
                         setTimeout(() => {
                             let allHeight = 0;
                             $(".messageList-item-content").each(function(index,item){
-
                                 if(index<obj.msgs.length+1){
-                                    allHeight+=item.offsetHeight
+                                    allHeight+=parseInt(item.offsetHeight)
                                 }
                             });
-                            this.$refs.messageBox.scrollTop = allHeight;
-                        }, 120);
+                            this.$refs.messageBox.scrollTop = (allHeight+210);
+                            that.$store.commit("stopLoading");
+                        }, 1000);
                     }
 
 
@@ -1328,6 +1328,9 @@
                 } else {
                     return false;
                 }
+            },
+            showDate(value){
+                console.log(value);
             }
         }
     };

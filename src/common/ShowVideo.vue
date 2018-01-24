@@ -82,7 +82,7 @@
     padding: 65px 135px;
 
     .bigger-button {
-      background: url("/static/img/img00/employee/picture_zoom.png") 50% 50% no-repeat;
+      background: url("/static/image/img00/employee/picture_zoom.png") 50% 50% no-repeat;
       background-color: rgba(255, 255, 255, .3);
       border-radius: 4px;
       width: 34px;
@@ -94,13 +94,13 @@
       cursor: pointer;
 
       &.on {
-        background: url("/static/img/img00/employee/photo_zoom out.png") 50% 50% no-repeat;
+        background: url("/static/image/img00/employee/photo_zoom out.png") 50% 50% no-repeat;
         background-color: rgba(255, 255, 255, .3);
       }
 
     }
     .rotate-button {
-      background: url("/static/img/img00/employee/picture_rotate.png") 50% 50% no-repeat;
+      background: url("/static/image/img00/employee/picture_rotate.png") 50% 50% no-repeat;
       background-color: rgba(255, 255, 255, .3);
       border-radius: 4px;
       width: 34px;
@@ -112,7 +112,7 @@
       cursor: pointer;
     }
     .smaller-button {
-      background: url("/static/img/img00/employee/picture_narrow.png") 50% 50% no-repeat;
+      background: url("/static/image/img00/employee/picture_narrow.png") 50% 50% no-repeat;
       background-color: rgba(255, 255, 255, .3);
       border-radius: 4px;
       width: 34px;
@@ -124,7 +124,7 @@
       cursor: pointer;
     }
     .download-button {
-      background: url("/static/img/img00/employee/picture_down.png") 50% 50% no-repeat;
+      background: url("/static/image/img00/employee/picture_down.png") 50% 50% no-repeat;
       background-color: rgba(255, 255, 255, .3);
       border-radius: 4px;
       width: 34px;
@@ -167,7 +167,7 @@
       }
 
       .swiper-left-gray {
-        background: url("/static/img/img00/employee/photo_arrow_left_big.png") no-repeat;
+        background: url("/static/image/img00/employee/photo_arrow_left_big.png") no-repeat;
         width: 50px;
         height: 50px;
         left: 55px;
@@ -176,7 +176,7 @@
       }
 
       .swiper-right-gray {
-        background: url("/static/img/img00/employee/photo_arrow_right_big.png") no-repeat;
+        background: url("/static/image/img00/employee/photo_arrow_right_big.png") no-repeat;
         width: 50px;
         height: 50px;
         right: 55px;
@@ -328,7 +328,7 @@
   .close {
     width: 16px;
     height: 16px;
-    background: url("/static/img/img00/employee/picture_close.png") 50% 50% no-repeat;
+    background: url("/static/image/img00/employee/picture_close.png") 50% 50% no-repeat;
     position: absolute;
     top: 0;
     right: -36px;
@@ -386,7 +386,7 @@
   .centerTip .tip-close {
     width: 16px;
     height: 16px;
-    background: url(/image/img00/employee/picture_close.png) 50% 50% no-repeat;
+    background: url("/static/image/img00/employee/picture_close.png") 50% 50% no-repeat;
     position: absolute;
     top: 0;
     right: -36px;
