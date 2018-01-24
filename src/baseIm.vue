@@ -945,7 +945,7 @@
                     done(error, obj) {
 //                        console.log(obj);
                         if (obj.msgs.length === 0) {
-                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
+//                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
                         }else{
                             that.renderHistoryMessage(that.targetData.account, error, obj, from);
                         }
@@ -1097,10 +1097,15 @@
                         element.content = JSON.parse(element.content);
                     }
                     if (from === "scrollInit") {
+                        this.communicationList.unshift(element);
+                    }else if(from === "history"){
                         this.loadCallback(element);
-
+                        this.communicationList.unshift(element);
+                    }else{
+                        this.loadCallback(element);
+                        this.communicationList.push(element);
                     }
-                    this.communicationList.unshift(element);
+
 
                 } else {
                     //接诊列表
