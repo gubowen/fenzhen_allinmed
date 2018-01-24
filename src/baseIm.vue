@@ -401,9 +401,6 @@
                         },
                         onmsg(msg) {
                             //自定义消息
-//                            console.log(msg);
-//                            console.log(that.targetData.account);
-//                            console.log(msg.from);
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
@@ -1096,17 +1093,14 @@
                 const _this = this;
 
                 if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
-//                    console.log(element);
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
                     if (from === "scrollInit") {
                         this.loadCallback(element);
-                        this.communicationList.unshift(element);
-                    }else{
-                        this.communicationList.push(element);
-                    }
 
+                    }
+                    this.communicationList.unshift(element);
 
                 } else {
                     //接诊列表
