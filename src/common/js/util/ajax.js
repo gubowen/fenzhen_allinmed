@@ -7,12 +7,13 @@
  * Created by Qiangkailiang on 17/7/14.
  */
 import axios from "axios";
+import store from "@/store/store";
 
 export default function ajax(param) {
   axios.interceptors.request.use(function (config) { //在请求发出之前进行一些操作
     if (document.querySelector(".ev-loading")) {
       document.querySelector(".ev-loading").style.display = "block";
-
+        store.commit("startLoading");
     }
 
     param.beforeSend && param.beforeSend(config);
@@ -34,8 +35,13 @@ export default function ajax(param) {
     param.done(res.data);
     if (document.querySelector(".ev-loading")) {
       document.querySelector(".ev-loading").style.display = "none";
+        store.commit("stopLoading");
     }
   }, (err) => {
+      if (document.querySelector(".ev-loading")) {
+          document.querySelector(".ev-loading").style.display = "none";
+          store.commit("stopLoading");
+      }
     param.fail && param.fail(err);
   });
 }

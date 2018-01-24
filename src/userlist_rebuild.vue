@@ -519,9 +519,9 @@
                 this.$store.commit("setCaseId", items.caseId);
                 localStorage.setItem("caseId", items.caseId);
                 this.$store.commit("setConsultationId", items.consultationId);
+                this.$store.commit("setConsultationState", items.consultationState);
 
                 this.$store.commit("setCurrentItem", items);
-                console.log(imRefresh);
                 if (imRefresh) {
                     this.$store.commit("setSBIObject", {});
                     this.$store.commit("videoListObject", {});
@@ -535,9 +535,7 @@
                 this.targetData.avatar = items.logoUrl;
                 this.fastRelyStatusParent = false;
 
-                this.$router.push({
-                    name: "mainSpeak"
-                });
+                this.$router.push({name: "mainSpeak"});
                 //刷新上传功能
                 this.$store.commit("setSendFileShow", false);
             },
@@ -804,7 +802,6 @@
                     },
                     () => {
                         this.getUserList("waiting");
-                        store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
                             text: "该患者已被其他分诊医生接诊！"
@@ -812,13 +809,13 @@
                     },
                     c => {
                         this.getUserList("waiting");
-                        store.commit("stopLoading");
                         store.commit("showPopup", {
                             hasImg: false,
                             text: `您最多可以接诊${c}个患者！`
                         });
                     }
                 ).then(res => {
+                    store.commit("stopLoading");
                     //患者未被抢单
                     this.getUserList("waiting");
                     this.getUserList("reset");

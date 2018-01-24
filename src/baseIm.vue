@@ -419,8 +419,7 @@
                                     store.commit("setMusicPlay", true);
 
 
-                                }
-                                else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
+                                } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     that.$store.commit("waitingListRefreshFlag", true);
                                     that.$store.commit('resetListRefreshFlag', true);
 
@@ -433,6 +432,9 @@
                                     that.$store.commit('onlineListRefresh', flag);
                                     that.$store.commit("setRefuseUserListFlag", flag);
                                     // that.$emit("update:userCurrentStatus", 3);
+
+                                }else if(JSON.parse(msg.content).type == 'triagePatientTips'){
+
 
                                 }
                             }

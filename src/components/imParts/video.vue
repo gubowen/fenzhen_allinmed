@@ -67,13 +67,18 @@
             installSBIList(){
                 let _this =this;
                 let videoListObject = [];
-
+                let flag = true ;
                 if(this.$store.state.videoListObject != ''&& this.$store.state.videoListObject.IMVideoList){
                     this.$store.state.videoListObject.IMVideoList.forEach(function(item,index){
                         videoListObject.push( {"url":item.url});
+                        if(item.url == _this.message.file.url){
+                            flag = false;
+                        }
                     })
                 }
-                videoListObject.push( {"url":this.message.file.url});
+                if(flag){
+                    videoListObject.push( {"url":this.message.file.url});
+                }
                 this.$store.commit('videoListObject',{'IMVideoList':videoListObject});
             },
             //撤回消息

@@ -56,8 +56,10 @@
                     </transition>
                     <!--结束沟通-->
                     <transition name="fade">
-                        <SmallConfirm @ensureCallback="reTriageConfirm" :comfirmContent="reTriageContentTips"
-                                      @cancelCallback="reTriageShow=false" v-if="reTriageShow"></SmallConfirm>
+                        <SmallConfirm @ensureCallback="reTriageConfirm" :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && store.state.consultationState!=='25'"></SmallConfirm>
+                    </transition>
+                    <transition name="fade">
+                        <DoctorReceive @ensureCallback="doctorReceiveFn" :comfirmContent="doctorReceive"  v-if="reTriageShow && store.state.consultationState=='25'"></DoctorReceive>
                     </transition>
                 </nav>
                 <article class="user-controller-middle">
@@ -110,6 +112,7 @@
 </template>
 <script>
     import SmallConfirm from "@/common/smallConfirm";
+    import DoctorReceive from "@/common/DoctorReceive";
     import fastRely from "@/components/fast_reply";
     import usedRely from "@/components/used_rely";
     import fastReplyConfig from "@/components/fast_reply_config";
@@ -148,6 +151,7 @@
                 fastReplyConfig: false,
                 reTriageShow: false,
                 reTriageContentTips: "确定结束与该患者的沟通吗？",
+                doctorReceive:"该患者已被接诊",
                 inputReadOnly: "",
                 sendFlag:false,
                 minBtnFlag:false,
@@ -299,6 +303,19 @@
 
                 });
 
+            },
+            doctorReceiveFn(){
+                this.$store.commit("waitingListRefreshFlag", true);
+                this.$store.commit("onlineListRefresh", true);
+                this.$store.commit("resetListRefreshFlag", true);
+
+                this.$store.commit("setCurrentItem",{});
+                this.$store.commit("setPatientId","");
+                this.$store.commit("setPatientName","");
+                this.$store.commit("setCaseId","");
+                this.$store.commit("setConsultationId","");
+                this.$store.commit("setConsultationState", "");
+                this.$store.commit("setSBIObject", "");
             },
             //患者接诊
             getPatient() {

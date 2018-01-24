@@ -31,13 +31,16 @@ export default new Vuex.Store({
         newReset:false,
         resetListRefresh:false,
 
+        currentItem: "",
         caseId: '',       //病例Id
         patientId: '',    //患者Id
         patientName: '',  //患者姓名
+        consultationId: '',//交流Id
         userId: '',
         mailBox: '',
         sex: '',
-        currentItem: "",
+        consultationState:"",
+
         inputReadOnly: true,
         userListStatus: {
             status: "1",
@@ -61,7 +64,7 @@ export default new Vuex.Store({
         },
         fastReplyContent: "", //
         fastReplyShow:false,
-        consultationId: '',//交流Id
+
         usedReplyConfig: false,
         examineFlag: false,//检查检验显示隐藏
         checkSuggestionFlag: false,//初诊建议显示隐藏
@@ -345,9 +348,9 @@ export default new Vuex.Store({
             state.sendFileShow = data;
         },
         //*****************************
-
-
-
+        setConsultationState(state,data){
+           state.consultationState = data ;
+        },
         setNewReset(state,data){
             state.newReset = data;
         },

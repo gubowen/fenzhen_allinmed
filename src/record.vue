@@ -124,7 +124,6 @@
                         text: `您最多可以接诊${c}个患者！`
                     });
                 }).then((res) => {
-
 //
 //          let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
 //          if (waitingAlertList) {
