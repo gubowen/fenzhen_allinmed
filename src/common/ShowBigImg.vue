@@ -495,6 +495,7 @@
   background: rgba(63, 63, 63, .1);
   z-index: 5;
   position: relative;
+  user-select:none;
   .centerTip {
     width: 320px;
     height: 240px;
