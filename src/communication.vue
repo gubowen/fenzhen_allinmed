@@ -299,8 +299,8 @@
                     });
 
                     this.userListChange();
-
                     this.$store.commit("resetListRefreshFlag", true);
+
 
                 });
 
@@ -363,6 +363,8 @@
             },
             userListChange(){
                 this.$store.commit("startLoading");
+                setTimeout(() => {this.$store.commit("startLoading");},100);
+                setTimeout(() => {this.$store.commit("startLoading");},500);
                 setTimeout(() => {
                     this.$store.commit("startLoading");
                     let patientList = this.$store.state.patientList;
@@ -401,6 +403,7 @@
 
                     this.$store.commit("stopLoading");
                     this.$store.commit("setRefuseUserListFlag",false);
+
                 }, 1500);
 
             }

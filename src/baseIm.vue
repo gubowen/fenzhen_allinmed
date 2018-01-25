@@ -576,6 +576,7 @@
                         }),
                         done(error, obj) {
                             that.$store.commit("setSendStatus", true);
+                            this.$store.commit("startLoading");
                             if (!error) {
                                 resolve(obj);
                                 that.sendSingleMessage(error, obj);
