@@ -434,7 +434,7 @@
                                     that.$store.commit("setRefuseUserListFlag", flag);
                                     // that.$emit("update:userCurrentStatus", 3);
 
-                                }else if(JSON.parse(msg.content).type == 'triagePatientTips'){
+                                }else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "5"){
 
                                     let patientList = that.$store.state.patientList;
                                     patientList.forEach(function (item, index) {
