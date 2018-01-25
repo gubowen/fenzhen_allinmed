@@ -62,6 +62,11 @@
                 let _this = this;
                 let SBIObject = {};
                 SBIObject = this.$store.state.SBIObject;
+
+                this.message.content.data.list.forEach(function (item,index) {
+                           item.url = _this.removeBaseImageMsg(item.url);
+                });
+
                 SBIObject[_this.message.idClient] = this.message.content.data.list;
 
                 this.$store.commit('setSBIObject', SBIObject);

@@ -56,10 +56,10 @@
                     </transition>
                     <!--结束沟通-->
                     <transition name="fade">
-                        <SmallConfirm @ensureCallback="reTriageConfirm" :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && $store.state.consultationState!=='25'"></SmallConfirm>
+                        <SmallConfirm @ensureCallback="reTriageConfirm"   :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && $store.state.consultationState!='1'"></SmallConfirm>
                     </transition>
                     <transition name="fade">
-                        <DoctorReceive @ensureCallback="doctorReceiveFn" :comfirmContent="doctorReceive"  v-if="reTriageShow && $store.state.consultationState=='25'"></DoctorReceive>
+                        <doctor-Receive @ensureCallback="doctorReceiveFn" :confirmContent="doctorReceive"  v-if="reTriageShow && $store.state.consultationState=='1'"></doctor-Receive>
                     </transition>
                 </nav>
                 <article class="user-controller-middle">
@@ -112,7 +112,7 @@
 </template>
 <script>
     import SmallConfirm from "@/common/smallConfirm";
-    import DoctorReceive from "@/common/DoctorReceive";
+    import doctorReceive from "./common/DoctorReceive";
     import fastRely from "@/components/fast_reply";
     import usedRely from "@/components/used_rely";
     import fastReplyConfig from "@/components/fast_reply_config";
@@ -171,7 +171,8 @@
             PreviewSuggestion,
             UsedReplyConfig,
             sendFile,
-            refuse
+            refuse,
+            doctorReceive
         },
         props: {
             m: {
@@ -305,6 +306,8 @@
 
             },
             doctorReceiveFn(){
+                this.reTriageShow = false;
+                this.$emit("update:n",false);
                 this.$store.commit("waitingListRefreshFlag", true);
                 this.$store.commit("onlineListRefresh", true);
                 this.$store.commit("resetListRefreshFlag", true);

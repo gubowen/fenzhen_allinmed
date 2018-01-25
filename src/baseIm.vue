@@ -400,6 +400,7 @@
                             console.log(obj);
                         },
                         onmsg(msg) {
+
                             //自定义消息
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
@@ -435,7 +436,28 @@
 
                                 }else if(JSON.parse(msg.content).type == 'triagePatientTips'){
 
-
+                                    let patientList = that.$store.state.patientList;
+                                    patientList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.from) {
+                                            item.consultationState = '1';
+                                            that.$store.commit("setConsultationState","1");
+                                        }
+                                    });
+                                    //待分诊
+                                    let waitingList = that.$store.state.waitingList;
+                                    waitingList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.from) {
+                                            item.consultationState = '1';
+                                            that.$store.commit("setConsultationState","1");
+                                        }
+                                    });
+                                    let resetList = that.$store.state.resetList;
+                                    resetList.forEach(function (item, index){
+                                        if ("0_" + item.caseId == msg.from) {
+                                            item.consultationState = '1';
+                                            that.$store.commit("setConsultationState","1");
+                                        }
+                                    });
                                 }
                             }
                             that.receiveMessage(that.targetData.account, msg);

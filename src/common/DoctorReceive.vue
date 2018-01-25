@@ -1,7 +1,7 @@
 <template>
-  <section class="modal-confirm show">
+  <section class="modal-confirm show doctorReceive">
     <article class="modal-confirm-content">
-      <p>{{comfirmContent}}</p>
+      <p>{{confirmContent}}</p>
     </article>
     <figure class="modal-confirm-button">
       <button class="btn-ensure modal-confirm-ensure" @click="ensure">确定</button>
@@ -18,6 +18,7 @@
    * Created by Qiangkailiang on 17/10/22.
    */
   export default{
+    name:'doctorReceive',
     data(){
       return {}
     },
@@ -27,13 +28,10 @@
     methods:{
        ensure(){
            this.$emit("ensureCallback");
-       },
-      cancel(){
-           this.$emit("cancelCallback");
-      }
+       }
     },
     props: {
-        comfirmContent:{
+        confirmContent:{
             type:String
         }
     }
