@@ -439,7 +439,6 @@
                                     let patientList = that.$store.state.patientList;
                                     patientList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
-                                            console.log("patient");
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState","1");
                                         }
@@ -448,7 +447,6 @@
                                     let waitingList = that.$store.state.waitingList;
                                     waitingList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
-                                            console.log("wait");
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState","1");
                                         }
@@ -456,7 +454,6 @@
                                     let resetList = that.$store.state.resetList;
                                     resetList.forEach(function (item, index){
                                         if ("0_" + item.caseId == msg.to) {
-                                            console.log("rest");
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState","1");
                                         }

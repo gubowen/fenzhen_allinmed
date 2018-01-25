@@ -22,7 +22,7 @@
       </section>
       <section class="edit" :class="{'active':showAdd}">
         <textarea placeholder="请填写" maxlength="200" class="J-textArea-remark"  v-model="remarkValue"></textarea>
-        <button :class="[{'active':remarkValue},'saveButton']" @click="addRemark">保存</button>
+        <button :class="[{'active':remarkValue.trim()},'saveButton']" @click="addRemark">保存</button>
         <!--<button class="saveButton" @click="addRemrak">保存</button>-->
       </section>
     </section>
