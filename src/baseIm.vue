@@ -400,7 +400,7 @@
                             console.log(obj);
                         },
                         onmsg(msg) {
-
+                            console.log(msg);
                             //自定义消息
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
@@ -435,7 +435,7 @@
                                     // that.$emit("update:userCurrentStatus", 3);
 
                                 }else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "5"){
-
+                                    console.log("医生接诊");
                                     let patientList = that.$store.state.patientList;
                                     patientList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.from) {
