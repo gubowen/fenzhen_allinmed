@@ -113,7 +113,7 @@
       },
       addRemark(){
         let that = this;
-        if(that.remarkValue){
+        if(that.remarkValue.trim()){
             if(this.addType == "add"){
                 ajax({
                     url: XHRList.update,

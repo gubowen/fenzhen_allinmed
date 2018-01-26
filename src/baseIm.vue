@@ -402,6 +402,7 @@
                             console.log(obj);
                         },
                         onmsg(msg) {
+                            console.log(msg);
                             //自定义消息
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.currentItem.createTime = that.transformMessageTime(msg.time);
@@ -427,21 +428,21 @@
 
 //                                    let flag = false;
                                     that.patientList.forEach(function (item, index) {
-                                        if ("0_" + item.caseId == msg.to) {
+                                        if ("0_" + item.caseId == msg.from) {
                                             item.consultationState = '6';
                                             that.$store.commit("setConsultationState","6");
                                         }
                                     });
                                     //待分诊
                                     that.waitingList.forEach(function (item, index) {
-                                        if ("0_" + item.caseId == msg.to) {
+                                        if ("0_" + item.caseId == msg.from) {
                                             item.consultationState = '6';
                                             that.$store.commit("setConsultationState","6");
                                         }
                                     });
                                     let resetList = that.resetList;
                                     resetList.forEach(function (item, index){
-                                        if ("0_" + item.caseId == msg.to) {
+                                        if ("0_" + item.caseId == msg.from) {
                                             item.consultationState = '6';
                                             that.$store.commit("setConsultationState","6");
                                         }
@@ -505,7 +506,7 @@
             medicalReport(items) {
                 let flag = true;
                 if (items.type === "custom" && (items.content && items.content.type === "medicalReport")) {
-                    console.log(flag);
+//                    console.log(flag);
                     setTimeout(() => {
                         if (this.$refs.medicalReport.length === 0) {
                             flag = true;
@@ -1144,7 +1145,7 @@
                         this.loadCallback(element);
                         this.communicationList.push(element);
                     }
-                        console.log( this.communicationList);
+//                        console.log( this.communicationList);
 
                 } else {
                     //接诊列表
