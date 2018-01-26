@@ -426,11 +426,26 @@
                                   //  that.$store.commit('resetListRefreshFlag', true);
 
 //                                    let flag = false;
-//                                    that.patientList.forEach(function (item, index) {
-//                                        if (msg.from == ("0_" + item.caseId)) {
-//                                            flag = true;
-//                                        }
-//                                    });
+                                    that.patientList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '6';
+                                            that.$store.commit("setConsultationState","6");
+                                        }
+                                    });
+                                    //待分诊
+                                    that.waitingList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '6';
+                                            that.$store.commit("setConsultationState","6");
+                                        }
+                                    });
+                                    let resetList = that.resetList;
+                                    resetList.forEach(function (item, index){
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '6';
+                                            that.$store.commit("setConsultationState","6");
+                                        }
+                                    });
 //                                    that.$store.commit('onlineListRefresh', flag);
 //                                    that.$store.commit("setRefuseUserListFlag", flag);
                                     // that.$emit("update:userCurrentStatus", 3);
