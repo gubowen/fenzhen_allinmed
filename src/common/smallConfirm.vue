@@ -60,16 +60,15 @@
 
   .modal-confirm {
     position: absolute;
-    width: 250px;
+    width: 200px;
     background: #FFFFFF;
     box-shadow: 0 0 20px 0 rgba(153, 167, 208, 0.35);
     border-radius: 4px;
-    padding: 40px 20px;
-    padding-bottom: 20px;
-    min-height: 155px;
+    padding: 20px 10px;
+    min-height: 100px;
     box-sizing: border-box;
     z-index: 5;
-    top: -156px;
+    top: -100px;
     right: 32.5%;
 
     @include query(1440px) {
@@ -108,6 +107,7 @@
         font-size: 13px;
         color: #808080;
         line-height: 1.5;
+        text-align: center;
 
       }
     }

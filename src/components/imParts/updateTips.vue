@@ -40,7 +40,7 @@
                     case "imageTriage":
                         result = "患者已上传视诊资料，";
                         break;
-                    case "checkSuggessSendTips":
+                    case "checkSuggestSendTips":
                         result = "患者已上传检查资料，";
                         break;
                 }

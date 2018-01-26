@@ -5,7 +5,7 @@
         </header>
         <section class="messageList">
             <!--v-for="items in messageInfo"-->
-            <article class="messageList-box" ref="messageBox" :class="{'watingBoxStyle':$store.state.inputReadOnly}">
+            <article class="messageList-box" ref="messageBox" :class="{'waitingBoxStyle':$store.state.inputReadOnly}">
                 <!--患者text-->
                 <p class="time-stamp" v-if="$store.state.currentItem.returnReason">
                     {{$store.state.currentItem.createTime.substring(0, $store.state.currentItem.createTime.length -
@@ -422,17 +422,17 @@
 
 
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
-                                    that.$store.commit("waitingListRefreshFlag", true);
-                                    that.$store.commit('resetListRefreshFlag', true);
+                                   // that.$store.commit("waitingListRefreshFlag", true);
+                                  //  that.$store.commit('resetListRefreshFlag', true);
 
-                                    let flag = false;
-                                    that.patientList.forEach(function (item, index) {
-                                        if (msg.from == ("0_" + item.caseId)) {
-                                            flag = true;
-                                        }
-                                    });
-                                    that.$store.commit('onlineListRefresh', flag);
-                                    that.$store.commit("setRefuseUserListFlag", flag);
+//                                    let flag = false;
+//                                    that.patientList.forEach(function (item, index) {
+//                                        if (msg.from == ("0_" + item.caseId)) {
+//                                            flag = true;
+//                                        }
+//                                    });
+//                                    that.$store.commit('onlineListRefresh', flag);
+//                                    that.$store.commit("setRefuseUserListFlag", flag);
                                     // that.$emit("update:userCurrentStatus", 3);
 
                                 }else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "5"){
@@ -490,6 +490,7 @@
             medicalReport(items) {
                 let flag = true;
                 if (items.type === "custom" && (items.content && items.content.type === "medicalReport")) {
+                    console.log(flag);
                     setTimeout(() => {
                         if (this.$refs.medicalReport.length === 0) {
                             flag = true;
@@ -656,10 +657,10 @@
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
                 this.$store.commit("setPatientList", patientListArray);
-                this.$store.state.currentItem.createTime = this.transformMessageTime(msg.time);
+                this.$store.state.currentItem.lastUpdateTime = this.transformMessageTime(msg.time);
                 store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
-                console.log(msg);
+              //  console.log(msg);
                 console.log("发送" + msg.scene + " " + msg.type + "消息" + (!error ? "成功" : "失败") + ", id=" + msg.idClient);
                 if (!error) {
                     that.controllerInput = "";
@@ -1128,7 +1129,7 @@
                         this.loadCallback(element);
                         this.communicationList.push(element);
                     }
-
+                        console.log( this.communicationList);
 
                 } else {
                     //接诊列表
@@ -1370,12 +1371,12 @@
         margin-left: 1px;
         box-sizing: border-box;
         @include query(1500px) {
-            &.watingBoxStyle {
+            &.waitingBoxStyle {
                 height: 105.5% !important;
             }
             height: 81% !important;
         }
-        &.watingBoxStyle {
+        &.waitingBoxStyle {
             height: 105.5%;
         }
         .messageList-item {

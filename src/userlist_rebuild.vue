@@ -66,7 +66,7 @@
                             </figure>
                             <figcaption class="userList-item-base-msg">
                                 <h3>
-                                    <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                    <span class="name" :title="items.patientName">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                         class="category short" v-show="items.consultationState==5">待分诊</span><span
                                         class="category short"
                                         v-show="items.consultationState!=5">{{items| checkState}}</span>
@@ -77,7 +77,7 @@
                                 </button>
                             </figcaption>
 
-                            <span class="time"> {{items.createTime | timeFormat}}</span>
+                            <span class="time"> {{items.lastUpdateTime | timeFormat}}</span>
                         </article>
                         <!--</transition-group>-->
                         <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
@@ -95,7 +95,7 @@
                             </figure>
                             <figcaption class="userList-item-base-msg">
                                 <h3>
-                                    <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                    <span class="name" :title="items.patientName">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                         class="category short" v-show="!fixByCurrent(items,index)">{{items | checkState}}</span><span
                                         class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
                                 </h3>
@@ -109,7 +109,7 @@
                                 <!--@click="selectQuitItem(items)"></i>-->
                                 <!--</figure>-->
                             </figcaption>
-                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
+                            <span class="time" ref="toTopTime"> {{items.lastUpdateTime | timeFormat}}</span>
                         </article>
                         <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                     </section>
@@ -125,7 +125,7 @@
                             </figure>
                             <figcaption class="userList-item-base-msg">
                                 <h3>
-                                    <span class="name">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
+                                    <span class="name" :title="items.patientName">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
                                         class="category short"
                                         v-show="!fixByCurrent(items,index)">{{items | checkState}}</span>
                                     <span class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
@@ -138,7 +138,7 @@
                                         @click.stop="getTriagePatient(items,index)">接诊
                                 </button>
                             </figcaption>
-                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
+                            <span class="time" ref="toTopTime"> {{items.lastUpdateTime | timeFormat}}</span>
                         </article>
                         <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
                     </section>
@@ -173,6 +173,7 @@
     import store from "@/store/store";
 
     Vue.filter("timeFormat", function (time, a) {
+
         let result = "";
         let date = new Date(),
             y = date.getFullYear(),
@@ -180,17 +181,12 @@
             d = date.getDate(),
             h = date.getHours(),
             mm = date.getMinutes();
-        let nowFirst = new Date(
-            y + "/" + (m >= 10 ? m : "0" + m) + "/" + (d >= 10 ? d : "0" + d)
-            ).getTime(),
-            timeFirst = new Date(time.substring(0, 10).replace(/-/g, "/")).getTime();
+        let nowFirst = new Date(y + "/" + (m >= 10 ? m : "0" + m) + "/" + (d >= 10 ? d : "0" + d)).getTime()
+        let timeFirst = new Date(time.substring(0, 10).replace(/-/g, "/")).getTime();
         let week = new Date(timeFirst).getDay();
         if (nowFirst === timeFirst) {
             result = time.substring(10, 16);
-        } else if (
-            parseInt((nowFirst / (60 * 60 * 24 * 1000) + 4) / 7) ===
-            parseInt((timeFirst / (60 * 60 * 24 * 1000) + 4) / 7)
-        ) {
+        } else if (parseInt((nowFirst / (60 * 60 * 24 * 1000) + 4) / 7) === parseInt((timeFirst / (60 * 60 * 24 * 1000) + 4) / 7)) {
             result = "星期" + common.numToChinese(week);
         } else {
             let windowWidth = $(window).width();
@@ -200,12 +196,12 @@
                 result = time.substring(0, 16);
             }
         }
+//        console.log(result);
         return result;
     });
 
     Vue.filter("checkState", function (items, a) {
         let result = "";
-
         switch (parseInt(items.consultationState)) {
             case -1:
                 if (items.consultationType === 0) {
@@ -462,11 +458,13 @@
                 } else if (this.userListStatus.second) {
 
                     this.waitingTriage = false;
+
                     this.userOnlineActive = index;
                     store.commit("setInputReadOnly", false);
 
                     let patientList = this.$store.state.patientList;
                     items.messageAlert = "";
+
                     if (getFlag) {
                         patientList.removeByValue(items);
                         patientList.unshift(items);
@@ -502,10 +500,7 @@
                     );
                     if (resetAlertList) {
                         delete resetAlertList["0_" + items.caseId];
-                        localStorage.setItem(
-                            "resetAlertList",
-                            JSON.stringify(resetAlertList)
-                        );
+                        localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
                     }
                     if (localStorage.getItem("resetAlertList") == "{}") {
                         this.newResetFlag = false;
@@ -529,8 +524,7 @@
                 this.$store.commit('setMinBtnFlag', false);
 
 
-                let data = JSON.stringify(items);
-                this.data = data;
+                this.data = JSON.stringify(items);
                 this.targetData.account = "0_" + items.caseId;
                 this.targetData.avatar = items.logoUrl;
                 this.fastRelyStatusParent = false;
@@ -587,7 +581,7 @@
 
             },
             //患者列表
-            //type:online为沟通中，wating待分诊
+            //type:online为沟通中，waiting待分诊 reset重新分诊
             getUserList(type, param, fn) {
                 this.$store.commit("startLoading");
                 let _this = this;
@@ -1083,7 +1077,7 @@
                     overflow: auto;
                     height: 85%;
                     &-item {
-                        padding: 25px 20px 25px 40px;
+                        padding: 25px 20px 25px 30px;
                         font-size: 0;
                         background-color: #fff;
                         box-sizing: border-box;
