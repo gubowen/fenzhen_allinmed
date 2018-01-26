@@ -115,7 +115,7 @@
 
     import nimEnv from "@/base/nimEnv";
     import releasePatient from "@/base/releasePatient";   //改变患者状态
-
+    import {mapGetters} from "vuex";
 
     Vue.filter("transformMessageTime", function (time) {
         var format = function (num) {
@@ -363,7 +363,9 @@
                 this.deleteMsg(obj);
             }
         },
-        computed: {},
+        computed: {
+            ...mapGetters(['currentItem','userId','patientList','waitingList','resetList']),
+        },
         mounted() {
             this.init();
         },
@@ -400,10 +402,9 @@
                             console.log(obj);
                         },
                         onmsg(msg) {
-                            console.log(msg);
                             //自定义消息
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
-                                that.$store.state.currentItem.createTime = that.transformMessageTime(msg.time);
+                                that.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
                             if (msg.type.toLowerCase() === "custom") {
                                 //判断是否为新用户
@@ -425,7 +426,7 @@
                                     that.$store.commit('resetListRefreshFlag', true);
 
                                     let flag = false;
-                                    that.$store.state.patientList.forEach(function (item, index) {
+                                    that.patientList.forEach(function (item, index) {
                                         if (msg.from == ("0_" + item.caseId)) {
                                             flag = true;
                                         }
@@ -435,23 +436,20 @@
                                     // that.$emit("update:userCurrentStatus", 3);
 
                                 }else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "5"){
-                                    console.log("医生接诊");
-                                    let patientList = that.$store.state.patientList;
-                                    patientList.forEach(function (item, index) {
+                                    that.patientList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState","1");
                                         }
                                     });
                                     //待分诊
-                                    let waitingList = that.$store.state.waitingList;
-                                    waitingList.forEach(function (item, index) {
+                                    that.waitingList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState","1");
                                         }
                                     });
-                                    let resetList = that.$store.state.resetList;
+                                    let resetList = that.resetList;
                                     resetList.forEach(function (item, index){
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '1';
@@ -590,8 +588,8 @@
                 promise.then(function () {
                     //改变患者状态 -- 7-分诊拒绝
                     releasePatient({
-                        customerId: that.$store.state.userId,
-                        consultationId: that.$store.state.currentItem.consultationId,
+                        customerId: that.userId,
+                        consultationId: that.currentItem.consultationId,
                         consultationState: 7
                     }).then(res => {
                         console.log("7");
@@ -648,7 +646,7 @@
             //发送单条数据...
             sendSingleMessage(error, msg) {
                 this.$store.commit("startLoading");
-                let patientListArray = this.$store.state.patientList;
+                let patientListArray = this.patientList;
 
                 //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
                 patientListArray.removeByValue(this.$store.state.currentItem);
@@ -990,7 +988,7 @@
                 console.log(element);
                 const _this = this;
                 //沟通中
-                let patientList = this.$store.state.patientList;
+                let patientList = this.patientList;
                 patientList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
 //                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1033,7 +1031,7 @@
                 this.$store.commit("setPatientList", patientList);
 
                 //带分诊
-                let waitingList = this.$store.state.waitingList;
+                let waitingList = this.waitingList;
 
                 waitingList.forEach(function (item, index) {
                     let waitingAlertList = {};
@@ -1072,7 +1070,7 @@
                 this.$store.commit("setWaitingList", waitingList);
 
                 //重新分诊
-                let resetList = this.$store.state.resetList;
+                let resetList = this.resetList;
                 resetList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
 //                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {

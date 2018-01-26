@@ -46,8 +46,8 @@
         },
         mounted() {
 
-            console.log("图集");
-            console.log(this.message);
+//            console.log("图集");
+//            console.log(this.message);
 
             this.multipleList = this.message;
             if (this.multipleList.content.data.list.length > 3) {
