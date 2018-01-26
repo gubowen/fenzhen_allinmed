@@ -34,7 +34,7 @@
 
 <style lang="scss" rel="stylesheet/scss" type="text/css">
     @import "./scss/base.scss";
-
+    @import './scss/swiper/swiper.scss';
     #app {
         width: 100%;
         height: 100%;
