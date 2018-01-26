@@ -100,7 +100,7 @@
           </figcaption>
         </section>
       </section>
-      <loading v-show="loadingShow"></loading>
+      <!-- <loading v-show="loadingShow"></loading> -->
     </section>
   </transition>
 </template>
@@ -158,7 +158,7 @@
         customerId: '',
 
         successfulSecond: 3, //自动跳转秒数
-        loadingShow: false   //loading是否显示
+        // loadingShow: false   //loading是否显示
       }
     },
     methods: {
@@ -226,7 +226,8 @@
       },
       loginFun: function (userNameVal, passWord, callback) {
         let _this = this;
-        _this.loadingShow = true;
+        // _this.loadingShow = true;
+        _this.$store.commit("startLoading");
         let data = {};
         data.j_username = "website;" + userNameVal + ";" + passWord + ";mobile";
         data.j_password = passWord;
@@ -244,7 +245,8 @@
             return data;
           }]
         }).then(function (res) {
-          _this.loadingShow = false;
+          // _this.loadingShow = false;
+          _this.$store.commit("stopLoading");
           if (res.data.responseObject.responseStatus) {
             store.commit("setUserLoginName", userNameVal);
             localStorage.setItem("userLoginName", userNameVal);
@@ -258,7 +260,8 @@
           }
 
         }).catch(() => {
-          _this.loadingShow = false;
+          // _this.loadingShow = false;
+          _this.$store.commit("stopLoading");
         })
       },
       //点击忘记密码，弹出手机验证
@@ -342,7 +345,8 @@
         this.hasError("phone");
         this.hasError("validateCode");
         if (!this.phoneError && !this.validateCodeError) {
-          _this.loadingShow = true;
+          // _this.loadingShow = true;
+          _this.$store.commit("startLoading");
           let data = {
             account: _this.mobile,            //手机号
             validCode: _this.validateCode,    //string	是	验证码CODE
@@ -358,7 +362,8 @@
               return data;
             }]
           }).then(function (res) {
-            _this.loadingShow = false;
+            // _this.loadingShow = false;
+            _this.$store.commit("stopLoading");
             let data = res.data.responseObject;
 
             if (data.responseStatus) {
@@ -374,7 +379,8 @@
               _this.validateCodeError = data.responseMessage;
             }
           }).catch(function (error) {
-            _this.loadingShow = false;
+            // _this.loadingShow = false;
+            _this.$store.commit("stopLoading");
             console.log("失败:" + error);
           })
         }
@@ -395,7 +401,8 @@
           return false;
         }
         if (_this.newPassword === _this.newPassword2) {
-          _this.loadingShow = true;
+          // _this.loadingShow = true;
+          _this.$store.commit("startLoading");
           let data = {
             customerId: _this.customerId,
             passwd: _this.newPassword
