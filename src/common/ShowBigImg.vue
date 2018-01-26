@@ -40,7 +40,7 @@
     import Vue from 'vue'
 //    import VueAwesomeSwiper from 'vue-awesome-swiper'
     import Swiper from 'swiper';
-    import '@/scss/swiper/swiper.css';
+
     import showBigImg  from '@/common/js/showBigImg';
 
 //    Vue.use(VueAwesomeSwiper);
