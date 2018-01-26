@@ -47,7 +47,7 @@
                 </header>
                 <section class="doctor-message">
                     <section class="doctor-message-item" v-for="item in previewSendData.doctorList">
-                        <figure class="doctor-message-img"><img :src="item.logoUrl"></figure>
+                        <figure class="doctor-message-img"><img :src="item.logoUrl?item.logoUrl:'/static/image/img00/common/default_logo.png'"></figure>
                         <figcaption class="doctor-message-content">
                             <header class="doctor-message-content-head">
                                 <h4>{{item.fullName}}</h4>
