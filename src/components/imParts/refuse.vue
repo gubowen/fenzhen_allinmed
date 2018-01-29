@@ -227,7 +227,7 @@
                     position: relative;
                     & > input {
                         width: 100%;
-                        padding: 8px 14px;
+                        padding: 8px 24px 8px 14px;
                         background: #F9F9F9;
                         border: 1px solid #E1E2E7;
                         font-size: 14px;
@@ -250,7 +250,7 @@
                     }
                     .icon-Cancel{
                         position: absolute;
-                        right: 60px;
+                        right: 52px;
                         margin-top: -22px;
                         display: block;
                         font-size: 0;
