@@ -6,7 +6,7 @@
         </figure>
         <!--图片-->
         <figcaption class="messageList-item-text" :class="{'make-photo-box':exifFlag}">
-            <img :src="message.file.url" alt="" style="width:300px" @click="showBigImgFunction(message.file.url)" ref="imageElement"/>
+            <img :src="message.file.url" alt="" style="width:300px" @click.self="showBigImgFunction(message.file.url)" ref="imageElement"/>
         </figcaption>
         <figure v-if="message.from == '1_doctor00001'" class="messageList-item-img">
             <div class="messageList-item-nameTop">
@@ -51,8 +51,10 @@
             showBigImgFunction(message){
                 let _this = this;
                 this.$store.state.SBIObject.IMImage.forEach(function (item, index) {
-//                    console.log(index);
+
                     if (message == item.url) {
+                        console.log(index);
+                        console.log(message);
                         _this.$store.commit("setSBIIndex", index);
                     }
                 });

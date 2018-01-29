@@ -56,10 +56,10 @@
                     </transition>
                     <!--结束沟通-->
                     <transition name="fade">
-                        <SmallConfirm @ensureCallback="reTriageConfirm"   :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && $store.state.consultationState!='1'"></SmallConfirm>
+                        <SmallConfirm @ensureCallback="reTriageConfirm"   :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && $store.state.consultationState!='1'&&$store.state.consultationState!='3'"></SmallConfirm>
                     </transition>
                     <transition name="fade">
-                        <doctor-Receive @ensureCallback="doctorReceiveFn" :confirmContent="doctorReceive"  v-if="reTriageShow && $store.state.consultationState=='1'"></doctor-Receive>
+                        <doctor-Receive @ensureCallback="doctorReceiveFn" :confirmContent="doctorReceive"  v-if="reTriageShow && ($store.state.consultationState=='1'||$store.state.consultationState=='3')"></doctor-Receive>
                     </transition>
                 </nav>
                 <article class="user-controller-middle">
