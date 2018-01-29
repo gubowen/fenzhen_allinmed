@@ -318,7 +318,7 @@
                 this.$store.commit("setCaseId","");
                 this.$store.commit("setConsultationId","");
                 this.$store.commit("setConsultationState", "");
-                this.$store.commit("setSBIObject", "");
+                this.$store.commit("setSBIObject", new Array());
             },
             //患者接诊
             getPatient() {
@@ -399,7 +399,7 @@
                     this.$store.commit("setCaseId", items ? items.caseId : "");
                     this.$store.commit("setConsultationId", items ? items.consultationId : "");
                     this.$store.commit("setCurrentItem", items ? items : {});
-                    this.$store.commit("setSBIObject", "");
+                    this.$store.commit("setSBIObject", []);
 
                     this.$store.commit("stopLoading");
                     this.$store.commit("setRefuseUserListFlag",false);

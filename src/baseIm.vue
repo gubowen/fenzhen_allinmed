@@ -474,6 +474,50 @@
                                         }
                                     });
                                 }
+//                                else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "3"){
+//                                    that.patientList.forEach(function (item, index) {
+//                                        if ("0_" + item.caseId == msg.to) {
+//                                            item.consultationState = '2';
+//                                            that.$store.commit("setConsultationState","2");
+//                                        }
+//                                    });
+//                                    //待分诊
+//                                    that.waitingList.forEach(function (item, index) {
+//                                        if ("0_" + item.caseId == msg.to) {
+//                                            item.consultationState = '2';
+//                                            that.$store.commit("setConsultationState","2");
+//                                        }
+//                                    });
+//                                    let resetList = that.resetList;
+//                                    resetList.forEach(function (item, index){
+//                                        if ("0_" + item.caseId == msg.to) {
+//                                            item.consultationState = '2';
+//                                            that.$store.commit("setConsultationState","2");
+//                                        }
+//                                    });
+//                                }
+                                else if(JSON.parse(msg.content).type == 'overtimeTip'){
+                                    that.patientList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '3';
+                                            that.$store.commit("setConsultationState","3");
+                                        }
+                                    });
+                                    //待分诊
+                                    that.waitingList.forEach(function (item, index) {
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '3';
+                                            that.$store.commit("setConsultationState","3");
+                                        }
+                                    });
+                                    let resetList = that.resetList;
+                                    resetList.forEach(function (item, index){
+                                        if ("0_" + item.caseId == msg.to) {
+                                            item.consultationState = '3';
+                                            that.$store.commit("setConsultationState","3");
+                                        }
+                                    });
+                                }
                             }
                             that.receiveMessage(that.targetData.account, msg);
                         }
@@ -965,8 +1009,10 @@
                         _OldY = this.$refs.messageBox.scrollTop;
                         this._scrollTimeout = setTimeout(() => {
                             if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
-//                                console.log("history_3");
+
+                                 console.log("history_3");
                                 this.getMessageList("scrollInit");
+
                             }
                         }, 20)
                     })

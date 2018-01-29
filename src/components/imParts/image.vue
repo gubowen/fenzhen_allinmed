@@ -51,6 +51,7 @@
             showBigImgFunction(message){
                 let _this = this;
                 this.$store.state.SBIObject.IMImage.forEach(function (item, index) {
+//                    console.log(index);
                     if (message == item.url) {
                         _this.$store.commit("setSBIIndex", index);
                     }
@@ -70,7 +71,8 @@
                 let SBIObject = [];
 
                 SBIObject = this.$store.state.SBIObject;
-                if (this.$store.state.SBIObject != '' && this.$store.state.SBIObject.IMImage) {
+                if (this.$store.state.SBIObject  &&  this.$store.state.SBIObject.IMImage) {
+//                    console.log("11");
                     let flag = false;
                     SBIObject.IMImage.forEach(function (item, index) {
                         ImageList.push({"url": item.url});
@@ -80,9 +82,11 @@
                         ImageList.push({"url": this.message.file.url});
                         SBIObject.IMImage = ImageList;
                     } else {
+
                     }
 
                 } else {
+//                    console.log("22");
                     SBIObject.IMImage = [];
                     SBIObject.IMImage = [{"url": this.message.file.url}];
                 }
