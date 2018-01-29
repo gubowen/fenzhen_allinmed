@@ -329,10 +329,11 @@
                     this.targetData = {
                         account: "0_" + id
                     };
+                    this.historyBeginTime = 0;
 //                    console.log("history_1");
                     this.getMessageList("history");
                 }
-                this.historyBeginTime = 0;
+
             },
             "$store.state.refuseReason"(obj) {
                 if (obj.flag) {
@@ -478,7 +479,7 @@
                         }
                     });
                 });
-                this.initScroll();
+              //  this.initScroll();
             },
             loadCallback(items) {
 //                console.log(items);
@@ -976,14 +977,15 @@
                 if (from === "history") {
                     that.communicationList = [];
                 }
+
                 if(this.targetData.account !="0_"){
-                     this.nim.getHistoryMsgs({
+                    this.nim.getHistoryMsgs({
                     scene: "p2p",
                     to: that.targetData.account,
                     beginTime: 0,
                     endTime: that.historyBeginTime,
                     done(error, obj) {
-//                        console.log(obj);
+                        console.log(obj);
                         if (obj.msgs.length === 0) {
 //                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
                         }else{
@@ -1141,6 +1143,7 @@
                     }else if(from === "history"){
                         this.loadCallback(element);
                         this.communicationList.unshift(element);
+                        _this.initScroll();
                     }else{
                         this.loadCallback(element);
                         this.communicationList.push(element);

@@ -82,10 +82,10 @@
   </transition>
 </template>
 <script>
-  import axios from  "axios";
   import {common, modules} from "common";
   import headerList from "../Header";
   import store from "@/store/store";
+  import ajax from "@/common/js/util/ajax";
 
   export default{
     name: 'setting',
@@ -195,40 +195,38 @@
         if( this.oldMobile != this.mobile){
             data.mobile = this.mobile;              //	string	是	手机号
         }
-        debugger;
-        axios({
-          method: 'post',
-          url: '/call/tocure/web/user/updateUniteInfo/',
-          data: data,
-          transformRequest: [function (data) {
-            return "paramJson=" + JSON.stringify(data);
-          }],
-          headers: {
-            'X-Requested-With': 'XMLHttpRequest'
-          }
-        }).then(function (res) {
-          if (res.data != null && res.data.responseObject.responseStatus) {
-            if (res.data.responseObject.responseCode == '0B0001') {
-              _this.mobileErrorMessage = res.data.responseObject.responseMessage;
-            } else {
-              _this.storageSet();
-              common.popup({
-                hasImg: "true",
-                text: "保存成功"
-              });
-            }
-          } else {
-            if (data&&data.responseObject&&data.responseObject.responseCode&&data.responseObject.responseCode.length > 0) {
-              _this.mobileErrorMessage = res.data.responseObject.responseMessage;
-            } else {
-              _this.oldPasswordErrorMessage = "密码错误，请重新输入";
-            }
-            common.popup({
-              hasImg: "true",
-              text: "保存失败"
-            });
-          }
-        })
+
+          ajax({
+              url: '/call/tocure/web/user/updateUniteInfo/',
+              method: "POST",
+              data: data,
+              done(res){
+                 if (res != null && res.responseObject.responseStatus) {
+                     if (res.responseObject.responseCode == '0B0001') {
+                         _this.mobileErrorMessage = res.responseObject.responseMessage;
+                     } else {
+                         _this.storageSet();
+                         common.popup({
+                             hasImg: "true",
+                             text: "保存成功"
+                         });
+                     }
+                 } else {
+                     if (res&&res.responseObject&&res.responseObject.responseCode&&res.responseObject.responseCode.length > 0) {
+                         _this.mobileErrorMessage = res.responseObject.responseMessage;
+                     } else {
+                         _this.oldPasswordErrorMessage = "密码错误，请重新输入";
+                     }
+                     common.popup({
+                         hasImg: "true",
+                         text: "保存失败"
+                     });
+                 }
+             },
+             fail(error){
+                 console.log(error);
+             }
+          });
       },
       storageSet(){
         let _this = this;
