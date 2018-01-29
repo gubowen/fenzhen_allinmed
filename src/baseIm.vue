@@ -426,6 +426,7 @@
                         onmsg(msg) {
                             console.log(msg);
                             //自定义消息
+                            that.getMessageType ='';
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
@@ -617,7 +618,7 @@
                             docName: that.$store.state.userName
                         }),
                         done(error, obj) {
-                            console.log(obj);
+//                            console.log(obj);
                             that.$store.commit("setSendStatus", true);
                             if (!error) {
                                 resolve(obj);
@@ -1023,15 +1024,15 @@
                 let _OldY = this.$refs.messageBox.scrollTop;
                 // this.$refs.messageBox.addEventListener("onmousewheel", event => {
                 this.$refs.messageBox.addEventListener("mousewheel", event => {
-                    console.log("fuck")
+//                    console.log("fuck")
                     clearTimeout(this._scrollTimeout);
-                    this.getMessageType = "scrollInit"
+                    this.getMessageType = "scrollInit";
                     let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
                     _OldY = this.$refs.messageBox.scrollTop;
                     this._scrollTimeout = setTimeout(() => {
                         if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
 
-                            console.log("history_3");
+//                            console.log("history_3");
                             this.getMessageList();
 
                         }
@@ -1206,12 +1207,15 @@
                         element.content = JSON.parse(element.content);
                     }
                     if (this.getMessageType === "scrollInit") {
+                        console.log("3333");
                         this.communicationList.unshift(element);
                     } else if (this.getMessageType === "history") {
+                        console.log("22222");
                         this.loadCallback(element);
                         this.communicationList.unshift(element);
                         // _this.initScroll();
                     } else {
+                        console.log("11111");
                         this.loadCallback(element);
                         this.communicationList.push(element);
                     }
