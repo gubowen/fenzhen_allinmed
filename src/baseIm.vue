@@ -865,7 +865,7 @@
                                 //    console.log('已经上传的大小: ' + obj.loaded + 'bytes');
                                   //  console.log('上传进度: ' + obj.percentage);
 
-                                    that.percentage = obj.percentage;
+                                    that.percentage = parseInt(obj.percentage);
                                     console.log( that.percentage);
                                     if(obj.percentage == '100'){
                                         setTimeout(function(){
