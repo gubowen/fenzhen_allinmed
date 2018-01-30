@@ -552,6 +552,10 @@
                                 }
                             }
                             that.receiveMessage(that.targetData.account, msg);
+                            if (msg.type==="image"){
+                                console.log(msg);
+                                that.imageList.push(msg);
+                            }
                         }
                     });
                 });
@@ -1223,7 +1227,8 @@
                     if (element.type==="image"){
                         this.imageList.push(element);
                     }
-                });
+                })
+
             },
             //接受消息...
             receiveMessage(targetUser, element, from) {
