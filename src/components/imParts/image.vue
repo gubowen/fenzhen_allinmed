@@ -79,7 +79,7 @@
                     });
 
                     if (_this.message.file.url.indexOf('&stripmeta=1&stripmeta=1') == -1) {
-                        ImageList.push({"url": this.message.file.url});
+                        ImageList.unshift({"url": this.message.file.url});
                         SBIObject.IMImage = ImageList;
                     } else {
 

@@ -824,8 +824,6 @@
 
 
                         //如果是选中患者 不清空
-                        console.log(item);
-                        console.log(this.$store.state.caseId);
                         if(item.caseId == this.$store.state.caseId){
                             this.transformData(triageItem, index, getFlag, false);
                         }else{
