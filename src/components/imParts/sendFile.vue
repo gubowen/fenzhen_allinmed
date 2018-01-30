@@ -123,8 +123,8 @@
                         return;
                     }
                 }
-                console.log(videoNumber);
-                console.log(PDFNumber);
+//                console.log(videoNumber);
+//                console.log(PDFNumber);
                 if (videoNumber > _this.videoNumber) {
                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.videoNumber + "个视频！"});
                     return;

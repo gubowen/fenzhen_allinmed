@@ -100,6 +100,11 @@
                 </transition-group>
             </article>
         </section>
+        <div class="percentage popup" v-if="percentage>0">
+            <figure class="middle-tip-box-text">
+                <p class="popup-text"> {{percentage+'%'}}</p>
+                </figure>
+           </div>
     </section>
 </template>
 <script>
@@ -129,6 +134,8 @@
 
     import store from "@/store/store";
     import api from "@/common/js/util/util";
+
+    import {common, modules} from "common";
 
     import nimEnv from "@/base/nimEnv";
     import releasePatient from "@/base/releasePatient";   //改变患者状态
@@ -203,7 +210,8 @@
                 diagnosisId: "",
                 diagnosisShow: false,
                 connectFlag: false,
-                allGet: false
+                allGet: false,
+                percentage:0
             };
         },
         components: {
@@ -854,10 +862,18 @@
                                 type: element.type,
                                 dataURL: element.data,
                                 uploadprogress: function (obj) {
-                                    console.log('文件总大小: ' + obj.total + 'bytes');
-                                    console.log('已经上传的大小: ' + obj.loaded + 'bytes');
-                                    console.log('上传进度: ' + obj.percentage);
-                                    console.log('上传进度文本: ' + obj.percentageText);
+                                  //  console.log('文件总大小: ' + obj.total + 'bytes');
+                                //    console.log('已经上传的大小: ' + obj.loaded + 'bytes');
+                                  //  console.log('上传进度: ' + obj.percentage);
+
+                                    that.percentage = parseInt(obj.percentage);
+                                    console.log( that.percentage);
+                                    if(obj.percentage == '100'){
+                                        setTimeout(function(){
+                                            that.percentage ='';
+                                        },300)
+                                    }
+                                  //  console.log('上传进度文本: ' + obj.percentageText);
                                 },
                                 done: function (error, file) {
                                     console.log('上传' + element.type + (!error ? '成功' : '失败'));
@@ -1213,7 +1229,7 @@
                         this.communicationList.unshift(element);
                         // _this.initScroll();
                     } else {
-                        console.log("11111");
+//                        console.log("11111");
                         this.loadCallback(element);
                         this.communicationList.push(element);
                     }
@@ -1450,6 +1466,7 @@
 </script>
 <style lang="scss" rel="stylesheet/scss">
     @import "./scss/base.scss";
+    @import "./scss/modules/_popup.scss";
     /*@import "./scss/modules/_ImMedicalRecord.scss";*/
     /*@import "./scss/modules/_masker.scss";*/
 
@@ -1768,5 +1785,8 @@
     .fadeDown-enter {
         opacity: 0;
         transform: translateY(-50%);
+    }
+    .percentage{
+        z-index: 10;
     }
 </style>
