@@ -202,7 +202,8 @@
                 ShowBigImgList: [],
                 diagnosisId: "",
                 diagnosisShow: false,
-                connectFlag: false
+                connectFlag: false,
+                allGet: false
             };
         },
         components: {
@@ -348,7 +349,7 @@
                         account: "0_" + id
                     };
                     this.historyBeginTime = 0;
-//                    console.log("history_1");
+                    this.allGet = false;
                     this.getMessageType = "history";
                     this.getMessageList();
                 }
@@ -426,7 +427,7 @@
                         onmsg(msg) {
                             console.log(msg);
                             //自定义消息
-                            that.getMessageType ='';
+                            that.getMessageType = '';
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
@@ -496,25 +497,25 @@
                                         }
                                     });
                                 }
-                                else if(JSON.parse(msg.content).type == 'notification'&&JSON.parse(msg.content).data.actionType == "3"){
+                                else if (JSON.parse(msg.content).type == 'notification' && JSON.parse(msg.content).data.actionType == "3") {
                                     that.patientList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '2';
-                                            that.$store.commit("setConsultationState","2");
+                                            that.$store.commit("setConsultationState", "2");
                                         }
                                     });
                                     //待分诊
                                     that.waitingList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '2';
-                                            that.$store.commit("setConsultationState","2");
+                                            that.$store.commit("setConsultationState", "2");
                                         }
                                     });
                                     let resetList = that.resetList;
-                                    resetList.forEach(function (item, index){
+                                    resetList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '2';
-                                            that.$store.commit("setConsultationState","2");
+                                            that.$store.commit("setConsultationState", "2");
                                         }
                                     });
                                 }
@@ -1021,22 +1022,17 @@
             },
             //上滑加载
             initScroll() {
-                let _OldY = this.$refs.messageBox.scrollTop;
-                // this.$refs.messageBox.addEventListener("onmousewheel", event => {
                 this.$refs.messageBox.addEventListener("mousewheel", event => {
-//                    console.log("fuck")
-                    clearTimeout(this._scrollTimeout);
-                    this.getMessageType = "scrollInit";
-                    let _Dir = (this.$refs.messageBox.scrollTop - _OldY < 0) ? "up" : "down";
-                    _OldY = this.$refs.messageBox.scrollTop;
-                    this._scrollTimeout = setTimeout(() => {
-                        if (_Dir === "up" && this.$refs.messageBox.scrollTop < 200) {
-
-//                            console.log("history_3");
-                            this.getMessageList();
-
-                        }
-                    }, 20)
+                    if (!this.allGet) {
+                        let delta = event.wheelDelta;
+                        clearTimeout(this._scrollTimeout);
+                        this.getMessageType = "scrollInit";
+                        this._scrollTimeout = setTimeout(() => {
+                            if (delta > 0 && this.$refs.messageBox.scrollTop < 20) {
+                                this.getMessageList();
+                            }
+                        }, 200)
+                    }
                 })
             },
             //获取历史消息……
@@ -1055,6 +1051,10 @@
                         done(error, obj) {
                             console.log(obj);
                             if (obj.msgs.length === 0) {
+                                if (that.getMessageType === "scrollInit") {
+                                    that.allGet = true;
+                                    that.getMessageType = false;
+                                }
 //                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
                             } else {
                                 that.renderHistoryMessage(that.targetData.account, error, obj);
@@ -1207,10 +1207,8 @@
                         element.content = JSON.parse(element.content);
                     }
                     if (this.getMessageType === "scrollInit") {
-                        console.log("3333");
                         this.communicationList.unshift(element);
                     } else if (this.getMessageType === "history") {
-                        console.log("22222");
                         this.loadCallback(element);
                         this.communicationList.unshift(element);
                         // _this.initScroll();
