@@ -544,7 +544,7 @@
       width: 100%;
       border-radius: 4px;
       border: 1px solid #E1E2E7;
-      padding: 13.5px 16px;
+      padding: 13.5px 35px 13.5px 16px;
       box-sizing: border-box;
       font-size: 16px;
       transition: border 0.4s linear;
