@@ -30,7 +30,7 @@
                                         :message="items" @deleteMsg="deleteMsg(items)"></ContentElement>
                         <!--图片消息-->
                         <ImageElement v-if="(items.type === 'image'||(items.type === 'file'&& getFileType(items.file)))"
-                                      :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></ImageElement>
+                                      :message="items" :nim="nim" @deleteMsg="deleteMsg(items)" :imageList="imageList"></ImageElement>
                         <!--多图片信息-->
                         <multiple-Image v-if="items.type === 'custom'&& items.content.type === 'multipleImage'"
                                         :message="items" :nim="nim" @deleteMsg="deleteMsg(items)"></multiple-Image>
@@ -211,7 +211,8 @@
                 diagnosisShow: false,
                 connectFlag: false,
                 allGet: false,
-                percentage:0
+                percentage:0,
+                imageList:[]
             };
         },
         components: {
@@ -1057,6 +1058,10 @@
                 if (this.getMessageType === "history") {
                     that.communicationList = [];
                 }
+                this.imageList=[];
+                // let setSBIObject =  this.$store.state.SBIObject;
+                // setSBIObject.IMImage = [];
+                // this.$store.commit("setSBIObject",setSBIObject);setSBIObject
 
                 if (this.targetData.account != "0_") {
                     this.nim.getHistoryMsgs({
@@ -1213,6 +1218,13 @@
                     }
                 });
             },
+            getImageList(){
+                this.communicationList.forEach((element,index)=>{
+                    if (element.type==="image"){
+                        this.imageList.push(element);
+                    }
+                });
+            },
             //接受消息...
             receiveMessage(targetUser, element, from) {
                 //获取当前患者消息
@@ -1222,6 +1234,8 @@
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
+
+
                     if (this.getMessageType === "scrollInit") {
                         this.communicationList.unshift(element);
                     } else if (this.getMessageType === "history") {
@@ -1287,7 +1301,7 @@
                         that.$store.commit("stopLoading");
                     }
 
-
+                    that.getImageList();
                 }
             },
             transformMessageTime(time) {

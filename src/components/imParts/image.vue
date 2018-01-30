@@ -39,6 +39,10 @@
             this.removeBaseImageMsg(this.message.file.url);
             this.installSBIList();
             this.initImageFn();
+
+                console.log(this.imageList)
+
+
         },
         computed: {
             docName(){
@@ -60,38 +64,45 @@
                 this.$store.commit("setSBIType", 'IMImage');
             },
             removeBaseImageMsg(url){
-                this.message.file.url = this.nim.viewImageStripMeta({
-                    url: url,
-                    strip: true
-                });
+                if (!url.includes("stripmeta")){
+                    this.message.file.url = this.nim.viewImageStripMeta({
+                        url: url,
+                        strip: true
+                    });
+                }
             },
             installSBIList(){
                 let _this = this;
                 let ImageList = [];
                 let SBIObject = [];
-
+                console.log(_this.message.file.url)
                 SBIObject = this.$store.state.SBIObject;
-                if (this.$store.state.SBIObject  &&  this.$store.state.SBIObject.IMImage) {
-//                    console.log("11");
-                    let flag = false;
-                    SBIObject.IMImage.forEach(function (item, index) {
-                        ImageList.unshift({"url": item.url});
-                    });
+//                 if (this.$store.state.SBIObject  &&  this.$store.state.SBIObject.IMImage) {
+// // //                    console.log("11");
+// //                     let flag = false;
+// //                     SBIObject.IMImage.forEach(function (item, index) {
+// //                         ImageList.unshift({"url": item.url});
+// //                     });
+// //
+// //                     if (_this.message.file.url.indexOf('&stripmeta=1&stripmeta=1') == -1) {
+// //                         ImageList.unshift({"url": this.message.file.url});
+// //                         SBIObject.IMImage = ImageList;
+// //                     } else {
+// //
+// //                     }
+//
+//                 } else {
+// //                    console.log("22");
+//                     SBIObject.IMImage = [];
+//                     SBIObject.IMImage = [{"url": this.message.file.url}];
+//                 }
 
-                    if (_this.message.file.url.indexOf('&stripmeta=1&stripmeta=1') == -1) {
-                        ImageList.unshift({"url": this.message.file.url});
-                        SBIObject.IMImage = ImageList;
-                    } else {
+                this.imageList.forEach((element,index)=>{
+                    ImageList.push({url:element.file.url});
+                })
 
-                    }
-
-                } else {
-//                    console.log("22");
-                    SBIObject.IMImage = [];
-                    SBIObject.IMImage = [{"url": this.message.file.url}];
-                }
+                SBIObject.IMImage = ImageList;
                 this.$store.commit('setSBIObject', SBIObject);
-
 
 //                if(this.$store.state.SBIObject != ''&& this.$store.state.SBIObject.IMImage){
 //                    this.$store.state.SBIObject.IMImage.forEach(function(item,index){
@@ -115,12 +126,20 @@
                 this.$emit("deleteMsg");
             }
         },
+        watch:{
+          "imageList"(list){
+              console.log(list)
+          }
+        },
         props: {
             message: {
                 type: Object
             },
             nim: {
                 type: Object
+            },
+            imageList:{
+                type:Array
             }
         }
     }
