@@ -517,12 +517,18 @@
                 this.$store.commit("setConsultationState", items.consultationState);
 
                 this.$store.commit("setCurrentItem", items);
+
+
+                //如果是选中患者 不清空
+                if(items.caseId == this.$store.state.caseId){
+                    imRefresh =false;
+                }
                 if (imRefresh) {
                     this.$store.commit("setSBIObject", {});
                     this.$store.commit("videoListObject", {});
                 }
-                this.$store.commit('setMinBtnFlag', false);
 
+                this.$store.commit('setMinBtnFlag', false);
 
                 this.data = JSON.stringify(items);
                 this.targetData.account = "0_" + items.caseId;
@@ -821,7 +827,7 @@
                         }
                         let getFlag = true;
 
-                        this.transformData(triageItem, index, getFlag, false);
+                        this.transformData(triageItem, index, getFlag, true);
 
                         store.commit("setTriagePatientCaseIdFlag", {
                             caseId: item.caseId,

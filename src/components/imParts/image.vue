@@ -53,8 +53,6 @@
                 this.$store.state.SBIObject.IMImage.forEach(function (item, index) {
 
                     if (message == item.url) {
-                        console.log(index);
-                        console.log(message);
                         _this.$store.commit("setSBIIndex", index);
                     }
                 });
