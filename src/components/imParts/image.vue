@@ -75,7 +75,7 @@
 //                    console.log("11");
                     let flag = false;
                     SBIObject.IMImage.forEach(function (item, index) {
-                        ImageList.push({"url": item.url});
+                        ImageList.unshift({"url": item.url});
                     });
 
                     if (_this.message.file.url.indexOf('&stripmeta=1&stripmeta=1') == -1) {
