@@ -518,11 +518,6 @@
 
                 this.$store.commit("setCurrentItem", items);
 
-
-                //如果是选中患者 不清空
-                if(items.caseId == this.$store.state.caseId){
-                    imRefresh =false;
-                }
                 if (imRefresh) {
                     this.$store.commit("setSBIObject", {});
                     this.$store.commit("videoListObject", {});
@@ -827,7 +822,14 @@
                         }
                         let getFlag = true;
 
-                        this.transformData(triageItem, index, getFlag, true);
+
+                        //如果是选中患者 不清空
+                        if(items.caseId == this.$store.state.caseId){
+                            this.transformData(triageItem, index, getFlag, false);
+                        }else{
+                            this.transformData(triageItem, index, getFlag, true);
+                        }
+
 
                         store.commit("setTriagePatientCaseIdFlag", {
                             caseId: item.caseId,
