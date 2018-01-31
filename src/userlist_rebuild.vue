@@ -78,7 +78,7 @@
                                 </button>
                             </figcaption>
 
-                            <span class="time"> {{items.lastUpdateTime | timeFormat}}</span>
+                            <span class="time"> {{items.createTime | timeFormat}}</span>
                         </article>
                         <!--</transition-group>-->
                         <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
@@ -110,7 +110,7 @@
                                 <!--@click="selectQuitItem(items)"></i>-->
                                 <!--</figure>-->
                             </figcaption>
-                            <span class="time" ref="toTopTime"> {{items.lastUpdateTime | timeFormat}}</span>
+                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
                         <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
                     </section>
@@ -139,7 +139,7 @@
                                         @click.stop="getTriagePatient(items,index)">接诊
                                 </button>
                             </figcaption>
-                            <span class="time" ref="toTopTime"> {{items.lastUpdateTime | timeFormat}}</span>
+                            <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
                         <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
                     </section>
