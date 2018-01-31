@@ -956,7 +956,7 @@
             //撤回
             deleteMsg(item) {
                 let _this = this;
-                if (!this.$store.state.isDeleteMsg &&item.custom && JSON.parse(item.custom).cId !== _this.$store.state.userId) {
+                if (!this.$store.state.isDeleteMsg ||(item.custom && JSON.parse(item.custom).cId !== _this.$store.state.userId)) {
                     _this.$store.commit("showPopup", {text: "您无权撤回此消息！"});
                     return false;
                 }
