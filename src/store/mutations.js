@@ -254,7 +254,7 @@ const mutations=  {
                             case 4://撤销
                                 if(parseInt(element.state) == 1){
                                     state.isDeleteMsg = true;
-                                    state.deleteMsgTime = element.toolConfig/100;break;
+                                    state.deleteMsgTime = element.toolConfig/60;break;
                                 }else{
                                     state.isDeleteMsg = false;
                                 }

@@ -11,6 +11,7 @@
                     :userListStatus.sync="userListStatus"
                     :userOnlineActive.sync="userOnlineActive"
                     :userWaitingActive.sync="userWaitingActive"
+                    :reTriageShow="reTriageShow"
             ></communication>
             <aside class="center-inner-userList">
                 <article class="search-result-tips" v-if="filterFinish">
@@ -296,7 +297,8 @@
                 popupContent: {
                     text: "",
                     hasImg: false
-                }
+                },
+                reTriageShow:false
             };
         },
         components: {
@@ -437,6 +439,7 @@
                 store.commit("setUsedReplyShow", false);
                 store.commit("setFastReplyShow", false);
                 this.noData = true;
+                this.reTriageShow = false;
                 if (this.userListStatus.first) {
                     this.waitingTriage = true;
                     this.userWaitingActive = index;

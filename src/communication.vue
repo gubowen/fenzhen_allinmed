@@ -149,7 +149,7 @@
                 SBIFlag: false,
                 usedRelyStatus: false, //常用回复是否能点击
                 fastReplyConfig: false,
-                reTriageShow: false,
+//                reTriageShow: false,
                 reTriageContentTips: "确定结束与该患者的沟通吗？",
                 doctorReceive:"该患者已被接诊",
                 inputReadOnly: "",
@@ -193,6 +193,9 @@
             },
             userOnlineActive: {
                 type: Number
+            },
+            reTriageShow:{
+                type:Boolean
             }
         },
         watch: {
