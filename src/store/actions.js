@@ -37,7 +37,15 @@ const actions = {
     setNewReset:({commit,state},data)=>{
         commit("setNewReset",data);
     },
-
+    setWaitingListRefresh:({commit,state},data)=>{
+        commit("setWaitingListRefresh",data);
+    },
+    setOnlineListRefresh:({commit,state},data)=>{
+        commit("setOnlineListRefresh",data);
+    },
+    setResetListRefresh:({commit,state},data)=>{
+        commit("setResetListRefresh",data);
+    },
     startLoading:({commit,state})=>{
         commit("startLoading");
     },

@@ -49,6 +49,9 @@
                 globeSortFlag: false
             }
         },
+        components: {
+            confirm
+        },
         watch: {
             '$store.state.searchStatus': function () {
                 this.searchStatus = this.$store.state.searchStatus;
@@ -198,7 +201,7 @@
                         // common.loading.show();
                     }
                 }).then(function (res) {
-                    console.log(res);
+                  //  console.log(res);
                     document.querySelector(".ev-loading").style.display = "none";
                     if (res.data.responseObject.responseStatus) {
                         if (res.data.responseObject.responseMessage) {
@@ -271,9 +274,6 @@
             getStateSetting(){
                 this.$store.commit("setStateSetting",true);
             }
-        },
-        components: {
-            confirm
         },
         mounted(){
             this.init();

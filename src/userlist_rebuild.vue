@@ -321,25 +321,19 @@
             waitingListRefresh(flag){
                 if (flag) {
                     this.getUserList("waiting", this.filterMethod);
-                    this.$store.commit("waitingListRefreshFlag", false);
-                } else {
-                    return;
+                    this.setWaitingListRefresh(false);
                 }
             },  //待分诊
             onlineListRefresh(flag) {
                 if (flag) {
                     this.getUserList("online", this.filterMethod);
-                    this.$store.commit("onlineListRefresh", false);
-                } else {
-                    return;
+                    this.setOnlineListRefresh( false);
                 }
             },   //沟通中
             resetListRefresh(flag) {
                 if (flag) {
                     this.getUserList("reset", this.filterMethod);
-                    this.$store.commit("resetListRefreshFlag", false);
-                } else {
-                    return;
+                    this.setResetListRefresh(false);
                 }
             },    //重新分诊
             //红点redPoint
@@ -362,7 +356,7 @@
         },
         methods: {
             ...mapActions(['setCaseId','setPatientId','setPatientName','setWaitingList','setOnlineList','setResetList','setNewWaiting','setNewOnline','setNewReset','startLoading','stopLoading'
-                            ,'setFastReplyShow','setUsedReplyShow','setInputReadOnly']),
+                            ,'setFastReplyShow','setUsedReplyShow','setInputReadOnly','setWaitingListRefresh','setOnlineListRefresh','setResetListRefresh']),
             init() {
                 this.$store.state.searchStatus = true;
                 this.getUserList("waiting");

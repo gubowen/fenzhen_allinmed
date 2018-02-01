@@ -224,7 +224,7 @@
         },
         props: {},
         computed: {
-            ...mapGetters(['currentItem', 'userId', 'onlineList', 'waitingList', 'resetList']),
+            ...mapGetters(['caseId', 'userId','currentItem', 'onlineList', 'waitingList', 'resetList']),
         },
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
@@ -345,7 +345,7 @@
                     return;
                 }
             },
-            "$store.state.caseId"(id) {
+            caseId(id) {
                 if (!id) {
                     this.targetData = {
                         account: "0_" + id
@@ -396,7 +396,7 @@
             this.init();
         },
         methods: {
-            ...mapActions(['setCaseId','setOnlineList','setNewWaiting','setNewOnline','setNewReset','startLoading','stopLoading']),
+            ...mapActions(['setCaseId','setOnlineList','setNewWaiting','setNewOnline','setNewReset','startLoading','stopLoading','setWaitingListRefresh','setOnlineListRefresh','setResetListRefresh']),
             init() {
                 let that = this;
                 that.connectFlag = false;
@@ -468,7 +468,7 @@
                                     }
                                     waitingAlertList[msg.from] = 1;
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
-                                    store.commit("waitingListRefreshFlag", true);
+                                    that.setWaitingListRefresh(true);
                                     that.setNewWaiting(true);
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     // that.$store.commit("waitingListRefreshFlag", true);
@@ -706,9 +706,13 @@
 //                    let currentItem = that.$store.state.currentItem;
 //                    currentItem.consultationState = 1;
 //                    that.$store.commit('setCurrentItem',currentItem);
-                        that.$store.commit('waitingListRefreshFlag', true);
-                        that.$store.commit('onlineListRefresh', true);
-                        that.$store.commit('resetListRefreshFlag', true);
+
+
+                        that.setWaitingListRefresh(true);
+                        that.setOnlineListRefresh(true);
+                        that.setResetListRefresh(true);
+
+
 
                         that.$store.commit("setRefuseUserListFlag", true);
 

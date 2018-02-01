@@ -198,13 +198,13 @@ const mutations=  {
         state.refuseFlag = data;
     },
     //***********刷新**************
-    waitingListRefreshFlag(state, data){
+    setWaitingListRefresh(state, data){
         state.waitingListRefresh = data;
     },
-    onlineListRefresh(state, data){
+    setOnlineListRefresh(state, data){
         state.onlineListRefresh = data;
     },
-    resetListRefreshFlag(state,data){
+    setResetListRefresh(state,data){
         state.resetListRefresh = data;
     },
     //***********拒绝**************
