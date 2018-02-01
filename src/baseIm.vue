@@ -470,9 +470,6 @@
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                                     store.commit("waitingListRefreshFlag", true);
                                     that.setNewWaiting(true);
-                                    that.setMusicPlay(true);
-
-
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
                                     // that.$store.commit("waitingListRefreshFlag", true);
                                     //  that.$store.commit('resetListRefreshFlag', true);
