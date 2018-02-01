@@ -135,11 +135,9 @@
     import store from "@/store/store";
     import api from "@/common/js/util/util";
 
-    import {common, modules} from "common";
-
     import nimEnv from "@/base/nimEnv";
     import releasePatient from "@/base/releasePatient";   //改变患者状态
-    import {mapGetters} from "vuex";
+    import {mapGetters,mapActions} from "vuex";
 
     Vue.filter("transformMessageTime", function (time) {
         var format = function (num) {
@@ -188,9 +186,6 @@
         return result;
     });
 
-    // const XHRList = {
-    // waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
-    // };
     export default {
         data() {
             return {
@@ -228,6 +223,9 @@
             UpdateTips
         },
         props: {},
+        computed: {
+            ...mapGetters(['currentItem', 'userId', 'onlineList', 'waitingList', 'resetList']),
+        },
         watch: {
             "$store.state.sendPreviewSuggestionFlag"(obj) {
                 if (obj.flag) {
@@ -254,7 +252,7 @@
             "$store.state.triagePatientCaseIdFlag"(param) {
                 const that = this;
                 if (param.flag) {
-                    this.$store.commit("startLoading");
+                    that.startLoading();
                     setTimeout(() => {
                         this.nim.sendCustomMsg({
                             scene: "p2p",
@@ -303,7 +301,7 @@
                             docName: this.$store.state.userName
                         }),
                         done(error, obj) {
-                            that.$store.commit("startLoading");
+                            that.startLoading();
                             if (!error) {
                                 that.sendSingleMessage(error, obj);
                             }
@@ -394,13 +392,11 @@
                 this.deleteMsg(obj);
             }
         },
-        computed: {
-            ...mapGetters(['currentItem', 'userId', 'patientList', 'waitingList', 'resetList']),
-        },
         mounted() {
             this.init();
         },
         methods: {
+            ...mapActions(['setCaseId','setOnlineList','setNewWaiting','setNewOnline','setNewReset','startLoading','stopLoading']),
             init() {
                 let that = this;
                 that.connectFlag = false;
@@ -450,7 +446,7 @@
 
                             that.getMessageType = '';//清空回去数据类型
 
-                            console.log(msg);
+                      //      console.log(msg);
                             //由患者端发送-更新时间戳
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.currentItem.createTime = that.transformMessageTime(msg.time);
@@ -473,8 +469,8 @@
                                     waitingAlertList[msg.from] = 1;
                                     localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                                     store.commit("waitingListRefreshFlag", true);
-                                    store.commit("setNewWaiting", true);
-                                    store.commit("setMusicPlay", true);
+                                    that.setNewWaiting(true);
+                                    that.setMusicPlay(true);
 
 
                                 } else if (JSON.parse(msg.content).type == 'checkSuggestSendTips') {
@@ -482,7 +478,7 @@
                                     //  that.$store.commit('resetListRefreshFlag', true);
 
 //                                    let flag = false;
-                                    that.patientList.forEach(function (item, index) {
+                                    that.onlineList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.from) {
                                             item.consultationState = '6';
                                             that.$store.commit("setConsultationState", "6");
@@ -507,7 +503,7 @@
                                     // that.$emit("update:userCurrentStatus", 3);
 
                                 } else if (JSON.parse(msg.content).type == 'notification' && JSON.parse(msg.content).data.actionType == "5") {
-                                    that.patientList.forEach(function (item, index) {
+                                    that.onlineList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '1';
                                             that.$store.commit("setConsultationState", "1");
@@ -529,7 +525,7 @@
                                     });
                                 }
                                 else if (JSON.parse(msg.content).type == 'notification' && JSON.parse(msg.content).data.actionType == "3") {
-                                    that.patientList.forEach(function (item, index) {
+                                    that.onlineList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '2';
                                             that.$store.commit("setConsultationState", "2");
@@ -551,7 +547,7 @@
                                     });
                                 }
                                 else if (JSON.parse(msg.content).type == 'overtimeTip') {
-                                    that.patientList.forEach(function (item, index) {
+                                    that.onlineList.forEach(function (item, index) {
                                         if ("0_" + item.caseId == msg.to) {
                                             item.consultationState = '3';
                                             that.$store.commit("setConsultationState", "3");
@@ -691,7 +687,7 @@
                         }),
                         done(error, obj) {
                             that.$store.commit("setSendStatus", true);
-                            that.$store.commit("startLoading");
+                            that.startLoading();
                             if (!error) {
                                 resolve(obj);
                                 that.sendSingleMessage(error, obj);
@@ -762,8 +758,8 @@
             },
             //发送单条数据...
             sendSingleMessage(error, msg) {
-                this.$store.commit("startLoading");
-                let patientListArray = this.patientList;
+                this.startLoading();
+                let patientListArray = this.onlineList;
 
                 //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
                 patientListArray.removeByValue(this.$store.state.currentItem);
@@ -772,7 +768,7 @@
                 //this.$store.commit("unshift",this.$store.state.currentItem);
                 //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
                 //this.$store.state.patientList.unshift(this.$store.state.currentItem);
-                this.$store.commit("setPatientList", patientListArray);
+                this.setOnlineList( patientListArray);
                 this.$store.state.currentItem.lastUpdateTime = this.transformMessageTime(msg.time);
                 store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
@@ -786,7 +782,7 @@
 //                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
 //                    }, 120);
                 }
-                this.$store.commit("stopLoading");
+                this.stopLoading();
             },
             //发送检查检验...
             sendCheckSuggestion(data) {
@@ -880,7 +876,7 @@
             //发送文件
             sendFile(data) {
                 let that = this;
-                store.commit("startLoading");
+                that.startLoading();
                 let promises = [];
                 Array.from(data.data).forEach(function (element, index) {
                     promises.push(
@@ -944,7 +940,7 @@
                             file: element.file,
                             type: element.type,
                             done(error, msg) {
-                                store.commit("stopLoading");
+                                that.stopLoading();
                                 that.sendSingleMessage(error, msg);
                             }
                         });
@@ -1093,7 +1089,7 @@
                         beginTime: 0,
                         endTime: that.historyBeginTime,
                         done(error, obj) {
-                            console.log(obj);
+                         //   console.log(obj);
                             if (obj.msgs.length === 0) {
                                 if (that.getMessageType === "scrollInit") {
                                     that.allGet = true;
@@ -1116,10 +1112,10 @@
             },
             // 新消息提示
             newMessageTips(target, element) {
-                console.log(element);
+             //   console.log(element);
                 const _this = this;
                 //沟通中
-                let patientList = this.patientList;
+                let patientList = this.onlineList;
                 patientList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
 //                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1156,10 +1152,10 @@
                         } else {
                             localStorage.setItem("patientAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("patientAlertList")), patientAlertList)));
                         }
-                        _this.$store.commit("setNewOnline", true);
+                        _this.setNewOnline(true);
                     }
                 });
-                this.$store.commit("setPatientList", patientList);
+                this.setOnlineList(patientList);
 
                 //带分诊
                 let waitingList = this.waitingList;
@@ -1195,7 +1191,7 @@
                             localStorage.setItem("waitingAlertList", JSON.stringify(Object.assign(JSON.parse(localStorage.getItem("waitingAlertList")), waitingAlertList)));
                         }
 
-                        _this.$store.commit("setNewWaiting", true);
+                        _this.setNewWaiting(true);
                     }
                 });
                 this.$store.commit("setWaitingList", waitingList);
@@ -1237,7 +1233,7 @@
                         }
 
 
-                        _this.$store.commit("setNewReset", true);
+                        _this.setNewReset(true);
                     }
                 });
             },
@@ -1311,7 +1307,7 @@
                     }
 //                    console.log(obj.msgs.length);
                     if (this.getMessageType === "scrollInit") {
-                        that.$store.commit("startLoading");
+                        that.startLoading();
                         // setTimeout(() => {
                         //     let allHeight = 0;
                         //     $(".messageList-item-content").each(function (index, item) {
@@ -1322,7 +1318,7 @@
                         //     this.$refs.messageBox.scrollTop = (allHeight + 210);
                         //     that.$store.commit("stopLoading");
                         // }, 1000);
-                        that.$store.commit("stopLoading");
+                        that.stopLoading();
                     }
 
                     that.getImageList();

@@ -56,9 +56,9 @@
                     <section class="userList-mainList viewItem" data-role="ut-tabs-1"
                              v-show="userListStatus.status == 1">
                         <!--<transition-group name="list-left" tag="section">-->
-                        <article v-show="userListWaiting.length > 0" @click="transformData(items,index)"
+                        <article v-show="waitingList.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userWaitingActive == index }, 'userList-mainList-item']"
-                                 v-for="(items,index) in userListWaiting"
+                                 v-for="(items,index) in waitingList"
                                  :key="index"
                         >
                             <figure class="userList-item-img">
@@ -81,13 +81,13 @@
                             <span class="time"> {{items.createTime | timeFormat}}</span>
                         </article>
                         <!--</transition-group>-->
-                        <p class="userList-no-data" v-show="userListWaiting.length == 0">没有找到相应的患者</p>
+                        <p class="userList-no-data" v-show="waitingList.length == 0">没有找到相应的患者</p>
                     </section>
                     <section class="userList-mainList viewItem" data-role="ut-tabs-2"
                              v-show="userListStatus.status == 2">
-                        <article v-show="userListOnline.length > 0" @click="transformData(items,index)"
+                        <article v-show="onlineList.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userOnlineActive == index }, 'userList-mainList-item']"
-                                 v-for="(items,index) in userListOnline"
+                                 v-for="(items,index) in onlineList"
                                  :key="index"
                         >
                             <figure class="userList-item-img">
@@ -112,12 +112,12 @@
                             </figcaption>
                             <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
-                        <p class="userList-no-data" v-show="userListOnline.length == 0">没有找到相应的患者</p>
+                        <p class="userList-no-data" v-show="onlineList.length == 0">没有找到相应的患者</p>
                     </section>
                     <section class="userList-mainList viewItem" data-role="ut-tabs-3" v-show="userListStatus.status == 3">
-                        <article v-show="userListReset.length > 0" @click="transformData(items,index)"
+                        <article v-show="resetList.length > 0" @click="transformData(items,index)"
                                  :class="[{ active : userResetActive == index }, 'userList-mainList-item']"
-                                 v-for="(items,index) in userListReset"
+                                 v-for="(items,index) in resetList"
                                  :key="index"
                         >
                             <figure class="userList-item-img">
@@ -138,7 +138,7 @@
                             </figcaption>
                             <span class="time" ref="toTopTime"> {{items.createTime | timeFormat}}</span>
                         </article>
-                        <p class="userList-no-data" v-show="userListReset.length === 0">没有找到相应的患者</p>
+                        <p class="userList-no-data" v-show="resetList.length === 0">没有找到相应的患者</p>
                     </section>
                 </section>
                 <footer class="user-list-footer">
@@ -154,22 +154,19 @@
     </div>
 </template>
 <script>
+    import Vue from "vue";
+    import {mapGetters,mapActions} from "vuex";
+
     import {common, modules} from "common";
     import api from "./common/js/util/util";
-    import TabsViewChange from "tabView";
-    import downSelector from "downSelector";
-    import ymd from "ymd";
-    import record from "./record";
+    import triagePatient from "@/base/triagePatient";
+
     import communication from "./communication";
-    import Vue from "vue";
+    import record from "./record";
     import footerList from "./Footer";
     import headerList from "./Header";
     import checkHistory from "./components/CheckHistory";
 
-    import triagePatient from "@/base/triagePatient";
-
-    import store from "@/store/store";
-    import {mapGetters} from "vuex";
 
     Vue.filter("timeFormat", function (time, a) {
 
@@ -259,9 +256,6 @@
         data() {
             return {
                 userListData: "",
-                userListOnline: [],
-                userListWaiting: [],
-                userListReset: [],
                 userWaitingActive: -1,
                 userOnlineActive: -1,
                 userResetActive: -1,
@@ -297,15 +291,15 @@
                 reTriageShow:false
             };
         },
-        computed: {
-            ...mapGetters(['newWaiting', 'newOnline', 'newReset','waitingListRefresh','onlineListRefresh','resetListRefresh']),
-        },
         components: {
             record,
             communication,
             headerList,
             footerList,
             checkHistory
+        },
+        computed: {
+            ...mapGetters(['caseId','waitingList','onlineList','resetList','newWaiting', 'newOnline', 'newReset','waitingListRefresh','onlineListRefresh','resetListRefresh',]),
         },
         watch: {
             "message.createTime"() {
@@ -322,25 +316,6 @@
             },
             "$store.state.userId"() {
                 this.init();
-            },
-            //列表
-            "$store.state.patientList": {
-                handler: (list, oldValue) => {
-                    this.userListOnline = list;
-                },
-                deep: true
-            },
-            "$store.state.waitingList": {
-                handler: (list, oldValue) => {
-                    this.userListWaiting = list;
-                },
-                deep: true
-            },
-            "$store.state.resetList": {
-                handler: (list, oldValue) => {
-                    this.userListReset = list;
-                },
-                deep: true
             },
             //刷新
             waitingListRefresh(flag){
@@ -381,13 +356,13 @@
         mounted() {
             if (this.$store.state.userId) {
                 this.init();
-                this.$store.commit("setUsedReplyShow", false);
-                this.$store.commit("setFastReplyShow", false);
+                this.setUsedReplyShow(false);
+                this.setFastReplyShow(false);
             }
         },
-        activated() {
-        },
         methods: {
+            ...mapActions(['setCaseId','setPatientId','setPatientName','setWaitingList','setOnlineList','setResetList','setNewWaiting','setNewOnline','setNewReset','startLoading','stopLoading'
+                            ,'setFastReplyShow','setUsedReplyShow','setInputReadOnly']),
             init() {
                 this.$store.state.searchStatus = true;
                 this.getUserList("waiting");
@@ -396,19 +371,20 @@
             },
             //给子组件传值..
             transformData(items, index, getFlag = false, imRefresh = true) {
-                store.commit("setUsedReplyShow", false);
-                store.commit("setFastReplyShow", false);
+                this.setUsedReplyShow(false);
+                this.setFastReplyShow(false);
                 this.noData = true;
                 this.reTriageShow = false;
-                if (this.userListStatus.first) {
+                if (this.userListStatus.first)
+                {
                     this.waitingTriage = true;
                     this.userWaitingActive = index;
-                    store.commit("setInputReadOnly", true);
+                    this.setInputReadOnly(true);
 
-                    let waitingList = this.$store.state.waitingList;
+                    let waitingList = this.waitingList;
                     items.messageAlert = "";
                     waitingList[index] = items;
-                    this.$store.commit("setWaitingList", waitingList);
+                    this.setWaitingList(waitingList);
 
                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                     if (waitingAlertList) {
@@ -416,25 +392,26 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.$store.commit("setNewWaiting",false);
+                        this.setNewWaiting(false);
                     }
-                } else if (this.userListStatus.second) {
+                } else if (this.userListStatus.second)
+                {
 
                     this.waitingTriage = false;
 
                     this.userOnlineActive = index;
-                    store.commit("setInputReadOnly", false);
+                    this.setInputReadOnly(false);
 
-                    let patientList = this.$store.state.patientList;
+                    let patientList = this.onlineList;
                     items.messageAlert = "";
 
                     if (getFlag) {
                         patientList.removeByValue(items);
                         patientList.unshift(items);
-                        this.$store.commit("setPatientList", patientList);
+                        this.setOnlineList(patientList);
                     } else {
                         patientList[index] = items;
-                        this.$store.commit("setPatientList", patientList);
+                        this.setOnlineList(patientList);
                     }
                     let patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
                     if (patientAlertList) {
@@ -442,21 +419,23 @@
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                     }
                     if (localStorage.getItem("patientAlertList") == "{}") {
-                        this.$store.commit("setNewOnline",false);
+                        this.setNewOnline(false);
                     }
-                } else if (this.userListStatus.third) {
+                } else if (this.userListStatus.third)
+                {
                     this.waitingTriage = true;
                     this.userResetActive = index;
-                    store.commit("setInputReadOnly", true);
-                    let resetList = this.$store.state.resetList;
+                    this.setInputReadOnly(true);
+
+                    let resetList = this.resetList;
                     items.messageAlert = "";
                     if (getFlag) {
                         resetList.removeByValue(items);
                         resetList.unshift(items);
-                        this.$store.commit("setResetList", resetList);
+                        this.setResetList(resetList);
                     } else {
                         resetList[index] = items;
-                        this.$store.commit("setResetList", resetList);
+                        this.setResetList(resetList);
                     }
                     let resetAlertList = JSON.parse(
                         localStorage.getItem("resetAlertList")
@@ -466,16 +445,19 @@
                         localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
                     }
                     if (localStorage.getItem("resetAlertList") == "{}") {
-                        this.$store.commit("setNewReset",false);
+                        this.setNewReset(false);
                     }
                 }
 
                 this.message = items;
 
-                this.$store.commit("setPatientId", items.patientId);
-                this.$store.commit("setPatientName", items.patientName);
-                this.$store.commit("setCaseId", items.caseId);
+
+                this.setCaseId(items.caseId);
                 localStorage.setItem("caseId", items.caseId);
+                this.setPatientId(items.patientId);
+                this.setPatientName(items.patientName);
+
+
                 this.$store.commit("setConsultationId", items.consultationId);
                 this.$store.commit("setConsultationState", items.consultationState);
 
@@ -533,8 +515,8 @@
             //患者列表
             //type:online为沟通中，waiting待分诊 reset重新分诊
             getUserList(type, param, fn) {
-                this.$store.commit("startLoading");
                 let _this = this;
+                _this.startLoading();
                 _this.userListData = "";
                 _this.userListLoading = [];
                 _this.userListEnd = [];
@@ -582,7 +564,7 @@
                     method: "POST",
                     data: dataValue,
                     done(res) {
-                        _this.$store.commit("startLoading");
+                        _this.startLoading();
                         if (res.responseObject.responseData && res.responseObject.responseStatus) {
                             let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
                             let waitingAlertList = {},patientAlertList = {},resetAlertList = {};
@@ -602,7 +584,7 @@
                                                 }
                                                 if (key == "0_" + item.caseId) {
                                                     item.messageAlert = patientAlertList[key];
-                                                    _this.$store.commit("setNewOnline",true);
+                                                    _this.setNewOnline(true);
                                                     flag = false;
                                                 }
                                             });
@@ -613,8 +595,9 @@
                                         }
                                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                                     }
-                                    _this.$store.commit("setPatientList", dataList);
-                                    _this.userListOnline = dataList ? dataList : [];
+                                    //_this.$store.commit("setPatientList", dataList);
+                                    _this.setOnlineList(dataList ? dataList : [])
+
                                 }
                                     break;
                                 case "waiting":
@@ -638,8 +621,7 @@
                                         }
                                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                                     }
-                                    _this.$store.commit("setWaitingList", dataList);
-                                    _this.userListWaiting = dataList ? dataList : [];
+                                    _this.setWaitingList( dataList ? dataList : []);
                                 }
                                     break;
                                 case "reset":
@@ -663,8 +645,7 @@
                                         }
                                         localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
                                     }
-                                    _this.$store.commit("setResetList", dataList);
-                                    _this.userListReset = dataList ? dataList : [];
+                                    _this.setResetList(dataList ? dataList : []);
                                 }
                                     break;
                                 default:
@@ -696,11 +677,11 @@
                 this.filterMethod = Object.assign(this.filterMethod, {
                     selectName: content
                 });
-                store.commit("startLoading");
+                this.startLoading();
                 this.getUserList("waiting", this.filterMethod);
                 this.getUserList("online", this.filterMethod);
                 this.getUserList("reset", this.filterMethod);
-                store.commit("stopLoading");
+                this.stopLoading();
                 //this.filterFinish = true;
             },
             //刷新按钮
@@ -712,7 +693,7 @@
             //接诊
             getTriagePatient(item, index) {
 
-                store.commit("startLoading");
+                this.startLoading();
                 triagePatient(
                     {
                         consultationId: item.consultationId,
@@ -720,20 +701,20 @@
                     },
                     () => {
                         this.getUserList("waiting");
-                        store.commit("showPopup", {
+                        this.$store.commit("showPopup", {
                             hasImg: false,
                             text: "该患者已被其他分诊医生接诊！"
                         });
                     },
                     c => {
                         this.getUserList("waiting");
-                        store.commit("showPopup", {
+                        this.$store.commit("showPopup", {
                             hasImg: false,
                             text: `您最多可以接诊${c}个患者！`
                         });
                     }
                 ).then(res => {
-                    store.commit("stopLoading");
+                    this.stopLoading();
                     //患者未被抢单
                     this.getUserList("waiting");
                     this.getUserList("reset");
@@ -754,14 +735,14 @@
                         }
 
 
-                        store.commit("setTriagePatientCaseIdFlag", {
+                        this.$store.commit("setTriagePatientCaseIdFlag", {
                             caseId: item.caseId,
                             flag: true
                         });
                         this.waitingTriage = false;
                         this.userOnlineActive = 0;
-                        store.commit("setInputReadOnly", false);
-                        store.commit("stopLoading");
+                        this.setInputReadOnly(false);
+                        this.stopLoading();
                     });
 
                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
@@ -774,7 +755,7 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaiting = false;
+                        this.setNewWaiting(false);
                     }
                 })
                     .catch(res => {
@@ -784,7 +765,7 @@
             getBeTriagePatient(item) {
                 let caseId = item.caseId;
                 let result;
-                this.userListOnline.forEach((element, index) => {
+                this.onlineList.forEach((element, index) => {
                     if (element.caseId === caseId) {
                         result = element;
                     }
@@ -793,12 +774,12 @@
             },
             //选择退回患者
             selectQuitItem(item) {
-                this.userListOnline.forEach((element, index) => {
+                this.onlineList.forEach((element, index) => {
                     element.triageSelect = false;
                 });
                 item.triageSelect = true;
 
-                store.commit("setQuitPatientItem", item);
+                this.$store.commit("setQuitPatientItem", item);
             },
             //显示排序列表
             sortShow() {

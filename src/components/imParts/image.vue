@@ -40,7 +40,7 @@
             this.installSBIList();
             this.initImageFn();
 
-                console.log(this.imageList)
+              //  console.log(this.imageList)
 
 
         },
@@ -75,7 +75,7 @@
                 let _this = this;
                 let ImageList = [];
                 let SBIObject = [];
-                console.log(_this.message.file.url)
+//                console.log(_this.message.file.url)
                 SBIObject = this.$store.state.SBIObject;
 //                 if (this.$store.state.SBIObject  &&  this.$store.state.SBIObject.IMImage) {
 // // //                    console.log("11");

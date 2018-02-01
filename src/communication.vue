@@ -6,7 +6,7 @@
                 <img src="/static/image/img00/index/logo_empty bg.png" alt="">
             </figure>
             <BaseIm ref="baseImComponent"></BaseIm>
-            <section class="user-controller" v-show="!$store.state.inputReadOnly">
+            <section class="user-controller" v-show="!inputReadOnly">
                 <nav class="user-controller-fastBtn" data-template="tpl-fastReply">
                     <button class="user-controller-fastReply" @click.stop="fastRely()">
                         <i class="icon-fastReply"></i>
@@ -38,7 +38,7 @@
                     </button>
 
                     <!--结束沟通-->
-                    <button class="user-controller-end" @click="reTriageShow=true">
+                    <button class="user-controller-end" @click="reTriageShowFlag=true">
                         <i class="icon-finish"></i>
                         <span>结束沟通</span>
                     </button>
@@ -49,22 +49,22 @@
 
                     <!--快捷提问-->
                     <transition name="fade">
-                        <fast-Rely v-if="$store.state.fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
+                        <fast-Rely v-if="fastReplyShow" :controllerInputStatus.sync="controllerInputStatus" :fastRelyStatus.sync="fastRelyStatus"></fast-Rely>
                     </transition>
                     <!--常用回复-->
-                    <transition name="fade"><used-Rely v-if="$store.state.usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
+                    <transition name="fade"><used-Rely v-if="usedReplyShow" :usedRelyStatus.sync="usedRelyStatus"></used-Rely>
                     </transition>
                     <!--结束沟通-->
                     <transition name="fade">
-                        <SmallConfirm @ensureCallback="reTriageConfirm"   :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShow=false" v-if="reTriageShow && $store.state.consultationState!='1'&&$store.state.consultationState!='3'"></SmallConfirm>
+                        <SmallConfirm @ensureCallback="reTriageConfirm"   :comfirmContent="reTriageContentTips" @cancelCallback="reTriageShowFlag=false" v-if="reTriageShowFlag && $store.state.consultationState!='1'&&$store.state.consultationState!='3'"></SmallConfirm>
                     </transition>
                     <transition name="fade">
-                        <doctor-Receive @ensureCallback="doctorReceiveFn" :confirmContent="doctorReceive"  v-if="reTriageShow && ($store.state.consultationState=='1'||$store.state.consultationState=='3')"></doctor-Receive>
+                        <doctor-Receive @ensureCallback="doctorReceiveFn" :confirmContent="doctorReceive"  v-if="reTriageShowFlag && ($store.state.consultationState=='1'||$store.state.consultationState=='3')"></doctor-Receive>
                     </transition>
                 </nav>
                 <article class="user-controller-middle">
                     <textarea name="" id="" cols="" rows="" class="user-controller-input" v-model="controllerInput"
-                              @keydown="sendMessage($event)" :readonly="$store.state.inputReadOnly" @input="$store.state.usedReplyContent=controllerInput"></textarea>
+                              @keydown="sendMessage($event)" :readonly="inputReadOnly" @input="$store.state.usedReplyContent=controllerInput"></textarea>
                 </article>
                 <footer class="user-controller-footer" v-if="!waitingTriage">
                     <span class="user-send-message">按下Enter发送</span>
@@ -83,7 +83,7 @@
         </transition>
         <!--编辑快捷提问-->
         <transition name="fade">
-            <fast-Reply-Config v-if="$store.state.fastReplyConfig"></fast-Reply-Config>
+            <fast-Reply-Config v-if="fastReplyConfig"></fast-Reply-Config>
         </transition>
         <!--检查检验-->
         <transition name="fade">
@@ -128,6 +128,7 @@
     import ShowVideoList from "@/common/ShowVideoList";
     import sendFile from "@/components/imParts/sendFile";
     import refuse from "@/components/imParts/refuse";
+    import {mapGetters,mapActions} from "vuex";
 
     export default {
         name: "communication",
@@ -145,14 +146,13 @@
                 suggestionFlag: false,
                 checkSuggestionFlag: false, //初诊建议
                 tabActive: true,
-                fastRelyStatus: "", //快捷提问是否能点击
-                SBIFlag: false,
+                fastRelyStatus: "",    //快捷提问是否能点击
                 usedRelyStatus: false, //常用回复是否能点击
+                SBIFlag: false,
                 fastReplyConfig: false,
-//                reTriageShow: false,
+                reTriageShowFlag: '',
                 reTriageContentTips: "确定结束与该患者的沟通吗？",
                 doctorReceive:"该患者已被接诊",
-                inputReadOnly: "",
                 sendFlag:false,
                 minBtnFlag:false,
             };
@@ -173,6 +173,9 @@
             sendFile,
             refuse,
             doctorReceive
+        },
+        computed: {
+            ...mapGetters(['currentItem', 'userId', 'patientList', 'waitingList', 'resetList','onlineList','fastReplyShow','usedReplyShow','inputReadOnly']),
         },
         props: {
             m: {
@@ -215,9 +218,15 @@
             }
 
         },
+        mounted() {
+            this.init();
+        },
         methods: {
+            ...mapActions(['setCaseId','setCurrentItem','setPatientId','setPatientName','setWaitingList','setOnlineList','setResetList',
+                'startLoading','stopLoading','setFastReplyShow','setUsedReplyShow','setInputReadOnly']),
             //初始化
             init() {
+                this.reTriageShowFlag = this.reTriageShow;
             },
             sendMessage(e) {
                 const that = this;
@@ -267,37 +276,37 @@
             //快捷提问按钮
             fastRely() {
                 let flag = true;
-                if (this.$store.state.fastReplyShow) {
+                if (this.fastReplyShow) {
                     flag = false;
                 } else {
                     flag = true;
-                    this.$store.commit("setUsedReplyShow", false);
+                    this.setUsedReplyShow(false);
                 }
-                this.$store.commit("setFastReplyShow", flag);
+                this.setFastReplyShow(flag);
             },
             //常用回复
             usedRely() {
                 let flag = true;
-                if (this.$store.state.usedReplyShow) {
+                if (this.usedReplyShow) {
                     flag = false;
                 } else {
                     flag = true;
-                    this.$store.commit("setFastReplyShow", false);
+                    this.setFastReplyShow(false);
                 }
-                this.$store.commit("setUsedReplyShow", flag);
+                this.setUsedReplyShow(flag);
             },
             //患者转移至其他分诊医生：
             reTriageConfirm() {
                 releasePatient({
-                    customerId: this.$store.state.userId,
-                    consultationId: this.$store.state.currentItem.consultationId,
+                    customerId: this.userId,
+                    consultationId: this.currentItem.consultationId,
                     consultationState:5
                 }).then(res => {
-                    this.$store.commit("startLoading");
+                    this.startLoading();
 
-                    this.reTriageShow = false;
+                    this.reTriageShowFlag = false;
                     this.$store.commit("setReleasePatientCaseIdFlag", {
-                        caseId: this.$store.state.caseId,
+                        caseId: this.caseId,
                         flag: true
                     });
 
@@ -309,38 +318,36 @@
 
             },
             doctorReceiveFn(){
-                this.reTriageShow = false;
+                this.reTriageShowFlag = false;
                 this.$emit("update:n",false);
                 this.$store.commit("waitingListRefreshFlag", true);
                 this.$store.commit("onlineListRefresh", true);
                 this.$store.commit("resetListRefreshFlag", true);
 
-                this.$store.commit("setCurrentItem",{});
-                this.$store.commit("setPatientId","");
-                this.$store.commit("setPatientName","");
-                this.$store.commit("setCaseId","");
+                this.setCurrentItem({});
+                this.setPatientId("");
+                this.setPatientName("");
+                this.setCaseId("");
                 this.$store.commit("setConsultationId","");
                 this.$store.commit("setConsultationState", "");
-                this.$store.commit("setSBIObject", new Array());
+                this.$store.commit("setSBIObject", {});
             },
             //患者接诊
             getPatient() {
-                let currentItem = this.$store.state.currentItem;
-                let waitingList = this.$store.state.waitingList;
-                let patientList = this.$store.state.patientList;
+                let currentItem = this.currentItem;
+                let waitingList = this.waitingList;
+                let patientList = this.onlineList;
                 triagePatient({
                     consultationId: this.$store.state.consultationId,
-                    customerId: this.$store.state.userId
+                    customerId: this.userId
                 })
                     .then(res => {
                         this.$emit("update:waitingTriage", false);
-
                         waitingList.removeByValue(currentItem);
                         patientList.unshift(currentItem);
-
-                        this.$store.commit("setPatientList", patientList);
-                        this.$store.commit("setWaitingList", waitingList);
-                        this.$store.commit("setInputReadOnly", false);
+                        this.setOnlineList(patientList);
+                        this.setWaitingList(waitingList);
+                        this.setInputReadOnly(false);
                         this.$emit("update:userListStatus", {
                             first: false,
                             second: true,
@@ -365,16 +372,14 @@
                 this.$store.commit("setRefuseFlag",true);
             },
             userListChange(){
-                this.$store.commit("startLoading");
-                setTimeout(() => {this.$store.commit("startLoading");},100);
-                setTimeout(() => {this.$store.commit("startLoading");},500);
+                this.startLoading();
+                setTimeout(() => {this.startLoading();},100);
+                setTimeout(() => {this.startLoading();},500);
                 setTimeout(() => {
-                    this.$store.commit("startLoading");
-                    let patientList = this.$store.state.patientList;
-                    patientList.removeByValue(this.$store.state.currentItem);
-                    this.$store.commit("setPatientList",patientList);
-//                    let waitingList = this.$store.state.waitingList;
-//                    this.$store.commit("setWaitingList", waitingList);
+                    this.startLoading();
+                    let patientList = this.onlineList;
+                    patientList.removeByValue(this.currentItem);
+                    this.setOnlineList(patientList);
                     this.$store.state.currentItem.triageSelect = false;
                     this.$store.commit("waitingListRefreshFlag", true);
                     let num = "";
@@ -388,32 +393,29 @@
                     } else {
                         this.$emit("update:userOnlineActive", -1);
                         this.$emit("update:n", false);
-                        this.$store.commit("setCurrentItem",'');
-                        this.$store.commit("setCaseId",'');
-                        this.$store.commit("setPatientId",'');
-                        this.$store.commit("setPatientName",'');
+                        this.setCurrentItem({});
+                        this.setCaseId("");
+                        this.setPatientId("");
+                        this.setPatientName("");
                         return;
                     }
                     this.$emit("update:userWaitingActive", -1);
                     let items = patientList[parseInt(num)];
 
-                    this.$store.commit("setPatientId", items ? items.patientId : "");
-                    this.$store.commit("setPatientName", items ? items.patientName : "");
-                    this.$store.commit("setCaseId", items ? items.caseId : "");
+                    this.setPatientId(items ? items.patientId : "");
+                    this.setPatientName(items ? items.patientName : "");
+                    this.setCaseId(items ? items.caseId : "");
                     this.$store.commit("setConsultationId", items ? items.consultationId : "");
-                    this.$store.commit("setCurrentItem", items ? items : {});
+                    this.setCurrentItem( items ? items : {});
                     this.$store.commit("setSBIObject", []);
 
-                    this.$store.commit("stopLoading");
+                    this.stopLoading();
                     this.$store.commit("setRefuseUserListFlag",false);
-
                 }, 1500);
 
             }
-        },
-        mounted() {
-            this.init();
         }
+
     };
 </script>
 <style lang="scss" rel="stylesheet/scss">

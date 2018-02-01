@@ -63,6 +63,8 @@
     import remarkRecord from "@/components/triageRecord";
     import triagePatient from "@/base/triagePatient";
     import store from "@/store/store";
+    import {mapGetters,mapActions} from "vuex";
+
     export default{
         name: 'record',
         props: {
@@ -76,6 +78,9 @@
                 type: Object
             }
         },
+        computed: {
+            ...mapGetters(['onlineList']),
+        },
         data(){
             return {
                 userMessage: '',
@@ -86,6 +91,7 @@
             }
         },
         methods: {
+            ...mapActions(['setCaseId','setOnlineList']),
             init(){
 //        alert(5)
 //        this.userMessage = this.$route.params.num;
@@ -107,7 +113,7 @@
             getPatient(){
                 let currentItem = this.$store.state.currentItem;
                 let waitingList = this.$store.state.waitingList;
-                let patientList = this.$store.state.patientList;
+                let patientList = this.onlineList;
                 triagePatient({
                     consultationId: this.$store.state.consultationId,
                     customerId: this.$store.state.userId
@@ -144,8 +150,9 @@
                     waitingList.removeByValue(currentItem);
                     patientList.unshift(currentItem);
 
-                    store.commit("setPatientList", patientList);
-                    store.commit("setWatingList", waitingList);
+
+                    this.setOnlineList(patientList);
+                    store.commit("setWaitingList", waitingList);
                     store.commit("setInputReadOnly", false);
                     this.$emit("update:userListStatus", {
                         first: false,

@@ -8,8 +8,8 @@ const getters={
     mobile(state){
         return state.mobile;
     },
-    patientList(state){
-        return state.patientList;
+    onlineList(state){
+        return state.onlineList;
     },
     patientActiveIndex(state){
         return state.patientActiveIndex;

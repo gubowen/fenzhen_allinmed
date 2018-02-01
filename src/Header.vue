@@ -198,6 +198,7 @@
                         // common.loading.show();
                     }
                 }).then(function (res) {
+                    console.log(res);
                     document.querySelector(".ev-loading").style.display = "none";
                     if (res.data.responseObject.responseStatus) {
                         if (res.data.responseObject.responseMessage) {

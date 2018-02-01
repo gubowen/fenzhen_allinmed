@@ -163,6 +163,8 @@
     import api from '../../common/js/util/util';
     import store from "../../store/store";
     import releasePatient from "@/base/releasePatient";   //改变患者状态
+    import {mapGetters,mapActions} from "vuex";
+
     export default{
         name: 'examine-check',
         data(){
@@ -185,6 +187,9 @@
                 changeStatus: "/call/customer/patient/case/v1/update/" //改变为待检查状态
 
             }
+        },
+        computed: {
+            ...mapGetters(['onlineList','caseId'])
         },
         methods: {
             init(){
@@ -365,7 +370,7 @@
                 });
 
                 let dataValue = {
-                    caseId: _this.$store.state.caseId,
+                    caseId: _this.caseId,
                     patientId: _this.$store.state.patientId,
                     customerId: _this.$store.state.userId,
                     recoveryAdviceList: JSON.stringify(_this.recoveryAdviceList),
@@ -401,7 +406,7 @@
                             url: _this.changeStatus,
                             method: "POST",
                             data: {
-                                caseId: _this.$store.state.caseId,
+                                caseId: _this.caseId,
                                 state: 3
                             },
                             beforeSend(config) {
@@ -418,8 +423,8 @@
                                     data: _this.recoveryAdviceList
                                 })
 
-                                _this.$store.state.patientList.forEach(function (item) {
-                                    if (item.caseId == _this.$store.state.caseId) {
+                                _this.onlineList.forEach(function (item) {
+                                    if (item.caseId == _this.caseId) {
                                         item.state = '3'
                                     }
                                 });
@@ -440,8 +445,8 @@
                             consultationState:9
                         }).then(res => {
                             let currentItem = _this.$store.state.currentItem;
-                                currentItem.consultationState = 9;
-                        _this.$store.commit('setCurrentItem',currentItem);
+                            currentItem.consultationState = 9;
+                            _this.$store.commit('setCurrentItem',currentItem);
                         })
 
                     },

@@ -6,10 +6,10 @@ const state={
     mobile: '',
 
 
-    patientList: '',  //患者列表
-    patientActiveIndex:-1,
+    onlineList: '',  //患者列表
     newOnline: false,
     onlineListRefresh:false,
+    patientActiveIndex:-1,
 
     waitingList: "",   //待分诊列表
     newWaiting: false,
@@ -59,7 +59,7 @@ const state={
     checkSuggestionFlag: false,//初诊建议显示隐藏
     usedReplyContent: "",
     usedReplyShow:false,
-    // quitPatientList: [],
+    // quitonlineList: [],
     quitPatientItem: {},
     SBIFlag: false, //查看大图标志位
     SBIObject: {}, //查看大图对象

@@ -3,6 +3,40 @@
  */
 import ajax from "@/common/js/util/ajax";
 const mutations=  {
+    setCaseId(state, data){
+        state.caseId = data;
+    },
+    SetUserId(state,data){
+        state.userId = data;
+    },
+
+    setNewWaiting(state, flag){
+        state.newWaiting = flag;
+    },
+    setNewOnline(state, flag){
+        state.newOnline = flag;
+    },
+    setNewReset(state,data){
+        state.newReset = data;
+    },
+    setOnlineList(state, data){
+        state.onlineList = data;
+    },
+    setWaitingList(state, data){
+        state.waitingList = data;
+    },
+    setResetList(state,data){
+        state.resetList = data;
+    },
+    startLoading(state){
+        state.loadingShow = true;
+    },
+    stopLoading(state){
+        state.loadingShow = false;
+    },
+
+
+
     setPatientActiveIndex(state,index){
         state.patientActiveIndex = index;
     },
@@ -21,18 +55,13 @@ const mutations=  {
     setUserListStatus(state, data){
         state.userListStatus = data;
     },
-    stopLoading(state){
-        state.loadingShow = false;
-    },
-    startLoading(state){
-        state.loadingShow = true;
-    },
+
     showPopup(state,payLoad){
         state.popupContent=payLoad;
         state.popupShow=true;
         setTimeout(()=>{
             state.popupShow=false;
-        },3000);
+        },2000);
     },
     setFastReply(state, content){
         state.fastReplyContent = content;
@@ -46,21 +75,17 @@ const mutations=  {
     clearTraigeContent(state){
         state.triageContent=[];
     },
-    setPatientList(state, data){
-        state.patientList = data;
-    },
+
+
     setPatientId(state, data){
         state.patientId = data;
     },
     setPatientName(state, data){
         state.patientName = data;
     },
-    setWaitingList(state, data){
-        state.waitingList = data;
-    },
-    setCaseId(state, data){
-        state.caseId = data;
-    },
+
+
+
     setConsultationId(state, data){
         state.consultationId = data;
     },
@@ -113,12 +138,8 @@ const mutations=  {
         state.previewType = data;
     },
 
-    setNewWaiting(state, flag){
-        state.newWaiting = flag;
-    },
-    setNewOnline(state, flag){
-        state.newOnline = flag;
-    },
+
+
     //检查检验显示隐藏
     setExamineFlag(state, data){
         state.examineFlag = data;
@@ -171,10 +192,7 @@ const mutations=  {
     setReleasePatientCaseIdFlag(state,param){
         state.releasePatientCaseIdFlag=param;
     },
-    //重新分诊列表
-    setResetList(state,data){
-        state.resetList = data;
-    },
+
     //拒绝分诊
     setRefuseFlag(state,data){
         state.refuseFlag = data;
@@ -207,9 +225,7 @@ const mutations=  {
     setConsultationState(state,data){
         state.consultationState = data ;
     },
-    setNewReset(state,data){
-        state.newReset = data;
-    },
+
     setMinBtnFlag(state,data){
         state.minBtnFlag = data;
     },
