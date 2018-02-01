@@ -8,7 +8,7 @@
  */
 export default function () {
     let result="";
-    if (window.location.host.includes("triage")){
+    if (window.location.host.includes("triage.")){
         result="production";
     }else{
         result="development";
