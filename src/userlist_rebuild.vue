@@ -23,20 +23,20 @@
                         <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-1"
                             @click.stop="statusChange(1)"
-                            v-bind:class="{ 'active': userListStatus.first,'new':newWaitingFlag}"
+                                v-bind:class="{ 'active': userListStatus.first,'new':newWaiting}"
                         >
                             待分诊
                         </li>
                         <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-2"
                             @click.stop="statusChange(2)"
-                            v-bind:class="{ 'active': userListStatus.second,'new':newPatientFlag}"
+                            v-bind:class="{ 'active': userListStatus.second,'new':newOnline}"
                         >沟通中
                         </li>
                         <li class="userList-status-item tabsItem"
                             data-role="ut-tabs-3"
                             @click.stop="statusChange(3)"
-                            v-bind:class="{ 'active': userListStatus.third,'new':newResetFlag}">
+                            v-bind:class="{ 'active': userListStatus.third,'new':newReset}">
                             重新分诊
                         </li>
                     </ul>
@@ -97,8 +97,8 @@
                             <figcaption class="userList-item-base-msg">
                                 <h3>
                                     <span class="name" :title="items.patientName">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
-                                        class="category short" v-show="!fixByCurrent(items,index)">{{items | checkState}}</span><span
-                                        class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
+                                        class="category short">{{items | checkState}}</span>
+                                    <!--<span class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>-->
                                 </h3>
                                 <article>
                                     <span class="text">
@@ -127,17 +127,14 @@
                             <figcaption class="userList-item-base-msg">
                                 <h3>
                                     <span class="name" :title="items.patientName">{{(items.patientName.length > 4 ? items.patientName.substring(0, 3) + '...' : items.patientName)}}</span><span
-                                        class="category short"
-                                        v-show="!fixByCurrent(items,index)">{{items | checkState}}</span>
-                                    <span class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>
+                                        class="category short" >{{items | checkState}}</span>
+                                    <!--<span class="category short" v-show="fixByCurrent(items,index)">{{userOnlineActive == index ? $store.state.currentItem.diagnosisContent : items.diagnosisContent}}</span>-->
                                 </h3>
                                 <article>
                                     <span class="text">
                                         {{items.returnReason.length > 0 ? `由于${items.returnReason}，该患者被${items.doctorName}医生退回` : items.patientSex == 1 ? '男' : '女'}}&nbsp;|&nbsp;{{items.patientAge}}&nbsp;|&nbsp;{{parseInt(items.isAttachment) === 0 ? "无影像" : "有影像"}}&nbsp;|&nbsp;{{items.partName}}</span>
                                 </article>
-                                <button class="get-triage btn-primary-small"
-                                        @click.stop="getTriagePatient(items,index)">接诊
-                                </button>
+                                <button class="get-triage btn-primary-small" @click.stop="getTriagePatient(items,index)">接诊</button>
                             </figcaption>
                             <span class="time" ref="toTopTime"> {{items.lastUpdateTime | timeFormat}}</span>
                         </article>
@@ -172,6 +169,7 @@
     import triagePatient from "@/base/triagePatient";
 
     import store from "@/store/store";
+    import {mapGetters} from "vuex";
 
     Vue.filter("timeFormat", function (time, a) {
 
@@ -252,9 +250,9 @@
         return result;
     });
     const XHRList = {
-        onlineuserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
-        waitinguserList: "/call/customer/case/consultation/v1/getMapListForCase/",
-        resetuserList: "/call/customer/case/consultation/v1/getMapListForCase/"
+        onlineUserList: "/call/customer/case/consultation/v1/getMapListByCustomerId/",
+        waitingUserList: "/call/customer/case/consultation/v1/getMapListForCase/",
+        resetUserList: "/call/customer/case/consultation/v1/getMapListForCase/"
     };
     export default {
         name: "userList",
@@ -288,8 +286,6 @@
                 fastRelyStatusParent: false, //快捷提问
                 waitingTriage: false,
                 filterFinish: false,
-                newWaitingFlag: false,
-                newPatientFlag: false,
                 newResetFlag: false,
                 sortFlag: false,
                 sortActive: "",
@@ -300,6 +296,9 @@
                 },
                 reTriageShow:false
             };
+        },
+        computed: {
+            ...mapGetters(['newWaiting', 'newOnline', 'newReset','waitingListRefresh','onlineListRefresh','resetListRefresh']),
         },
         components: {
             record,
@@ -333,78 +332,57 @@
             },
             "$store.state.waitingList": {
                 handler: (list, oldValue) => {
-                    this.userListReset = list;
-                    this.newResetFlag = true;
+                    this.userListWaiting = list;
                 },
                 deep: true
             },
             "$store.state.resetList": {
                 handler: (list, oldValue) => {
                     this.userListReset = list;
-                    this.newResetFlag = true;
                 },
                 deep: true
             },
             //刷新
-            "$store.state.waitingListRefresh"(flag) {
+            waitingListRefresh(flag){
                 if (flag) {
                     this.getUserList("waiting", this.filterMethod);
-                    store.commit("waitingListRefreshFlag", false);
+                    this.$store.commit("waitingListRefreshFlag", false);
                 } else {
                     return;
                 }
             },  //待分诊
-            "$store.state.onlineListRefresh"(flag) {
+            onlineListRefresh(flag) {
                 if (flag) {
                     this.getUserList("online", this.filterMethod);
-                    store.commit("onlineListRefresh", false);
+                    this.$store.commit("onlineListRefresh", false);
                 } else {
                     return;
                 }
             },   //沟通中
-            "$store.state.resetListRefresh"(flag) {
+            resetListRefresh(flag) {
                 if (flag) {
                     this.getUserList("reset", this.filterMethod);
-                    store.commit("resetListRefreshFlag", false);
+                    this.$store.commit("resetListRefreshFlag", false);
                 } else {
                     return;
                 }
             },    //重新分诊
-            //红点
-            "$store.state.newWaiting"(flag) {
-                let _this = this;
-                _this.$store.commit("setMusicPlay", true);
-                setTimeout(function () {
-                    _this.$store.commit("setMusicPlay", false);
-                }, 2000);
-                this.newWaitingFlag = flag;
+            //红点redPoint
+            newWaiting(flag) {
+                this.redPoint(flag);
             },
-            "$store.state.newOnline"(flag) {
-                let _this = this;
-                _this.$store.commit("setMusicPlay", true);
-                setTimeout(function () {
-                    _this.$store.commit("setMusicPlay", false);
-                }, 2000);
-                this.newPatientFlag = flag;
+            newOnline(flag) {
+                this.redPoint(flag);
             },
-            "$store.state.newReset"(flag) {
-                let _this = this;
-                _this.$store.commit("setMusicPlay", true);
-                console.log("music2");
-                setTimeout(function () {
-                    console.log("music");
-                    _this.$store.commit("setMusicPlay", false);
-                }, 2000);
-                this.newResetFlag = flag;
-            },
-
-
+            newReset(flag){
+                this.redPoint(flag);
+            }
         },
         mounted() {
             if (this.$store.state.userId) {
                 this.init();
-                store.commit("setUsedReplyShow", false);
-                store.commit("setFastReplyShow", false);
+                this.$store.commit("setUsedReplyShow", false);
+                this.$store.commit("setFastReplyShow", false);
             }
         },
         activated() {
@@ -415,24 +393,6 @@
                 this.getUserList("waiting");
                 this.getUserList("online");
                 this.getUserList("reset");
-            },
-            fixByCurrent(item, index) {
-                let flag = false;
-//      if (index === this.userOnlineActive) {
-//        if (this.$store.state.currentItem.diagnosisContent) {
-//          flag = true;
-//        } else {
-//          flag = false;
-//        }
-//      } else {
-//        if (item.diagnosisContent) {
-//          flag = true;
-//        } else {
-//          flag = false;
-//        }
-//      }
-
-                return flag;
             },
             //给子组件传值..
             transformData(items, index, getFlag = false, imRefresh = true) {
@@ -456,7 +416,7 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaitingFlag = false;
+                        this.$store.commit("setNewWaiting",false);
                     }
                 } else if (this.userListStatus.second) {
 
@@ -482,7 +442,7 @@
                         localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                     }
                     if (localStorage.getItem("patientAlertList") == "{}") {
-                        this.newPatientFlag = false;
+                        this.$store.commit("setNewOnline",false);
                     }
                 } else if (this.userListStatus.third) {
                     this.waitingTriage = true;
@@ -506,7 +466,7 @@
                         localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
                     }
                     if (localStorage.getItem("resetAlertList") == "{}") {
-                        this.newResetFlag = false;
+                        this.$store.commit("setNewReset",false);
                     }
                 }
 
@@ -540,49 +500,35 @@
             //三个状态的点击切换（沟通中、已结束、被退回）
             statusChange(status) {
                 //Tab 切换
-
-                this.userListStatus.status = status;
                 switch (status) {
                     case 1 :
-                        this.userListStatus.first = true;
-                        this.userListStatus.second = false;
-                        this.userListStatus.third = false;
-                        this.message.userController = true;
-                        this.$store.commit("setUserListStatus", {
+                        this.userListStatus={
                             status: "1",
                             first: true,
                             second: false,
                             third: false
-                        });
+                        };
+                        this.$store.commit("setUserListStatus",this.userListStatus);
                         break;
                     case 2:
-
-                        this.userListStatus.first = false;
-                        this.userListStatus.second = true;
-                        this.userListStatus.third = false;
-                        this.message.userController = false;
-                        this.$store.commit("setUserListStatus", {
+                        this.userListStatus ={
                             status: "2",
                             first: false,
                             second: true,
                             third: false
-                        });
+                        };
+                        this.$store.commit("setUserListStatus",  this.userListStatus);
                         break;
                     case 3:
-                        this.userListStatus.first = false;
-                        this.userListStatus.second = false;
-                        this.userListStatus.third = true;
-                        this.message.userController = false;
-                        this.$store.commit("setUserListStatus", {
+                        this.userListStatus={
                             status: "3",
                             first: false,
                             second: false,
                             third: true
-                        });
+                        };
+                        this.$store.commit("setUserListStatus", this.userListStatus);
                         break;
-
                 }
-
             },
             //患者列表
             //type:online为沟通中，waiting待分诊 reset重新分诊
@@ -598,8 +544,7 @@
                 //会诊状态-1-待就诊0-沟通中1-已结束2-被退回(拒绝接诊)3-超时接诊退回4-新用户5-释放8-分诊完成9-待检查10-已推荐   7-分诊拒绝    6-已上传资料    11-超时未回复
                 switch (type) {
                     case 'online':
-                        dataValue = Object.assign(
-                            {
+                        dataValue = Object.assign({
                                 customerId: _this.$store.state.userId,
                                 // conState: "-1,0,9,10",
                                 triageType:2,
@@ -608,11 +553,10 @@
                             },
                             param
                         );
-                        url = XHRList.onlineuserList;
+                        url = XHRList.onlineUserList;
                         break;
                     case 'waiting':
-                        dataValue = Object.assign(
-                            {
+                        dataValue = Object.assign({
                                 // conState: "4,5",
                                 conType: 0,
                                 triageType:1,
@@ -620,11 +564,10 @@
                             },
                             param
                         );
-                        url = XHRList.waitinguserList;
+                        url = XHRList.waitingUserList;
                         break;
                     case 'reset':
-                        dataValue = Object.assign(
-                            {
+                        dataValue = Object.assign({
                                 // conState: "2,3,6,11",  //2-被退回(拒绝接诊) 3-超时接诊退回  6-已上传资料 11-超时未回复
                                 conType: 0,
                                 sortType: -6,
@@ -632,7 +575,7 @@
                             },
                             param
                         );
-                        url = XHRList.resetuserList;
+                        url = XHRList.resetUserList;
                 }
                 api.ajax({
                     url: url,
@@ -642,92 +585,90 @@
                         _this.$store.commit("startLoading");
                         if (res.responseObject.responseData && res.responseObject.responseStatus) {
                             let dataList = _this.setSelectValue(res.responseObject.responseData.dataList);
-                            let waitingAlertList = {};
-                            let patientAlertList = {};
-                            let resetAlertList = {};
+                            let waitingAlertList = {},patientAlertList = {},resetAlertList = {};
                             waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
                             patientAlertList = JSON.parse(localStorage.getItem("patientAlertList"));
                             resetAlertList = JSON.parse(localStorage.getItem("resetAlertList"));
-                            if (type === "online") {
-                                if (patientAlertList && patientAlertList !== "{}") {
-                                    for (let key in patientAlertList) {
-                                        let flag = true;
-                                        dataList.forEach(function (item, index) {
-                                            if (typeof item.messageAlert == "undefined") {
-                                                item.messageAlert = "";
-                                            }
-                                            if (key == "0_" + item.caseId) {
-                                                item.messageAlert = patientAlertList[key];
 
-                                                _this.newPatientFlag = true;
-                                                _this.$store.commit("setMusicPlay", true);
-                                                setTimeout(function () {
-                                                    _this.$store.commit("setMusicPlay", false);
-                                                }, 2000);
-                                                flag = false;
+                            switch(type){
+                                case "online":
+                                {
+                                    if (patientAlertList && patientAlertList !== "{}") {
+                                        for (let key in patientAlertList) {
+                                            let flag = true;
+                                            dataList.forEach(function (item, index) {
+                                                if (typeof item.messageAlert == "undefined") {
+                                                    item.messageAlert = "";
+                                                }
+                                                if (key == "0_" + item.caseId) {
+                                                    item.messageAlert = patientAlertList[key];
+                                                    _this.$store.commit("setNewOnline",true);
+                                                    flag = false;
+                                                }
+                                            });
+                                            //列表中没有此人 删除提示消息-1.被其他分诊医生接走刷新列表
+                                            if (flag) {
+                                                delete patientAlertList[key];
                                             }
-                                        });
-                                        if (flag) {
-                                            delete patientAlertList[key];
                                         }
+                                        localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
                                     }
-                                    localStorage.setItem("patientAlertList", JSON.stringify(patientAlertList));
+                                    _this.$store.commit("setPatientList", dataList);
+                                    _this.userListOnline = dataList ? dataList : [];
                                 }
-                                _this.$store.commit("setPatientList", dataList);
-                                _this.userListOnline = dataList ? dataList : [];
-                            } else if (type === "waiting") {
-                                if (waitingAlertList && waitingAlertList !== "{}") {
-                                    for (let key in waitingAlertList) {
-                                        let flag = true;
-                                        dataList.forEach(function (item, index) {
-                                            if (typeof item.messageAlert == "undefined") {
-                                                item.messageAlert = "";
+                                    break;
+                                case "waiting":
+                                {
+                                    if (waitingAlertList && waitingAlertList !== "{}") {
+                                        for (let key in waitingAlertList) {
+                                            let flag = true;
+                                            dataList.forEach(function (item, index) {
+                                                if (typeof item.messageAlert == "undefined") {
+                                                    item.messageAlert = "";
+                                                }
+                                                if (key == "0_" + item.caseId) {
+                                                    item.messageAlert = waitingAlertList[key];
+                                                    _this.$store.commit("newWaiting",true);
+                                                    flag = false;
+                                                }
+                                            });
+                                            if (flag) {
+                                                delete waitingAlertList[key];
                                             }
-                                            if (key == "0_" + item.caseId) {
-                                                item.messageAlert = waitingAlertList[key];
-                                                _this.newWaitingFlag = true;
-                                                _this.$store.commit("setMusicPlay", true);
-                                                setTimeout(function () {
-                                                    _this.$store.commit("setMusicPlay", false);
-                                                }, 2000);
-                                                flag = false;
-                                            }
-                                        });
-                                        if (flag) {
-                                            delete waitingAlertList[key];
                                         }
+                                        localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                                     }
-                                    localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
+                                    _this.$store.commit("setWaitingList", dataList);
+                                    _this.userListWaiting = dataList ? dataList : [];
                                 }
-                                _this.$store.commit("setWaitingList", dataList);
-                                _this.userListWaiting = dataList ? dataList : [];
-                            } else if (type === 'reset') {
-                                if (resetAlertList && resetAlertList !== "{}") {
-                                    for (let key in resetAlertList) {
-                                        let flag = true;
-                                        dataList.forEach(function (item, index) {
-                                            if (typeof item.messageAlert == "undefined") {
-                                                item.messageAlert = "";
+                                    break;
+                                case "reset":
+                                {
+                                    if (resetAlertList && resetAlertList !== "{}") {
+                                        for (let key in resetAlertList) {
+                                            let flag = true;
+                                            dataList.forEach(function (item, index) {
+                                                if (typeof item.messageAlert == "undefined") {
+                                                    item.messageAlert = "";
+                                                }
+                                                if (key == "0_" + item.caseId) {
+                                                    item.messageAlert = resetAlertList[key];
+                                                    _this.$store.commit("newReset",true);
+                                                    flag = false;
+                                                }
+                                            });
+                                            if (flag) {
+                                                delete resetAlertList[key];
                                             }
-                                            if (key == "0_" + item.caseId) {
-                                                item.messageAlert = resetAlertList[key];
-                                                _this.newResetFlag = true;
-
-                                                _this.$store.commit("setMusicPlay", true);
-                                                setTimeout(function () {
-                                                    _this.$store.commit("setMusicPlay", false);
-                                                }, 2000);
-                                                flag = false;
-                                            }
-                                        });
-                                        if (flag) {
-                                            delete resetAlertList[key];
                                         }
+                                        localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
                                     }
-                                    localStorage.setItem("resetAlertList", JSON.stringify(resetAlertList));
+                                    _this.$store.commit("setResetList", dataList);
+                                    _this.userListReset = dataList ? dataList : [];
                                 }
-                                _this.$store.commit("setResetList", dataList);
-                                _this.userListReset = dataList ? dataList : [];
+                                    break;
+                                default:
+                                    console.log("请求哪个列表的数据？");
                             }
                         }
                         fn && fn();
@@ -750,19 +691,6 @@
                 }
                 return result;
             },
-            filterTemplateList(data) {
-                return (
-                    '<li class="custom-selector-item secondListTitle ' +
-                    (parseInt(data.treeLevel) === 3 ? "result-item" : "") +
-                    '" data-down-role="' +
-                    data.regionId +
-                    '" data-level="' +
-                    data.treeLevel +
-                    '"><span>' +
-                    data.regionName +
-                    "</span></li>"
-                );
-            },
             //患者搜索...
             searchPatient(content) {
                 this.filterMethod = Object.assign(this.filterMethod, {
@@ -773,21 +701,13 @@
                 this.getUserList("online", this.filterMethod);
                 this.getUserList("reset", this.filterMethod);
                 store.commit("stopLoading");
-                //                this.filterFinish = true;
+                //this.filterFinish = true;
             },
+            //刷新按钮
             refreshList() {
                 this.getUserList("waiting", this.filterMethod);
                 this.getUserList("online", this.filterMethod);
                 this.getUserList("reset", this.filterMethod);
-            },
-            //选择退回患者
-            selectQuitItem(item) {
-                this.userListOnline.forEach((element, index) => {
-                    element.triageSelect = false;
-                });
-                item.triageSelect = true;
-
-                store.commit("setQuitPatientItem", item);
             },
             //接诊
             getTriagePatient(item, index) {
@@ -854,7 +774,7 @@
                         localStorage.setItem("waitingAlertList", JSON.stringify(waitingAlertList));
                     }
                     if (localStorage.getItem("waitingAlertList") == "{}") {
-                        this.newWaitingFlag = false;
+                        this.newWaiting = false;
                     }
                 })
                     .catch(res => {
@@ -871,10 +791,20 @@
                 });
                 return result;
             },
+            //选择退回患者
+            selectQuitItem(item) {
+                this.userListOnline.forEach((element, index) => {
+                    element.triageSelect = false;
+                });
+                item.triageSelect = true;
+
+                store.commit("setQuitPatientItem", item);
+            },
+            //显示排序列表
             sortShow() {
                 this.sortFlag = !this.sortFlag;
-                console.log(this.sortFlag);
             },
+            //排序- 4:患者等待沟通时间从多到少  -6:患者最近消息发出时间由近到远                  -5:患者等待沟通时间从多到少
             sort(index) {
                 let _this = this;
                 _this.sortActive = index;
@@ -885,31 +815,38 @@
                         _this.getUserList("online", {sortType: -6});
                         _this.getUserList("reset", {sortType: -6});
                         break;
-                    case 1:
-                        _this.getUserList("waiting", {sortType: 5});
-                        _this.getUserList("online", {sortType: 5});
-                        _this.getUserList("reset", {sortType: 5});
-                        break;
-                    case 2:
-                        _this.getUserList("waiting", {sortType: 4});
-                        _this.getUserList("online", {sortType: 4});
-                        _this.getUserList("reset", {sortType: 4});
-                        break;
-                    case 3:
-                        _this.getUserList("waiting", {sortType: -5});
-                        _this.getUserList("online", {sortType: -5});
-                        _this.getUserList("reset", {sortType: -5});
-                        break;
+//                    case 1:
+//                        _this.getUserList("waiting", {sortType: 5});
+//                        _this.getUserList("online", {sortType: 5});
+//                        _this.getUserList("reset", {sortType: 5});
+//                        break;
+//                    case 2:
+//                        _this.getUserList("waiting", {sortType: 4});
+//                        _this.getUserList("online", {sortType: 4});
+//                        _this.getUserList("reset", {sortType: 4});
+//                        break;
+//                    case 3:
+//                        _this.getUserList("waiting", {sortType: -5});
+//                        _this.getUserList("online", {sortType: -5});
+//                        _this.getUserList("reset", {sortType: -5});
+//                        break;
                     case 4:
                         _this.getUserList("waiting", {sortType: -5});
                         _this.getUserList("online", {sortType: -5});
                         _this.getUserList("reset", {sortType: -5});
                         break;
                     default:
-                        _this.getUserList("waiting", {sortType: 6});
-                        _this.getUserList("online", {sortType: 6});
-                        _this.getUserList("reset", {sortType: 6});
+                        _this.getUserList("waiting", {sortType: -6});
+                        _this.getUserList("online", {sortType: -6});
+                        _this.getUserList("reset", {sortType: -6});
                 }
+            },
+            //消息提醒红点
+            redPoint(flag){
+                this.$store.commit("setMusicPlay", flag);
+                setTimeout( ()=> {
+                    this.$store.commit("setMusicPlay", !flag);
+                }, 2000);
             }
         }
     };
@@ -1362,17 +1299,17 @@
     /*}*/
 
     /*.userList-item-msg-item {*/
-        /*margin-top: 14px;*/
-        /*font-size: 0;*/
-        /*& > span {*/
-            /*font-size: 12px;*/
-            /*color: #666;*/
-        /*}*/
-        /*.sex {*/
-            /*margin-right: 10px;*/
-        /*}*/
-        /*.age {*/
-            /*margin-right: 10px;*/
-        /*}*/
+    /*margin-top: 14px;*/
+    /*font-size: 0;*/
+    /*& > span {*/
+    /*font-size: 12px;*/
+    /*color: #666;*/
+    /*}*/
+    /*.sex {*/
+    /*margin-right: 10px;*/
+    /*}*/
+    /*.age {*/
+    /*margin-right: 10px;*/
+    /*}*/
     /*}*/
 </style>

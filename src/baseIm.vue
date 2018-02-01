@@ -412,39 +412,61 @@
                         account: that.userData.account,
                         token: that.userData.token,
                         onconnect(data) {
+
                             console.log("连接成功");
-                            that.connectFlag = true;
+                          // console.log(data);
+                          //  that.connectFlag = true;
                         },
                         onmyinfo(userData) {
                         },
                         onwillreconnect(obj) {
-                            console.log(
-                                "已重连" + obj.retryCount + "次，" + obj.duration + "后将重连..."
-                            );
+                            console.log("已重连" + obj.retryCount + "次，" + obj.duration + "后将重连...");
                         },
                         ondisconnect(error) {
                             console.log("丢失连接");
                             console.log(error);
+                            if(error){
+                                switch(error){
+                                    case 302 :console.log("账号或密码错误，请转到登录页面并提示错误");break;
+                                    case 417 :console.log("重复登录，已经在其他端登录了，请跳转到登录页并提示错误");break;
+                                    case 'kicked':console.log("被踢，请提示错误后跳转到登录页面"); break;
+                                    default:
+                                        break;
+                                }
+                            }
                         },
-                        onerror: this.onError,
+                        onerror(error){
+                            console.log(error);
+                        },
                         onroamingmsgs(obj) {
-                            console.log(obj);
+                           // console.log('收到漫游消息', obj);
                         },
                         onofflinemsgs() {
-                            console.log(obj);
+                           // console.log('收到离线消息', obj);
                         },
                         onmsg(msg) {
-                            console.log(msg);
+                            //console.log(msg);
                             //自定义消息
-                            that.getMessageType = '';
+
+                            that.getMessageType = '';//清空回去数据类型
+
+                            console.log(msg);
+                            //由患者端发送-更新时间戳
                             if (msg.from.includes("0_") && that.targetData.account === msg.from) {
                                 that.currentItem.createTime = that.transformMessageTime(msg.time);
                             }
+                            //自定义消息
+                            //新用户:
+                            //       1.消息提醒
+                            //
+
                             if (msg.type.toLowerCase() === "custom") {
                                 //判断是否为新用户
                                 if (JSON.parse(msg.content).type.indexOf("new-") != -1) {
                                     //消息提醒
                                     let waitingAlertList = JSON.parse(localStorage.getItem("waitingAlertList"));
+                                    //1.有数据 2.{} 3.undefined
+
                                     if (!waitingAlertList) {
                                         waitingAlertList = {};
                                     }
