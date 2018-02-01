@@ -305,6 +305,7 @@
             return data;
           }]
         }).then(function (res) {
+          _this.$store.commit("stopLoading");
           console.log(res);
           //发送验证码成功
           let data = res.data.responseObject;
@@ -335,6 +336,7 @@
           }
 
         }).catch(function (error) {
+          _this.$store.commit("stopLoading");
           console.log(error);
         })
       },
@@ -416,6 +418,7 @@
               return data;
             }]
           }).then(function (res) {
+            _this.$store.commit("stopLoading");
             if (res.data.responseObject.responseStatus) {
               _this.loadingShow = false;
               _this.loginFun(_this.mobile, _this.newPassword, function () {
@@ -437,6 +440,7 @@
               })
             }
           }).catch(function (error) {
+            _this.$store.commit("stopLoading");
             console.log("更新代码失败！");
             console.log(error);
           })
