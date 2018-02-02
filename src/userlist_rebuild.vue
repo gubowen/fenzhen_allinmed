@@ -604,7 +604,7 @@
                                                 }
                                                 if (key == "0_" + item.caseId) {
                                                     item.messageAlert = waitingAlertList[key];
-                                                    _this.$store.commit("newWaiting",true);
+                                                    _this.setNewWaiting(true);
                                                     flag = false;
                                                 }
                                             });

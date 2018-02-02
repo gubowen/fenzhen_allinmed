@@ -567,7 +567,6 @@
                             }
                             that.receiveMessage(that.targetData.account, msg);
                             if (msg.type==="image"){
-                                console.log(msg);
                                 that.imageList.push(msg);
                             }
                         }
@@ -577,7 +576,6 @@
             },
             loadCallback(items) {
                 if (items.scrollFlag) {
-                    console.log(4)
                 } else {
                     if (items) {
                         if (items.scrollFlag) {
@@ -1095,7 +1093,9 @@
                 //沟通中
                 let patientList = this.onlineList;
                 patientList.forEach(function (item, index) {
+
                     if ("0_" + item.caseId == element.from) {
+
                         let patientAlertList = {};
                         let caseIdInfo = "0_" + item.caseId;
                         if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
@@ -1130,11 +1130,11 @@
 
                 //带分诊
                 let waitingList = this.waitingList;
-
                 waitingList.forEach(function (item, index) {
                     let waitingAlertList = {};
                     let caseIdInfo = "0_" + item.caseId;
                     if ("0_" + item.caseId == element.from) {
+
 
                         if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1223,20 +1223,16 @@
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
                     }
-
-
                     if (this.getMessageType === "scrollInit") {
+                        console.log(element);
                         this.communicationList.unshift(element);
                     } else if (this.getMessageType === "history") {
                         this.loadCallback(element);
                         this.communicationList.unshift(element);
-                        // _this.initScroll();
                     } else {
-//                        console.log("11111");
                         this.loadCallback(element);
                         this.communicationList.push(element);
                     }
-//                        console.log( this.communicationList);
 
                 } else {
                     //接诊列表
@@ -1274,7 +1270,6 @@
 
                         that.receiveMessage(container, obj.msgs[i]);
                     }
-//                    console.log(obj.msgs.length);
                     if (this.getMessageType === "scrollInit") {
                         that.startLoading();
                         // setTimeout(() => {
