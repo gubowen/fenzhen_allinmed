@@ -112,8 +112,6 @@
                 this.userMessage = this.$store.state.currentItem;
                 this.getData();
 
-               // console.log(this.$refs.inputLimitController)
-                //autosize(this.$refs.inputLimitController);
                 autosize(document.querySelectorAll('.J-other'));
 
             },
@@ -214,7 +212,6 @@
                         },
                         done(res) {
                             if(res.responseObject.responseMessage != 'NO DATA'){
-                                console.log(res);
                                 _this.visualInspection = res.responseObject.responseData.dataList[0].visualInspection;
                                 _this.activityState = res.responseObject.responseData.dataList[0].activityState;
                                 _this.muscleStrength = res.responseObject.responseData.dataList[0].muscleStrength;
@@ -234,7 +231,6 @@
             saveData(){
                 let _this = this;
                 let id = '';
-               // console.log(_this.$store.state.newSickId);
                     id = _this.$store.state.newSickId ? _this.$store.state.newSickId :'';
                let dataValue = {
                     id:id,
@@ -244,7 +240,6 @@
                     patientId:_this.$store.state.patientId,
                     caseId:_this.$store.state.caseId
                 };
-//                console.log(dataValue);
                 api.ajax({                    //保存现病史信息
                         url: XHRList.sickSaveUrl,
                         method: "POST",

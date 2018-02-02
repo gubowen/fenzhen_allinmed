@@ -148,7 +148,6 @@
 
           },
           done(res){
-            console.log(res);
             if (res.responseObject.responseData) {
               let dataList = res.responseObject.responseData.dataList;
               if (dataList && dataList.length !== 0) {

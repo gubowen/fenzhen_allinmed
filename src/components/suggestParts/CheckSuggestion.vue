@@ -189,7 +189,6 @@
           beforeSend(config) {
           },
           done(res) {
-           // console.log(res);
             _this.partList.dataList = res.responseObject.responseData.data_list;
             _this.partList.placeholderText = '专科';
               store.commit("stopLoading");
@@ -218,7 +217,6 @@
           beforeSend(config) {
           },
           done(res) {
-            // console.log(res);
             _this.sickness.dataList = res.responseObject.responseData.dataList;
             _this.sickness.placeholderText = '疾病';
               store.commit("stopLoading");
@@ -231,7 +229,6 @@
       },
       operationData(){
         let _this = this;
-         // console.log(_this.partListResult);
           let dataValue = {
           isValid: 1,	                  //string	是		1
           firstResult: 0,	              //string	是	分页参数
@@ -292,7 +289,6 @@
           // positionName: $(".firstListTitle", "#direction-selector").val()
           positionName: ""
         };
-//        console.log( _this.nextPageDate);
       }
     },
     mounted(){

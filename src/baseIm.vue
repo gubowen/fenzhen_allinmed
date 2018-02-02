@@ -331,7 +331,6 @@
                 }
             },
             "$store.state.sendVideoTriageFlag"(obj) {
-                console.log(obj);
                 if (obj.flag) {
                     this.sendVideoTriage(obj.data);
                     store.commit("videoTriageSender", {
@@ -577,7 +576,6 @@
 
             },
             loadCallback(items) {
-//                console.log(items);
                 if (items.scrollFlag) {
                     console.log(4)
                 } else {
@@ -761,27 +759,17 @@
             sendSingleMessage(error, msg) {
                 this.startLoading();
                 let patientListArray = this.onlineList;
-
-                //  if (msg.content&&JSON.parse(msg.content).type !== "triagePatientTips") {
                 patientListArray.removeByValue(this.$store.state.currentItem);
                 patientListArray.unshift(this.$store.state.currentItem);
-                //   }
-                //this.$store.commit("unshift",this.$store.state.currentItem);
-                //this.$store.state.patientList.removeByValue(this.$store.state.currentItem);
-                //this.$store.state.patientList.unshift(this.$store.state.currentItem);
                 this.setOnlineList( patientListArray);
                 this.$store.state.currentItem.lastUpdateTime = this.transformMessageTime(msg.time);
                 store.commit("setPatientActiveIndex", this.$store.state.patientActiveIndex + 1);
                 let that = this;
-                //  console.log(msg);
                 console.log("发送" + msg.scene + " " + msg.type + "消息" + (!error ? "成功" : "失败") + ", id=" + msg.idClient);
                 if (!error) {
                     that.controllerInput = "";
                     that.mine(msg);
                     that.loadCallback(msg);
-//                    setTimeout(() => {
-//                        this.$refs.messageBox.scrollTop = this.$refs.messageBox.scrollHeight;
-//                    }, 120);
                 }
                 this.stopLoading();
             },
@@ -989,7 +977,6 @@
                                 _this.communicationList.removeByValue(item);
                                 resolve(item);
                             } else {
-                                //  _this.$store.commit('showPopup',{'text':'撤回失败，该消息发送时间超过'+_this.$store.state.deleteMsgTime+'分钟'});
                                 console.log("撤回失败.....");
                                 reject(error, item);
                             }
@@ -1044,7 +1031,6 @@
             //患者撤回
             ShowFlagDeleteTips(items) {
                 let flag = false;
-                // console.log(JSON.parse(items.content).data);
                 if (items.content.data.deleteMsg.from !== "1_doctor00001") {
                     flag = true;
                     let idClient = items.content.data.deleteMsg.idClient;
@@ -1079,10 +1065,6 @@
                     that.communicationList = [];
                 }
                 this.imageList=[];
-                // let setSBIObject =  this.$store.state.SBIObject;
-                // setSBIObject.IMImage = [];
-                // this.$store.commit("setSBIObject",setSBIObject);setSBIObject
-
                 if (this.targetData.account != "0_") {
                     this.nim.getHistoryMsgs({
                         scene: "p2p",
@@ -1090,13 +1072,11 @@
                         beginTime: 0,
                         endTime: that.historyBeginTime,
                         done(error, obj) {
-                         //   console.log(obj);
                             if (obj.msgs.length === 0) {
                                 if (that.getMessageType === "scrollInit") {
                                     that.allGet = true;
                                     that.getMessageType = false;
                                 }
-//                            that.$store.commit("showPopup", {text: "无聊天记录了！"});
                             } else {
                                 that.renderHistoryMessage(that.targetData.account, error, obj);
                             }
@@ -1104,8 +1084,6 @@
                             if (error) {
                                 nim.getInstance();
                             }
-//                        console.log(from);
-
                         },
                         limit: 20
                     });
@@ -1113,21 +1091,14 @@
             },
             // 新消息提示
             newMessageTips(target, element) {
-             //   console.log(element);
                 const _this = this;
                 //沟通中
                 let patientList = this.onlineList;
                 patientList.forEach(function (item, index) {
                     if ("0_" + item.caseId == element.from) {
-//                        if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
-//                            item.messageAlert = "1";
-//                        } else {
-//                            item.messageAlert = parseInt(item.messageAlert) + 1;
-//                        }
                         let patientAlertList = {};
                         let caseIdInfo = "0_" + item.caseId;
                         if (element.type == 'custom' && JSON.parse(element.content).type == 'deleteMsgTips') {
-
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
                                 item.messageAlert = "";
                             } else {
@@ -1135,7 +1106,6 @@
                                     item.messageAlert = parseInt(item.messageAlert) - 1;
                                 }
                             }
-
                             patientAlertList[caseIdInfo] = item.messageAlert;
                         } else {
                             if (typeof (item.messageAlert) == 'undefined' || item.messageAlert == "") {
@@ -1249,8 +1219,6 @@
             //接受消息...
             receiveMessage(targetUser, element, from) {
                 //获取当前患者消息
-                const _this = this;
-
                 if ((element.from.includes("0_") && targetUser === element.from) || (element.to.includes("0_") && targetUser === element.to)) {
                     if (element.type === "custom") {
                         element.content = JSON.parse(element.content);
@@ -1325,60 +1293,6 @@
                     that.getImageList();
                 }
             },
-            transformMessageTime(time) {
-                var format = function (num) {
-                    return num > 9 ? num : "0" + num;
-                };
-                var normalTime = function (time) {
-                    var d = new Date(time);
-                    var obj = {
-                        y: d.getFullYear(),
-                        m: d.getMonth() + 1,
-                        dd: d.getDate(),
-                        h: d.getHours(),
-                        mm: format(d.getMinutes())
-                    };
-                    return obj;
-                };
-                var result = "";
-                var now = new Date().getTime(),
-                    day1 =
-                        normalTime(time).y +
-                        "-" +
-                        normalTime(time).m +
-                        "-" +
-                        normalTime(time).dd,
-                    day2 =
-                        normalTime(now).y +
-                        "-" +
-                        normalTime(now).m +
-                        "-" +
-                        normalTime(now).dd;
-                if (day1 === day2) {
-                    result = normalTime(time).h + ":" + normalTime(time).mm;
-                } else if (normalTime(time).y === normalTime(now).y) {
-                    result =
-                        normalTime(time).m +
-                        "月" +
-                        normalTime(time).dd +
-                        "日  " +
-                        normalTime(time).h +
-                        ":" +
-                        normalTime(time).mm;
-                } else if (normalTime(time).y !== normalTime(now).y) {
-                    result =
-                        normalTime(time).y +
-                        "年" +
-                        normalTime(time).m +
-                        "月" +
-                        normalTime(time).dd +
-                        "日  " +
-                        normalTime(time).h +
-                        ":" +
-                        normalTime(time).mm;
-                }
-                return result;
-            },
             //消息时间转换...
             transformMessageTime(time) {
                 var format = function (num) {
@@ -1443,7 +1357,6 @@
                 if (data.content) {
                     data.content = JSON.parse(data.content);
                 }
-//                console.log(data);
                 this.communicationList.push(data);
             },
             showNext(type, index) {

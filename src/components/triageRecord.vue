@@ -59,7 +59,6 @@
        },
         showRecord(){
            if(this.showRecord){
-             console.log(document.body.clientWidth)
              if (document.body.clientWidth<1500){
                document.querySelector(".medical-record-form").style.cssText="height:30%;";
              }else{

@@ -76,7 +76,6 @@
                     beforeSend(config) {
                     },
                     done(res) {
-//                        console.log(res);
                         let dataList = res.responseObject.responseData.dataList[0];
 
                         if (dataList.patientCasemap.caseMain.caseMain != '') {

@@ -521,7 +521,6 @@
                         logoUseFlag: 3,
                     },
                     done(data){
-                        console.log(data);
                         if (data.responseObject.responseData && data.responseObject.responseData.dataList) {
                             let dataList = that.setCheckedState(data.responseObject.responseData.dataList);
                             that.matchDoc.matchDocList = dataList;
@@ -531,7 +530,6 @@
                 })
             },
             getAllDocCustomer(obj,isInit){
-                console.log(obj)
                 if(obj.value == "•••") return false;
                 store.commit("startLoading");
                 let that = this;
@@ -704,7 +702,6 @@
                         }
                     }
                 }
-                //  console.log(that.allDoc.pageArr)
             },
             //推荐医生---复选、全选、筛选、分页
             setCheckedState(arr){
@@ -1090,7 +1087,6 @@
                                 }).then((res)=>{
 
                                     if (that.previewDiagnoseSuggest.examineList.length > 0||that.previewDiagnoseSuggest.testList.length > 0){
-                                        console.log("1");
                                         releasePatient({
                                             customerId: that.$store.state.userId,
                                             consultationId: that.$store.state.currentItem.consultationId,
@@ -1101,7 +1097,6 @@
                                             that.$store.commit('setCurrentItem',currentItem);
                                         })
                                     }else{
-                                        console.log("2");
                                         releasePatient({
                                             customerId: that.$store.state.userId,
                                             consultationId: that.$store.state.currentItem.consultationId,
@@ -1112,7 +1107,6 @@
                                             that.$store.commit('setCurrentItem',currentItem);
                                         })
                                     }
-                                    console.log(res);
                                     //发送IM
                                     let  inquiryResult = that.$store.state.currentItem,
                                         caseMajorName = that.checkData.majorName,

@@ -64,7 +64,7 @@
             init(){
                 this.getUserStatus();
                 this.getBaseMessage();
-            //    this.searchStatus = this.$store.state.searchStatus;
+                //    this.searchStatus = this.$store.state.searchStatus;
                 this.globeClick();
                 this.getStateSetting();
             },
@@ -115,38 +115,30 @@
                     maxResult: "9999",
                     isValid: "1"
                 };
-                axios({
-                    method: "post",
+                ajax({
                     url: "/call/customer/status/v1/getMapById/",
+                    method: "POST",
                     data: data,
-                    responseType: 'json',
-                    transformRequest: [function (data) {
-                        data = "paramJson=" + JSON.stringify(data);
-                        return data;
-                    }],
-                    before: function () {
-                        // common.loading.show();
-                    }
-                }).then(function (res) {
-                    if (res.data.responseObject.responseData) {
-                        var dataList = res.data.responseObject.responseData.dataList;
+                    done(res){
+                        if (res.responseObject.responseData) {
+                            var dataList = res.responseObject.responseData.dataList;
 
-                        if (dataList && dataList.length) {
+                            if (dataList && dataList.length) {
 
-                            for (let i = 0; i < dataList.length; i++) {
-                                switch (dataList[i].status) {
-                                    case '0' :
-                                        _this.isActiveMessage = '在线';
-                                        break;
-                                    case '1' :
-                                        _this.isActiveMessage = '休息';
-                                        break;
+                                for (let i = 0; i < dataList.length; i++) {
+                                    switch (dataList[i].status) {
+                                        case '0' :
+                                            _this.isActiveMessage = '在线';
+                                            break;
+                                        case '1' :
+                                            _this.isActiveMessage = '休息';
+                                            break;
+                                    };
                                 }
-                                ;
-                                //  common.loading.hide();
                             }
                         }
                     }
+
                 })
             },
             toggleStatus(){
@@ -161,47 +153,29 @@
                     customerId: that.$store.state.userId,
                     status: id
                 };
-                axios({
-                    method: "post",
+                ajax({
                     url: "/call/customer/status/v1/update/",
+                    method: "POST",
                     data: data,
-                    responseType: 'json',
-                    transformRequest: [function (data) {
-                        data = "paramJson=" + JSON.stringify(data);
-                        return data;
-                    }],
-                    before: function () {
-                        // common.loading.show();
+                    done(res){
+
+                    },fail(){
+
                     }
-                }).then(function (res) {
-                    // common.loading.hide();
                 })
             },
             getBaseMessage(){
                 //检测登录状态 获取基本信息
                 let _this = this;
-//                ajax({
-//                    url:"/call/tocure/web/user/getWebUser/",
-//                    method: "POST",
-//                    done(res){
-//                        window.location.reload();
-//                        _this.confirmShow = false;
-//                    }
-//                });
-
                 axios({
                     method: "post",
                     url: "/call/tocure/web/user/getWebUser/",
                     responseType: 'json',
-//          transformRequest: [function (data) {
-//            data = "paramJson=" + JSON.stringify(data);
-//            return data;
-//          }],
                     before: function () {
-                        // common.loading.show();
+                        _this.$store.commit("startLoading");
                     }
-                }).then(function (res) {
-                  //  console.log(res);
+                }).then(function (res)
+                {
                     document.querySelector(".ev-loading").style.display = "none";
                     if (res.data.responseObject.responseStatus) {
                         if (res.data.responseObject.responseMessage) {
@@ -233,7 +207,7 @@
 //          this.$router.push({
 //            name: "home"
 //          })
-                    this.$store.commit('enableSearchFn',true);    
+                    this.$store.commit('enableSearchFn',true);
                     if (window.location.origin.includes("triage.allinmed.cn")) {
                         this.$router.push({
                             path: "/"

@@ -279,7 +279,6 @@
                     beforeSend(config) {
                     },
                     done(res) {
-                        console.log(res.responseObject.responseData.dataList);
                         _this.diagnoseHistoryList = res.responseObject.responseData.dataList;
                     }
                 })
@@ -319,7 +318,6 @@
                         } else {
                             _this.popupShow = false;
 
-                            console.log(res.responseObject.responseData.dataList);
                             if (parseInt(res.responseObject.responseData.totalCount) > 2) {
                                 _this.totalCount = parseInt(res.responseObject.responseData.totalCount) - 2;
                                 _this.chatHistoryRecordList = res.responseObject.responseData.dataList;
@@ -391,7 +389,6 @@
                         that.pageArr.push(i);
                     }
                 }
-                console.log(that.pageArr)
             },
             filterInfo(ele){
                  if (ele.msgType.toLowerCase() === 'custom') {

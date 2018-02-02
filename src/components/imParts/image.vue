@@ -40,7 +40,6 @@
             this.installSBIList();
             this.initImageFn();
 
-              //  console.log(this.imageList)
 
 
         },
@@ -75,7 +74,6 @@
                 let _this = this;
                 let ImageList = [];
                 let SBIObject = [];
-//                console.log(_this.message.file.url)
                 SBIObject = this.$store.state.SBIObject;
 //                 if (this.$store.state.SBIObject  &&  this.$store.state.SBIObject.IMImage) {
 // // //                    console.log("11");
@@ -125,11 +123,6 @@
             deleteMsg(){
                 this.$emit("deleteMsg");
             }
-        },
-        watch:{
-          "imageList"(list){
-              console.log(list)
-          }
         },
         props: {
             message: {

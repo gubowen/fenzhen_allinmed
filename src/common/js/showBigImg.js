@@ -483,7 +483,7 @@ $.extend({
   openPhotoGallery: function (obj) {
       var that = this;
       console.log("启动查看大图！");
-      console.log( $(obj).find("img"));
+      // console.log( $(obj).find("img"));
         // $(obj).find("img").load(function(){
         //     console.log("图片加载完成:load");
         //     var $img = $(obj).find("img");
@@ -499,7 +499,7 @@ $.extend({
       var  aa = setInterval(fn,50);
       function fn(){
           if( $(obj).find("img")[0].complete){
-              console.log("图片加载完成:complete = true");
+          //    console.log("图片加载完成:complete = true");
               var $img = $(obj).find("img");
               var imgUrl = $img[0].src;
               if (!imgUrl) return;

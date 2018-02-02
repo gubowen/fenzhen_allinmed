@@ -393,7 +393,6 @@
           method: "POST",
           data:  dataValue,
           done(res) {
-            // console.log(222);
             store.commit("stopLoading")
             let userListLoading = [];
             let userListEnd = [];

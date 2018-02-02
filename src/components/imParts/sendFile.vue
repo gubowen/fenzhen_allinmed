@@ -84,7 +84,6 @@
                 }
 
                 Array.from(files).forEach((element, index) => {
-                    console.log(element);
                     if ((/image\/\w+/.test(element.type)) || (/.pdf/.test(element.type)) || (/video\/\w+/.test(element.type))) {
                         if (/video\/\w+/.test(element.type) && !((/mp4/.test(element.type))||(/quicktime/.test(element.type)))) {
                             this.$store.commit("showPopup", {text: "请选择规定类型文件！"});
@@ -123,8 +122,6 @@
                         return;
                     }
                 }
-//                console.log(videoNumber);
-//                console.log(PDFNumber);
                 if (videoNumber > _this.videoNumber) {
                     this.$store.commit("showPopup", {text: "一次最多传入" + _this.videoNumber + "个视频！"});
                     return;

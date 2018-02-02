@@ -66,7 +66,6 @@
             transformBtn (dir) {
                 const total = this.total;
                 const size = this.size;
-                console.log(this.transformIndex.i);
                 if (dir === "prev") {
                     if (Math.abs(this.transformIndex.i) > 0) {
                         this.transformIndex.i++;

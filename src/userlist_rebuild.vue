@@ -192,7 +192,6 @@
                 result = time.substring(0, 16);
             }
         }
-//        console.log(result);
         return result;
     });
 

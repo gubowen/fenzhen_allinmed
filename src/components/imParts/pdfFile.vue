@@ -46,7 +46,6 @@
             }
         },
         mounted(){
-//            console.log(this.message);
         },
         computed:{
             docName(){

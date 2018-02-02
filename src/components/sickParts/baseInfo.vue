@@ -240,7 +240,6 @@
     },
     mounted(){
       this.init();
-      //console.log(this.$route.params)
     },
     watch: {
       '$store.state.currentItem'(){
@@ -479,7 +478,6 @@
       },
       hiddenSelect(){
           this.currentSelectorIndex =-1;
-          console.log(this.currentSelectorIndex);
       }
     }
   }

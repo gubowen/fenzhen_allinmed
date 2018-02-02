@@ -377,7 +377,6 @@
                                     })
                                 };
                             }).then((res) => {
-                                console.log(res);
                                 //发送IM
                                 let inquiryResult = that.$store.state.currentItem,
                                     caseMajorName = that.previewSendData.diagnoseResult.majorName,

@@ -1027,7 +1027,6 @@
                     patientId: this.$store.state.patientId	                                    // string	是	患者id
 
                 };
-                console.log(dataValue);
                 api.ajax({
                     url: XHRList.sickSaveUrl,
                     method: "POST",
