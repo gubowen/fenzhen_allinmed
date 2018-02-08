@@ -32,7 +32,7 @@ module.exports = {
             "tabView": path.resolve(__dirname, '../static/js/plugins.tabView.js'),
             "toJSON": path.resolve(__dirname, '../static/js/jquery.json-2.4.js'),
             "ymd": path.resolve(__dirname, '../static/js/plugins/ymd.js'),
-            "nim": path.resolve(__dirname, '../static/js/third-party/nim/NIM_Web_NIM_v3.4.0.js'),
+            "nim": path.resolve(__dirname, '../static/js/third-party/nim/NIM_Web_NIM_v4.7.3.js'),
         }
     },
     module: {
