@@ -8,6 +8,7 @@ const baseWebpackConfig = require('./webpack.base.conf')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin')
+const vConsolePlugin = require('vconsole-webpack-plugin');
 const portfinder = require('portfinder')
 
 const HOST = process.env.HOST
@@ -64,7 +65,10 @@ const devWebpackConfig = merge(baseWebpackConfig, {
         to: config.dev.assetsSubDirectory,
         ignore: ['.*']
       }
-    ])
+    ]),
+      new vConsolePlugin({
+          enable: false // 发布代码前记得改回 false
+      }),
   ]
 })
 

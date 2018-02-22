@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import VueResource from 'vue-resource'
 import login from '@/Login'
 import userlist from '@/userlist_rebuild'
 
@@ -13,7 +12,6 @@ import checkBody from '@/components/sickParts/checkBody'
 import majorCheck from '@/components/sickParts/majorCheck'
 import setting from '@/components/setting'
 Vue.use(Router);
-Vue.use(VueResource);
 
 export default new Router({
   routes: [
