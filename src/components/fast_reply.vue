@@ -146,7 +146,7 @@
         box-shadow: 0 0 40px 0 rgba(153, 167, 208, 0.35);
         border-radius: 4px 4px 4px 4px;
         position: absolute;
-        bottom: 225px;
+        bottom: 200px;
         left: 20px;
         background-color: #fff;
         z-index: 5;

@@ -163,7 +163,7 @@
       .sendList{
         position: absolute;
         width:85px;
-        top:-120px;
+        top:-110px;
         right: -24px;
         @include  query(1440px){
           top:-170px;
