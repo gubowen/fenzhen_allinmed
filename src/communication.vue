@@ -311,7 +311,7 @@
                     });
 
                     this.userListChange();
-                    this.$store.commit("resetListRefreshFlag", true);
+                    this.$store.commit("setResetListRefresh", true);
 
 
                 });
@@ -322,7 +322,7 @@
                 this.$emit("update:n",false);
                 this.$store.commit("waitingListRefreshFlag", true);
                 this.$store.commit("onlineListRefresh", true);
-                this.$store.commit("resetListRefreshFlag", true);
+                this.$store.commit("setResetListRefresh", true);
 
                 this.setCurrentItem({});
                 this.setPatientId("");
@@ -381,7 +381,7 @@
                     patientList.removeByValue(this.currentItem);
                     this.setOnlineList(patientList);
                     this.$store.state.currentItem.triageSelect = false;
-                    this.$store.commit("waitingListRefreshFlag", true);
+                    this.$store.commit("setWaitingListRefresh", true);
                     let num = "";
                     if (patientList.length > 0) {
                         if (this.userOnlineActive <= patientList.length - 1) {

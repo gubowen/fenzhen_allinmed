@@ -50,7 +50,7 @@ const actions = {
         commit("startLoading");
     },
     stopLoading:({commit,state})=>{
-        commit("startLoading");
+        commit("stopLoading");
     },
     //快捷提问显示隐藏
     setFastReplyShow:({commit,state},data)=>{
