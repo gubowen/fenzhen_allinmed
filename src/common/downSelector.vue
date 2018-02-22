@@ -147,6 +147,7 @@
                     method: "POST",
                     data: {
                         isValid: 1,
+
                         firstResult: 0,
                         maxResult: 999,
                         illnessName: "",
